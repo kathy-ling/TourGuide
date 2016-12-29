@@ -19,7 +19,6 @@ public class LoginAction {
 	 * */
 	@RequestMapping(value="/logincheck.action")
 	public String  logincheck() {
-		System.out.println("进入登录界面");
 		return "index";
 	}
 	/*
