@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<b class="arrow"></b>
 						<ul class="submenu">
 							<li class="">
-								<a href="Guidelocation.action" target="targetiframe">
+								<a href="operateUser.action" target="targetiframe">
 									<i class="menu-icon fa fa-caret-right"></i>
 									运营人员信息管理
 								</a>

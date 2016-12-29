@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
  * */
 
 @Controller
-public class LoginAction {
+public class AdminloginAction {
 
 	/*
 	 * 登录检验
@@ -28,7 +28,7 @@ public class LoginAction {
 	 * */
 	@RequestMapping(value="/login.action" )
 	public ModelAndView Login(String username,String password) {
-	
+		
 		if (username.equals("15029319152")&&password.equals("123456")) {
 			return new ModelAndView("main");
 		} else {
