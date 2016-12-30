@@ -20,7 +20,7 @@
 	<mvc:resources location="/image/visitor/" mapping="/image/visitor/**"/>
 	<mvc:resources location="/image/guide/" mapping="/image/guide/**"/>
 	<bean id="DataSource" class="com.TourGuide.common.XBasicDataSource"
-		p:driverClassName="com.mysql.jdbc.Driver" p:url="jdbc:mysql://202.200.119.158:3306/tour"
+		p:driverClassName="com.mysql.jdbc.Driver" p:url="jdbc:mysql://202.200.119.158:3306/tourguide"
 		p:username="root" p:password="root123" destroy-method="close" />
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
 		p:dataSource-ref="DataSource"   />
