@@ -54,10 +54,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 
 		<!-- /section:basics/navbar.layout -->
-		<div class="main-container" id="main-container">
-			<!-- #section:basics/sidebar -->
-			<div id="sidebar" class="sidebar                  responsive">
-				<ul class="nav nav-list">
+		<div class="main-container" id="main-container" >
+			
+			<div id="sidebar" class="sidebar responsive" >
+				<ul class="nav nav-list" >
 					<li class="">
 						<a href="" class="dropdown-toggle">
 							<i class="menu-icon fa fa-location-arrow red"></i>

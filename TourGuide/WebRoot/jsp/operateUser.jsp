@@ -29,7 +29,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<link rel="apple-touch-icon-precomposed" href="<%=path %>/assets1/i/app-icon72x72@2x.png">
   	<link rel="stylesheet" href="<%=path %>/assets1/css/amazeui.min.css"/>
   	<link rel="stylesheet" href="<%=path %>/assets1/css/admin.css">
-  	<link href="css/bootstrap.css" rel="stylesheet">
   	<link rel="stylesheet" href="<%=path%>/assets/css/bootstrap.css" />
   	<link rel="stylesheet" href="<%=path%>/assets/css/ace.onpage-help.css" />
 	<link rel="stylesheet" href="<%=path%>/docs/assets/js/themes/sunburst.css" />
@@ -80,19 +79,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="am-g">
         <div class="am-u-sm-12">
           <form class="am-form">
-            <table class="am-table am-table-striped am-table-hover table-main">
+            <table class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px;">
               <thead>
               <tr>
-                <th  style="width: 5%;"><input type="checkbox"  /></th><th  style="align-content: center; width: 15%;">姓名</th><th  style="align-content: center; width: 15%;">账号</th><th style="align-content: center; width: 15%;">角色</th><th style="align-content: center; width: 15%;">手机号</th><th style="align-content: center; width: 15%;">操作</th>
+                <th  style="align-content: center; width: 10%;">姓名</th><th  style="align-content: center; width: 10%;">账号</th><th style="align-content: center; width: 10%;">角色</th><th style="align-content: center; width: 10%;">手机号</th><th style="align-content: center; width: 10%;">操作</th>
               </tr>
               </thead>
-              <tbody id="tby">
-              
+              <tbody id="tby" >
+              	
               </tbody>
             </table>
-           <div>
-				<ul id="paginator"></ul>
+           <div style=" margin-bottom:10%; margin-left:40%;">
+				<ul id="paginator" ></ul>
 		   </div>
+		  
           </form>
         </div>
 
@@ -102,7 +102,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
   </div>
   <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog" style="width:30%; ">
+			<div class="modal-dialog" style="width:25%">
 				<div class="modal-content">
 					<div class="model-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -114,15 +114,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px;">
-						<tr><td><label class="col-lg-4 control-label">姓名：</label></td>
+						<tr ><td >姓名：</td>
 						<td><input  type="text" id="delete_name" name="delete_name" /></td>
 						</tr>
-						<tr><td><label class="col-lg-4 control-label">账号：</label></td>
+						<tr><td>账号：</td>
 						<td><input  type="text" id="delete_account" name="delete_account" /></td>
 						</tr>
-						<tr><td><label class="col-lg-4 control-label">角色:</label></td>
+						<tr><td>角色:</td>
 						<td><input  type="text"  id="delete_role" name="delete_role" /></td></tr>
-						<tr><td><label class="col-lg-4 control-label">手机号:</label></td>
+						<tr><td>手机号:</td>
 						<td><input  type="text"  id="delete_phone" name="delete_phone" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button class="close"  >确定增加</button></td></tr>
 						
@@ -132,8 +132,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 				</div>
 			</div>
+</div>
+<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width:25%">
+				<div class="modal-content">
+					<div class="model-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                        <span class="blue">X</span>
+	                    </button>
+						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
+							删除运营人员
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div>是否禁用此运营人员</div>
+						
+									
+					</div>
+				</div>
+			</div>
 		</div>
-
 
 
 
@@ -144,7 +162,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!--[if (gte IE 9)|!(IE)]><!-->
-<script src="<%=path %>/assets1/js/jquery.min.js"></script>
 <!--<![endif]-->
 <script src="<%=path %>/assets1/js/amazeui.min.js"></script>
 <script src="<%=path %>/assets1/js/app.js"></script>
@@ -156,18 +173,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	$(document).ready(function()
   	{
+  			
   			loadGuideInfo();
   	});
   	function loadGuideInfo()
   	{
-  		var url="<%=basePath%>/GetOperateUser.action";
+  		var url="<%=basePath%>OperateUser/GetOperateUser.action";
+  		
   		$.ajax(
   		{
   			url:url,
-  			type:"get",
+  			type:"GET",
+  			datatype: "json",
   			data:{currentPage:1,pageRows:pageRows},
   			success: function(data)
   					{
+  						
   					    if(data!=null){
   					    OperateUseInfo = data.jsonStr;
   					    initTable(data.jsonStr,data.page);	
@@ -186,16 +207,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                    itemTexts: function (type, page, current) {
 		                        switch (type) {
 		                            case "first":
-		                                return "|<<";
+		                                return "首页";
 		                                break;
 		                            case "prev":
-		                                return "<";
+		                                return "上一页";
 		                                break;
 		                            case "next":
-		                                return ">";
+		                                return "下一页";
 		                                break;
 		                            case "last":
-		                                return ">>|";
+		                                return "末页";
 		                                break;
 		                            case "page":
 		                                return page;
@@ -203,12 +224,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                        }
 		                    },
 		                    onPageClicked: function (event, originalEvent, type, page) {
-		                    	
-		                    	
 		                        $.ajax({
 									url: url,
-									datatype: "json",
 									type: "GET",
+									datatype: "json",
 									data:{currentPage:page,pageRows:5},
 									success: function(data) {
 										OperateUseInfo = data.jsonStr;
@@ -219,14 +238,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						};					
 						$("#paginator").bootstrapPaginator(options);
   					    }
-  					}
+  					},
+  				
+  					
   		});
   		
   	}
   	
   	function initTable(jsonStr,currentPage)
   	{
-  		
+  		$("#tby").html("");
+  		$.each(JSON.parse(jsonStr),function(index,value)
+  			{
+  				var t0="<tr>";
+  				var t2="<td style='align-content: center; width: 15%;'>"+value.Operateper_name+"</td>";
+              	var t3="<td style='align-content: center; width: 15%;'>"+value.Operateper_account+"</td>";
+              	var t4="<td style='align-content: center; width: 15%;'>"+value.operateper_role+"</td>";
+              	var t5="<td style='align-content: center; width: 15%;'>"+value.Operateper_phone+"</td>";
+              	var t6="<td style='align-content: center; width: 15%;'> <div class='am-btn-toolbar'>"+
+              	"<div class='am-btn-group am-btn-group-xs'>"+
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' onclick='StopOperate("+index+")'>"+"<span class='am-icon-pencil-square-o'></span> 禁用</button>"+
+                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' onclick='DeleteOperate("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
+                  "</div></div> </td>";				
+                var t7="</tr>";
+				$("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7);
+  			});
   	}
  	
  	function serach()
@@ -238,8 +274,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	{
  		$("#addmodal").modal('show');
  	}
+ 	function StopOperate(i)
+ 	{
+ 		
+ 	}
+ 	
 </script>
-<script src="<%=path%>/assets/js/jquery.js"></script>
+
 	<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='<%=path%>/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
 	</script>
