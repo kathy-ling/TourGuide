@@ -1,5 +1,7 @@
 package com.TourGuide.model;
 
+import java.sql.Date;
+
 /**
  * 预约订单的信息
  * @author Tian
@@ -8,19 +10,22 @@ package com.TourGuide.model;
 public class BookOrder {
 	
 	private String bookOrderID; //预约订单的编号
-	private String produceTime; //下单时间
-	private String visitTime; //参观时间
-	private String endTime; //订单结束时间
+	private Date produceTime; //下单时间
+	private Date visitTime; //参观时间
+	private Date endTime; //订单结束时间
 	private String visitorPhone; //预约的游客的手机号
 	private String guidePhone; //被预约的导游的手机号
 	private String orderState; //订单状态
 	private String scenicID; //景区编号
 	private String priceRange; //价位区间
 	private String otherCommand; //其他需求
+	private String language;  //讲解语言
+	private String guideSex;  //讲解员性别
+	private String visitorName;  //游客姓名
 	private int visitNum; //此次参观的人数
 	private int totalMoney; //订单总额（讲解费+门票）
 	private int purchaseTicket; //是否代购门票
-	private int disabled; //是否禁用
+	private int releaseByVisitor; //是否是游客发布的订单
 	
 	public String getBookOrderID() {
 		return bookOrderID;
@@ -28,22 +33,22 @@ public class BookOrder {
 	public void setBookOrderID(String bookOrderID) {
 		this.bookOrderID = bookOrderID;
 	}
-	public String getProduceTime() {
+	public Date getProduceTime() {
 		return produceTime;
 	}
-	public void setProduceTime(String produceTime) {
+	public void setProduceTime(Date produceTime) {
 		this.produceTime = produceTime;
 	}
-	public String getVisitTime() {
+	public Date getVisitTime() {
 		return visitTime;
 	}
-	public void setVisitTime(String visitTime) {
+	public void setVisitTime(Date visitTime) {
 		this.visitTime = visitTime;
 	}
-	public String getEndTime() {
+	public Date getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(String endTime) {
+	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
 	public String getVisitorPhone() {
@@ -82,6 +87,24 @@ public class BookOrder {
 	public void setOtherCommand(String otherCommand) {
 		this.otherCommand = otherCommand;
 	}
+	public String getLanguage() {
+		return language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+	public String getGuideSex() {
+		return guideSex;
+	}
+	public void setGuideSex(String guideSex) {
+		this.guideSex = guideSex;
+	}
+	public String getVisitorName() {
+		return visitorName;
+	}
+	public void setVisitorName(String visitorName) {
+		this.visitorName = visitorName;
+	}
 	public int getVisitNum() {
 		return visitNum;
 	}
@@ -100,10 +123,11 @@ public class BookOrder {
 	public void setPurchaseTicket(int purchaseTicket) {
 		this.purchaseTicket = purchaseTicket;
 	}
-	public int getDisabled() {
-		return disabled;
+	public int getReleaseByVisitor() {
+		return releaseByVisitor;
 	}
-	public void setDisabled(int disabled) {
-		this.disabled = disabled;
+	public void setReleaseByVisitor(int releaseByVisitor) {
+		this.releaseByVisitor = releaseByVisitor;
 	}
+	
 }
