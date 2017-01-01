@@ -5,18 +5,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
+@RequestMapping(value="view")
 public class CommonAction {
 	
 	/*
 	 * 跳转首页Action
 	 * */
-	@RequestMapping(value="FirstShow.action",method=RequestMethod.GET)
+	@RequestMapping(value="/FirstShow.action",method=RequestMethod.GET)
 	public String FirstShow()
 	{
 		return "firsthome";
 	}
 	
-	@RequestMapping(value="operateUser.action",method=RequestMethod.GET)
+	@RequestMapping(value="/operateUser.action",method=RequestMethod.GET)
 	public String ToOperateUser()
 	{
 		return "operateUser";

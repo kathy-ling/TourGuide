@@ -262,7 +262,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	});
   	function loadGuideInfo()
   	{
-  		var url="<%=basePath%>OperateUser/GetOperateUser.action";
+  		var url="<%=basePath%>operate/GetOperateUser.action";
   		
   		$.ajax(
   		{
@@ -358,7 +358,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	function serach()
  	{
  		
- 		var url = "<%=basePath%>OperateUser/SearchOperateUser.action";
+ 		var url = "<%=basePath%>operate/SearchOperateUser.action";
  		var searchText = $("#searchText").val();
  		var sqlStr = " select * from t_operateper where account = '" + searchText +"'";
  		alert(searchText);
@@ -398,7 +398,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#addmodal").modal('show');
  	}
  	function AddOperateperInfo() {
- 		var url = "<%=basePath%>OperateUser/AddOperateperInfo.action";
+ 		var url = "<%=basePath%>operate/AddOperateperInfo.action";
  		var name = $("#add_name").val();
  		var account = $("#add_account").val();
  		var role = $("#add_role").val();
@@ -450,7 +450,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	function editOperateperInfo()
  	{
- 		var url = "<%=basePath%>OperateUser/UpdateOperateperInfo.action";
+ 		var url = "<%=basePath%>operate/UpdateOperateperInfo.action";
  		var name = $("#edit_name").val();
  		var account = $("#edit_account").val();
  		var role = $("#edit_role").val();
@@ -487,7 +487,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	
  	function DeleteOperateInfo()
  	{
- 		var url = "<%=basePath%>OperateUser/DeleteOperateperInfo.action";
+ 		var url = "<%=basePath%>operate/DeleteOperateperInfo.action";
  		var account=$("#delete_account").val();
  		$.ajax( {
  				url:url,

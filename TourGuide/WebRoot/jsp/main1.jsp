@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="sideMenu">
       <h3 class="am-icon-flag"><em></em> <a href="#">运营人员管理</a></h3>
       <ul>
-        <li><a href="operateUser.action" target="targetiframe">运营人员信息管理</a></li>
+        <li><a href="view/operateUser.action" target="targetiframe">运营人员信息管理</a></li>
       </ul>
       <h3 class="am-icon-users"><em></em> <a href="#">讲解员管理</a></h3>
       <ul>
@@ -85,6 +85,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <ul>
         <li>平台收入信息管理</li>
         <li>讲解员收入查询</li>
+        
+      </ul>
+      
+      <h3 class="am-icon-gears"><em></em> <a href="#">系统管理</a></h3>
+      <ul>
+        <li>个人信息修改</li>
         
       </ul>
     </div>
@@ -128,7 +134,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <div class="admin-biaogelist" style="width: 85%;height:90%">
    
-          <iframe name="targetiframe" style="width: 100%; height:90% ; " src="FirstShow.action"  ></iframe>
+          <iframe name="targetiframe" style="width: 100%; height:90% ; " src="view/FirstShow.action"  ></iframe>
     
  <div class="foods">
   <ul>版权所有@2016 </ul>
