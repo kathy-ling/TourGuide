@@ -1,5 +1,7 @@
 package com.TourGuide.model;
 
+import java.sql.Date;
+
 /**
  * 拼单的订单详细信息
  * @author Tian
@@ -8,16 +10,16 @@ package com.TourGuide.model;
 public class ConsistOrder {
 	
 	private String consistOrderID; //拼单的编号
-	private String produceTime; //订单产生时间
-	private String visitTime; //参观时间
-	private String endTime; //订单结束时间
+	private Date produceTime; //订单产生时间
+	private Date visitTime; //参观时间
+	private Date endTime; //订单结束时间
 	private String visitorPhone; //预约的游客的手机号
 	private String guidePhone; //导游的手机号
 	private String scenicID; //景点编号
 	private String orderState; //订单状态
 	private String otherCommand; //其他需求
 	private int totalMoney; //订单费用
-	private int currentNum; //当前参观人数 
+	private int visitNum; //参观人数 
 	private int maxNum; //每单可带的最大人数
 	private int purchaseTicket; //是否代购门票
 	
@@ -27,23 +29,29 @@ public class ConsistOrder {
 	public void setConsistOrderID(String consistOrderID) {
 		this.consistOrderID = consistOrderID;
 	}
-	public String getProduceTime() {
+	public Date getProduceTime() {
 		return produceTime;
 	}
-	public void setProduceTime(String produceTime) {
+	public void setProduceTime(Date produceTime) {
 		this.produceTime = produceTime;
 	}
-	public String getVisitTime() {
+	public Date getVisitTime() {
 		return visitTime;
 	}
-	public void setVisitTime(String visitTime) {
+	public void setVisitTime(Date visitTime) {
 		this.visitTime = visitTime;
 	}
-	public String getEndTime() {
+	public Date getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(String endTime) {
+	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
+	}
+	public int getVisitNum() {
+		return visitNum;
+	}
+	public void setVisitNum(int visitNum) {
+		this.visitNum = visitNum;
 	}
 	public String getVisitorPhone() {
 		return visitorPhone;
@@ -82,10 +90,10 @@ public class ConsistOrder {
 		this.totalMoney = totalMoney;
 	}
 	public int getCurrentNum() {
-		return currentNum;
+		return visitNum;
 	}
-	public void setCurrentNum(int currentNum) {
-		this.currentNum = currentNum;
+	public void setCurrentNum(int visitNum) {
+		this.visitNum = visitNum;
 	}
 	public int getMaxNum() {
 		return maxNum;

@@ -14,6 +14,7 @@ public class GuideOtherInfo {
 	private int singleMax; //单次最大讲解人数
 	private int guideFee; //讲解费
 	private int authorized; //是否审核通过
+	private int disabled; //是否禁用讲解员
 	
 	public String getPhone() {
 		return phone;
@@ -56,5 +57,11 @@ public class GuideOtherInfo {
 	}
 	public void setAuthorized(int authorized) {
 		this.authorized = authorized;
+	}
+	public int getDisabled() {
+		return disabled;
+	}
+	public void setDisabled(int disabled) {
+		this.disabled = disabled;
 	}
 }
