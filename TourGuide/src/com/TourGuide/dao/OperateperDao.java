@@ -1,11 +1,13 @@
 package com.TourGuide.dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
 import com.TourGuide.model.Operateper;
@@ -44,5 +46,88 @@ public class OperateperDao {
 	public  int  GetOperateCount() {
 		String sql="SELECT * FROM t_operateper";
 		return jdbcTemplate.queryForList(sql).size();
+	}
+	
+	
+	/*
+	 * 通过sql查询语句进行查询运营人员的详细信息
+	 * 参数：SQL语句
+	 * 2016-12-31 14:49:28
+	 * */
+	public List<Operateper> SearchOperateInfoByAccount_Dao(String sql) {
+		final List<Operateper> list = new ArrayList<Operateper>();
+		jdbcTemplate.query(sql, new RowCallbackHandler() {
+			
+
+			@Override
+			public void processRow(java.sql.ResultSet rSet) throws SQLException {
+				// TODO Auto-generated method stub
+				Operateper operateper = new Operateper();
+				operateper.setOperateper_name(rSet.getString(1));
+				operateper.setOperateper_account(rSet.getString(2));
+				operateper.setOperateper_role(rSet.getString(3));
+				operateper.setOperateper_phone(rSet.getString(4));
+				operateper.setOperateper_bool(rSet.getShort(5));
+				list.add(operateper);
+			}
+		});
+		return list;
+	}
+	/*
+	 * 增加运营人员
+	 * 参数：运营人员信息类
+	 * 2016-12-31 16:33:22
+	 * */
+	public boolean AddOperateperInfo_Dao(Operateper operateper) {
+		String sql = " select count(*) from t_operateper where account = '"
+					+operateper.getOperateper_account()+"'";
+		 
+		
+		if (jdbcTemplate.queryForObject(sql, Integer.class) == 0) {
+			sql =  " insert into t_operateper (name,account,role,phone) values (?,?,?,?) ";
+			jdbcTemplate.update(sql, new Object[]{
+				operateper.getOperateper_name(),
+				operateper.getOperateper_account(),
+				operateper.getOperateper_role(),
+				operateper.getOperateper_phone()
+			});
+			return true;
+		}
+		return false;
+	}
+	/*
+	 * 	删除运营人员
+	 * 	参数：运营人员账号
+	 * 2016-12-31 20:47:13
+	 * */
+	public boolean DeleteOperateperInfo(String s) {
+		String sql = "delete from t_operateper where account='"+s+"'";
+		if (jdbcTemplate.update(sql)>0) {
+			return true;
+		} else {
+			return false;
+		}
+		
+		
+	}
+	
+	/*
+	 * 更新运营人员信息
+	 * 参数：运营人员信息类
+	 * 2016-12-31 20:48:22
+	 * */
+	public boolean UpdateOperateperInfo(Operateper operateper) {
+		String sql = "update   t_operateper set name=?,account=?,role=?,phone=?,bool=?   where account=?";
+		int i=jdbcTemplate.update(sql, new Object[]{operateper.getOperateper_name()
+				,operateper.getOperateper_account(),operateper.getOperateper_role(),
+				operateper.getOperateper_phone(),operateper.getOperateper_bool()
+				,operateper.getOperateper_account()});
+		if (i>0) {
+			return true;
+		} else {
+			return false;
+		}
+		
+		
 	}
 }

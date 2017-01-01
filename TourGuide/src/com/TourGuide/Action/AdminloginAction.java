@@ -30,7 +30,7 @@ public class AdminloginAction {
 	public ModelAndView Login(String username,String password) {
 		
 		if (username.equals("15029319152")&&password.equals("123456")) {
-			return new ModelAndView("main");
+			return new ModelAndView("main1");
 		} else {
 			return new ModelAndView("index","error","用户名或密码错误");
 		}

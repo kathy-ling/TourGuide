@@ -56,4 +56,77 @@ public class OperateAction {
 		return map;
 	}
 	
+	/*
+	 * 通过sql语句获取运营人员的信息
+	 * 参数：sql语句
+	 * 2016-12-31 15:12:07	
+*/
+	@RequestMapping(value="SearchOperateUser.action",method=RequestMethod.GET)
+	@ResponseBody
+	public Object SearchOperateInfoByAccount(HttpServletResponse resp,
+			@RequestParam(value="sql")String sqlStr) throws IOException {
+		CommonResp.SetUtf(resp);
+		List<Operateper> list = operateperService.SearchOperateInfoByAccount_Service(sqlStr);
+		String jsonStr = new Gson().toJson(list).toString();
+		Map<String , Object> map=new HashMap<>();
+		map.put("jsonStr", jsonStr);
+		return map;
+	}
+	
+	
+	/*
+	 *增加运营人员 
+	 * 
+	 * */
+	@RequestMapping(value="AddOperateperInfo.action",method=RequestMethod.GET)
+	@ResponseBody
+	public Object AddOperateperInfo(HttpServletResponse reap,
+			@RequestParam(value="name")String name,
+			@RequestParam(value="account")String account,
+			@RequestParam(value="role")String role,
+			@RequestParam(value="phone")String phone) throws IOException {
+		Operateper operateper = new Operateper();
+		operateper.setOperateper_name(name);
+		operateper.setOperateper_account(account);
+		operateper.setOperateper_role(role);
+		operateper.setOperateper_phone(phone);
+		
+		boolean confirm = operateperService.AddOperateperInfo_Service(operateper);
+		Map<String, Object> map = new HashMap<>();
+		map.put("confirm", confirm);
+		return map;
+	}
+	
+	@RequestMapping(value="DeleteOperateperInfo.action",method=RequestMethod.GET)
+	@ResponseBody
+	public Object DeleteOperateperInfo(HttpServletResponse reap,
+			@RequestParam(value="account")String s
+			) throws IOException {
+		
+		
+		boolean confirm = operateperService.DeleteOperateperInfo_Service(s);
+		Map<String, Object> map = new HashMap<>();
+		map.put("confirm", confirm);
+		return map;
+	}
+	
+	@RequestMapping(value="UpdateOperateperInfo.action",method=RequestMethod.GET)
+	@ResponseBody
+	public Object UpdateOperateperInfo(HttpServletResponse reap,
+			@RequestParam(value="name")String name,
+			@RequestParam(value="account")String account,
+			@RequestParam(value="role")String role,
+			@RequestParam(value="phone")String phone,
+			@RequestParam(value="bool")int bool) throws IOException {
+		Operateper operateper = new Operateper();
+		operateper.setOperateper_name(name);
+		operateper.setOperateper_account(account);
+		operateper.setOperateper_role(role);
+		operateper.setOperateper_phone(phone);
+		operateper.setOperateper_bool(bool);
+		boolean confirm = operateperService.UpdateOperateperInfo_Service(operateper);
+		Map<String, Object> map = new HashMap<>();
+		map.put("confirm", confirm);
+		return map;
+	}
 }

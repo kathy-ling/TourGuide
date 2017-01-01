@@ -68,9 +68,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="am-u-sm-12 am-u-md-3">
           <div class="am-input-group am-input-group-sm">
             
-            <input type="text" class="am-form-field" placeholder="账号">
+            <input type="text" id="searchText" class="am-form-field" placeholder="账号">
           <span class="am-input-group-btn">
-            <button class="am-btn am-btn-default" type="button" onclick="serach()">搜索</button>
+            <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="serach()">搜索</button>
           </span>
           </div>
         </div>
@@ -79,10 +79,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="am-g">
         <div class="am-u-sm-12">
           <form class="am-form">
-            <table class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px;">
+            <table  class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px; " >
               <thead>
               <tr>
-                <th  style="align-content: center; width: 10%;">姓名</th><th  style="align-content: center; width: 10%;">账号</th><th style="align-content: center; width: 10%;">角色</th><th style="align-content: center; width: 10%;">手机号</th><th style="align-content: center; width: 10%;">操作</th>
+                <th  style="align-content: center; width: 10%;">姓名</th><th  style="align-content: center; width: 10%;">账号</th><th style="align-content: center; width: 10%;">角色</th><th style="align-content: center; width: 10%;">手机号</th><th style="align-content: center; width: 10%;">禁用状态</th><th style="align-content: center; width: 10%;">操作</th>
               </tr>
               </thead>
               <tbody id="tby" >
@@ -101,8 +101,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
     
   </div>
-  <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog" style="width:25%">
+<div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" >
 				<div class="modal-content">
 					<div class="model-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -113,18 +113,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</h4>
 					</div>
 					<div class="modal-body">
-					<table style="border-collapse:separate; border-spacing:10px;">
+					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
 						<tr ><td >姓名：</td>
-						<td><input  type="text" id="delete_name" name="delete_name" /></td>
+						<td><input  type="text" id="add_name" name="add_name" /></td>
 						</tr>
 						<tr><td>账号：</td>
-						<td><input  type="text" id="delete_account" name="delete_account" /></td>
+						<td><input  type="text" id="add_account" name="add_account" /></td>
 						</tr>
 						<tr><td>角色:</td>
-						<td><input  type="text"  id="delete_role" name="delete_role" /></td></tr>
+						<td><input  type="text"  id="add_role" name="add_role" /></td></tr>
 						<tr><td>手机号:</td>
-						<td><input  type="text"  id="delete_phone" name="delete_phone" /></td></tr>
-						<tr><td colspan="2" style="text-align:center;"><button class="close"  >确定增加</button></td></tr>
+						<td><input  type="text"  id="add_phone" name="add_phone" /></td></tr>
+						<tr><td colspan="2" style="text-align:center;"><button class="close" onclick="AddOperateperInfo()" >确定增加</button></td></tr>
 						
 					</table>
 					
@@ -133,8 +133,76 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</div>
 </div>
+<div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" >
+				<div class="modal-content">
+					<div class="model-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                        <span class="blue">X</span>
+	                    </button>
+						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
+							编辑运营人员
+						</h4>
+					</div>
+					<div class="modal-body">
+					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr ><td >姓名：</td>
+						<td><input  type="text" id="edit_name" name="edit_name" /></td>
+						</tr>
+						<tr><td>账号：</td>
+						<td><input  type="text" id="edit_account" name="edit_account" readonly="true" /></td>
+						</tr>
+						<tr><td>角色:</td>
+						<td><input  type="text"  id="edit_role" name="edit_role" /></td></tr>
+						<tr><td>手机号:</td>
+						<td><input  type="text"  id="edit_phone" name="edit_phone" /></td></tr>
+						<tr><td>状态</td><td align="center">
+							<input type="radio" id="yes" name="1" value="1"/>禁用
+							<input style="" id="no" type="radio" name="1" value="0"/>未禁用
+							</td></tr>
+						<tr><td colspan="2" style="text-align:center;"><button  onclick="editOperateperInfo()" >修改</button></td></tr>
+						
+					</table>
+					
+									
+					</div>
+				</div>
+			</div>
+</div>
+  
+<div class="modal fade" id="SearchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+			<div class="modal-dialog" >
+				<div class="modal-content">
+					<div class="model-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                        <span class="blue">X</span>
+	                    </button>
+	                    <h4 class="modal-title" id="myModalLabel" style="text-align:center;">
+							搜索结果
+						</h4>
+					</div>
+					<div class="modal-body">
+					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr ><td >姓名：</td>
+						<td><input id="SearchName" style="text-align:center; " readonly= "true " /></td>
+						</tr>
+						<tr><td>账号：</td>
+						<td><input id="SearchAccount" style="text-align:center;" readonly= "true "/></td>
+						</tr>
+						<tr><td>角色：</td>
+						<td><input id="SearchRole" style="text-align:center;"readonly= "true " /></td></tr>
+						<tr><td>手机号：</td>
+						<td><input id="SearchPhone" style="text-align:center;"readonly= "true " /></td></tr>						
+						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true" >确定</button></td></tr>
+					</table>
+					
+									
+					</div>
+				</div>
+			</div>
+</div>
 <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog" style="width:25%">
+			<div class="modal-dialog" >
 				<div class="modal-content">
 					<div class="model-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -145,7 +213,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</h4>
 					</div>
 					<div class="modal-body">
-						<div>是否禁用此运营人员</div>
+						<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr ><td >姓名：</td>
+						<td><input  type="text" id="delete_name" name="delete_name"  readonly="true"/></td>
+						</tr>
+						<tr><td>账号：</td>
+						<td><input  type="text" id="delete_account" name="delete_account" readonly="true" /></td>
+						</tr>
+						<tr><td>角色:</td>
+						<td><input  type="text"  id="delete_role" name="delete_role"  readonly="true"/></td></tr>
+						<tr><td>手机号:</td>
+						<td><input  type="text"  id="delete_phone" name="delete_phone" readonly="true" /></td></tr>
+						<tr><td colspan="2" style="text-align:center;"><div >
+							<button class="btn btn-danger" onclick="DeleteOperateInfo()">Delete</button>
+											
+						</div></td></tr>
+						
+					</table>
 						
 									
 					</div>
@@ -230,7 +314,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									datatype: "json",
 									data:{currentPage:page,pageRows:5},
 									success: function(data) {
-										OperateUseInfo = data.jsonStr;
   					   					initTable(data.jsonStr,page);	
 						            }
 						        });
@@ -248,34 +331,178 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	function initTable(jsonStr,currentPage)
   	{
   		$("#tby").html("");
-  		$.each(JSON.parse(jsonStr),function(index,value)
+  		OperateUseInfo=JSON.parse(jsonStr);
+  		$.each(OperateUseInfo,function(index,value)
   			{
   				var t0="<tr>";
-  				var t2="<td style='align-content: center; width: 15%;'>"+value.Operateper_name+"</td>";
-              	var t3="<td style='align-content: center; width: 15%;'>"+value.Operateper_account+"</td>";
-              	var t4="<td style='align-content: center; width: 15%;'>"+value.operateper_role+"</td>";
-              	var t5="<td style='align-content: center; width: 15%;'>"+value.Operateper_phone+"</td>";
-              	var t6="<td style='align-content: center; width: 15%;'> <div class='am-btn-toolbar'>"+
+  				var t2="<td style='align-content: center; width: 10%;'>"+value.Operateper_name+"</td>";
+              	var t3="<td style='align-content: center; width: 10%;'>"+value.Operateper_account+"</td>";
+              	var t4="<td style='align-content: center; width: 10%;'>"+value.operateper_role+"</td>";
+              	var t5="<td style='align-content: center; width: 10%;'>"+value.Operateper_phone+"</td>";
+              	var c;
+              	if(value.Operateper_bool=="0"){
+              		c="未禁用";
+              	}else{
+              		c="禁用";
+              	}
+              	var	t6="<td style='align-content: center; width: 10%;'>"+c+"</td>";
+              	var t7="<td style='align-content: center; width: 10%;'> <div class='am-btn-toolbar'>"+
               	"<div class='am-btn-group am-btn-group-xs'>"+
-              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' onclick='StopOperate("+index+")'>"+"<span class='am-icon-pencil-square-o'></span> 禁用</button>"+
-                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' onclick='DeleteOperate("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='EditOperate("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
+                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='DeleteOperate("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
                   "</div></div> </td>";				
-                var t7="</tr>";
+                var t8="</tr>";
 				$("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7);
   			});
   	}
- 	
  	function serach()
  	{
- 		alert("搜索已运行");
+ 		
+ 		var url = "<%=basePath%>OperateUser/SearchOperateUser.action";
+ 		var searchText = $("#searchText").val();
+ 		var sqlStr = " select * from t_operateper where account = '" + searchText +"'";
+ 		alert(searchText);
+ 		$.ajax( {
+ 			url:url,
+ 			type:"get",
+ 			datatype:"json",
+ 			data:{sql:sqlStr},
+ 			success:function(data) {
+ 				if (data.jsonStr == "[]") {
+ 					alert("没有搜索到任何信息，请重新搜索!");
+	 			}
+		 		else {
+					SearchSuccess(data.jsonStr);
+		 		};
+ 			}
+ 		});
+ 	}
+ 	
+ 	function SearchSuccess(jsonStr) {
+ 			$.each(JSON.parse(jsonStr),function(index,value){
+ 			$("#SearchName").val(value.Operateper_name);
+ 			$("#SearchAccount").val(value.Operateper_account);
+ 			$("#SearchRole").val(value.operateper_role);
+ 			$("#SearchPhone").val(value.Operateper_phone);
+ 			
+ 		});
+ 		$("#SearchModal").modal('show');
  	}
  	
  	function addOperateUser()
  	{
+ 		$("#add_name").val("");
+ 		$("#add_account").val("");
+ 		$("#add_role").val("");
+ 		$("#add_phone").val("");
  		$("#addmodal").modal('show');
  	}
- 	function StopOperate(i)
+ 	function AddOperateperInfo() {
+ 		var url = "<%=basePath%>OperateUser/AddOperateperInfo.action";
+ 		var name = $("#add_name").val();
+ 		var account = $("#add_account").val();
+ 		var role = $("#add_role").val();
+ 		var phone = $("#add_phone").val();
+ 		
+ 		if (name != "" && account != "" && role != "" && phone != "") {
+ 			$.ajax( {
+ 				url:url,
+ 				type:"get",
+ 				datatype:"json",
+ 				data:{name:name,account:account,role:role,phone:phone},
+ 				success:function(data) {
+ 					if (data.confirm) {
+ 						$("#addmodal").modal('hide');
+ 						alert("添加成功！");
+ 						
+ 					}
+ 					else
+ 						alert("帐号已存在，请重新添加！");
+ 				}
+ 			});
+ 		}else{
+ 		alert("请重新填写运营人员信息！");
+ 		}
+ 		
+ 		
+ 		
+ 	}
+ 
+ 	function EditOperate(index)
  	{
+ 		$("#edit_name").val(OperateUseInfo[index].Operateper_name);
+ 		$("#edit_account").val(OperateUseInfo[index].Operateper_account);
+ 		$("#edit_role").val(OperateUseInfo[index].operateper_role);
+ 		
+ 		if((OperateUseInfo[index].Operateper_bool)=="0")
+ 		{
+ 			
+ 			$("#no").attr("checked","checked");
+ 		}
+ 		else
+ 		{
+ 			
+ 			$("#yes").attr("checked","checked");
+ 		}
+		$("#edit_phone").val(OperateUseInfo[index].Operateper_phone);
+ 		$("#editmodal").modal('show');
+ 		
+ 	}
+ 	function editOperateperInfo()
+ 	{
+ 		var url = "<%=basePath%>OperateUser/UpdateOperateperInfo.action";
+ 		var name = $("#edit_name").val();
+ 		var account = $("#edit_account").val();
+ 		var role = $("#edit_role").val();
+ 		var phone = $("#edit_phone").val();
+ 		var a = $("input[name='1']:checked").val();
+ 		if (name != "" && account != "" && role != "" && phone != "") {
+ 			$.ajax( {
+ 				url:url,
+ 				type:"get",
+ 				datatype:"json",
+ 				data:{name:name,account:account,role:role,phone:phone,bool:a},
+ 				success:function(data) {
+ 					if (data.confirm) {
+ 						$("#editmodal").modal('hide');
+ 						alert("修改成功！");
+ 						loadGuideInfo();
+ 					}
+ 					else{alert("修改失败，请重新确认修改");
+ 						$("#editmodal").modal('hide');
+ 					}
+ 				}
+ 			});
+ 		}
+ 		
+ 	}
+ 	function DeleteOperate(index)
+ 	{	
+ 		$("#delete_name").val(OperateUseInfo[index].Operateper_name);
+ 		$("#delete_account").val(OperateUseInfo[index].Operateper_account);
+ 		$("#delete_role").val(OperateUseInfo[index].operateper_role);
+		$("#delete_phone").val(OperateUseInfo[index].Operateper_phone);
+ 		$("#deletemodal").modal('show');	
+ 	}
+ 	
+ 	function DeleteOperateInfo()
+ 	{
+ 		var url = "<%=basePath%>OperateUser/DeleteOperateperInfo.action";
+ 		var account=$("#delete_account").val();
+ 		$.ajax( {
+ 				url:url,
+ 				type:"get",
+ 				datatype:"json",
+ 				data:{account:account},
+ 				success:function(data) {
+ 					if (data.confirm) {
+ 						$("#deletemodal").modal('hide');
+ 						
+ 					}
+ 					alert("删除成功");
+ 					loadGuideInfo();
+ 				}
+ 			});
  		
  	}
  	
@@ -284,8 +511,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='<%=path%>/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
 	</script>
-	<script src="<%=path %>/assets/js/bootstrap.js"></script>
-
+	<script src="<%=path%>/assets/js/bootstrap.js"></script>
 	<!-- page specific plugin scripts -->
 	<script src="<%=path%>/assets/js/dataTables/jquery.dataTables.js"></script>
 	<script
@@ -296,7 +522,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/buttons.print.js"></script>
 	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/buttons.colVis.js"></script>
 	<script src="<%=path%>/assets/js/dataTables/extensions/select/dataTables.select.js"></script>
-
 	<!-- ace scripts -->
 	<script src="<%=path%>/assets/js/ace/elements.scroller.js"></script>
 	<script src="<%=path%>/assets/js/ace/elements.colorpicker.js"></script>
