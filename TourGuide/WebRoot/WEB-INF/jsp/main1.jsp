@@ -16,10 +16,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta name="renderer" content="webkit">
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 <meta name="apple-mobile-web-app-title" content="Amaze UI" />
-<link rel="stylesheet" href="<%=path %>/assets/css/amazeui.min.css"/>
-<link rel="stylesheet" href="<%=path %>/assets/css/admin.css">
-<script src="<%=path %>/assets/js/jquery.js"></script>
-<script src="<%=path %>/assets/js/app.js"></script>
+<link rel="stylesheet" href="<%=basePath %>/assets/css/amazeui.min.css"/>
+<link rel="stylesheet" href="<%=basePath %>/assets/css/admin.css">
+<script src="<%=basePath %>/assets/js/jquery.js"></script>
+<script src="<%=basePath %>/assets/js/app.js"></script>
 </head>
 <body>
 <!--[if lte IE 9]><p class="browsehappy">升级你的浏览器吧！ <a href="http://se.360.cn/" target="_blank">升级浏览器</a>以获得更好的体验！</p><![endif]-->
@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <body>
 <header class="am-topbar admin-header">
-  <div class="am-topbar-brand"><img src="assets/i/logo.png"></div>
+  <div class="am-topbar-brand"><img src="<%=basePath %>assets/i/logo.png"></div>
 
   <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
     <ul class="am-nav am-nav-pills am-topbar-nav admin-header-list">
@@ -85,6 +85,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <ul>
         <li>平台收入信息管理</li>
         <li>讲解员收入查询</li>
+        
+      </ul>
+      
+      <h3 class="am-icon-gears"><em></em> <a href="#">系统管理</a></h3>
+      <ul>
+        <li>个人信息修改</li>
         
       </ul>
     </div>
@@ -152,10 +158,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <![endif]--> 
 
 <!--[if (gte IE 9)|!(IE)]><!--> 
-<script src="<%=path %>/assets/js/amazeui.min.js"></script>
+<script src="<%=basePath %>/assets/js/amazeui.min.js"></script>
 <!--<![endif]-->
 <script type="text/javascript">
-			window.jQuery || document.write("<script src='<%=path %>/assets/js/jquery.js'>"+"<"+"/script>");
+			window.jQuery || document.write("<script src='<%=basePath %>/assets/js/jquery.js'>"+"<"+"/script>");
 		</script>
 
 

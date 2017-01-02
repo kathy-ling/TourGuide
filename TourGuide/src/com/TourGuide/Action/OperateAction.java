@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.model.Operateper;
@@ -26,7 +27,8 @@ import com.google.gson.Gson;
  * 
  * */
 @Controller
-@RequestMapping(value="OperateUser")
+@RequestMapping(value="operate")
+@SessionAttributes("adminSession")
 public class OperateAction {
 
 	@Autowired
@@ -38,7 +40,7 @@ public class OperateAction {
 	 * 参数：当前页，页面容量
 	 * 2016-12-30 15:24:51	
 */
-	@RequestMapping(value="GetOperateUser.action",method=RequestMethod.GET)
+	@RequestMapping(value="/GetOperateUser.action",method=RequestMethod.GET)
 	@ResponseBody
 	public Object GetOperateInfoByPage(HttpServletResponse resp,
 			@RequestParam(value="currentPage")int currentPage,
@@ -61,7 +63,7 @@ public class OperateAction {
 	 * 参数：sql语句
 	 * 2016-12-31 15:12:07	
 */
-	@RequestMapping(value="SearchOperateUser.action",method=RequestMethod.GET)
+	@RequestMapping(value="/SearchOperateUser.action",method=RequestMethod.GET)
 	@ResponseBody
 	public Object SearchOperateInfoByAccount(HttpServletResponse resp,
 			@RequestParam(value="sql")String sqlStr) throws IOException {
@@ -78,7 +80,7 @@ public class OperateAction {
 	 *增加运营人员 
 	 * 
 	 * */
-	@RequestMapping(value="AddOperateperInfo.action",method=RequestMethod.GET)
+	@RequestMapping(value="/AddOperateperInfo.action",method=RequestMethod.GET)
 	@ResponseBody
 	public Object AddOperateperInfo(HttpServletResponse reap,
 			@RequestParam(value="name")String name,
@@ -97,7 +99,7 @@ public class OperateAction {
 		return map;
 	}
 	
-	@RequestMapping(value="DeleteOperateperInfo.action",method=RequestMethod.GET)
+	@RequestMapping(value="/DeleteOperateperInfo.action",method=RequestMethod.GET)
 	@ResponseBody
 	public Object DeleteOperateperInfo(HttpServletResponse reap,
 			@RequestParam(value="account")String s
@@ -110,7 +112,7 @@ public class OperateAction {
 		return map;
 	}
 	
-	@RequestMapping(value="UpdateOperateperInfo.action",method=RequestMethod.GET)
+	@RequestMapping(value="/UpdateOperateperInfo.action",method=RequestMethod.GET)
 	@ResponseBody
 	public Object UpdateOperateperInfo(HttpServletResponse reap,
 			@RequestParam(value="name")String name,

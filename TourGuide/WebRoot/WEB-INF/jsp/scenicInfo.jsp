@@ -23,17 +23,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<meta name="renderer" content="webkit">
  	 <meta http-equiv="Cache-Control" content="no-siteapp" />
- 	 <link rel="stylesheet" href="<%=path%>/assets/css/ace.onpage-help.css" />
-	<link rel="stylesheet" href="<%=path%>/docs/assets/js/themes/sunburst.css" />
-  	<link rel="icon" type="image/png" href="<%=path %>/assets1/i/favicon.png">
-  	<link rel="apple-touch-icon-precomposed" href="<%=path %>/assets1/i/app-icon72x72@2x.png">
-  	<link rel="stylesheet" href="<%=path %>/assets1/css/amazeui.min.css"/>
-  	<link rel="stylesheet" href="<%=path %>/assets1/css/admin.css">
+ 	 <link rel="stylesheet" href="<%=basePath %>/assets/css/ace.onpage-help.css" />
+	<link rel="stylesheet" href="<%=basePath %>/docs/assets/js/themes/sunburst.css" />
+  	<link rel="icon" type="image/png" href="<%=basePath %>/assets1/i/favicon.png">
+  	<link rel="apple-touch-icon-precomposed" href="<%=basePath %>/assets1/i/app-icon72x72@2x.png">
+  	<link rel="stylesheet" href="<%=basePath %>/assets1/css/amazeui.min.css"/>
+  	<link rel="stylesheet" href="<%=basePath %>/assets1/css/admin.css">
   	<link rel="stylesheet" href="<%=path%>/assets/css/bootstrap.css" />
   	<link rel="stylesheet" href="<%=path%>/assets/css/ace.onpage-help.css" />
 	<link rel="stylesheet" href="<%=path%>/docs/assets/js/themes/sunburst.css" />
-	<script type="text/javascript" src="<%=path %>/assets/js/jquery.js"></script>
-	<script type="text/javascript" src="<%=path %>/assets/js/bootstrap-paginator.min.js"></script>
+	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.js"></script>
+	<script type="text/javascript" src="<%=basePath %>/assets/js/bootstrap-paginator.min.js"></script>
 
   </head>
   
@@ -42,7 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <header class="am-topbar am-topbar-inverse admin-header">
   <div class="am-topbar-brand">
-    <strong>运营人员信息管理</strong> 
+    <strong>景区信息管理</strong> 
   </div>
 </header>
 
@@ -247,8 +247,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <!--[if (gte IE 9)|!(IE)]><!-->
 <!--<![endif]-->
-<script src="<%=path %>/assets1/js/amazeui.min.js"></script>
-<script src="<%=path %>/assets1/js/app.js"></script>
+<script src="<%=basePath %>/assets1/js/amazeui.min.js"></script>
+<script src="<%=basePath %>/assets1/js/app.js"></script>
 <script type="text/javascript">
 	var id=1;
 	var OperateUseInfo="";
@@ -257,13 +257,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	$(document).ready(function()
   	{
-  			
-  			loadGuideInfo();
+  		loadGuideInfo();
   	});
   	function loadGuideInfo()
   	{
-  		var url="<%=basePath%>OperateUser/GetOperateUser.action";
-  		
+  		var url="<%=basePath%>operate/GetOperateUser.action";
   		$.ajax(
   		{
   			url:url,
@@ -272,7 +270,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			data:{currentPage:1,pageRows:pageRows},
   			success: function(data)
   					{
-  						
   					    if(data!=null){
   					    OperateUseInfo = data.jsonStr;
   					    initTable(data.jsonStr,data.page);	
@@ -352,21 +349,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                   "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='DeleteOperate("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
                   "</div></div> </td>";				
                 var t8="</tr>";
-				$("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7);
+				$("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8);
   			});
   	}
  	function serach()
  	{
- 		
- 		var url = "<%=basePath%>OperateUser/SearchOperateUser.action";
- 		var searchText = $("#searchText").val();
- 		var sqlStr = " select * from t_operateper where account = '" + searchText +"'";
- 		alert(searchText);
+ 		var url = "<%=basePath%>operate/SearchOperateUser.action";
+ 		var a = $("#searchText").val();
  		$.ajax( {
  			url:url,
  			type:"get",
  			datatype:"json",
- 			data:{sql:sqlStr},
+ 			data:{sql:a},
  			success:function(data) {
  				if (data.jsonStr == "[]") {
  					alert("没有搜索到任何信息，请重新搜索!");
@@ -398,7 +392,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#addmodal").modal('show');
  	}
  	function AddOperateperInfo() {
- 		var url = "<%=basePath%>OperateUser/AddOperateperInfo.action";
+ 		var url = "<%=basePath%>operate/AddOperateperInfo.action";
  		var name = $("#add_name").val();
  		var account = $("#add_account").val();
  		var role = $("#add_role").val();
@@ -414,18 +408,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  					if (data.confirm) {
  						$("#addmodal").modal('hide');
  						alert("添加成功！");
- 						
+ 						loadGuideInfo();
  					}
  					else
- 						alert("帐号已存在，请重新添加！");
+ 						{alert("帐号已存在，请重新添加！");}
+ 						loadGuideInfo();
  				}
  			});
  		}else{
  		alert("请重新填写运营人员信息！");
  		}
- 		
- 		
- 		
  	}
  
  	function EditOperate(index)
@@ -436,12 +428,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		
  		if((OperateUseInfo[index].Operateper_bool)=="0")
  		{
- 			
  			$("#no").attr("checked","checked");
  		}
  		else
  		{
- 			
  			$("#yes").attr("checked","checked");
  		}
 		$("#edit_phone").val(OperateUseInfo[index].Operateper_phone);
@@ -450,7 +440,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	function editOperateperInfo()
  	{
- 		var url = "<%=basePath%>OperateUser/UpdateOperateperInfo.action";
+ 		var url = "<%=basePath%>operate/UpdateOperateperInfo.action";
  		var name = $("#edit_name").val();
  		var account = $("#edit_account").val();
  		var role = $("#edit_role").val();
@@ -466,7 +456,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  					if (data.confirm) {
  						$("#editmodal").modal('hide');
  						alert("修改成功！");
- 						loadGuideInfo();
  					}
  					else{alert("修改失败，请重新确认修改");
  						$("#editmodal").modal('hide');
@@ -474,7 +463,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  				}
  			});
  		}
- 		
+ 		loadGuideInfo();
  	}
  	function DeleteOperate(index)
  	{	
@@ -487,9 +476,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	
  	function DeleteOperateInfo()
  	{
- 		var url = "<%=basePath%>OperateUser/DeleteOperateperInfo.action";
+ 		var url = "<%=basePath%>operate/DeleteOperateperInfo.action";
  		var account=$("#delete_account").val();
- 		$.ajax( {
+ 		$.ajax({
  				url:url,
  				type:"get",
  				datatype:"json",
@@ -497,7 +486,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  				success:function(data) {
  					if (data.confirm) {
  						$("#deletemodal").modal('hide');
- 						
  					}
  					alert("删除成功");
  					loadGuideInfo();
