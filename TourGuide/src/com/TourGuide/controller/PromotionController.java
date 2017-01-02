@@ -36,7 +36,7 @@ public class PromotionController {
 	public void getPromotions(HttpServletResponse resp) throws IOException{
 		
 		CommonResp.SetUtf(resp);
-		
+
 		List<Promotion> list = promotionService.getPromotions();
 		
 		List<Map<String, Object>> listresult = new ArrayList<Map<String, Object>>();
@@ -49,6 +49,6 @@ public class PromotionController {
 		
 		PrintWriter writer = resp.getWriter();
 		writer.write(new Gson().toJson(listresult));
-		writer.flush();
+		writer.flush();		
 	}
 }

@@ -29,11 +29,11 @@ public class ConsistOrderService {
 	 * @param maxNum 最大可拼单人数
 	 * @return  发布拼单是否成功，成功：1  失败：0
 	 */
-	public boolean ReleaseConsistOrder(String consistOrderID, String scenicID,
+	public boolean ReleaseConsistOrder(String consistOrderID, String orderID, String scenicID,
 			String produceTime, String visitTime, int visitNum, String visitorPhone, 
 			int totalMoney, int purchaseTicket, String orderState, int isConsisted, int maxNum){
 		
-		return consistOrderDao.ReleaseConsistOrder(consistOrderID, scenicID, 
+		return consistOrderDao.ReleaseConsistOrder(consistOrderID, orderID, scenicID, 
 				produceTime, visitTime, visitNum, visitorPhone, 
 				totalMoney, purchaseTicket, orderState, isConsisted, maxNum);
 	}
@@ -48,6 +48,51 @@ public class ConsistOrderService {
 	 */
 	public List<ConsistOrder> getAvailableConsistOrder(String scenicID, String date){
 		return consistOrderDao.getAvailableConsistOrder(scenicID, date);
+	}
+	
+	
+	/**
+	 * 从可拼单列表中选择订单，进行拼单
+	 * @param orderID   订单编号，一个订单编号对应多个拼单编号
+	 * @param consistOrderID  拼单编号
+	 * @param scenicID    景区编号
+	 * @param produceTime  订单生成时间
+	 * @param visitTime  参观时间
+	 * @param visitNum   参观人数
+	 * @param visitorPhone  游客的手机号
+	 * @param totalMoney  此拼单的金额
+	 * @param purchaseTicket  是否代购门票
+	 * @param orderState  拼单的状态
+	 * @param isConsisted   是否被拼单
+	 * @param maxNum
+	 */
+	public boolean consistWithconsistOrderID(String orderID, String consistOrderID, String scenicID,
+			String produceTime, String visitTime, int visitNum, String visitorPhone, int totalMoney, 
+			int currentNum, int purchaseTicket, String orderState, int isConsisted, int maxNum){
+		
+		return consistOrderDao.consistWithconsistOrderID(orderID, consistOrderID, scenicID, 
+				produceTime, visitTime, visitNum, visitorPhone, totalMoney, currentNum,
+				purchaseTicket, orderState, isConsisted, maxNum);
+	}
+	
+	
+	/**
+	 * 根据订单编号，查询该订单中的所有拼单的编号
+	 * @param orderID  订单编号
+	 * @return
+	 */
+	public List<String> getConsistOrderIDsWithOrderID(String orderID){
+		return consistOrderDao.getConsistOrderIDsWithOrderID(orderID);
+	}
+	
+	
+	/**
+	 * 根据拼单编号，查询每个拼单的详细信息
+	 * @param consistOrderID  拼单编号
+	 * @return
+	 */
+	public ConsistOrder getDetailConsistOrder(String consistOrderID){
+		return consistOrderDao.getDetailConsistOrder(consistOrderID);
 	}
 
 }

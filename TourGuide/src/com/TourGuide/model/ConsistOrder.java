@@ -10,9 +10,10 @@ import java.sql.Date;
 public class ConsistOrder {
 	
 	private String consistOrderID; //拼单的编号
-	private Date produceTime; //订单产生时间
-	private Date visitTime; //参观时间
-	private Date endTime; //订单结束时间
+	private String orderID;  //订单编号
+	private String produceTime; //订单产生时间
+	private String visitTime; //参观时间
+	private String endTime; //订单结束时间
 	private String visitorPhone; //预约的游客的手机号
 	private String guidePhone; //导游的手机号
 	private String scenicID; //景点编号
@@ -22,6 +23,7 @@ public class ConsistOrder {
 	private int visitNum; //参观人数 
 	private int maxNum; //每单可带的最大人数
 	private int purchaseTicket; //是否代购门票
+	private int isConsisted; //是否被拼单
 	
 	public String getConsistOrderID() {
 		return consistOrderID;
@@ -29,22 +31,28 @@ public class ConsistOrder {
 	public void setConsistOrderID(String consistOrderID) {
 		this.consistOrderID = consistOrderID;
 	}
-	public Date getProduceTime() {
+	public String getOrderID() {
+		return orderID;
+	}
+	public void setOrderID(String orderID) {
+		this.orderID = orderID;
+	}
+	public String getProduceTime() {
 		return produceTime;
 	}
-	public void setProduceTime(Date produceTime) {
+	public void setProduceTime(String produceTime) {
 		this.produceTime = produceTime;
 	}
-	public Date getVisitTime() {
+	public String getVisitTime() {
 		return visitTime;
 	}
-	public void setVisitTime(Date visitTime) {
+	public void setVisitTime(String visitTime) {
 		this.visitTime = visitTime;
 	}
-	public Date getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Date endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 	public int getVisitNum() {
@@ -106,5 +114,11 @@ public class ConsistOrder {
 	}
 	public void setPurchaseTicket(int purchaseTicket) {
 		this.purchaseTicket = purchaseTicket;
+	}
+	public int getIsConsisted() {
+		return isConsisted;
+	}
+	public void setIsConsisted(int isConsisted) {
+		this.isConsisted = isConsisted;
 	}
 }

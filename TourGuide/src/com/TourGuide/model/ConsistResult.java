@@ -9,7 +9,8 @@ package com.TourGuide.model;
 public class ConsistResult {
 
 	private String orderID; //订单编号
-	private String consistOrderID; //拼单ID
+	private int currentNum; //当前的总人数
+	private int maxNum;  //最大可拼单人数
 	
 	public String getOrderID() {
 		return orderID;
@@ -17,10 +18,16 @@ public class ConsistResult {
 	public void setOrderID(String orderID) {
 		this.orderID = orderID;
 	}
-	public String getConsistOrderID() {
-		return consistOrderID;
+	public int getCurrentNum() {
+		return currentNum;
 	}
-	public void setConsistOrderID(String consistOrderID) {
-		this.consistOrderID = consistOrderID;
+	public void setCurrentNum(int currentNum) {
+		this.currentNum = currentNum;
+	}
+	public int getMaxNum() {
+		return maxNum;
+	}
+	public void setMaxNum(int maxNum) {
+		this.maxNum = maxNum;
 	}
 }
