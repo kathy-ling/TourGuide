@@ -16,10 +16,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta name="renderer" content="webkit">
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 <meta name="apple-mobile-web-app-title" content="Amaze UI" />
-<link rel="stylesheet" href="<%=path %>/assets/css/amazeui.min.css"/>
-<link rel="stylesheet" href="<%=path %>/assets/css/admin.css">
-<script src="<%=path %>/assets/js/jquery.js"></script>
-<script src="<%=path %>/assets/js/app.js"></script>
+<link rel="stylesheet" href="<%=basePath %>/assets/css/amazeui.min.css"/>
+<link rel="stylesheet" href="<%=basePath %>/assets/css/admin.css">
+<script src="<%=basePath %>/assets/js/jquery.js"></script>
+<script src="<%=basePath %>/assets/js/app.js"></script>
 </head>
 <body>
 <!--[if lte IE 9]><p class="browsehappy">升级你的浏览器吧！ <a href="http://se.360.cn/" target="_blank">升级浏览器</a>以获得更好的体验！</p><![endif]-->
@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <body>
 <header class="am-topbar admin-header">
-  <div class="am-topbar-brand"><img src="assets/i/logo.png"></div>
+  <div class="am-topbar-brand"><img src="<%=basePath %>assets/i/logo.png"></div>
 
   <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
     <ul class="am-nav am-nav-pills am-topbar-nav admin-header-list">
@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="sideMenu">
       <h3 class="am-icon-flag"><em></em> <a href="#">运营人员管理</a></h3>
       <ul>
-        <li><a href="view/operateUser.action" target="targetiframe">运营人员信息管理</a></li>
+        <li><a href="operateUser.action" target="targetiframe">运营人员信息管理</a></li>
       </ul>
       <h3 class="am-icon-users"><em></em> <a href="#">讲解员管理</a></h3>
       <ul>
@@ -134,7 +134,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <div class="admin-biaogelist" style="width: 85%;height:90%">
    
-          <iframe name="targetiframe" style="width: 100%; height:90% ; " src="view/FirstShow.action"  ></iframe>
+          <iframe name="targetiframe" style="width: 100%; height:90% ; " src="FirstShow.action"  ></iframe>
     
  <div class="foods">
   <ul>版权所有@2016 </ul>
@@ -158,10 +158,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <![endif]--> 
 
 <!--[if (gte IE 9)|!(IE)]><!--> 
-<script src="<%=path %>/assets/js/amazeui.min.js"></script>
+<script src="<%=basePath %>/assets/js/amazeui.min.js"></script>
 <!--<![endif]-->
 <script type="text/javascript">
-			window.jQuery || document.write("<script src='<%=path %>/assets/js/jquery.js'>"+"<"+"/script>");
+			window.jQuery || document.write("<script src='<%=basePath %>/assets/js/jquery.js'>"+"<"+"/script>");
 		</script>
 
 

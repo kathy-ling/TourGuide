@@ -24,9 +24,8 @@ public class OperateperDao {
 	 * */
 	public List<Operateper> GetOperateUseInfoByPage(int currentPage,int rows)
 	{
-		int i=(currentPage-1)*rows;
-		int j=currentPage*rows;
-		String sql="SELECT * FROM t_operateper LIMIT "+i+" ,"+j+"";
+		int j=(currentPage-1)*rows;
+		String sql="SELECT * FROM t_operateper LIMIT "+j+" ,"+rows+"";
 		
 		List<Map<String , Object>> list=jdbcTemplate.queryForList(sql);
 		List<Operateper> listres=new ArrayList<>();
@@ -54,8 +53,9 @@ public class OperateperDao {
 	 * 参数：SQL语句
 	 * 2016-12-31 14:49:28
 	 * */
-	public List<Operateper> SearchOperateInfoByAccount_Dao(String sql) {
+	public List<Operateper> SearchOperateInfoByAccount_Dao(String a) {
 		final List<Operateper> list = new ArrayList<Operateper>();
+		String sql=" select * from t_operateper where account = '" + a +"'";
 		jdbcTemplate.query(sql, new RowCallbackHandler() {
 			
 

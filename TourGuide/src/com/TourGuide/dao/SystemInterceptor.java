@@ -39,8 +39,8 @@ public class SystemInterceptor implements HandlerInterceptor {
 		String[] notFilter = new String[] {
 				"/assets",
 				"/assets1",
-				"/account",
-				"/captcha/getCaptcha"};
+				"/css",
+				"/docs","/image","/js","logincheck.action","login.action"};
 		
 		// 请求的URI
 		String uri = request.getRequestURI();
@@ -57,7 +57,7 @@ public class SystemInterceptor implements HandlerInterceptor {
 		if (doFilter) {
 			
 			// 从session中获取登录者的实体
-			Object obj = request.getSession().getAttribute("employeeSession");
+			Object obj = request.getSession().getAttribute("adminSession");
 			if (null == obj) {
 
 				// 未登录
@@ -70,7 +70,7 @@ public class SystemInterceptor implements HandlerInterceptor {
 				builder.append("alert(\"页面已过期，请重新登录!\");");
 				builder.append("window.location.href=\"");
 				builder.append(request.getContextPath());
-				builder.append("/account/login\"; </script>");
+				builder.append("/logincheck.action\"; </script>");
 				out.print(builder.toString());
 				out.close();
 				

@@ -19,6 +19,11 @@
 	<context:component-scan base-package="com.TourGuide.service" />
 	<mvc:resources location="/image/visitor/" mapping="/image/visitor/**"/>
 	<mvc:resources location="/image/guide/" mapping="/image/guide/**"/>
+	<mvc:resources location="/assets" mapping="/assets/**"/>
+	<mvc:resources location="/css" mapping="/css/**"/>
+	<mvc:resources location="/assets1" mapping="/assets1/**"/>
+	<mvc:resources location="/js" mapping="/js/**"/>
+	<mvc:resources location="/docs" mapping="/docs/**"/>
 	<bean id="DataSource" class="com.TourGuide.common.XBasicDataSource"
 		p:driverClassName="com.mysql.jdbc.Driver" p:url="jdbc:mysql://202.200.119.158:3306/tourguide"
 		p:username="root" p:password="root123" destroy-method="close" />
@@ -32,13 +37,22 @@
 			id="serviceMethod" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethod" />
 	</aop:config>
+	
+	<!-- 自定义登录拦截器 -->
+	 
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.TourGuide.dao.SystemInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 	<tx:advice id="txAdvice" transaction-manager="transiactionManager">
 		<tx:attributes>
 			<tx:method name="*"/>
 		</tx:attributes>
 	</tx:advice>
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-	p:viewClass="org.springframework.web.servlet.view.JstlView" p:prefix="/jsp/" p:suffix=".jsp"
+	p:viewClass="org.springframework.web.servlet.view.JstlView" p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"
 	/>
 
 </beans>

@@ -3,9 +3,11 @@ package com.TourGuide.Action;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
 @RequestMapping(value="view")
+@SessionAttributes("adminSession")
 public class CommonAction {
 	
 	/*
@@ -22,5 +24,9 @@ public class CommonAction {
 	{
 		return "operateUser";
 	}
-
+	@RequestMapping(value="/index.action",method=RequestMethod.GET)
+	public String ToMain1()
+	{
+		return "main1";
+	}
 }

@@ -1,9 +1,12 @@
 package com.TourGuide.Action;
 
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.TourGuide.model.AdminInfo;
@@ -25,6 +29,7 @@ import com.TourGuide.service.AdminService;
  * */
 
 @Controller
+@SessionAttributes("adminSession")
 public class AdminAction {
 
 	@Autowired
@@ -42,21 +47,23 @@ public class AdminAction {
 	 * 
 	 * 
 	 * */
-	@RequestMapping(value="/login.action" ,method=RequestMethod.POST )
+	@RequestMapping(value="/login.action" ,method=RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView Login(@RequestParam(value="username")String username,
+	public Object  Login(@RequestParam(value="username")String username,
 			@RequestParam(value="password")String password,
 			HttpServletRequest request, 
-			HttpSession session, ModelMap model) {
+			HttpSession session, ModelMap model,HttpServletResponse resp) throws IOException {
 		boolean flag=adminService.isValid(username, password);
 		AdminInfo adminInfo=new AdminInfo();
 		adminInfo.setUsername(username);
 		adminInfo.setPassword(password);
+		Map<String , Object> map=new HashMap<String, Object>();
 		if (flag==true) {
 			
 			// 添加用户session
 			model.addAttribute("adminSession", adminInfo);
-			return new ModelAndView("main1");
+			resp.sendRedirect("/TourGuide/view/index.action");
+			return null;
 		} else {
 			return new ModelAndView("index","error","用户名或密码错误");
 		}

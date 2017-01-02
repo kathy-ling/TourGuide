@@ -22,7 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<font color="red"><c:out value="${error}"></c:out></font>
     	</c:if>
 	</div>
-		<form action="login.action" id="lg-form" name="lg-form" method="post">
+		<form action="login.action" id="lg-form" name="lg-form"  method="post">
 			
 			<div>
 				<label for="username">Username:</label>
@@ -42,7 +42,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 	</body>
 	<script>
-		
-		
+	
 	</script>
 </html>

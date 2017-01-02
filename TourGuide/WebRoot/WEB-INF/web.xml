@@ -8,7 +8,7 @@
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     <init-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>/config/Service.xml</param-value>
+      <param-value>/WEB-INF/config/Service.xml</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -17,7 +17,7 @@
   <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
   <init-param>
   <param-name>contextConfigLocation</param-name>
-   <param-value>/config/WebManager.xml</param-value>
+   <param-value>/WEB-INF/config/WebManager.xml</param-value>
   </init-param>
   <load-on-startup>2</load-on-startup>
   </servlet>
@@ -30,4 +30,8 @@
   <servlet-name>SpringMvc1</servlet-name>
   <url-pattern>*.action</url-pattern>
   </servlet-mapping>
+  
+  <session-config>
+  		<session-timeout>10</session-timeout>
+  </session-config>
 </web-app>
