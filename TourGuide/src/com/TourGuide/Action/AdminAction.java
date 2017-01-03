@@ -57,7 +57,6 @@ public class AdminAction {
 		AdminInfo adminInfo=new AdminInfo();
 		adminInfo.setUsername(username);
 		adminInfo.setPassword(password);
-		Map<String , Object> map=new HashMap<String, Object>();
 		if (flag==true) {
 			
 			// 添加用户session

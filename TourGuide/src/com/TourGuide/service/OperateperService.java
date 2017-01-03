@@ -14,28 +14,55 @@ public class OperateperService {
 	@Autowired
 	private OperateperDao operateperDao;
 	
+	/*
+	 *通过分页语句来得到运营人员的信息 
+	 *2017-1-3 14:15:26
+	 * */
 	public List<Operateper> getOperatepersByPage(int i,int j) {
 		return operateperDao.GetOperateUseInfoByPage(i, j);
 	}
 	
+	/*
+	 * 得到运营人员的个数
+	 * 2017-1-3 14:16:19
+	 * */
 	public  int  GetOperateCount()
 	{
 		return operateperDao.GetOperateCount();
 	}
 	
 	
-	public List<Operateper> SearchOperateInfoByAccount_Service(String sql) {
-		return operateperDao.SearchOperateInfoByAccount_Dao(sql);
+	/*
+	 * 通过运营人员的名字来进行运营人员查询
+	 * 2017-1-3 14:17:35
+	 * */
+	public List<Operateper> SearchOperateInfoByAccount_Service(String name) {
+		return operateperDao.SearchOperateInfoByAccount_Dao(name);
 	}
 	
+	
+	/*
+	 * 添加运营人员
+	 * 2017-1-3 14:17:50
+	 * */
 	public boolean AddOperateperInfo_Service(Operateper operateper) {
 		return operateperDao.AddOperateperInfo_Dao(operateper);
 	}
 	
+	
+	/*
+	 * 删除运营人员
+	 * 2017-1-3 14:18:04
+	 * */
 	public boolean DeleteOperateperInfo_Service(String s) {
 		return operateperDao.DeleteOperateperInfo(s);
 	}
 	
+	
+	/*
+	 * 更新运营人员信息
+	 * 2017-1-3 14:18:28
+	 * */
 	public boolean UpdateOperateperInfo_Service(Operateper operateper) {
 		return operateperDao.UpdateOperateperInfo(operateper);
 	}

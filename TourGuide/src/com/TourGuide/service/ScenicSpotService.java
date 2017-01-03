@@ -5,9 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.TourGuide.dao.OperateperDao;
 import com.TourGuide.dao.ScenicSpotDao;
-import com.TourGuide.model.Operateper;
 import com.TourGuide.model.ScenicsSpotInfo;
 
 @Service
@@ -55,28 +53,51 @@ public class ScenicSpotService {
 //		return scenicSpotDao.getRelatedScenicByLocation(location);
 //	}
 	
+	/*
+	 * 为景区信息进行分页
+	 * 2017-1-3 14:43:09
+	 * */
 	public List<ScenicsSpotInfo> getScenicInfoByPage(int i,int j) {
 		return scenicSpotDao.GetScenicInfoByPage(i, j);
 	}
-
+	
+	/*
+	 * 得到景区信息表的景区数目
+	 * 2017-1-3 14:43:14
+	 * */
 	public  int  GetScenicCount()
 	{
 		return scenicSpotDao.GetScenicCount();
 	}
 	
-	
-	public List<ScenicsSpotInfo> SearchScenicInfoByName_Service(String sql) {
-		return scenicSpotDao.SearchSceincInfoByName_Dao(sql);
+	/*
+	 * 通过景区名称来获取景区信息
+	 * 2017-1-3 14:44:29
+	 * */
+	public List<ScenicsSpotInfo> SearchScenicInfoByName_Service(String name) {
+		return scenicSpotDao.SearchSceincInfoByName_Dao(name);
 	}
 	
+	/*
+	 * 添加景区信息
+	 * 2017-1-3 14:44:50
+	 * */
 	public boolean AddScenicInfo_Service(ScenicsSpotInfo scenicsSpotInfo) {
 		return scenicSpotDao.AddScenicInfo_Dao(scenicsSpotInfo);
 	}
 	
+	/*
+	 * 通过景区名称来删除景区信息
+	 * 2017-1-3 14:45:25
+	 * */
 	public boolean DeleteScenicInfo_Service(String s) {
 		return scenicSpotDao.DeleteScenicInfo(s);
 	}
 	
+	/*
+	 * 更新景区信息
+	 * 2017-1-3 14:45:38
+	 * */
 	public boolean UpdateScenicInfo_Service(ScenicsSpotInfo scenicsSpotInfo) {
 		return scenicSpotDao.UpdateScenicInfo(scenicsSpotInfo);
 	}
