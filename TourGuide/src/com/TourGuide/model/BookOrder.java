@@ -10,9 +10,9 @@ import java.sql.Date;
 public class BookOrder {
 	
 	private String bookOrderID; //预约订单的编号
-	private Date produceTime; //下单时间
-	private Date visitTime; //参观时间
-	private Date endTime; //订单结束时间
+	private String produceTime; //下单时间
+	private String visitTime; //参观时间
+	private String endTime; //订单结束时间
 	private String visitorPhone; //预约的游客的手机号
 	private String guidePhone; //被预约的导游的手机号
 	private String orderState; //订单状态
@@ -33,22 +33,22 @@ public class BookOrder {
 	public void setBookOrderID(String bookOrderID) {
 		this.bookOrderID = bookOrderID;
 	}
-	public Date getProduceTime() {
+	public String getProduceTime() {
 		return produceTime;
 	}
-	public void setProduceTime(Date produceTime) {
+	public void setProduceTime(String produceTime) {
 		this.produceTime = produceTime;
 	}
-	public Date getVisitTime() {
+	public String getVisitTime() {
 		return visitTime;
 	}
-	public void setVisitTime(Date visitTime) {
+	public void setVisitTime(String visitTime) {
 		this.visitTime = visitTime;
 	}
-	public Date getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Date endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 	public String getVisitorPhone() {
