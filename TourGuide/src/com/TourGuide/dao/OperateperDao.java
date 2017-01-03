@@ -67,7 +67,7 @@ public class OperateperDao {
 				operateper.setOperateper_account(rSet.getString(2));
 				operateper.setOperateper_role(rSet.getString(3));
 				operateper.setOperateper_phone(rSet.getString(4));
-				operateper.setOperateper_bool(rSet.getShort(5));
+				operateper.setOperateper_bool(rSet.getInt(5));
 				list.add(operateper);
 			}
 		});

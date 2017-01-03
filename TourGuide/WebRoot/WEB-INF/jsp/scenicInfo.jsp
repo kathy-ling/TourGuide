@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>My JSP 'operateUser.jsp' starting page</title>
+    <title>My JSP 'ScenicInfo.jsp' starting page</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -17,7 +17,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
  	 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  	<title>运营人员信息管理</title>
+  	<title>景区信息信息管理</title>
  	 <meta name="description" content="这是一个 table 页面">
   	<meta name="keywords" content="table">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <div class="admin-content">
     <div class="admin-content-body">
       <div class="am-cf am-padding am-padding-bottom-0">
-        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">运营人员管理</strong> / <small>运营人员信息管理</small></div>
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">景区信息管理</strong> / <small>景区信息信息管理</small></div>
       </div>
 
       <hr>
@@ -60,7 +60,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="am-u-sm-12 am-u-md-6">
           <div class="am-btn-toolbar">
             <div class="am-btn-group am-btn-group-xs">
-              <button type="button" class="am-btn am-btn-default" onclick="addOperateUser()"><span class="am-icon-plus"></span> 新增运营人员</button>
+              <button type="button" class="am-btn am-btn-default" onclick="addScenicInfo()"><span class="am-icon-plus"></span> 发布景区信息</button>
             </div>
           </div>
         </div>
@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="am-u-sm-12 am-u-md-3">
           <div class="am-input-group am-input-group-sm">
             
-            <input type="text" id="searchText" class="am-form-field" placeholder="账号">
+            <input type="text" id="searchText" class="am-form-field" placeholder="名称">
           <span class="am-input-group-btn">
             <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="serach()">搜索</button>
           </span>
@@ -82,7 +82,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <table  class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px; " >
               <thead>
               <tr>
-                <th  style="align-content: center; width: 10%;">姓名</th><th  style="align-content: center; width: 10%;">账号</th><th style="align-content: center; width: 10%;">角色</th><th style="align-content: center; width: 10%;">手机号</th><th style="align-content: center; width: 10%;">禁用状态</th><th style="align-content: center; width: 10%;">操作</th>
+                <th  style="align-content: center; width: 10%;">编号</th><th  style="align-content: center; width: 10%;">名称</th><th style="align-content: center; width: 10%;">历史参观人数</th><th style="align-content: center; width: 10%;">开放时间</th><th style="align-content: center; width: 10%;">景区等级</th><th style="align-content: center; width: 10%;">操作</th>
               </tr>
               </thead>
               <tbody id="tby" >
@@ -109,22 +109,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        <span class="blue">X</span>
 	                    </button>
 						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
-							增加运营人员
+							增加景区信息
 						</h4>
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr ><td >姓名：</td>
-						<td><input  type="text" id="add_name" name="add_name" /></td>
-						</tr>
-						<tr><td>账号：</td>
-						<td><input  type="text" id="add_account" name="add_account" /></td>
-						</tr>
-						<tr><td>角色:</td>
-						<td><input  type="text"  id="add_role" name="add_role" /></td></tr>
-						<tr><td>手机号:</td>
-						<td><input  type="text"  id="add_phone" name="add_phone" /></td></tr>
-						<tr><td colspan="2" style="text-align:center;"><button class="close" onclick="AddOperateperInfo()" >确定增加</button></td></tr>
+						<tr ><td >编号：</td>
+						<td><input  type="text" id="add_scenicNo" name="add_scenicNo" /></td></tr>
+						<tr><td>名称：</td>
+						<td><input  type="text" id="add_scenicName" name="add_scenicName" /></td></tr>
+						<tr><td>景区介绍：</td>
+						<td><textarea rows="3" cols="22" id="add_scenicIntro" name="add_scenicIntro"></textarea></td></tr>												
+						<tr><td>历史参观人数:</td>
+						<td><input  type="text"  id="add_totalVisits" name="add_totalVisits" /></td></tr>
+						<tr><td>开放时间:</td>
+						<td><input  type="text"  id="add_openingHours" name="add_openingHours" /></td></tr>
+						<tr><td>所在省份：</td>
+						<td><input  type="text" id="add_province" name="add_province" /></td></tr>
+						<tr><td>所在市:</td>
+						<td><input  type="text"  id="add_city" name="add_city"" /></td></tr>
+						<tr><td>详细位置:</td>
+						<td><input  type="text"  id="add_scenicLocation" name="add_scenicLocation"" /></td></tr>
+						<tr><td>是否为热门景点:</td>
+						<td>
+						<input type="radio" value="HotSpot" name="add_isHotSpot" checked="checked"><label for="热门">热门</label>
+						<input type="radio" value="notHotSpot" name="add_isHotSpot"><label for="非热门">非热门</label>
+						</td></tr>
+						<tr><td>景区等级:</td>
+						<td><input  type="text"  id="add_scenicLevel" name="add_scenicLevel"" /></td></tr>
+						<tr><td>负责人:</td>
+						<td><input  type="text"  id="add_chargePerson" name="add_chargePerson"" /></td></tr>
+						<tr><td colspan="2" style="text-align:center;"><button class="close" onclick="AddScenicInfo()" >确定增加</button></td></tr>
 						
 					</table>
 					
@@ -141,26 +156,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        <span class="blue">X</span>
 	                    </button>
 						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
-							编辑运营人员
+							编辑景区信息
 						</h4>
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr ><td >姓名：</td>
-						<td><input  type="text" id="edit_name" name="edit_name" /></td>
-						</tr>
-						<tr><td>账号：</td>
-						<td><input  type="text" id="edit_account" name="edit_account" readonly="true" /></td>
-						</tr>
-						<tr><td>角色:</td>
-						<td><input  type="text"  id="edit_role" name="edit_role" /></td></tr>
-						<tr><td>手机号:</td>
-						<td><input  type="text"  id="edit_phone" name="edit_phone" /></td></tr>
-						<tr><td>状态</td><td align="center">
-							<input type="radio" id="yes" name="1" value="1"/>禁用
-							<input style="" id="no" type="radio" name="1" value="0"/>未禁用
-							</td></tr>
-						<tr><td colspan="2" style="text-align:center;"><button  onclick="editOperateperInfo()" >修改</button></td></tr>
+						<tr ><td >编号：</td>
+						<td><input  type="text" id="edit_scenicNo" name="edit_scenicNo" /></td></tr>
+						<tr><td>名称：</td>
+						<td><input  type="text" id="edit_scenicName" name="edit_scenicName" /></td></tr>
+						<tr><td>景区介绍：</td>
+						<td><textarea rows="3" cols="22" id="edit_scenicIntro" name="edit_scenicIntro"></textarea></td></tr>												
+						<tr><td>历史参观人数:</td>
+						<td><input  type="text"  id="edit_totalVisits" name="edit_totalVisits" /></td></tr>
+						<tr><td>开放时间:</td>
+						<td><input  type="text"  id="edit_openingHours" name="edit_openingHours" /></td></tr>
+						<tr><td>所在省份：</td>
+						<td><input  type="text" id="edit_province" name="edit_province" /></td></tr>
+						<tr><td>所在市:</td>
+						<td><input  type="text"  id="edit_city" name="edit_city"" /></td></tr>
+						<tr><td>详细位置:</td>
+						<td><input  type="text"  id="edit_scenicLocation" name="edit_scenicLocation"" /></td></tr>
+						<tr><td>是否为热门景点:</td>
+						<td>
+						<input type="radio" value="HotSpot" name="edit_isHotSpot" checked="checked"><label for="热门">热门</label>
+						<input type="radio" value="notHotSpot" name="edit_isHotSpot"><label for="非热门">非热门</label>
+						</td></tr>						
+						<tr><td>景区等级:</td>
+						<td><input  type="text"  id="edit_scenicLevel" name="edit_scenicLevel"" /></td></tr>
+						<tr><td>负责人:</td>
+						<td><input  type="text"  id="edit_chargePerson" name="edit_chargePerson"" /></td></tr>
+				<tr><td colspan="2" style="text-align:center;"><button  onclick="editScenicInfo()" >修改</button></td></tr>
 						
 					</table>
 					
@@ -183,19 +209,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr ><td >姓名：</td>
-						<td><input id="SearchName" style="text-align:center; " readonly= "true " /></td>
-						</tr>
-						<tr><td>账号：</td>
-						<td><input id="SearchAccount" style="text-align:center;" readonly= "true "/></td>
-						</tr>
-						<tr><td>角色：</td>
-						<td><input id="SearchRole" style="text-align:center;"readonly= "true " /></td></tr>
-						<tr><td>手机号：</td>
-						<td><input id="SearchPhone" style="text-align:center;"readonly= "true " /></td></tr>						
+						<tr ><td >编号：</td>
+						<td><input  type="text" id="search_scenicNo" name="search_scenicNo" readonly="true" /></td></tr>
+						<tr><td>名称：</td>
+						<td><input  type="text" id="search_scenicName" name="search_scenicName" readonly="true" /></td></tr>
+						<tr><td>景区介绍：</td>
+						<td><textarea rows="3" cols="22" id="search_scenicIntro" name="search_scenicIntro" readonly="true"></textarea></td></tr>												
+						<tr><td>历史参观人数:</td>
+						<td><input  type="text"  id="search_totalVisits" name="search_totalVisits"  readonly="true"/></td></tr>
+						<tr><td>开放时间:</td>
+						<td><input  type="text"  id="search_openingHours" name="search_openingHours" readonly="true" /></td></tr>
+						<tr><td>所在省份：</td>
+						<td><input  type="text" id="search_province" name="search_province" readonly="true"/></td></tr>
+						<tr><td>所在市:</td>
+						<td><input  type="text"  id="search_city" name="search_city"" readonly="true" /></td></tr>
+						<tr><td>详细位置:</td>
+						<td><input  type="text"  id="search_scenicLocation" name="search_scenicLocation" readonly="true" /></td></tr>
+						<tr><td>是否为热门景点:</td>
+						<td><input  type="text"  id="search_isHotSpot" name="search_isHotSpot" readonly="true" /></td></tr>
+						<tr><td>景区等级:</td>
+						<td><input  type="text"  id="search_scenicLevel" name="search_scenicLevel" readonly="true" /></td></tr>
+						<tr><td>负责人:</td>
+						<td><input  type="text"  id="search_chargePerson" name="search_chargePerson"" readonly="true" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true" >确定</button></td></tr>
 					</table>
-					
 									
 					</div>
 				</div>
@@ -209,23 +246,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        <span class="blue">X</span>
 	                    </button>
 						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
-							删除运营人员
+							删除景区信息
 						</h4>
 					</div>
 					<div class="modal-body">
 						<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr ><td >姓名：</td>
-						<td><input  type="text" id="delete_name" name="delete_name"  readonly="true"/></td>
+						<tr ><td >编号：</td>
+						<td><input  type="text" id="delete_scenicNo" name="delete_scenicNo" readonly="true" /></td>
 						</tr>
-						<tr><td>账号：</td>
-						<td><input  type="text" id="delete_account" name="delete_account" readonly="true" /></td>
+						<tr><td>名称：</td>
+						<td><input  type="text" id="delete_scenicName" name="delete_scenicName" readonly="true"/></td>
 						</tr>
-						<tr><td>角色:</td>
-						<td><input  type="text"  id="delete_role" name="delete_role"  readonly="true"/></td></tr>
-						<tr><td>手机号:</td>
-						<td><input  type="text"  id="delete_phone" name="delete_phone" readonly="true" /></td></tr>
+						<tr><td>历史参观人数:</td>
+						<td><input  type="text"  id="delete_totalVisits" name="delete_totalVisits" readonly="true" /></td></tr>
+						<tr><td>开放时间:</td>
+						<td><input  type="text"  id="delete_openingHours" name="delete_openingHours" readonly="true" /></td></tr>
+						<tr><td>景区等级:</td>
+						<td><input  type="text"  id="delete_scenicLevel" name="delete_scenicLevel" readonly="true" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><div >
-							<button class="btn btn-danger" onclick="DeleteOperateInfo()">Delete</button>
+							<button class="btn btn-danger" onclick="DeleteScenicInfo()">Delete</button>
 											
 						</div></td></tr>
 						
@@ -251,17 +290,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="<%=basePath %>/assets1/js/app.js"></script>
 <script type="text/javascript">
 	var id=1;
-	var OperateUseInfo="";
+	var ScenicInfo="";
 	var currentPage=1;
 	var pageRows=5;
 	
 	$(document).ready(function()
   	{
-  		loadGuideInfo();
+  		loadScenicInfo();
   	});
-  	function loadGuideInfo()
+  	function loadScenicInfo()
   	{
-  		var url="<%=basePath%>operate/GetOperateUser.action";
+  		var url="<%=basePath%>scenic/GetScenicInfo.action";
   		$.ajax(
   		{
   			url:url,
@@ -271,7 +310,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			success: function(data)
   					{
   					    if(data!=null){
-  					    OperateUseInfo = data.jsonStr;
+  					    ScenicInfo = data.jsonStr;
   					    initTable(data.jsonStr,data.page);	
   					       // 获取currentPage 请求页面
 						var currentPage = data.page;
@@ -328,25 +367,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	function initTable(jsonStr,currentPage)
   	{
   		$("#tby").html("");
-  		OperateUseInfo=JSON.parse(jsonStr);
-  		$.each(OperateUseInfo,function(index,value)
+  		ScenicInfo=JSON.parse(jsonStr);
+  		$.each(ScenicInfo,function(index,value)
   			{
   				var t0="<tr>";
-  				var t2="<td style='align-content: center; width: 10%;'>"+value.Operateper_name+"</td>";
-              	var t3="<td style='align-content: center; width: 10%;'>"+value.Operateper_account+"</td>";
-              	var t4="<td style='align-content: center; width: 10%;'>"+value.operateper_role+"</td>";
-              	var t5="<td style='align-content: center; width: 10%;'>"+value.Operateper_phone+"</td>";
+  				var t2="<td style='align-content: center; width: 10%;'>"+value.scenicNo+"</td>";
+              	var t3="<td style='align-content: center; width: 10%;'>"+value.scenicName+"</td>";
+              	var t4="<td style='align-content: center; width: 10%;'>"+value.totalVisits+"</td>";
+              	var t5="<td style='align-content: center; width: 10%;'>"+value.openingHours+"</td>";
+              	var t6="<td style='align-content: center; width: 10%;'>"+value.scenicLevel+"</td>";
               	var c;
-              	if(value.Operateper_bool=="0"){
+                /*if(value.=="0"){
               		c="未禁用";
               	}else{
               		c="禁用";
-              	}
-              	var	t6="<td style='align-content: center; width: 10%;'>"+c+"</td>";
+              	}*/
+              	//var	t6="<td style='align-content: center; width: 10%;'>"+c+"</td>";
               	var t7="<td style='align-content: center; width: 10%;'> <div class='am-btn-toolbar'>"+
               	"<div class='am-btn-group am-btn-group-xs'>"+
-              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='EditOperate("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
-                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='DeleteOperate("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='EditScenic("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
+                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='DeleteScenic("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
                   "</div></div> </td>";				
                 var t8="</tr>";
 				$("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8);
@@ -354,7 +394,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	}
  	function serach()
  	{
- 		var url = "<%=basePath%>operate/SearchOperateUser.action";
+ 		var url = "<%=basePath%>scenic/SearchScenicInfo.action";
  		var a = $("#searchText").val();
  		$.ajax( {
  			url:url,
@@ -374,85 +414,132 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	
  	function SearchSuccess(jsonStr) {
  			$.each(JSON.parse(jsonStr),function(index,value){
- 			$("#SearchName").val(value.Operateper_name);
- 			$("#SearchAccount").val(value.Operateper_account);
- 			$("#SearchRole").val(value.operateper_role);
- 			$("#SearchPhone").val(value.Operateper_phone);
- 			
+ 			$("#search_scenicNo").val(value.scenicNo);
+ 			$("#search_scenicName").val(value.scenicName);
+ 			$("#search_totalVisits").val(value.totalVisits);
+ 			$("#search_openingHours").val(value.openingHours);
+ 			$("#search_scenicLevel").val(value.scenicLevel);
+ 			$("#search_scenicIntro").val(value.scenicIntro);
+ 			$("#search_province").val(value.province);
+ 			$("#search_city").val(value.city);
+ 			$("#search_scenicLocation").val(value.scenicLocation);
+ 			if (value.isHotSpot == 1) $("#search_isHotSpot").val("热门");
+ 			else $("#search_isHotSpot").val("非热门");
+ 			$("#search_chargePerson").val(value.chargePerson);
  		});
  		$("#SearchModal").modal('show');
  	}
  	
- 	function addOperateUser()
+ 	function addScenicInfo()
  	{
- 		$("#add_name").val("");
- 		$("#add_account").val("");
- 		$("#add_role").val("");
- 		$("#add_phone").val("");
+ 		$("#add_scenicNo").val("");
+ 		$("#add_scenicName").val("");
+ 		$("#add_totalVisits").val("");
+ 		$("#add_openingHours").val("");
+ 		$("#add_scenicLevel").val("");
+ 		$("#add_scenicIntro").val("");
+ 		$("#add_province").val("");
+ 		$("#add_city").val("");
+ 		$("#add_scenicLocation").val("");
+ 		//$("#add_isHotSpot").val("");
+ 		$("#add_chargePerson").val("");
  		$("#addmodal").modal('show');
  	}
- 	function AddOperateperInfo() {
- 		var url = "<%=basePath%>operate/AddOperateperInfo.action";
- 		var name = $("#add_name").val();
- 		var account = $("#add_account").val();
- 		var role = $("#add_role").val();
- 		var phone = $("#add_phone").val();
+ 	
+ 	function AddScenicInfo() {
+ 		var url = "<%=basePath%>scenic/AddScenicInfo.action";
+  		var scenicNo = $("#add_scenicNo").val();
+ 		var scenicName = $("#add_scenicName").val();
+ 		var totalVisits = $("#add_totalVisits").val();
+ 		var openingHours = $("#add_openingHours").val();
+ 		var scenicLevel = $("#add_scenicLevel").val();
+ 		var scenicIntro = $("#add_scenicIntro").val();
+ 		var province = $("#add_province").val();
+ 		var city = $("#add_city").val();
+ 		var scenicLocation = $("#add_scenicLocation").val();
+ 		var isHotSpot = $("input[name=add_isHotSpot]:checked").val();
+ 		if (isHotSpot == "HotSpot") isHotSpot = 1;
+ 		else isHotSpot = 0;
+ 		var chargePerson = $("#add_chargePerson").val();
  		
- 		if (name != "" && account != "" && role != "" && phone != "") {
+ 		if (scenicNo != "" && scenicName != "" && totalVisits != "" && openingHours != "" && scenicLevel != ""
+ 			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") {
  			$.ajax( {
  				url:url,
  				type:"get",
  				datatype:"json",
- 				data:{name:name,account:account,role:role,phone:phone},
+ 				data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
+ 					scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
+ 					scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson},
  				success:function(data) {
  					if (data.confirm) {
  						$("#addmodal").modal('hide');
  						alert("添加成功！");
- 						loadGuideInfo();
+ 						loadScenicInfo();
  					}
- 					else
- 						{alert("帐号已存在，请重新添加！");}
- 						loadGuideInfo();
+ 					else {
+ 						var str = "\"" + scenicName + "\"已存在，请重新添加！";
+ 						alert(str);
+ 					}
+ 						loadScenicInfo();
  				}
  			});
  		}else{
- 		alert("请重新填写运营人员信息！");
+ 		alert("信息不能为空，请重新填写景区信息！");
  		}
  	}
  
- 	function EditOperate(index)
+ 	function EditScenic(index)
  	{
- 		$("#edit_name").val(OperateUseInfo[index].Operateper_name);
- 		$("#edit_account").val(OperateUseInfo[index].Operateper_account);
- 		$("#edit_role").val(OperateUseInfo[index].operateper_role);
- 		
- 		if((OperateUseInfo[index].Operateper_bool)=="0")
+ 		$("#edit_scenicNo").val(ScenicInfo[index].scenicNo);
+ 		$("#edit_scenicName").val(ScenicInfo[index].scenicName);
+ 		$("#edit_totalVisits").val(ScenicInfo[index].totalVisits);
+ 		$("#edit_openingHours").val(ScenicInfo[index].openingHours);
+ 		$("#edit_scenicLevel").val(ScenicInfo[index].scenicLevel);
+ 		$("#edit_scenicLocation").val(ScenicInfo[index].scenicLocation);
+ 		$("#edit_province").val(ScenicInfo[index].province);
+ 		$("#edit_city").val(ScenicInfo[index].city);
+ 		$("#edit_scenicIntro").val(ScenicInfo[index].scenicIntro);
+ 		$("#edit_chargePerson").val(ScenicInfo[index].chargePerson);
+ 		if(ScenicInfo[index].isHotSpot==1) $("input[name=edit_isHotSpot]:eq(0)").attr("checked",'checked'); 
+ 		else  $("input[name=edit_isHotSpot]:eq(1)").attr("checked",'checked'); 
+ 		/*if((ScenicInfo[index].)=="0")
  		{
  			$("#no").attr("checked","checked");
  		}
  		else
  		{
  			$("#yes").attr("checked","checked");
- 		}
-		$("#edit_phone").val(OperateUseInfo[index].Operateper_phone);
+ 		}*/
+ 		
  		$("#editmodal").modal('show');
  		
  	}
- 	function editOperateperInfo()
+ 	function editScenicInfo()
  	{
- 		var url = "<%=basePath%>operate/UpdateOperateperInfo.action";
- 		var name = $("#edit_name").val();
- 		var account = $("#edit_account").val();
- 		var role = $("#edit_role").val();
- 		var phone = $("#edit_phone").val();
- 		var a = $("input[name='1']:checked").val();
- 		if (name != "" && account != "" && role != "" && phone != "") {
- 			$.ajax( {
+ 		var url = "<%=basePath%>scenic/UpdateScenicInfo.action";
+ 		var scenicNo = $("#edit_scenicNo").val();
+ 		var scenicName = $("#edit_scenicName").val();
+ 		var totalVisits = $("#edit_totalVisits").val();
+ 		var openingHours = $("#edit_openingHours").val();
+ 		var scenicLevel = $("#edit_scenicLevel").val();
+ 		var scenicIntro = $("#edit_scenicIntro").val();
+ 		var province = $("#edit_province").val();
+ 		var city = $("#edit_city").val();
+ 		var scenicLocation = $("#edit_scenicLocation").val();
+ 		var isHotSpot = $("input[name=edit_isHotSpot]:checked").val();
+ 		if (isHotSpot == "HotSpot") isHotSpot = 1;
+ 		else isHotSpot = 0;
+ 		var chargePerson = $("#edit_chargePerson").val();
+ 		if (scenicNo != "" && scenicName != "" && totalVisits != "" && openingHours != "" && scenicLevel != ""
+ 			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") { 			
+ 			 $.ajax( {
  				url:url,
  				type:"get",
  				datatype:"json",
- 				data:{name:name,account:account,role:role,phone:phone,bool:a},
- 				success:function(data) {
+ 				data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
+ 					scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
+ 					scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson}, 				success:function(data) {
  					if (data.confirm) {
  						$("#editmodal").modal('hide');
  						alert("修改成功！");
@@ -463,32 +550,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  				}
  			});
  		}
- 		loadGuideInfo();
+ 		loadScenicInfo();
  	}
- 	function DeleteOperate(index)
+ 	function DeleteScenic(index)
  	{	
- 		$("#delete_name").val(OperateUseInfo[index].Operateper_name);
- 		$("#delete_account").val(OperateUseInfo[index].Operateper_account);
- 		$("#delete_role").val(OperateUseInfo[index].operateper_role);
-		$("#delete_phone").val(OperateUseInfo[index].Operateper_phone);
+ 		$("#delete_scenicNo").val(ScenicInfo[index].scenicNo);
+ 		$("#delete_scenicName").val(ScenicInfo[index].scenicName);
+ 		$("#delete_totalVisits").val(ScenicInfo[index].totalVisits);
+ 		$("#delete_openingHours").val(ScenicInfo[index].openingHours);
+ 		$("#delete_scenicLevel").val(ScenicInfo[index].scenicLevel);
  		$("#deletemodal").modal('show');	
  	}
  	
- 	function DeleteOperateInfo()
+ 	function DeleteScenicInfo()
  	{
- 		var url = "<%=basePath%>operate/DeleteOperateperInfo.action";
- 		var account=$("#delete_account").val();
+ 		var url = "<%=basePath%>scenic/DeleteScenicInfo.action";
+ 		var scenicName=$("#delete_scenicName").val();
  		$.ajax({
  				url:url,
  				type:"get",
  				datatype:"json",
- 				data:{account:account},
+ 				data:{scenicName:scenicName},
  				success:function(data) {
  					if (data.confirm) {
  						$("#deletemodal").modal('hide');
  					}
  					alert("删除成功");
- 					loadGuideInfo();
+ 					loadScenicInfo();
  				}
  			});
  		

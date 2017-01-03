@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.TourGuide.dao.OperateperDao;
 import com.TourGuide.dao.ScenicSpotDao;
+import com.TourGuide.model.Operateper;
 import com.TourGuide.model.ScenicsSpotInfo;
 
 @Service
@@ -52,4 +54,31 @@ public class ScenicSpotService {
 //	public List<ScenicsSpotInfo> getRelatedScenicByLocation(String location){
 //		return scenicSpotDao.getRelatedScenicByLocation(location);
 //	}
+	
+	public List<ScenicsSpotInfo> getScenicInfoByPage(int i,int j) {
+		return scenicSpotDao.GetScenicInfoByPage(i, j);
+	}
+
+	public  int  GetScenicCount()
+	{
+		return scenicSpotDao.GetScenicCount();
+	}
+	
+	
+	public List<ScenicsSpotInfo> SearchScenicInfoByName_Service(String sql) {
+		return scenicSpotDao.SearchSceincInfoByName_Dao(sql);
+	}
+	
+	public boolean AddScenicInfo_Service(ScenicsSpotInfo scenicsSpotInfo) {
+		return scenicSpotDao.AddScenicInfo_Dao(scenicsSpotInfo);
+	}
+	
+	public boolean DeleteScenicInfo_Service(String s) {
+		return scenicSpotDao.DeleteScenicInfo(s);
+	}
+	
+	public boolean UpdateScenicInfo_Service(ScenicsSpotInfo scenicsSpotInfo) {
+		return scenicSpotDao.UpdateScenicInfo(scenicsSpotInfo);
+	}
 }
+

@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>My JSP 'operateUser.jsp' starting page</title>
+    <title>My JSP 'VisitorInfo.jsp' starting page</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -17,7 +17,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
  	 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  	<title>运营人员信息管理</title>
+  	<title>游客信息管理</title>
  	 <meta name="description" content="这是一个 table 页面">
   	<meta name="keywords" content="table">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,7 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <header class="am-topbar am-topbar-inverse admin-header">
   <div class="am-topbar-brand">
-    <strong>运营人员信息管理</strong> 
+    <strong>游客信息管理</strong> 
   </div>
 </header>
 
@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <div class="admin-content">
     <div class="admin-content-body">
       <div class="am-cf am-padding am-padding-bottom-0">
-        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">运营人员管理</strong> / <small>运营人员信息管理</small></div>
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">游客信息管理</strong> / <small>景区信息信息管理</small></div>
       </div>
 
       <hr>
@@ -60,7 +60,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="am-u-sm-12 am-u-md-6">
           <div class="am-btn-toolbar">
             <div class="am-btn-group am-btn-group-xs">
-              <button type="button" class="am-btn am-btn-default" onclick="addOperateUser()"><span class="am-icon-plus"></span> 新增运营人员</button>
+              <button type="button" class="am-btn am-btn-default" onclick="addVisitorInfo()"><span class="am-icon-plus"></span> 增加游客信息</button>
             </div>
           </div>
         </div>
@@ -68,11 +68,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="am-u-sm-12 am-u-md-3">
           <div class="am-input-group am-input-group-sm">
             
-           <input type="text" id="searchText" class="am-form-field" placeholder="账号">
+            <input type="text" id="searchText" class="am-form-field" placeholder="手机号">
           <span class="am-input-group-btn">
-            <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="serach()">搜索</button>
+            <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="search()">搜索</button>
           </span>
-          
           </div>
         </div>
       </div>
@@ -83,7 +82,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <table  class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px; " >
               <thead>
               <tr>
-                <th  style="align-content: center; width: 10%;">姓名</th><th  style="align-content: center; width: 10%;">账号</th><th style="align-content: center; width: 10%;">角色</th><th style="align-content: center; width: 10%;">手机号</th><th style="align-content: center; width: 10%;">禁用状态</th><th style="align-content: center; width: 10%;">操作</th>
+                <th  style="align-content: center; width: 10%;">姓名</th><th  style="align-content: center; width: 10%;">手机号</th><th style="align-content: center; width: 10%;">昵称</th><th style="align-content: center; width: 10%;">性别</th><th style="align-content: center; width: 10%;">城市</th><th style="align-content: center; width: 10%;">操作</th>
               </tr>
               </thead>
               <tbody id="tby" >
@@ -110,26 +109,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        <span class="blue">X</span>
 	                    </button>
 						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
-							增加运营人员
+							增加游客信息
 						</h4>
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr ><td >姓名：</td>
-						<td><input  type="text" id="add_name" name="add_name" /></td>
-						</tr>
-						<tr><td>账号：</td>
-						<td><input  type="text" id="add_account" name="add_account" /></td>
-						</tr>
-						<tr><td>角色:</td>
-						<td><input  type="text"  id="add_role" name="add_role" /></td></tr>
-						<tr><td>手机号:</td>
-						<td><input  type="text"  id="add_phone" name="add_phone" /></td></tr>
-						<tr><td colspan="2" style="text-align:center;"><button class="close" onclick="AddOperateperInfo()" >确定增加</button></td></tr>
-						
-					</table>
-					
-									
+						<tr><td>姓名：</td>
+						<td><input  type="text" id="add_name" name="add_name" /></td></tr>
+						<tr><td>手机号：</td>
+						<td><input  type="text" id="add_phone" name="add_phone" /></td></tr>
+						<tr><td>昵称:</td>
+						<td><input  type="text"  id="add_nickName" name="add_nickName" /></td></tr>
+						<tr><td>性别:</td>
+						<td>
+						<input type="radio" value="男" name="add_sex" checked="checked"><label for="男">男</label>
+						<input type="radio" value="女" name="add_sex"><label for="女">女</label>
+						</td></tr>	
+						<tr><td>城市:</td>
+						<td><input  type="text"  id="add_city" name="add_city" /></td></tr>
+						<tr><td colspan="2" style="text-align:center;"><button class="close" onclick="AddVisitorInfo()" >确定增加</button></td></tr>	
+					</table>				
 					</div>
 				</div>
 			</div>
@@ -142,30 +141,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        <span class="blue">X</span>
 	                    </button>
 						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
-							编辑运营人员
+							编辑游客信息
 						</h4>
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr ><td >姓名：</td>
-						<td><input  type="text" id="edit_name" name="edit_name" /></td>
-						</tr>
-						<tr><td>账号：</td>
-						<td><input  type="text" id="edit_account" name="edit_account" readonly="true" /></td>
-						</tr>
-						<tr><td>角色:</td>
-						<td><input  type="text"  id="edit_role" name="edit_role" /></td></tr>
-						<tr><td>手机号:</td>
-						<td><input  type="text"  id="edit_phone" name="edit_phone" /></td></tr>
-						<tr><td>状态</td><td align="center">
-							<input type="radio" id="yes" name="1" value="1"/>禁用
-							<input style="" id="no" type="radio" name="1" value="0"/>未禁用
-							</td></tr>
-						<tr><td colspan="2" style="text-align:center;"><button  onclick="editOperateperInfo()" >修改</button></td></tr>
-						
-					</table>
-					
-									
+						<tr><td>姓名：</td>
+						<td><input  type="text" id="edit_name" name="edit_name" /></td></tr>
+						<tr><td>手机号：</td>
+						<td><input  type="text" id="edit_phone" name="edit_phone" /></td></tr>
+						<tr><td>昵称:</td>
+						<td><input  type="text"  id="edit_nickName" name="edit_nickName" /></td></tr>
+						<tr><td>性别:</td>
+						<td>
+						<input type="radio" value="男" name="edit_sex" checked="checked"><label for="男">男</label>
+						<input type="radio" value="女" name="edit_sex"><label for="女">女</label>
+						</td></tr>	
+						<tr><td>城市:</td>
+						<td><input  type="text"  id="edit_city" name="edit_city" /></td></tr>
+						<tr><td colspan="2" style="text-align:center;"><button  onclick="EditVisitorInfo()" >修改</button></td></tr>
+					</table>			
 					</div>
 				</div>
 			</div>
@@ -184,20 +179,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr ><td >姓名：</td>
-						<td><input id="SearchName" style="text-align:center; " readonly= "true " /></td>
-						</tr>
-						<tr><td>账号：</td>
-						<td><input id="SearchAccount" style="text-align:center;" readonly= "true "/></td>
-						</tr>
-						<tr><td>角色：</td>
-						<td><input id="SearchRole" style="text-align:center;"readonly= "true " /></td></tr>
+						<tr><td>姓名：</td>
+						<td><input  type="text" id="search_name" name="search_name" readonly="true" /></td></tr>
 						<tr><td>手机号：</td>
-						<td><input id="SearchPhone" style="text-align:center;"readonly= "true " /></td></tr>						
+						<td><input  type="text" id="search_phone" name="search_phone" readonly="true" /></td></tr>
+						<tr><td>昵称:</td>
+						<td><input  type="text"  id="search_nickName" name="search_nickName" readonly="true" /></td></tr>
+						<tr><td>性别:</td>
+						<td><input  type="text"  id="search_sex" name="search_sex" readonly="true" /></td></tr>	
+						<tr><td>城市:</td>
+						<td><input  type="text"  id="search_city" name="search_city" readonly="true" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true" >确定</button></td></tr>
-					</table>
-					
-									
+					</table>			
 					</div>
 				</div>
 			</div>
@@ -209,30 +202,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 	                        <span class="blue">X</span>
 	                    </button>
-						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
-							删除运营人员
+						<h4 class="modal-title" id="myModalLabel" style="text-align:center;" >
+							删除游客信息
 						</h4>
 					</div>
 					<div class="modal-body">
 						<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr ><td >姓名：</td>
-						<td><input  type="text" id="delete_name" name="delete_name"  readonly="true"/></td>
-						</tr>
-						<tr><td>账号：</td>
-						<td><input  type="text" id="delete_account" name="delete_account" readonly="true" /></td>
-						</tr>
-						<tr><td>角色:</td>
-						<td><input  type="text"  id="delete_role" name="delete_role"  readonly="true"/></td></tr>
-						<tr><td>手机号:</td>
-						<td><input  type="text"  id="delete_phone" name="delete_phone" readonly="true" /></td></tr>
+						<tr><td>姓名：</td>
+						<td><input  type="text" id="delete_name" name="delete_name" readonly="true" /></td></tr>
+						<tr><td>手机号：</td>
+						<td><input  type="text" id="delete_phone" name="delete_phone"  readonly="true"/></td></tr>
+						<tr><td>昵称:</td>
+						<td><input  type="text"  id="delete_nickName" name="delete_nickName" readonly="true" /></td></tr>
+						<tr><td>性别:</td>
+						<td><input  type="text"  id="delete_sex" name="delete_sex" readonly="true" /></td></tr>	
+						<tr><td>城市:</td>
+						<td><input  type="text"  id="delete_city" name="delete_city" readonly="true" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><div >
-							<button class="btn btn-danger" onclick="DeleteOperateInfo()">Delete</button>
-											
-						</div></td></tr>
-						
-					</table>
-						
-									
+						<button class="btn btn-danger" onclick="DeleteVisitorInfo()">Delete</button>
+						</div></td></tr>			
+					</table>			
 					</div>
 				</div>
 			</div>
@@ -252,17 +241,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="<%=basePath %>/assets1/js/app.js"></script>
 <script type="text/javascript">
 	var id=1;
-	var OperateUseInfo="";
+	var VisitorInfo="";
 	var currentPage=1;
 	var pageRows=5;
 	
 	$(document).ready(function()
   	{
-  		loadGuideInfo();
+  		loadVisitorInfo();
   	});
-  	function loadGuideInfo()
+  	function loadVisitorInfo()
   	{
-  		var url="<%=basePath%>operate/GetOperateUser.action";
+  		var url="<%=basePath%>visitor/GetVisitorInfo.action";
   		$.ajax(
   		{
   			url:url,
@@ -272,7 +261,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			success: function(data)
   					{
   					    if(data!=null){
-  					    OperateUseInfo = data.jsonStr;
+  					    VisitorInfo = data.jsonStr;
   					    initTable(data.jsonStr,data.page);	
   					       // 获取currentPage 请求页面
 						var currentPage = data.page;
@@ -321,7 +310,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   					    }
   					},
   				
-  					
   		});
   		
   	}
@@ -329,33 +317,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	function initTable(jsonStr,currentPage)
   	{
   		$("#tby").html("");
-  		OperateUseInfo=JSON.parse(jsonStr);
-  		$.each(OperateUseInfo,function(index,value)
+  		VisitorInfo=JSON.parse(jsonStr);
+  		$.each(VisitorInfo,function(index,value)
   			{
   				var t0="<tr>";
-  				var t2="<td style='align-content: center; width: 10%;'>"+value.Operateper_name+"</td>";
-              	var t3="<td style='align-content: center; width: 10%;'>"+value.Operateper_account+"</td>";
-              	var t4="<td style='align-content: center; width: 10%;'>"+value.operateper_role+"</td>";
-              	var t5="<td style='align-content: center; width: 10%;'>"+value.Operateper_phone+"</td>";
-              	var c;
-              	if(value.Operateper_bool=="0"){
+  				var t2="<td style='align-content: center; width: 10%;'>"+value.name+"</td>";
+              	var t3="<td style='align-content: center; width: 10%;'>"+value.phone+"</td>";
+              	var t4="<td style='align-content: center; width: 10%;'>"+value.nickName+"</td>";
+              	var t5="<td style='align-content: center; width: 10%;'>"+value.sex+"</td>";
+              	var t6="<td style='align-content: center; width: 10%;'>"+value.city+"</td>";
+              	/*var c;
+              	if(value.VisitorInfo_bool=="0"){
               		c="未禁用";
               	}else{
               		c="禁用";
               	}
-              	var	t6="<td style='align-content: center; width: 10%;'>"+c+"</td>";
+              	var	t6="<td style='align-content: center; width: 10%;'>"+c+"</td>";*/
               	var t7="<td style='align-content: center; width: 10%;'> <div class='am-btn-toolbar'>"+
               	"<div class='am-btn-group am-btn-group-xs'>"+
-              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='EditOperate("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
-                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='DeleteOperate("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='editVisitor("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
+                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='deleteVisitor("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
                   "</div></div> </td>";				
                 var t8="</tr>";
 				$("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8);
   			});
   	}
- 	function serach()
+ 	function search()
  	{
- 		var url = "<%=basePath%>operate/SearchOperateUser.action";
+ 		var url = "<%=basePath%>visitor/SearchVisitorInfo.action";
  		var a = $("#searchText").val();
  		$.ajax( {
  			url:url,
@@ -375,84 +364,80 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	
  	function SearchSuccess(jsonStr) {
  			$.each(JSON.parse(jsonStr),function(index,value){
- 			$("#SearchName").val(value.Operateper_name);
- 			$("#SearchAccount").val(value.Operateper_account);
- 			$("#SearchRole").val(value.operateper_role);
- 			$("#SearchPhone").val(value.Operateper_phone);
- 			
- 		});
+ 			$("#search_name").val(value.name);
+ 			$("#search_phone").val(value.phone);
+ 			$("#search_nickName").val(value.nickName);
+ 			$("#search_sex").val(value.sex);
+ 			$("#search_city").val(value.city);
+ 		 	});
  		$("#SearchModal").modal('show');
  	}
  	
- 	function addOperateUser()
+ 	function addVisitorInfo()
  	{
- 		$("#add_name").val("");
- 		$("#add_account").val("");
- 		$("#add_role").val("");
- 		$("#add_phone").val("");
+		$("#add_name").val();
+		$("#add_phone").val();
+		$("#add_nickName").val();
+		$("#add_sex").val();
+		$("#add_city").val();
  		$("#addmodal").modal('show');
  	}
- 	function AddOperateperInfo() {
- 		var url = "<%=basePath%>operate/AddOperateperInfo.action";
+ 	function AddVisitorInfo() {
+ 		var url = "<%=basePath%>visitor/AddVisitorInfo.action";
  		var name = $("#add_name").val();
- 		var account = $("#add_account").val();
- 		var role = $("#add_role").val();
  		var phone = $("#add_phone").val();
+ 		var nickName = $("#add_nickName").val();
+ 		var sex = $("input[name=add_sex]:checked").val();
+ 		var city = $("#add_city").val();
  		
- 		if (name != "" && account != "" && role != "" && phone != "") {
+ 		if (name != "" && city != "" && nickName != "" && phone != "") {
  			$.ajax( {
  				url:url,
  				type:"get",
  				datatype:"json",
- 				data:{name:name,account:account,role:role,phone:phone},
+ 				data:{name:name,city:city,nickName:nickName,phone:phone,sex:sex},
  				success:function(data) {
  					if (data.confirm) {
  						$("#addmodal").modal('hide');
  						alert("添加成功！");
- 						loadGuideInfo();
+ 						loadVisitorInfo();
  					}
  					else
- 						{alert("帐号已存在，请重新添加！");}
- 						loadGuideInfo();
+ 						{alert("手机号已存在，请重新添加！");}
+ 						loadVisitorInfo();
  				}
  			});
  		}else{
- 		alert("请重新填写运营人员信息！");
+ 		alert("信息不完整，请重新填写游客信息！");
  		}
  	}
  
- 	function EditOperate(index)
+ 	function editVisitor(index)
  	{
- 		$("#edit_name").val(OperateUseInfo[index].Operateper_name);
- 		$("#edit_account").val(OperateUseInfo[index].Operateper_account);
- 		$("#edit_role").val(OperateUseInfo[index].operateper_role);
- 		
- 		if((OperateUseInfo[index].Operateper_bool)=="0")
- 		{
- 			$("#no").attr("checked","checked");
- 		}
- 		else
- 		{
- 			$("#yes").attr("checked","checked");
- 		}
-		$("#edit_phone").val(OperateUseInfo[index].Operateper_phone);
+ 		$("#edit_name").val(VisitorInfo[index].name);
+ 		$("#edit_phone").val(VisitorInfo[index].phone);
+ 		$("#edit_nickName").val(VisitorInfo[index].nickName);
+ 		$("#edit_city").val(VisitorInfo[index].city);
+
+ 		if(VisitorInfo[index].sex=="男") $("input[name=edit_sex]:eq(0)").attr("checked",'checked'); 
+ 		else $("input[name=edit_sex]:eq(1)").attr("checked",'checked'); 
  		$("#editmodal").modal('show');
  		
  	}
- 	function editOperateperInfo()
+ 	function EditVisitorInfo()
  	{
- 		var url = "<%=basePath%>operate/UpdateOperateperInfo.action";
+ 		var url = "<%=basePath%>visitor/UpdateVisitorInfo.action";
  		var name = $("#edit_name").val();
- 		var account = $("#edit_account").val();
- 		var role = $("#edit_role").val();
+ 		var nickName = $("#edit_nickName").val();
+ 		var city = $("#edit_city").val();
  		var phone = $("#edit_phone").val();
- 		var a = $("input[name='1']:checked").val();
- 		if (name != "" && account != "" && role != "" && phone != "") {
+ 		var sex = $("input[name=add_sex]:checked").val();
+ 		if (name != "" && nickName != "" && city != "" && phone != "") {
  			$.ajax( {
  				url:url,
  				type:"get",
  				datatype:"json",
- 				data:{name:name,account:account,role:role,phone:phone,bool:a},
+ 				data:{name:name,nickName:nickName,city:city,phone:phone,sex:sex},
  				success:function(data) {
  					if (data.confirm) {
  						$("#editmodal").modal('hide');
@@ -464,32 +449,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  				}
  			});
  		}
- 		loadGuideInfo();
+ 		loadVisitorInfo();
  	}
- 	function DeleteOperate(index)
+ 	function deleteVisitor(index)
  	{	
- 		$("#delete_name").val(OperateUseInfo[index].Operateper_name);
- 		$("#delete_account").val(OperateUseInfo[index].Operateper_account);
- 		$("#delete_role").val(OperateUseInfo[index].operateper_role);
-		$("#delete_phone").val(OperateUseInfo[index].Operateper_phone);
+ 		$("#delete_name").val(VisitorInfo[index].name);
+ 		$("#delete_nickName").val(VisitorInfo[index].nickName);
+ 		$("#delete_city").val(VisitorInfo[index].city);
+		$("#delete_phone").val(VisitorInfo[index].phone);
+		$("#delete_sex").val(VisitorInfo[index].sex);
  		$("#deletemodal").modal('show');	
  	}
  	
- 	function DeleteOperateInfo()
+ 	function DeleteVisitorInfo()
  	{
- 		var url = "<%=basePath%>operate/DeleteOperateperInfo.action";
- 		var account=$("#delete_account").val();
+ 		var url = "<%=basePath%>visitor/DeleteVisitorInfo.action";
+ 		var phone=$("#delete_phone").val();
  		$.ajax({
  				url:url,
  				type:"get",
  				datatype:"json",
- 				data:{account:account},
+ 				data:{phone:phone},
  				success:function(data) {
  					if (data.confirm) {
  						$("#deletemodal").modal('hide');
  					}
  					alert("删除成功");
- 					loadGuideInfo();
+ 					loadVisitorInfo();
  				}
  			});
  		

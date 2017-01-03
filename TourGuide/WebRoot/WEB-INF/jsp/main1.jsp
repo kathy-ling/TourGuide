@@ -67,7 +67,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       
       <h3 class="am-icon-users"><em></em> <a href="#">游客管理</a></h3>
       <ul>
-        <li>游客信息管理</li>
+       <li><a href="visitor.action" target="targetiframe">游客信息管理</a></li>
       </ul>
       
       <h3 class="am-icon-cart-plus"><em></em> <a href="#"> 订单管理</a></h3>
@@ -78,7 +78,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       
       <h3 class="am-icon-location-arrow"><em></em> <a href="#">景区管理</a></h3>
       <ul>
-        <li>景区信息管理 </li>
+       <li><a href="scenicInfo.action" target="targetiframe">景区信息管理</a></li>
         
       </ul>
       <h3 class="am-icon-money"><em></em> <a href="#">收入管理</a></h3>

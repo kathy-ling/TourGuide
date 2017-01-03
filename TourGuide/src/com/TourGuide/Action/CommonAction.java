@@ -24,9 +24,23 @@ public class CommonAction {
 	{
 		return "operateUser";
 	}
+	
 	@RequestMapping(value="/index.action",method=RequestMethod.GET)
 	public String ToMain1()
 	{
 		return "main1";
 	}
+	
+	@RequestMapping(value="/scenicInfo.action",method=RequestMethod.GET)
+	public String ToScenicInfo()
+	{
+		return "scenicInfo";
+	}
+	
+	@RequestMapping(value="/visitor.action",method=RequestMethod.GET)
+	public String ToVisitorInfo()
+	{
+		return "visitorInfo";
+	}
+	
 }
