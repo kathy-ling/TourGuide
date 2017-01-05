@@ -12,7 +12,6 @@ public class VisitorInfo {
 	private String nickName; //昵称
 	private String image; // 头像
 	private String sex; //性别
-	private String city; //所在城市
 	
 	public String getPhone() {
 		return phone;
@@ -44,11 +43,6 @@ public class VisitorInfo {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
+
 	
 }

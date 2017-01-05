@@ -24,11 +24,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
 <!--[if lte IE 9]><p class="browsehappy">升级你的浏览器吧！ <a href="http://se.360.cn/" target="_blank">升级浏览器</a>以获得更好的体验！</p><![endif]-->
 
-
-
-
-
-
 </head>
 
 <body>
@@ -61,8 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <h3 class="am-icon-users"><em></em> <a href="#">讲解员管理</a></h3>
       <ul>
         <li>讲解员审核 </li>
-        <li>讲解员信息管理</li>
-        
+        <li>讲解员信息管理</li> 
       </ul>
       
       <h3 class="am-icon-users"><em></em> <a href="#">游客管理</a></h3>

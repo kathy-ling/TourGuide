@@ -36,7 +36,7 @@ public class VisitorAction {
 		 * 参数：当前页，页面容量
 		 * 2016-12-30 15:24:51	
 	*/
-		@RequestMapping(value="/GetVisitorInfo.action",method=RequestMethod.GET)
+		@RequestMapping(value="/GetVisitorInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object GetVisitorInfoByPage(HttpServletResponse resp,
 				@RequestParam(value="currentPage")int currentPage,
@@ -59,7 +59,7 @@ public class VisitorAction {
 		 * 参数：sql语句
 		 * 2016-12-31 15:12:07	
 	*/
-		@RequestMapping(value="/SearchVisitorInfo.action",method=RequestMethod.GET)
+		@RequestMapping(value="/SearchVisitorInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object SearchVisitorInfoByName(HttpServletResponse resp,
 				@RequestParam(value="sql")String sqlStr) throws IOException {
@@ -76,19 +76,17 @@ public class VisitorAction {
 		 *增加游客 
 		 * 
 		 * */
-		@RequestMapping(value="/AddVisitorInfo.action",method=RequestMethod.GET)
+		@RequestMapping(value="/AddVisitorInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object AddVisitorInfo(HttpServletResponse reap,
 				@RequestParam(value="name")String name,
 				@RequestParam(value="nickName")String nickName,
 				@RequestParam(value="sex")String sex,
-				@RequestParam(value="city")String city,
 				@RequestParam(value="phone")String phone) throws IOException {
 			VisitorInfo visitorInfo = new VisitorInfo();
 			visitorInfo.setNickName(nickName);
 			visitorInfo.setName(name);
 			visitorInfo.setSex(sex);
-			visitorInfo.setCity(city);
 			visitorInfo.setPhone(phone);
 			
 			boolean confirm = visitorService.AddVisitorInfo_Service(visitorInfo);
@@ -97,7 +95,7 @@ public class VisitorAction {
 			return map;
 		}
 		
-		@RequestMapping(value="/DeleteVisitorInfo.action",method=RequestMethod.GET)
+		@RequestMapping(value="/DeleteVisitorInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object DeleteVisitorInfo(HttpServletResponse reap,
 				@RequestParam(value="phone")String s
@@ -110,20 +108,18 @@ public class VisitorAction {
 			return map;
 		}
 		
-		@RequestMapping(value="/UpdateVisitorInfo.action",method=RequestMethod.GET)
+		@RequestMapping(value="/UpdateVisitorInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object UpdateVisitorInfo(HttpServletResponse reap,
 				@RequestParam(value="name")String name,
 				@RequestParam(value="nickName")String nickName,
 				@RequestParam(value="sex")String sex,
-				@RequestParam(value="phone")String phone,
-				@RequestParam(value="city")String city) throws IOException {
+				@RequestParam(value="phone")String phone) throws IOException {
 			VisitorInfo visitorInfo = new VisitorInfo();
 			visitorInfo.setName(name);
 			visitorInfo.setNickName(nickName);
 			visitorInfo.setSex(sex);
 			visitorInfo.setPhone(phone);
-			visitorInfo.setCity(city);
 			
 			boolean confirm = visitorService.UpdateVisitorInfo_Service(visitorInfo);
 			Map<String, Object> map = new HashMap<>();

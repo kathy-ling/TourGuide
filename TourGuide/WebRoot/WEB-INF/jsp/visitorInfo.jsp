@@ -40,11 +40,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  <body>
 
 
-<header class="am-topbar am-topbar-inverse admin-header">
+<!-- <header class="am-topbar am-topbar-inverse admin-header">
   <div class="am-topbar-brand">
     <strong>游客信息管理</strong> 
   </div>
-</header>
+</header> -->
 
 
   <!-- content start -->
@@ -82,7 +82,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <table  class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px; " >
               <thead>
               <tr>
-                <th  style="align-content: center; width: 10%;">姓名</th><th  style="align-content: center; width: 10%;">手机号</th><th style="align-content: center; width: 10%;">昵称</th><th style="align-content: center; width: 10%;">性别</th><th style="align-content: center; width: 10%;">城市</th><th style="align-content: center; width: 10%;">操作</th>
+                <th  style="align-content: center; width: 10%;">姓名</th><th  style="align-content: center; width: 10%;">手机号</th><th style="align-content: center; width: 10%;">昵称</th><th style="align-content: center; width: 10%;">性别</th><th style="align-content: center; width: 10%;">操作</th>
               </tr>
               </thead>
               <tbody id="tby" >
@@ -122,11 +122,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="add_nickName" name="add_nickName" /></td></tr>
 						<tr><td>性别:</td>
 						<td>
-						<input type="radio" value="男" name="add_sex" checked="checked"><label for="男">男</label>
-						<input type="radio" value="女" name="add_sex"><label for="女">女</label>
+						<input type="radio" value="男" name="add_sex" >男
+						<input type="radio" value="女" name="add_sex">女
 						</td></tr>	
-						<tr><td>城市:</td>
-						<td><input  type="text"  id="add_city" name="add_city" /></td></tr>
+						
 						<tr><td colspan="2" style="text-align:center;"><button class="close" onclick="AddVisitorInfo()" >确定增加</button></td></tr>	
 					</table>				
 					</div>
@@ -154,11 +153,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="edit_nickName" name="edit_nickName" /></td></tr>
 						<tr><td>性别:</td>
 						<td>
-						<input type="radio" value="男" name="edit_sex" checked="checked"><label for="男">男</label>
-						<input type="radio" value="女" name="edit_sex"><label for="女">女</label>
+						<input type="radio" value="男" name="edit_sex" >男
+						<input type="radio" value="女" name="edit_sex">女
 						</td></tr>	
-						<tr><td>城市:</td>
-						<td><input  type="text"  id="edit_city" name="edit_city" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button  onclick="EditVisitorInfo()" >修改</button></td></tr>
 					</table>			
 					</div>
@@ -187,8 +184,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="search_nickName" name="search_nickName" readonly="true" /></td></tr>
 						<tr><td>性别:</td>
 						<td><input  type="text"  id="search_sex" name="search_sex" readonly="true" /></td></tr>	
-						<tr><td>城市:</td>
-						<td><input  type="text"  id="search_city" name="search_city" readonly="true" /></td></tr>
+						
 						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true" >确定</button></td></tr>
 					</table>			
 					</div>
@@ -216,8 +212,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="delete_nickName" name="delete_nickName" readonly="true" /></td></tr>
 						<tr><td>性别:</td>
 						<td><input  type="text"  id="delete_sex" name="delete_sex" readonly="true" /></td></tr>	
-						<tr><td>城市:</td>
-						<td><input  type="text"  id="delete_city" name="delete_city" readonly="true" /></td></tr>
+						
 						<tr><td colspan="2" style="text-align:center;"><div >
 						<button class="btn btn-danger" onclick="DeleteVisitorInfo()">Delete</button>
 						</div></td></tr>			
@@ -255,7 +250,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		$.ajax(
   		{
   			url:url,
-  			type:"GET",
+  			type:"post",
   			datatype: "json",
   			data:{currentPage:1,pageRows:pageRows},
   			success: function(data)
@@ -297,7 +292,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                    onPageClicked: function (event, originalEvent, type, page) {
 		                        $.ajax({
 									url: url,
-									type: "GET",
+									type: "post",
 									datatype: "json",
 									data:{currentPage:page,pageRows:5},
 									success: function(data) {
@@ -325,7 +320,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               	var t3="<td style='align-content: center; width: 10%;'>"+value.phone+"</td>";
               	var t4="<td style='align-content: center; width: 10%;'>"+value.nickName+"</td>";
               	var t5="<td style='align-content: center; width: 10%;'>"+value.sex+"</td>";
-              	var t6="<td style='align-content: center; width: 10%;'>"+value.city+"</td>";
               	/*var c;
               	if(value.VisitorInfo_bool=="0"){
               		c="未禁用";
@@ -339,7 +333,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                   "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='deleteVisitor("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
                   "</div></div> </td>";				
                 var t8="</tr>";
-				$("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8);
+				$("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t7).append(t8);
   			});
   	}
  	function search()
@@ -348,7 +342,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var a = $("#searchText").val();
  		$.ajax( {
  			url:url,
- 			type:"get",
+ 			type:"post",
  			datatype:"json",
  			data:{sql:a},
  			success:function(data) {
@@ -368,7 +362,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			$("#search_phone").val(value.phone);
  			$("#search_nickName").val(value.nickName);
  			$("#search_sex").val(value.sex);
- 			$("#search_city").val(value.city);
  		 	});
  		$("#SearchModal").modal('show');
  	}
@@ -379,7 +372,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$("#add_phone").val();
 		$("#add_nickName").val();
 		$("#add_sex").val();
-		$("#add_city").val();
  		$("#addmodal").modal('show');
  	}
  	function AddVisitorInfo() {
@@ -387,15 +379,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var name = $("#add_name").val();
  		var phone = $("#add_phone").val();
  		var nickName = $("#add_nickName").val();
- 		var sex = $("input[name=add_sex]:checked").val();
- 		var city = $("#add_city").val();
- 		
- 		if (name != "" && city != "" && nickName != "" && phone != "") {
+ 		var sex = $("input[name='add_sex']:checked").val();
+ 		alert(sex);
+ 		if (name != ""  && nickName != "" && phone != "") {
  			$.ajax( {
  				url:url,
- 				type:"get",
+ 				type:"post",
  				datatype:"json",
- 				data:{name:name,city:city,nickName:nickName,phone:phone,sex:sex},
+ 				data:{name:name,nickName:nickName,phone:phone,sex:sex},
  				success:function(data) {
  					if (data.confirm) {
  						$("#addmodal").modal('hide');
@@ -417,10 +408,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#edit_name").val(VisitorInfo[index].name);
  		$("#edit_phone").val(VisitorInfo[index].phone);
  		$("#edit_nickName").val(VisitorInfo[index].nickName);
- 		$("#edit_city").val(VisitorInfo[index].city);
-
- 		if(VisitorInfo[index].sex=="男") $("input[name=edit_sex]:eq(0)").attr("checked",'checked'); 
- 		else $("input[name=edit_sex]:eq(1)").attr("checked",'checked'); 
+ 		if(VisitorInfo[index].sex=="男") 
+ 		{
+ 			alert(1);
+ 			$("input[name=edit_sex]:eq(0)").attr("checked",'checked'); 
+ 		}
+ 		else
+ 		 {
+ 		 	alert(0);
+ 			$("input[name=edit_sex]:eq(1)").attr("checked",'checked'); 
+ 		}
  		$("#editmodal").modal('show');
  		
  	}
@@ -429,15 +426,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var url = "<%=basePath%>visitor/UpdateVisitorInfo.action";
  		var name = $("#edit_name").val();
  		var nickName = $("#edit_nickName").val();
- 		var city = $("#edit_city").val();
  		var phone = $("#edit_phone").val();
  		var sex = $("input[name=add_sex]:checked").val();
- 		if (name != "" && nickName != "" && city != "" && phone != "") {
+ 		alert($("input[name=add_sex]:checked").val());
+ 		if (name != "" && nickName != "" && phone != "") {
  			$.ajax( {
  				url:url,
- 				type:"get",
+ 				type:"POST",
  				datatype:"json",
- 				data:{name:name,nickName:nickName,city:city,phone:phone,sex:sex},
+ 				data:{name:name,nickName:nickName,phone:phone,sex:sex},
  				success:function(data) {
  					if (data.confirm) {
  						$("#editmodal").modal('hide');
@@ -455,7 +452,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	{	
  		$("#delete_name").val(VisitorInfo[index].name);
  		$("#delete_nickName").val(VisitorInfo[index].nickName);
- 		$("#delete_city").val(VisitorInfo[index].city);
 		$("#delete_phone").val(VisitorInfo[index].phone);
 		$("#delete_sex").val(VisitorInfo[index].sex);
  		$("#deletemodal").modal('show');	
@@ -467,7 +463,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var phone=$("#delete_phone").val();
  		$.ajax({
  				url:url,
- 				type:"get",
+ 				type:"POST",
  				datatype:"json",
  				data:{phone:phone},
  				success:function(data) {

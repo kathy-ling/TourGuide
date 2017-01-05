@@ -40,11 +40,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  <body>
 
 
-<header class="am-topbar am-topbar-inverse admin-header">
+<!-- <header class="am-topbar am-topbar-inverse admin-header">
   <div class="am-topbar-brand">
     <strong>景区信息管理</strong> 
   </div>
-</header>
+</header> -->
 
 
   <!-- content start -->
@@ -371,11 +371,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		$.each(ScenicInfo,function(index,value)
   			{
   				var t0="<tr>";
-  				var t2="<td style='align-content: center; width: 10%;'>"+value.scenicNo+"</td>";
-              	var t3="<td style='align-content: center; width: 10%;'>"+value.scenicName+"</td>";
-              	var t4="<td style='align-content: center; width: 10%;'>"+value.totalVisits+"</td>";
-              	var t5="<td style='align-content: center; width: 10%;'>"+value.openingHours+"</td>";
-              	var t6="<td style='align-content: center; width: 10%;'>"+value.scenicLevel+"</td>";
+  				var t2="<td style=' width: 10%;'>"+value.scenicNo+"</td>";
+              	var t3="<td style=' width: 10%;'>"+value.scenicName+"</td>";
+              	var t4="<td style=' width: 10%;'>"+value.totalVisits+"</td>";
+              	var t5="<td style=' width: 10%;'>"+value.openingHours+"</td>";
+              	var t6="<td style=' width: 10%;'>"+value.scenicLevel+"</td>";
               	var c;
                 /*if(value.=="0"){
               		c="未禁用";
@@ -383,7 +383,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               		c="禁用";
               	}*/
               	//var	t6="<td style='align-content: center; width: 10%;'>"+c+"</td>";
-              	var t7="<td style='align-content: center; width: 10%;'> <div class='am-btn-toolbar'>"+
+              	var t7="<td  width: 10%;'> <div class='am-btn-toolbar'>"+
               	"<div class='am-btn-group am-btn-group-xs'>"+
               	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='EditScenic("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
                   "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='DeleteScenic("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+

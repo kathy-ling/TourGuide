@@ -40,11 +40,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  <body>
 
 
-<header class="am-topbar am-topbar-inverse admin-header">
+<!-- <header class="am-topbar am-topbar-inverse admin-header">
   <div class="am-topbar-brand">
     <strong>运营人员信息管理</strong> 
   </div>
-</header>
+</header> -->
 
 
   <!-- content start -->
@@ -333,18 +333,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		$.each(OperateUseInfo,function(index,value)
   			{
   				var t0="<tr>";
-  				var t2="<td style='align-content: center; width: 10%;'>"+value.Operateper_name+"</td>";
-              	var t3="<td style='align-content: center; width: 10%;'>"+value.Operateper_account+"</td>";
-              	var t4="<td style='align-content: center; width: 10%;'>"+value.operateper_role+"</td>";
-              	var t5="<td style='align-content: center; width: 10%;'>"+value.Operateper_phone+"</td>";
+  				var t2="<td style='width: 10%;'>"+value.Operateper_name+"</td>";
+              	var t3="<td style='width: 10%;'>"+value.Operateper_account+"</td>";
+              	var t4="<td style='width: 10%;'>"+value.operateper_role+"</td>";
+              	var t5="<td style='width: 10%;'>"+value.Operateper_phone+"</td>";
               	var c;
               	if(value.Operateper_bool=="0"){
               		c="未禁用";
               	}else{
               		c="禁用";
               	}
-              	var	t6="<td style='align-content: center; width: 10%;'>"+c+"</td>";
-              	var t7="<td style='align-content: center; width: 10%;'> <div class='am-btn-toolbar'>"+
+              	var	t6="<td style=' width: 10%;'>"+c+"</td>";
+              	var t7="<td style=' width: 10%;'> <div class='am-btn-toolbar'>"+
               	"<div class='am-btn-group am-btn-group-xs'>"+
               	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='EditOperate("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
                   "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='DeleteOperate("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+

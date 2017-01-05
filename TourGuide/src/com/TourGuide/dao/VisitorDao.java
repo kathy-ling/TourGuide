@@ -36,7 +36,6 @@ public class VisitorDao {
 				visitorInfo.setNickName((String) list.get(k).get("nickName"));
 				visitorInfo.setImage((String) list.get(k).get("image"));
 				visitorInfo.setSex((String) list.get(k).get("sex"));
-				visitorInfo.setCity((String) list.get(k).get("city"));
 				listres.add(visitorInfo);
 			}
 			
@@ -68,7 +67,6 @@ public class VisitorDao {
 					visitorInfo.setNickName(rSet.getString(3));
 					visitorInfo.setImage(rSet.getString(4));
 					visitorInfo.setSex(rSet.getString(5));
-					visitorInfo.setCity(rSet.getString(6));
 					list.add(visitorInfo);
 				}
 			});
@@ -85,14 +83,13 @@ public class VisitorDao {
 			 
 			
 			if (jdbcTemplate.queryForObject(sql, Integer.class) == 0) {
-				sql =  " insert into t_visitor values (?,?,?,?,?,?) ";
+				sql =  " insert into t_visitor values (?,?,?,?,?) ";
 				jdbcTemplate.update(sql, new Object[]{
 					visitorInfo.getPhone(),
 					visitorInfo.getName(),
 					visitorInfo.getNickName(),
 					"0",
-					visitorInfo.getSex(),
-					visitorInfo.getCity() });
+					visitorInfo.getSex() });
 				return true;
 			}
 			return false;
@@ -120,13 +117,12 @@ public class VisitorDao {
 		 * */
 		public boolean UpdateVisitorInfo(VisitorInfo visitorInfo) {
 			String sql = "update   t_visitor set phone=?,name=?,nickName=?, "+
-						" sex=?,city=? where phone=?";
+						" sex=? where phone=?";
 			int i=jdbcTemplate.update(sql, new Object[]{
 					visitorInfo.getPhone(),
 					visitorInfo.getName(),
 					visitorInfo.getNickName(),
 					visitorInfo.getSex(),
-					visitorInfo.getCity(),
 					visitorInfo.getPhone()});
 			if (i>0) {
 				return true;
