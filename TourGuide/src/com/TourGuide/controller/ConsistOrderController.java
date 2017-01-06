@@ -102,7 +102,7 @@ public class ConsistOrderController {
 		ScenicTickets scenicTickets = scenicTicketService.geTicketsByScenicNo(scenicID);
 		
 		//查询给景区该日的最大可拼单人数
-		String[] date = visitTime.split(" ");
+		String[] date = visitTime.toString().split(" ");
 		int maxNum = introFeeService.getMaxNum(date[0], scenicID);
 		
 		//计算每个订单的应付总额

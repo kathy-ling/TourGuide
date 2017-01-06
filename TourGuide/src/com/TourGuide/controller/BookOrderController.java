@@ -3,14 +3,16 @@ package com.TourGuide.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.common.MyDateFormat;
@@ -43,7 +45,7 @@ public class BookOrderController {
 	 * @param otherCommand    其他需求
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/releaseBookOrder.do")
+	@RequestMapping(value = "/releaseBookOrder.do", method=RequestMethod.POST)
 	public void releaseBookOrder(HttpServletResponse resp,
 			@RequestParam("scenicID") String scenicID, 
 			@RequestParam("visitTime") String visitTime, 
@@ -54,7 +56,8 @@ public class BookOrderController {
 			@RequestParam("visitorName") String visitorName,
 			@RequestParam("priceRange") String priceRange,
 			@RequestParam("purchaseTicket") String purchaseTicket,
-			@RequestParam("otherCommand") String otherCommand) throws IOException{
+			@RequestParam("otherCommand") String otherCommand
+			) throws IOException{
 		
 		CommonResp.SetUtf(resp);
 		

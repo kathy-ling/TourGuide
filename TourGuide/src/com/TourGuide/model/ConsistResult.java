@@ -11,6 +11,8 @@ public class ConsistResult {
 	private String orderID; //订单编号
 	private int currentNum; //当前的总人数
 	private int maxNum;  //最大可拼单人数
+	private String visitTime; //参观时间
+	private String scenicID; //景点编号
 	
 	public String getOrderID() {
 		return orderID;
@@ -29,5 +31,17 @@ public class ConsistResult {
 	}
 	public void setMaxNum(int maxNum) {
 		this.maxNum = maxNum;
+	}
+	public String getVisitTime() {
+		return visitTime;
+	}
+	public void setVisitTime(String visitTime) {
+		this.visitTime = visitTime;
+	}
+	public String getScenicID() {
+		return scenicID;
+	}
+	public void setScenicID(String scenicID) {
+		this.scenicID = scenicID;
 	}
 }

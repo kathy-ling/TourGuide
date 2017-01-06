@@ -14,6 +14,21 @@ public class VisitorService {
 	@Autowired
 	private VisitorDao visitorDao;
 	
+	/**
+	 * 用户注册
+	 * @param nickName 用户昵称
+	 * @param sex  性别
+	 * @param name  用户姓名
+	 * @param phone  手机号
+	 * @param passwd  用户密码
+	 * @param image   用户头像
+	 * @return
+	 */
+	public boolean visitorRegister(String nickName, String sex,
+			String name, String phone, String passwd, String image){
+		return visitorDao.visitorRegister(nickName, sex, name, phone, passwd, image);
+	}
+	
 	public List<VisitorInfo> getVisitorInfoByPage(int i,int j) {
 		return visitorDao.GetVisitorInfoByPage(i, j);
 	}

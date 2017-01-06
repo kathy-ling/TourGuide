@@ -22,6 +22,12 @@ public class WeatherController {
 	@Autowired
 	public WeatherService weatherService;
 	
+	/**
+	 * 根据城市名， 查看天气情况
+	 * @param resp
+	 * @param city   城市名
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/getWeatherByCity.do")
 	public void getWeatherByCity(HttpServletResponse resp,
 			@RequestParam("city") String city) throws IOException{
