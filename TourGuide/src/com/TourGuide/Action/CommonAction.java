@@ -54,4 +54,13 @@ public class CommonAction {
 		return "visitorInfo";
 	}
 	
+	/*
+	 * 跳转讲解员信息管理页面的Action
+	 * */
+	@RequestMapping(value="/guideInfo.action",method=RequestMethod.GET)
+	public String ToGuideInfo()
+	{
+		return "guideInfo";
+	}
+	
 }
