@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.TourGuide.dao.VisitorDao;
+import com.TourGuide.model.GuideOtherInfo;
 import com.TourGuide.model.VisitorInfo;
+import com.TourGuide.model.VisitorLoginInfo;
 
 @Service
 public class VisitorService {
@@ -52,6 +54,18 @@ public class VisitorService {
 	
 	public boolean UpdateVisitorInfo_Service(VisitorInfo visitorInfo) {
 		return visitorDao.UpdateVisitorInfo(visitorInfo);
+	}
+	
+	public boolean ForbidVisitorInfo_Service(String phone) {
+		return visitorDao.ForbidVisitorInfo_Dao(phone);
+	}
+	
+	public boolean RelieveVisitorInfo_Service(String phone) {
+		return visitorDao.RelieveVisitorInfo_Dao(phone);
+	}
+	
+	public List<VisitorLoginInfo> getVisitorLoginInfoByPage_Service(int i, int j) {
+		return visitorDao.GetVisitorLoginInfoByPage_Dao(i, j);
 	}
 }
 

@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
+import com.TourGuide.model.GuideOtherInfo;
 import com.TourGuide.model.Operateper;
 
 @Repository
@@ -128,6 +129,26 @@ public class OperateperDao {
 			return false;
 		}
 		
-		
 	}
+	/*
+	 * 禁用运营人员
+	 * */
+	public boolean ForbidOperate_Dao(String account) {
+		String sql = " update t_operateper set bool=1 where account='"+account+"'";
+		int i = jdbcTemplate.update(sql);
+		
+		if (i > 0) return true;
+		return false;
+	}
+	/*
+	 * 解禁运营人员
+	 * */
+	public boolean RelieveOperate_Dao(String account) {
+		String sql = " update t_operateper set bool=0 where account='"+account+"'";
+		int i = jdbcTemplate.update(sql);
+		
+		if (i > 0) return true;
+		return false;
+	}
+	
 }
