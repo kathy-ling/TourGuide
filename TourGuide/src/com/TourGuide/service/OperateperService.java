@@ -66,4 +66,16 @@ public class OperateperService {
 	public boolean UpdateOperateperInfo_Service(Operateper operateper) {
 		return operateperDao.UpdateOperateperInfo(operateper);
 	}
+	/*
+	 * 禁用运营人员
+	 * */
+	public boolean ForbidOperate_Service(String account) {
+		return operateperDao.ForbidOperate_Dao(account);
+	}
+	/*
+	 * 解禁运营人员
+	 * */
+	public boolean RelieveOperate_Service(String account) {
+		return operateperDao.RelieveOperate_Dao(account);
+	}
 }

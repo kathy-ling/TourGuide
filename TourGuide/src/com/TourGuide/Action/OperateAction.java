@@ -138,4 +138,29 @@ public class OperateAction {
 		map.put("confirm", confirm);
 		return map;
 	}
+	/*
+	 * 禁用运营人员
+	 * */
+	@RequestMapping(value="/ForbidOperate.action")
+	@ResponseBody
+	public Object ForbidOperate(HttpServletResponse resp,
+			@RequestParam(value="account")String account) throws IOException {
+		CommonResp.SetUtf(resp);
+		Map<String, Object> map = new HashMap<>();
+		map.put("confirm", operateperService.ForbidOperate_Service(account));
+		return map;
+	}
+	/*
+	 * 解禁运营人员
+	 * */
+	@RequestMapping(value="/RelieveOperate.action")
+	@ResponseBody
+	public Object RelieveOperate(HttpServletResponse resp,
+			@RequestParam(value="account")String account) throws IOException {
+		CommonResp.SetUtf(resp);
+		Map<String, Object> map = new HashMap<>();
+		map.put("confirm", operateperService.RelieveOperate_Service(account));
+		return map;
+	}
 }
+

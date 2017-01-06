@@ -83,7 +83,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <table  class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px; " >
               <thead>
               <tr>
-                <th  style="align-content: center; width: 10%;">姓名</th><th  style="align-content: center; width: 10%;">账号</th><th style="align-content: center; width: 10%;">角色</th><th style="align-content: center; width: 10%;">手机号</th><th style="align-content: center; width: 10%;">禁用状态</th><th style="align-content: center; width: 10%;">操作</th>
+                <th  style="text-align:center; width: 10%;">姓名</th><th  style="text-align:center; width: 10%;">账号</th><th style="text-align:center; width: 10%;">角色</th><th style="text-align:center; width: 10%;">手机号</th><th style="text-align:center; width: 10%;">禁用状态</th><th style="text-align:center; width: 10%;">操作</th>
               </tr>
               </thead>
               <tbody id="tby" >
@@ -239,6 +239,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 
 
+<div class="modal fade" id="forbidmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width:25%">
+				<div class="modal-content">
+					<div class="model-header">
+						
+					</div>
+					<div class="modal-body">
+						<table style="border-collapse:separate; border-spacing:10px;">
+						<tr><td>&nbsp;</td></tr>
+						<tr><td style="text-align:center;">确定禁用该运营人员？</td></tr>
+						<tr><td>&nbsp;</td></tr>
+						<tr><td  style="text-align:center;"><button class="close" onclick="ForbidOperate()">确定</button></td><td><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
+						</table>
+					</div>
+				</div>
+			</div>
+</div>
+
+<div class="modal fade" id="relievemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width:25%">
+				<div class="modal-content">
+					<div class="modal-body">
+						<table style="border-collapse:separate; border-spacing:10px;">
+						<tr><td>&nbsp;</td></tr>
+						<tr><td style="text-align:center;">确定解禁该运营人员？</td></tr>
+						<tr><td>&nbsp;</td></tr>
+						<tr><td  style="text-align:center;"><button class="close" onclick="RelieveOperate()">确定</button></td><td><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
+						</table>
+					</div>
+				</div>
+			</div>
+</div>
 
 <footer>
   <hr>
@@ -255,7 +287,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	var OperateUseInfo="";
 	var currentPage=1;
 	var pageRows=5;
-	
+	var forbidIndex;
 	$(document).ready(function()
   	{
   		loadGuideInfo();
@@ -333,24 +365,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		$.each(OperateUseInfo,function(index,value)
   			{
   				var t0="<tr>";
-  				var t2="<td style='width: 10%;'>"+value.Operateper_name+"</td>";
-              	var t3="<td style='width: 10%;'>"+value.Operateper_account+"</td>";
-              	var t4="<td style='width: 10%;'>"+value.operateper_role+"</td>";
-              	var t5="<td style='width: 10%;'>"+value.Operateper_phone+"</td>";
+  				var t2="<td style='width: 10%; text-align:center;'>"+value.Operateper_name+"</td>";
+              	var t3="<td style='width: 10%; text-align:center;'>"+value.Operateper_account+"</td>";
+              	var t4="<td style='width: 10%; text-align:center;'>"+value.operateper_role+"</td>";
+              	var t5="<td style='width: 10%; text-align:center;'>"+value.Operateper_phone+"</td>";
               	var c;
+              	var a;
               	if(value.Operateper_bool=="0"){
               		c="未禁用";
+              		a="禁用";
               	}else{
               		c="禁用";
+              		a="解禁";
               	}
-              	var	t6="<td style=' width: 10%;'>"+c+"</td>";
-              	var t7="<td style=' width: 10%;'> <div class='am-btn-toolbar'>"+
-              	"<div class='am-btn-group am-btn-group-xs'>"+
+              	
+              	
+              	var	t6="<td style=' width: 8%; text-align:center;'>"+c+"</td>";
+              	var t7="<td align='center' style=' width: 15%; '> <div class='am-btn-toolbar'>"+
+              	"<div style='float: none' class='am-btn-group am-btn-group-xs'>"+
               	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='EditOperate("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
-                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='DeleteOperate("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
-                  "</div></div> </td>";				
+                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger ' type='button' onclick='DeleteOperate("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
+                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger ' type='button' onclick='forbidOperate("+index+")'>"+"<span class='am-icon-cog'></span>"+a+"</button>"+
+                  "</div></div> </td>";
+                 				
                 var t8="</tr>";
-				$("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8);
+                $("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8);
   			});
   	}
  	function serach()
@@ -499,6 +538,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			});
  		
  	}
+ 	function forbidOperate(index) {
+ 		forbidIndex=index;
+ 		if(OperateUseInfo[forbidIndex].Operateper_bool=="0")
+ 		{
+ 			$("#forbidmodal").modal('show');
+ 		}else
+ 		{
+ 			$("#relievemodal").modal('show');
+ 		}
+ 		
+ 	}
+ 	
+ 	function ForbidOperate() {
+ 		var url = "<%=basePath%>operate/ForbidOperate.action";
+ 		var account=OperateUseInfo[forbidIndex].Operateper_account;
+ 		$.ajax ({
+ 			url:url,
+ 			type:"get",
+ 			datatype:"json",
+ 			data:{account:account},
+ 			success:function(data) {
+ 				if (data.confirm) alert("成功禁用该运营人员！");
+ 				else alert("无法禁用该运营人员！");
+ 				$("#forbidmodal").modal('hide');
+ 				loadGuideInfo();
+ 			}
+ 		});
+ 	}
+ 	
+ 	
+ 	
+ 	function RelieveOperate() {
+ 		var url = "<%=basePath%>operate/RelieveOperate.action";
+ 		var account=OperateUseInfo[forbidIndex].Operateper_account;
+ 		$.ajax ({
+ 			url:url,
+ 			type:"get",
+ 			datatype:"json",
+ 			data:{account:account},
+ 			success:function(data) {
+ 				if (data.confirm) alert("解禁成功！");
+ 				else alert("解禁失败！");
+ 			 	$("#relievemodal").modal('hide');
+ 				loadGuideInfo();
+ 			}
+ 		});
+
+ 	}
+ 	
  	
 </script>
 

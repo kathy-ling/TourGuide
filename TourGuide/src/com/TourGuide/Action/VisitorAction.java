@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.TourGuide.common.CommonResp;
+import com.TourGuide.model.GuideInfo;
+import com.TourGuide.model.GuideOtherInfo;
 import com.TourGuide.model.VisitorInfo;
+import com.TourGuide.model.VisitorLoginInfo;
 import com.TourGuide.service.VisitorService;
 import com.google.gson.Gson;
 /*
@@ -32,10 +35,8 @@ public class VisitorAction {
 		
 		
 		/*
-		 * 通过当前页面与页面容量数目获取游客数目
-		 * 参数：当前页，页面容量
-		 * 2016-12-30 15:24:51	
-	*/
+		 * 加载页面时获取讲解员的基本信息及其他信息
+		 * */
 		@RequestMapping(value="/GetVisitorInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object GetVisitorInfoByPage(HttpServletResponse resp,
@@ -45,12 +46,15 @@ public class VisitorAction {
 			
 			CommonResp.SetUtf(resp);
 			List<VisitorInfo> list=visitorService.getVisitorInfoByPage(currentPage, pageRows);
+			List<VisitorLoginInfo> listOther = visitorService.getVisitorLoginInfoByPage_Service(currentPage, pageRows);
 			Map< String , Object> map=new HashMap<>();
 			String jsonStr=new Gson().toJson(list).toString();
+			String otherInfo =new Gson().toJson(listOther).toString();
 			int i=visitorService.GetVisitorCount();
 			map.put("jsonStr", jsonStr);
 			map.put("page", currentPage);
 			map.put("total", (int)(i%pageRows==0? i/pageRows:i/pageRows + 1));
+			map.put("otherInfo", otherInfo);
 			return map;
 		}
 		
@@ -134,5 +138,30 @@ public class VisitorAction {
 			map.put("confirm", confirm);
 			return map;
 		}
-	}
+		
+		/*
+		 * 禁用游客
+		 * */
+		@RequestMapping(value="/ForbidVisitorInfo.action")
+		@ResponseBody
+		public Object ForbidVisitorInfo(HttpServletResponse resp,
+				@RequestParam(value="phone")String phone) throws IOException {
+			CommonResp.SetUtf(resp);
+			Map<String, Object> map = new HashMap<>();
+			map.put("confirm", visitorService.ForbidVisitorInfo_Service(phone));
+			return map;
+		}
+		/*
+		 * 解禁游客
+		 * */
+		@RequestMapping(value="/RelieveVisitorInfo.action")
+		@ResponseBody
+		public Object RelieveVisitorInfo(HttpServletResponse resp,
+				@RequestParam(value="phone")String phone) throws IOException {
+			CommonResp.SetUtf(resp);
+			Map<String, Object> map = new HashMap<>();
+			map.put("confirm", visitorService.RelieveVisitorInfo_Service(phone));
+			return map;
+		}
+}
 

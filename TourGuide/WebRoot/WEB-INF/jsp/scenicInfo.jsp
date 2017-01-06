@@ -67,12 +67,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         <div class="am-u-sm-12 am-u-md-3">
           <div class="am-input-group am-input-group-sm">
-            
-            <input type="text" id="searchText" class="am-form-field" placeholder="名称">
-          <span class="am-input-group-btn">
+            <input type="text" id="searchText" class="am-form-field" placeholder="景区位置">
+          	<span class="am-input-group-btn">
+            <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="serachOflocation()">搜索</button>
+          </span>
+          </div>
+          
+        </div>
+        <div class="am-u-sm-12 am-u-md-3">
+          <div class="am-input-group am-input-group-sm">
+            <input type="text" id="searchText" class="am-form-field" placeholder="景区名称">
+          	<span class="am-input-group-btn">
             <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="serach()">搜索</button>
           </span>
           </div>
+          
         </div>
       </div>
 
@@ -82,7 +91,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <table  class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px; " >
               <thead>
               <tr>
-                <th  style="align-content: center; width: 10%;">编号</th><th  style="align-content: center; width: 10%;">名称</th><th style="align-content: center; width: 10%;">历史参观人数</th><th style="align-content: center; width: 10%;">开放时间</th><th style="align-content: center; width: 10%;">景区等级</th><th style="align-content: center; width: 10%;">操作</th>
+                <th  style="text-align: center; width: 10%;">编号</th>
+                <th  style="text-align: center; width: 10%;">名称</th>
+                <th style="text-align: center; width: 10%;">历史参观人数</th>
+                <th style="text-align: center; width: 10%;">开放时间</th>
+                <th style="text-align: center; width: 10%;">景区等级</th>
+                <th style="text-align: center; width: 10%;">操作</th>
               </tr>
               </thead>
               <tbody id="tby" >
@@ -371,20 +385,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		$.each(ScenicInfo,function(index,value)
   			{
   				var t0="<tr>";
-  				var t2="<td style='width: 10%;'>"+value.scenicNo+"</td>";
-              	var t3="<td style=' width: 10%;'>"+value.scenicName+"</td>";
-              	var t4="<td style=' width: 10%;'>"+value.totalVisits+"</td>";
-              	var t5="<td style=' width: 10%;'>"+value.openingHours+"</td>";
-              	var t6="<td style=' width: 10%;'>"+value.scenicLevel+"</td>";
-              	var c;
-                /*if(value.=="0"){
-              		c="未禁用";
-              	}else{
-              		c="禁用";
-              	}*/
-              	//var	t6="<td style='align-content: center; width: 10%;'>"+c+"</td>";
-              	var t7="<td   width: 10%;'> <div class='am-btn-toolbar'>"+
-              	"<div class='am-btn-group am-btn-group-xs'>"+
+  				var t2="<td style=' text-align: center;width: 10%;'>"+value.scenicNo+"</td>";
+              	var t3="<td style=' text-align: center;width: 10%;'>"+value.scenicName+"</td>";
+              	var t4="<td style=' text-align: center;width: 10%;'>"+value.totalVisits+"</td>";
+              	var t5="<td style=' text-align: center;width: 10%;'>"+value.openingHours+"</td>";
+              	var t6="<td style=' text-align: center;width: 10%;'>"+value.scenicLevel+"</td>";
+              
+       
+              	var t7="<td align='center'  width: 10%;'> <div class='am-btn-toolbar'>"+
+              	"<div style='float: none' class='am-btn-group am-btn-group-xs'>"+
               	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='EditScenic("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
                   "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='DeleteScenic("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
                   "</div></div> </td>";				

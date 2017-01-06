@@ -40,11 +40,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  <body>
 
 
-<header class="am-topbar am-topbar-inverse admin-header">
-  <div class="am-topbar-brand">
-    <strong>讲解员信息管理</strong> 
-  </div>
-</header>
 
 
   <!-- content start -->
@@ -82,9 +77,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <table class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px;">
               <thead>
               <tr>
-               <th style="text-align: center; width: 10%;">姓名</th><th style="text-align: center; width: 10%;">性别</th><th style="text-align: center; width: 10%;">证号</th><th style="text-align: center; width: 10%;">讲解语言</th>
-                <th style="text-align: center; width: 10%;">年龄</th><th style="text-align: center; width: 10%;">工作年限</th><th  style="text-align: center; width: 10%;">审核状态</th><th style="text-align: center; width: 10%;">禁用状态</th>
-              	<th style="text-align: center; width: 10%;">操作</th>
+               <th style="text-align: center; width: 5%;">姓名</th><th style="text-align: center; width: 10%;">性别</th><th style="text-align: center; width: 10%;">证号</th><th style="text-align: center; width: 10%;">讲解语言</th>
+                <th style="text-align: center; width: 5%;">年龄</th><th style="text-align: center; width: 5%;">工作年限</th><th  style="text-align: center; width: 5%;">审核状态</th><th style="text-align: center; width: 5%;">禁用状态</th>
+              	<th style="text-align: center; width: 25%;">操作</th>
               </tr>
               </thead>
               <tbody id="tby" >
@@ -389,7 +384,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	var GuideOtherInfo="";
 	var currentPage=1;
 	var pageRows=5;
-	
+	var GlobalIndex;
 	$(document).ready(function()
   	{
   			loadGuideInfo();
@@ -482,32 +477,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               	var t6="<td style='text-align: center; width: 8%;'>"+value.workAge+"</td>";
               	var authorized = GuideOtherInfo[index].authorized;
               	var disabled = GuideOtherInfo[index].disabled;
-              	if (authorized == 1) authorized = "通过";
-		 		else authorized = "未通过";
-		 		if (disabled == 1) disabled = "禁用";
-		 		else disabled = "未禁用";
+              	var a;
+		 		var b;
+              	if (authorized == 1) {authorized = "通过";a="disabled='disabled'"}
+		 		else {authorized = "未通过";a='';}
+		 		if (disabled == 1) {disabled = "禁用";b="解禁";}
+		 		else {disabled = "未禁用";b="禁用";}
+		 		
+		 		
               	var t7="<td style='text-align: center; width: 8%;'>"+authorized+"</td>";
               	var t8="<td style='text-align: center; width: 8%;'>"+disabled+"</td>";
-              	var t9="<td style='text-align: center; width: 16%;'> <div class='am-btn-toolbar'>"+
+              	var t9="<td style='text-align: center; '> <div class='am-btn-toolbar'>"+
 	              	"<div class='am-btn-group am-btn-group-xs'>"+
 	              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='LookGuideInfo("+index+")'>"+"<span class='am-icon-pencil-square-o'></span> 查看</button>"+
 	              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='editGuideInfo("+index+")'>"+"<span class='am-icon-pencil-square-o'></span> 编辑</button>"+
-	                "<button class='am-btn am-btn-default am-btn-xs am-text-danger ' type='button' onclick='deleteGuideInfo("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>";    
-                var t10="<button class='am-btn am-btn-default am-btn-xs am-text-danger ' type='button' onclick='checkGuideInfo("+index+")'>"+"<span class='am-icon-trash-o'></span>审核</button>";
-                var t11="<button class='am-btn am-btn-default am-btn-xs am-text-danger ' type='button' onclick='forbidGuideInfo("+index+")'>"+"<span class='am-icon-trash-o'></span>禁用</button>";		
-                var t12="<button class='am-btn am-btn-default am-btn-xs am-text-danger ' type='button' onclick='relieveGuideInfo("+index+")'>"+"<span class='am-icon-trash-o'></span>解禁</button>";
-                var t13="</div></div> </td></tr>";
-                
-                if (authorized == "通过")
-                	if (disabled == "禁用")
-						$("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8).append(t9).append(t12).append(t13);
-					else
-						$("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8).append(t9).append(t11).append(t13);
-				else 
-					if (disabled == "禁用")
-						$("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8).append(t9).append(t10).append(t12).append(t13);
-  					else
-  						$("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8).append(t9).append(t10).append(t11).append(t13);
+	                "<button class='am-btn am-btn-default am-btn-xs am-text-danger ' type='button' onclick='deleteGuideInfo("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+   
+                	"<button "+a+" class='am-btn am-btn-default am-btn-xs am-text-danger ' type='button' onclick='checkGuideInfo("+index+")'>"+"<span class='am-icon-trash-o'></span>审核</button>"+
+                	"<button  class='am-btn am-btn-default am-btn-xs am-text-danger ' type='button' onclick='forbidGuideInfo("+index+")'>"+"<span class='am-icon-trash-o'></span>"+b+"</button>";		
+                var t10="</div></div> </td></tr>";
+                $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8).append(t9).append(t10);
   			});
   	}
  	
@@ -715,13 +703,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	
  	function checkGuideInfo(index) {
- 		$("#add_phone").val(GuiderInfo[index].phone);
- 		$("#checkmodal").modal('show');
+ 		GlobalIndex=index;
+ 		if(GuideOtherInfo[GlobalIndex].authorized=="0")
+ 		{
+ 			$("#checkmodal").modal('show');
+ 		}
+ 		
  	}
  	
  	function CheckGuideInfo() {
  		var url = "<%=basePath%>Guider/CheckGuideInfo.action";
- 		var phone = $("#add_phone").val();
+ 		var phone = GuideOtherInfo[GlobalIndex].phone;
  		$.ajax ({
  			url:url,
  			type:"get",
@@ -737,13 +729,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	
  	function forbidGuideInfo(index) {
- 		$("#add_phone").val(GuiderInfo[index].phone);
- 		$("#forbidmodal").modal('show');
+ 		GlobalIndex=index;
+ 		if(GuideOtherInfo[GlobalIndex].disabled=="0")
+ 		{
+ 			$("#forbidmodal").modal('show');
+ 		}else
+ 		{
+ 			$("#relievemodal").modal('show');
+ 		}
+ 		
  	}
  	
  	function ForbidGuideInfo() {
  		var url = "<%=basePath%>Guider/ForbidGuideInfo.action";
- 		var phone = $("#add_phone").val();
+ 		var phone = GuideOtherInfo[GlobalIndex].phone;
  		$.ajax ({
  			url:url,
  			type:"get",
@@ -758,14 +757,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		loadGuideInfo();
  	}
  	
- 	function relieveGuideInfo(index) {
- 		$("#add_phone").val(GuiderInfo[index].phone);
- 		$("#relievemodal").modal('show');
- 	}
- 	
  	function RelieveGuideInfo() {
  		var url = "<%=basePath%>Guider/RelieveGuideInfo.action";
- 		var phone = $("#add_phone").val();
+ 		var phone = GuideOtherInfo[GlobalIndex].phone;
  		$.ajax ({
  			url:url,
  			type:"get",

@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
 import com.TourGuide.model.VisitorInfo;
+import com.TourGuide.model.VisitorLoginInfo;
 
 @Repository
 public class VisitorDao {
@@ -128,7 +129,45 @@ public class VisitorDao {
 				return true;
 			} else {
 				return false;
-			}
+			}			
+		}
+		
+		/*
+		 * 禁用游客
+		 * */
+		public boolean ForbidVisitorInfo_Dao(String phone) {
+			String sql = " update t_visitorlogin set disable=1 where phone='"+phone+"'";
+			int i = jdbcTemplate.update(sql);
 			
+			if (i > 0) return true;
+			return false;
+		}
+		/*
+		 * 解禁游客
+		 * */
+		public boolean RelieveVisitorInfo_Dao(String phone) {
+			String sql = " update t_visitorlogin set disable=0 where phone='"+phone+"'";
+			int i = jdbcTemplate.update(sql);
+			
+			if (i > 0) return true;
+			return false;
+		}
+		//获取游客其他信息
+		public List<VisitorLoginInfo> GetVisitorLoginInfoByPage_Dao(int currentPage,int rows)
+		{
+			int i = (currentPage-1)*rows;
+			int j = currentPage*rows;
+			String sql = "SELECT * FROM t_visitorlogin LIMIT "+i+" ,"+j+"";
+			
+			List<Map<String , Object>> list = jdbcTemplate.queryForList(sql);
+			List<VisitorLoginInfo> listres = new ArrayList<>();
+			for (int k = 0; k < list.size(); k++) {
+				VisitorLoginInfo visitorLoginInfo = new VisitorLoginInfo();
+				visitorLoginInfo.setPhone((String)list.get(k).get("phone"));
+				visitorLoginInfo.setPassword((String)list.get(k).get("password"));
+				visitorLoginInfo.setDisable((int)list.get(k).get("disable"));
+				listres.add(visitorLoginInfo);
+			}
+			return listres;
 		}
 }
