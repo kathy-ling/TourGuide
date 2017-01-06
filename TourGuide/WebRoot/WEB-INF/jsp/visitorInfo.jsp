@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <div class="admin-content">
     <div class="admin-content-body">
       <div class="am-cf am-padding am-padding-bottom-0">
-        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">游客信息管理</strong> / <small>景区信息信息管理</small></div>
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">游客信息管理</strong> / <small>游客基本信息</small></div>
       </div>
 
       <hr>
@@ -60,10 +60,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="am-u-sm-12 am-u-md-6">
           <div class="am-btn-toolbar">
             <div class="am-btn-group am-btn-group-xs">
-              <button type="button" class="am-btn am-btn-default" onclick="addVisitorInfo()"><span class="am-icon-plus"></span> 增加游客信息</button>
+              <!-- <button type="button" class="am-btn am-btn-default" onclick="addVisitorInfo()"><span class="am-icon-plus"></span> 增加游客信息</button> -->
             </div>
           </div>
-        </div>
+        </div> 
         
         <div class="am-u-sm-12 am-u-md-3">
           <div class="am-input-group am-input-group-sm">
@@ -101,7 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
     
   </div>
-<div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog" >
 				<div class="modal-content">
 					<div class="model-header">
@@ -131,8 +131,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 				</div>
 			</div>
-</div>
-<div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div> -->
+<!-- <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog" >
 				<div class="modal-content">
 					<div class="model-header">
@@ -161,7 +161,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 				</div>
 			</div>
-</div>
+</div> -->
   
 <div class="modal fade" id="SearchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
 			<div class="modal-dialog" >
@@ -191,7 +191,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</div>
 </div>
-<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog" >
 				<div class="modal-content">
 					<div class="model-header">
@@ -220,7 +220,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 
 
 
@@ -329,7 +329,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               	var	t6="<td style='align-content: center; width: 10%;'>"+c+"</td>";*/
               	var t7="<td style='align-content: center; width: 10%;'> <div class='am-btn-toolbar'>"+
               	"<div class='am-btn-group am-btn-group-xs'>"+
-              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='editVisitor("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='editVisitor("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>禁用</button>"+/*  */
                   "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='deleteVisitor("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
                   "</div></div> </td>";				
                 var t8="</tr>";
@@ -366,7 +366,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#SearchModal").modal('show');
  	}
  	
- 	function addVisitorInfo()
+ 	<%-- function addVisitorInfo()
  	{
 		$("#add_name").val();
 		$("#add_phone").val();
@@ -410,12 +410,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#edit_nickName").val(VisitorInfo[index].nickName);
  		if(VisitorInfo[index].sex=="男") 
  		{
- 			alert(1);
+ 			
  			$("input[name=edit_sex]:eq(0)").attr("checked",'checked'); 
  		}
  		else
  		 {
- 		 	alert(0);
  			$("input[name=edit_sex]:eq(1)").attr("checked",'checked'); 
  		}
  		$("#editmodal").modal('show');
@@ -427,18 +426,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var name = $("#edit_name").val();
  		var nickName = $("#edit_nickName").val();
  		var phone = $("#edit_phone").val();
- 		var sex = $("input[name=add_sex]:checked").val();
- 		alert($("input[name=add_sex]:checked").val());
+ 		var a = $("input[name='edit_sex']:checked").val();
  		if (name != "" && nickName != "" && phone != "") {
  			$.ajax( {
  				url:url,
  				type:"POST",
  				datatype:"json",
- 				data:{name:name,nickName:nickName,phone:phone,sex:sex},
+ 				data:{name:name,nickName:nickName,phone:phone,sex:a},
  				success:function(data) {
  					if (data.confirm) {
  						$("#editmodal").modal('hide');
  						alert("修改成功！");
+ 						loadVisitorInfo();
  					}
  					else{alert("修改失败，请重新确认修改");
  						$("#editmodal").modal('hide');
@@ -446,8 +445,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  				}
  			});
  		}
- 		loadVisitorInfo();
- 	}
+ 		
+ 	} --%>
  	function deleteVisitor(index)
  	{	
  		$("#delete_name").val(VisitorInfo[index].name);

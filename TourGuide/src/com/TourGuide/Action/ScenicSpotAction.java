@@ -36,7 +36,7 @@ public class ScenicSpotAction {
 		 * 参数：当前页，页面容量
 		 * 2017-1-2 10:12:30	
 	*/
-		@RequestMapping(value="/GetScenicInfo.action",method=RequestMethod.GET)
+		@RequestMapping(value="/GetScenicInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object GetScenicInfoByPage(HttpServletResponse resp,
 				@RequestParam(value="currentPage")int currentPage,
@@ -59,7 +59,7 @@ public class ScenicSpotAction {
 		 * 参数：sql语句
 		 * 2017-1-2 10:15:30	
 	*/
-		@RequestMapping(value="/SearchScenicInfo.action",method=RequestMethod.GET)
+		@RequestMapping(value="/SearchScenicInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object SearchScenicInfoByName(HttpServletResponse resp,
 				@RequestParam(value="sql")String sqlStr) throws IOException {
@@ -76,7 +76,7 @@ public class ScenicSpotAction {
 		 *增加景区信息
 		 * 2017-1-2 19:48:11
 		 * */
-		@RequestMapping(value="/AddScenicInfo.action",method=RequestMethod.GET)
+		@RequestMapping(value="/AddScenicInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object AddScenicInfo(HttpServletResponse reap,
 				@RequestParam(value="scenicNo")String scenicNo,
@@ -114,7 +114,7 @@ public class ScenicSpotAction {
 		 * 参数：景区名称
 		 * 2017-1-2 19:49:04
 		 * */
-		@RequestMapping(value="/DeleteScenicInfo.action",method=RequestMethod.GET)
+		@RequestMapping(value="/DeleteScenicInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object DeleteScenicInfo(HttpServletResponse reap,
 				@RequestParam(value="scenicName")String s
@@ -131,7 +131,7 @@ public class ScenicSpotAction {
 		 * 更新景区信息
 		 * 2017-1-2 19:49:32
 		 * */
-		@RequestMapping(value="/UpdateScenicInfo.action",method=RequestMethod.GET)
+		@RequestMapping(value="/UpdateScenicInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object UpdateScenicInfo(HttpServletResponse reap,
 				@RequestParam(value="scenicNo")String scenicNo,

@@ -304,7 +304,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		$.ajax(
   		{
   			url:url,
-  			type:"GET",
+  			type:"POST",
   			datatype: "json",
   			data:{currentPage:1,pageRows:pageRows},
   			success: function(data)
@@ -346,7 +346,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                    onPageClicked: function (event, originalEvent, type, page) {
 		                        $.ajax({
 									url: url,
-									type: "GET",
+									type: "PSOT",
 									datatype: "json",
 									data:{currentPage:page,pageRows:5},
 									success: function(data) {
@@ -371,7 +371,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		$.each(ScenicInfo,function(index,value)
   			{
   				var t0="<tr>";
-  				var t2="<td style=' width: 10%;'>"+value.scenicNo+"</td>";
+  				var t2="<td style='width: 10%;'>"+value.scenicNo+"</td>";
               	var t3="<td style=' width: 10%;'>"+value.scenicName+"</td>";
               	var t4="<td style=' width: 10%;'>"+value.totalVisits+"</td>";
               	var t5="<td style=' width: 10%;'>"+value.openingHours+"</td>";
@@ -383,7 +383,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               		c="禁用";
               	}*/
               	//var	t6="<td style='align-content: center; width: 10%;'>"+c+"</td>";
-              	var t7="<td  width: 10%;'> <div class='am-btn-toolbar'>"+
+              	var t7="<td   width: 10%;'> <div class='am-btn-toolbar'>"+
               	"<div class='am-btn-group am-btn-group-xs'>"+
               	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='EditScenic("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
                   "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='DeleteScenic("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
@@ -398,7 +398,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var a = $("#searchText").val();
  		$.ajax( {
  			url:url,
- 			type:"get",
+ 			type:"PSOT",
  			datatype:"json",
  			data:{sql:a},
  			success:function(data) {
@@ -466,7 +466,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") {
  			$.ajax( {
  				url:url,
- 				type:"get",
+ 				type:"PSOT",
  				datatype:"json",
  				data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
  					scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
@@ -535,7 +535,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") { 			
  			 $.ajax( {
  				url:url,
- 				type:"get",
+ 				type:"PSOT",
  				datatype:"json",
  				data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
  					scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
@@ -568,7 +568,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var scenicName=$("#delete_scenicName").val();
  		$.ajax({
  				url:url,
- 				type:"get",
+ 				type:"PSOT",
  				datatype:"json",
  				data:{scenicName:scenicName},
  				success:function(data) {

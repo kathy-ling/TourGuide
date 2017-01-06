@@ -38,7 +38,7 @@ public class OperateAction {
 	 * 参数：当前页，页面容量
 	 * 2016-12-30 15:24:51	
 */
-	@RequestMapping(value="/GetOperateUser.action",method=RequestMethod.GET)
+	@RequestMapping(value="/GetOperateUser.action",method=RequestMethod.POST)
 	@ResponseBody
 	public Object GetOperateInfoByPage(HttpServletResponse resp,
 			@RequestParam(value="currentPage")int currentPage,
@@ -61,7 +61,7 @@ public class OperateAction {
 	 * 参数：sql语句
 	 * 2016-12-31 15:12:07	
 */
-	@RequestMapping(value="/SearchOperateUser.action",method=RequestMethod.GET)
+	@RequestMapping(value="/SearchOperateUser.action",method=RequestMethod.POST)
 	@ResponseBody
 	public Object SearchOperateInfoByAccount(HttpServletResponse resp,
 			@RequestParam(value="sql")String sqlStr) throws IOException {
@@ -78,7 +78,7 @@ public class OperateAction {
 	 *增加运营人员 
 	 * 
 	 * */
-	@RequestMapping(value="/AddOperateperInfo.action",method=RequestMethod.GET)
+	@RequestMapping(value="/AddOperateperInfo.action",method=RequestMethod.POST)
 	@ResponseBody
 	public Object AddOperateperInfo(HttpServletResponse reap,
 			@RequestParam(value="name")String name,
@@ -97,7 +97,12 @@ public class OperateAction {
 		return map;
 	}
 	
-	@RequestMapping(value="/DeleteOperateperInfo.action",method=RequestMethod.GET)
+	/*
+	 * 删除运营人员
+	 * 参数：账号
+	 * 2017-1-6 15:03:30
+	 * */
+	@RequestMapping(value="/DeleteOperateperInfo.action",method=RequestMethod.POST)
 	@ResponseBody
 	public Object DeleteOperateperInfo(HttpServletResponse reap,
 			@RequestParam(value="account")String s
@@ -110,7 +115,11 @@ public class OperateAction {
 		return map;
 	}
 	
-	@RequestMapping(value="/UpdateOperateperInfo.action",method=RequestMethod.GET)
+	/*
+	 * 更新运营人员信息
+	 * 2017-1-6 15:04:09
+	 * */
+	@RequestMapping(value="/UpdateOperateperInfo.action",method=RequestMethod.POST)
 	@ResponseBody
 	public Object UpdateOperateperInfo(HttpServletResponse reap,
 			@RequestParam(value="name")String name,

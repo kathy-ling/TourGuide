@@ -95,6 +95,10 @@ public class VisitorAction {
 			return map;
 		}
 		
+		/*
+		 * 删除游客信息
+		 * 2017-1-6 15:05:01
+		 * */
 		@RequestMapping(value="/DeleteVisitorInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object DeleteVisitorInfo(HttpServletResponse reap,
@@ -108,6 +112,10 @@ public class VisitorAction {
 			return map;
 		}
 		
+		/*
+		 * 更新游客信息
+		 * 2017-1-6 15:05:14
+		 * */
 		@RequestMapping(value="/UpdateVisitorInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object UpdateVisitorInfo(HttpServletResponse reap,

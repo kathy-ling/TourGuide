@@ -19,24 +19,35 @@ public class CommonAction {
 		return "firsthome";
 	}
 	
+	/*
+	 * 跳转运营人员界面
+	 * */
 	@RequestMapping(value="/operateUser.action",method=RequestMethod.GET)
 	public String ToOperateUser()
 	{
 		return "operateUser";
 	}
 	
+	/*
+	 * 跳转主界面
+	 * */
 	@RequestMapping(value="/index.action",method=RequestMethod.GET)
 	public String ToMain1()
 	{
 		return "main1";
 	}
 	
+	/*
+	 * 跳转景区界面
+	 * */
 	@RequestMapping(value="/scenicInfo.action",method=RequestMethod.GET)
 	public String ToScenicInfo()
 	{
 		return "scenicInfo";
 	}
-	
+	/*
+	 * 跳转游客界面
+	 * */
 	@RequestMapping(value="/visitor.action",method=RequestMethod.GET)
 	public String ToVisitorInfo()
 	{

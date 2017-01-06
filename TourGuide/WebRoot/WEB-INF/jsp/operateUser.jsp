@@ -266,7 +266,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		$.ajax(
   		{
   			url:url,
-  			type:"GET",
+  			type:"POST",
   			datatype: "json",
   			data:{currentPage:1,pageRows:pageRows},
   			success: function(data)
@@ -308,7 +308,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                    onPageClicked: function (event, originalEvent, type, page) {
 		                        $.ajax({
 									url: url,
-									type: "GET",
+									type: "POST",
 									datatype: "json",
 									data:{currentPage:page,pageRows:5},
 									success: function(data) {
@@ -359,7 +359,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var a = $("#searchText").val();
  		$.ajax( {
  			url:url,
- 			type:"get",
+ 			type:"POST",
  			datatype:"json",
  			data:{sql:a},
  			success:function(data) {
@@ -402,14 +402,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		if (name != "" && account != "" && role != "" && phone != "") {
  			$.ajax( {
  				url:url,
- 				type:"get",
+ 				type:"POST",
  				datatype:"json",
  				data:{name:name,account:account,role:role,phone:phone},
  				success:function(data) {
  					if (data.confirm) {
  						$("#addmodal").modal('hide');
  						alert("添加成功！");
- 						loadGuideInfo();
+ 						
  					}
  					else
  						{alert("帐号已存在，请重新添加！");}
@@ -419,6 +419,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		}else{
  		alert("请重新填写运营人员信息！");
  		}
+ 		
  	}
  
  	function EditOperate(index)
@@ -450,21 +451,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		if (name != "" && account != "" && role != "" && phone != "") {
  			$.ajax( {
  				url:url,
- 				type:"get",
+ 				type:"POST",
  				datatype:"json",
  				data:{name:name,account:account,role:role,phone:phone,bool:a},
  				success:function(data) {
  					if (data.confirm) {
  						$("#editmodal").modal('hide');
  						alert("修改成功！");
+ 						loadGuideInfo();
  					}
  					else{alert("修改失败，请重新确认修改");
  						$("#editmodal").modal('hide');
+ 						loadGuideInfo();
  					}
+ 					
  				}
+ 				
  			});
  		}
- 		loadGuideInfo();
+ 		
  	}
  	function DeleteOperate(index)
  	{	
@@ -481,7 +486,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var account=$("#delete_account").val();
  		$.ajax({
  				url:url,
- 				type:"get",
+ 				type:"POST",
  				datatype:"json",
  				data:{account:account},
  				success:function(data) {
