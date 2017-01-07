@@ -157,7 +157,7 @@ public class ScenicSpotDao {
 	 * @param scenicID   景区编号
 	 * @return 景区名称、图片
 	 */
-	public Map<String, String> getScenicInfoByscenicID(String scenicID){
+	public Map<String, String> getSomeScenicInfoByscenicID(String scenicID){
 		
 		final Map<String, String> map = new HashMap<String, String>();
 		String sqlString = "select scenicName,scenicImagePath from t_scenicspotinfo "
@@ -168,7 +168,7 @@ public class ScenicSpotDao {
 					@Override
 					public void processRow(ResultSet res) throws SQLException {
 						map.put("scenicName", res.getString(1));
-						map.put("", res.getString(2));
+						map.put("scenicImagePath", res.getString(2));
 					}
 		});
 		return map;

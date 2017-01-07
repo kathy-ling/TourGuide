@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.apache.catalina.webresources.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
 import com.TourGuide.model.IntroFeeAndMaxNum;
@@ -24,11 +25,21 @@ public class IntroFeeAndMaxNumDao {
 	 */
 	public int getIntroFee(String date, String scenicNo){
 		
+		final IntroFeeAndMaxNum introFeeAndMaxNum = new IntroFeeAndMaxNum();
 		int fee = 0;
 		
 		String sql = "select fee from t_introfeeandmaxnum where scenicNo='"+scenicNo+"' and date='"+date+"'";
-		fee = jdbcTemplate.queryForObject(sql, Integer.class);
+//		fee = jdbcTemplate.queryForObject(sql, Integer.class);
 		
+		jdbcTemplate.query(sql,  new RowCallbackHandler() {
+					
+					@Override
+					public void processRow(ResultSet res) throws SQLException {
+						introFeeAndMaxNum.setFee(res.getInt(1));
+					}
+		});
+		
+		fee = introFeeAndMaxNum.getFee();
 		return fee;
 	}
 	
