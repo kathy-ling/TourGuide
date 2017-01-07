@@ -88,10 +88,8 @@ public class getWeatherByCity {
     
     /** 
      * 对服务器端返回的XML进行解析 
-     *  
-     * @param city 
-     *            用户输入的城市名称 
-     * @return  
+     * @param city  用户输入的城市名称 
+     * @return  天气：天气状况、气温、风力风向、气象图标1、气象图标2
      */  
     public static Weather getCityWeather(String city) {  
         

@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.TourGuide.common.CommonResp;
+import com.TourGuide.model.ScenicTickets;
 import com.TourGuide.model.ScenicsSpotInfo;
 import com.TourGuide.service.ScenicSpotService;
+import com.TourGuide.service.ScenicTicketService;
 import com.google.gson.Gson;
 
 @Controller
@@ -24,6 +26,9 @@ public class ScenicSpotController {
 
 	@Autowired
 	public ScenicSpotService scenicSpotService;
+	
+	@Autowired
+	public ScenicTicketService scenicTicketService;
 	
 	/**
 	 * 根据用户的位置（省份），获取对应省份的热门景点
@@ -136,4 +141,22 @@ public class ScenicSpotController {
 		writer.flush();
 	}
 	
+	/**
+	 * 根据景区编号，查询该景区的门票信息
+	 * @param resp
+	 * @param scenicNo   景区编号
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/geTicketsByScenicNo.do")
+	public void geTicketsByScenicNo(HttpServletResponse resp,
+			@RequestParam("scenicNo") String scenicNo) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		ScenicTickets scenicTickets = scenicTicketService.geTicketsByScenicNo(scenicNo);
+		
+		PrintWriter writer = resp.getWriter();
+		writer.write(new Gson().toJson(scenicTickets));
+		writer.flush();
+	}
 }

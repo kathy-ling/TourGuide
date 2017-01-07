@@ -43,7 +43,6 @@ public class ConsistOrderService {
 	/**
 	 * 查询当前可拼单的订单
 	 * @param scenicID  景区编号
-	 * @param maxNum  拼单的最大可拼人数
 	 * @param date   当前的时间
 	 */
 	public List<ConsistOrder> getAvailableConsistOrder(String scenicID, String date){

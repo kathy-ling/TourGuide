@@ -19,6 +19,36 @@ public class VisitorDao {
 		@Autowired
 		private JdbcTemplate jdbcTemplate;
 		
+		private final int disable = 0;  //用户是否被禁止登陆，0-否，1-是
+		
+		/**
+		 * 用户注册
+		 * @param nickName 用户昵称
+		 * @param sex  性别
+		 * @param name  用户姓名
+		 * @param phone  手机号
+		 * @param passwd  用户密码
+		 * @param image   用户头像
+		 * @return
+		 */
+		public boolean visitorRegister(String nickName, String sex,
+				String name, String phone, String passwd, String image){
+			
+			boolean bool = false;
+			String sqlRegister = "insert into t_visitor (nickName,sex,name,phone,image) "
+					+ "values (?,?,?,?,?)";
+			int i = jdbcTemplate.update(sqlRegister, new Object[]{nickName, sex, name, phone, image});
+			
+			String sqlSetPass = "insert into t_visitorlogin (phone,password,disable) "
+					+ "values (?,?,?)";
+			int j = jdbcTemplate.update(sqlSetPass, new Object[]{phone, passwd, disable});
+			
+			if(i!=0 && j!=0){
+				bool = true;
+			}
+			return bool;
+		}
+		
 		/*
 		 *通过页数与页数容量来获取游客信息 
 		 * time：2017-1-2 17:22:30

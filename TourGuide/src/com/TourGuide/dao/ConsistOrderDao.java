@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.TourGuide.common.DateConvert;
 import com.TourGuide.model.ConsistOrder;
+import com.TourGuide.model.ConsistResult;
 
 @Repository
 public class ConsistOrderDao {
@@ -47,8 +48,10 @@ public class ConsistOrderDao {
 		
 		boolean bool = false;
 		
-		String sqlString2 = "insert into t_consistresult (orderID,visitNum) values (?,?)";
-		int j = jdbcTemplate.update(sqlString2, new Object[]{orderID, visitNum});
+		String sqlString2 = "insert into t_consistresult (orderID,currentNum,maxNum,"
+				+ "visitTime,scenicID) values (?,?,?,?,?)";
+		int j = jdbcTemplate.update(sqlString2, new Object[]{orderID, visitNum, 
+				maxNum, visitTime, scenicID});
 		
 		String sqlString = "insert into t_consistOrder (consistOrderID,orderID,scenicID,produceTime,"
 				+ "visitTime,visitNum,visitorPhone,totalMoney,purchaseTicket,orderState,isConsisted,maxNum) "
@@ -99,8 +102,11 @@ public class ConsistOrderDao {
 		String sqlString1 = "update t_consistorder set isConsisted=1 where orderID=?";
 		int j = jdbcTemplate.update(sqlString1, new Object[]{orderID});
 		
-		String sqlString2 = "update t_consistresult set currentNum=?,maxNum=? where orderID=?";
-		int k = jdbcTemplate.update(sqlString2, new Object[]{currentNum, maxNum, orderID});
+		//更新拼单结果，当前人数
+		String sqlString2 = "update t_consistresult set "
+				+ "currentNum=?,maxNum=?,visitTime=?,scenicID=? where orderID=?";
+		int k = jdbcTemplate.update(sqlString2, new Object[]{currentNum, maxNum,
+				visitTime, scenicID, orderID});
 
 		if(i != 0 && j != 0 && k!=0){
 			bool = true;
@@ -120,16 +126,22 @@ public class ConsistOrderDao {
 	public List<ConsistOrder> getAvailableConsistOrder(String scenicID, String date){
 		
 		List<ConsistOrder> listResult = new ArrayList<>();
-		List<String> consistOrderIDs = new ArrayList<>();
-		/**
-		 * 还有一种情况未写
-		 */
-//		String sqlSearch = "select orderID from t_consistresult where ? < ?";
-//		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlSearch);
-//		for (int i = 0; i <list.size(); i++){
-//			String orderID = (String)list.get(i).get("orderID");
-//			
-//		}
+		
+		//在拼单结果中根据人数和参观时间进行筛选
+		String sqlSearch = "select * from t_consistresult where currentNum < maxNum "
+				+ "and scenicID='"+scenicID+"' and visitTime>'"+date+"'";
+		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlSearch);
+		
+		for (int i = 0; i <list.size(); i++){
+			ConsistOrder consistResult = new ConsistOrder();
+			consistResult.setOrderID((String)list.get(i).get("orderID"));
+			consistResult.setCurrentNum((int)list.get(i).get("currentNum"));
+			consistResult.setMaxNum((int)list.get(i).get("maxNum"));
+			Timestamp timestamp = (Timestamp) list.get(i).get("visitTime");
+			String dateTime = DateConvert.timeStamp2DateTime(timestamp);
+			consistResult.setVisitTime(dateTime);
+			listResult.add(consistResult);
+		}
 		
 		//根据拼单状态和参观时间在拼单表中筛选当前景区的可拼订单
 		String sqlString = "select orderID,visitTime,visitNum,maxNum from t_consistorder "

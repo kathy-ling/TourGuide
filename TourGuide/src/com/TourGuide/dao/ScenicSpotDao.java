@@ -3,6 +3,7 @@ package com.TourGuide.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -148,6 +149,31 @@ public class ScenicSpotDao {
 		
 		return listResult;
 	}
+	
+	
+	
+	/**
+	 * 根据景区的编号， 查询景区的信息,景区名称、图片
+	 * @param scenicID   景区编号
+	 * @return 景区名称、图片
+	 */
+	public Map<String, String> getScenicInfoByscenicID(String scenicID){
+		
+		final Map<String, String> map = new HashMap<String, String>();
+		String sqlString = "select scenicName,scenicImagePath from t_scenicspotinfo "
+				+ "where scenicNo='"+scenicID+"'";
+		
+		jdbcTemplate.query(sqlString,  new RowCallbackHandler() {
+					
+					@Override
+					public void processRow(ResultSet res) throws SQLException {
+						map.put("scenicName", res.getString(1));
+						map.put("", res.getString(2));
+					}
+		});
+		return map;
+	}
+	
 	
 	/*
 	 *通过页数与页数容量来获取景区信息 
