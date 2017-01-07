@@ -10,7 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 @Repository
-public class SystemInterceptor implements HandlerInterceptor {
+public class VisitorInteceptor  implements HandlerInterceptor {
 
 	@Override
 	public void afterCompletion(HttpServletRequest arg0,
@@ -29,14 +29,10 @@ public class SystemInterceptor implements HandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-			Object handler) throws Exception {
-		
+			Object arg2) throws Exception {
 		request.setCharacterEncoding("UTF-8");
 		String[] notFilter = new String[] {
-				"/assets",
-				"/assets1",
-				"/css",
-				"/docs","/image","/js","logincheck.action","login.action"};
+				"/image","login.do"};
 		
 		// 请求的URI
 		String uri = request.getRequestURI();
@@ -53,7 +49,7 @@ public class SystemInterceptor implements HandlerInterceptor {
 		if (doFilter) {
 			
 			// 从session中获取登录者的实体
-			Object  objAdmin = request.getSession().getAttribute("adminSession");
+			Object  objAdmin = request.getSession().getAttribute("visitorSession");
 			 
 			if (null == objAdmin) {
 
@@ -65,9 +61,7 @@ public class SystemInterceptor implements HandlerInterceptor {
 				StringBuilder builder = new StringBuilder();
 				builder.append("<script type=\"text/javascript\" charset=\"UTF-8\">");
 				builder.append("alert(\"页面已过期，请重新登录!\");");
-				builder.append("window.location.href=\"");
-				builder.append(request.getContextPath());
-				builder.append("/logincheck.action\"; </script>");
+				builder.append(" </script>");
 				out.print(builder.toString());
 				out.close();
 				
@@ -82,6 +76,5 @@ public class SystemInterceptor implements HandlerInterceptor {
 			return true;
 		}
 	}
-	
 
 }

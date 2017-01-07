@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -80,11 +83,13 @@ public class OperateAction {
 	 * */
 	@RequestMapping(value="/AddOperateperInfo.action",method=RequestMethod.POST)
 	@ResponseBody
-	public Object AddOperateperInfo(HttpServletResponse reap,
+	public Object AddOperateperInfo(HttpServletResponse resp,HttpServletRequest req,
 			@RequestParam(value="name")String name,
 			@RequestParam(value="account")String account,
 			@RequestParam(value="role")String role,
 			@RequestParam(value="phone")String phone) throws IOException {
+		
+		CommonResp.SetUtf(resp);
 		Operateper operateper = new Operateper();
 		operateper.setOperateper_name(name);
 		operateper.setOperateper_account(account);
@@ -94,6 +99,8 @@ public class OperateAction {
 		boolean confirm = operateperService.AddOperateperInfo_Service(operateper);
 		Map<String, Object> map = new HashMap<>();
 		map.put("confirm", confirm);
+		HttpSession session=req.getSession();
+		System.out.println(session.toString());
 		return map;
 	}
 	

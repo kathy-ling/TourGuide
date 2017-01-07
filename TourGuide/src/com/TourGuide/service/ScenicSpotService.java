@@ -21,6 +21,10 @@ public class ScenicSpotService {
 		return scenicSpotDao.getScenicByLocation(province);
 	}
 	
+	public List<ScenicsSpotInfo> SearchSceincInfoByLocation(String provin,String city,String s)
+	{
+		return scenicSpotDao.SearchSceincInfoByLocation_Dao(provin, city, s);
+	}
 	
 	/*
 	 * 根据用户的当前所在的省份，获取该省份的所有景点

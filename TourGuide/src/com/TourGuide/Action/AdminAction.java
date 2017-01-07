@@ -2,8 +2,6 @@ package com.TourGuide.Action;
 
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,17 +51,17 @@ public class AdminAction {
 			@RequestParam(value="password")String password,
 			HttpServletRequest request, 
 			HttpSession session, ModelMap model,HttpServletResponse resp) throws IOException {
-		boolean flag=adminService.isValid(username, password);
-		AdminInfo adminInfo=new AdminInfo();
-		adminInfo.setUsername(username);
-		adminInfo.setPassword(password);
-		if (flag==true) {
+			boolean flag=adminService.isValid(username, password);
+			AdminInfo adminInfo=new AdminInfo();
+			adminInfo.setUsername(username);
+			adminInfo.setPassword(password);
+			if (flag==true) {
 			
 			// 添加用户session
 			model.addAttribute("adminSession", adminInfo);
 			resp.sendRedirect("/TourGuide/view/index.action");
 			return null;
-		} else {
+			} else {
 			return new ModelAndView("index","error","用户名或密码错误");
 		}
 		

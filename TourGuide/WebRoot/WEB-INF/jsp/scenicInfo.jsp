@@ -162,7 +162,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        <span class="blue">X</span>
 	                    </button>
 						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
-							搜索景区信息
+							景区位置搜索信息
 						</h4>
 					</div>
 					<div class="modal-body">
@@ -170,19 +170,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       				<div data-toggle="distpicker">
         			<div class="form-group">
          				 <label class="sr-only" for="province1">Province</label>
-         				 <select class="form-control" id="province1" onchange=""></select>
+         				 <select class="form-control" id="province1" ></select>
         			</div>
-        <div class="form-group">
-          <label class="sr-only" for="city1">City</label>
-          <select class="form-control" id="city1"></select>
-        </div>
+        			<div class="form-group">
+          				<label class="sr-only" for="city1">City</label>
+          				<select class="form-control" id="city1" ></select>
+        			</div>
         
      		</div>
  			</form>	
  			<div class="am-input-group am-input-group-sm">
-            <input type="text" id="searchText" class="am-form-field" placeholder="景区详细地址">
+            <input type="text" id="LocationText" class="am-form-field" placeholder="景区详细地址">
           	<span class="am-input-group-btn">
-            <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="serach()">搜索</button>
+            <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="serachoflocation()">搜索</button>
           </span>
 					</div>
 				</div>
@@ -620,7 +620,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	function queryOflocation()
  	{
+ 		
  		$("#queryOflocationmodal").modal('show');
+ 	}
+ 	
+ 	function serachoflocation()
+ 	{
+ 		var url="<%=basePath%>scenic/SearchScenicInfoByloc.action";
+ 		var a=$("#province1 option:selected").val();
+ 		var b=$("#city1 option:selected").val();
+ 		var c=$("#LocationText").val();
+ 		$.ajax({
+ 			url:url,
+ 			type:"POST",
+ 			datatype:"json",
+ 			data:{pro:a,city:b,s:c},
+ 			success:function(data) {
+ 				var a=data.jsonStr;
+ 				if(a!=null)
+ 				{
+ 					SearchSuccess(a); 
+ 				}else
+ 				{
+ 					alert("没有查到任何信息！！");
+ 				}
+ 					
+ 				},
+ 			error:alert("查询失败"),	
+ 			});
  	}
 </script>
 	<script src="<%=path%>/assets/js/distpicker.data.js"></script>
