@@ -82,6 +82,7 @@ public class ScenicSpotAction {
 		 * 2017-1-7 19:21:56
 		 */
 		@RequestMapping(value="SearchScenicInfoByloc.action",method=RequestMethod.POST)
+		@ResponseBody
 		public Object SearchScenicInfoByLocation(@RequestParam(value="pro")String provin,
 				@RequestParam(value="city")String city,
 				@RequestParam(value="s")String s,
@@ -92,10 +93,8 @@ public class ScenicSpotAction {
 			String jsonString=new Gson().toJson(list).toString();
 			Map<String, Object> map=new HashMap<>();
 			map.put("jsonStr", jsonString);
-			return map;
-					
+			return map;		
 		}
-		
 		/*
 		 *增加景区信息
 		 * 2017-1-2 19:48:11
