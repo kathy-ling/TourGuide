@@ -648,8 +648,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  					alert("没有查到任何信息！！");
  				}
  					
- 				},
- 			error:alert("查询失败"),	
+ 				}	
  			});
  	}
 </script>
