@@ -72,6 +72,30 @@ public class ScenicSpotAction {
 		}
 		
 		
+		/**
+		 * 通过省份，城市，详细地址进行搜索景区
+		 * @param provin
+		 * @param city
+		 * @param s
+		 * @param resp
+		 * @return 景区list
+		 * 2017-1-7 19:21:56
+		 */
+		@RequestMapping(value="SearchScenicInfoByloc.action",method=RequestMethod.POST)
+		public Object SearchScenicInfoByLocation(@RequestParam(value="pro")String provin,
+				@RequestParam(value="city")String city,
+				@RequestParam(value="s")String s,
+				HttpServletResponse resp)
+		{
+			CommonResp.SetUtf(resp);
+			List<ScenicsSpotInfo> list=scenicSpotService.SearchSceincInfoByLocation(provin, city, s);
+			String jsonString=new Gson().toJson(list).toString();
+			Map<String, Object> map=new HashMap<>();
+			map.put("jsonStr", jsonString);
+			return map;
+					
+		}
+		
 		/*
 		 *增加景区信息
 		 * 2017-1-2 19:48:11

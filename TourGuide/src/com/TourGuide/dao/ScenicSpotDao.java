@@ -10,8 +10,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.core.RowCountCallbackHandler;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.test.web.servlet.ResultHandler;
 
 import com.TourGuide.model.ScenicsSpotInfo;
 
@@ -242,6 +244,36 @@ public class ScenicSpotDao {
 		});
 		return list;
 	}
+	
+	public List<ScenicsSpotInfo> SearchSceincInfoByLocation_Dao(String provin,
+			String city ,String s) {
+		final List<ScenicsSpotInfo> list = new ArrayList<ScenicsSpotInfo>();
+		String sql=" select * from t_scenicspotinfo where province = ? and city=? and scenicLocation=?";
+		jdbcTemplate.query(sql, new String[]{provin,city,s}, new RowCallbackHandler()
+		{
+			@Override
+			public void processRow(ResultSet rSet) throws SQLException {
+				// TODO Auto-generated method stub
+				ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
+				scenicsSpotInfo.setScenicNo(rSet.getString(1));
+				scenicsSpotInfo.setScenicImagePath(rSet.getString(2));
+				scenicsSpotInfo.setScenicName(rSet.getString(3));
+				scenicsSpotInfo.setScenicIntro(rSet.getString(4));
+				scenicsSpotInfo.setTotalVisits(rSet.getString(5));
+				scenicsSpotInfo.setOpeningHours(rSet.getString(6));
+				scenicsSpotInfo.setProvince(rSet.getString(7));
+				scenicsSpotInfo.setCity(rSet.getString(8));
+				scenicsSpotInfo.setScenicLocation(rSet.getString(9));
+				scenicsSpotInfo.setIsHotSpot(rSet.getInt(10));
+				scenicsSpotInfo.setScenicLevel(rSet.getString(11));
+				scenicsSpotInfo.setChargePerson(rSet.getString(12));
+				list.add(scenicsSpotInfo);
+			}
+		});
+		
+		return list;
+	}
+	
 	/*
 	 * 增加景区信息
 	 * 参数：景区信息类

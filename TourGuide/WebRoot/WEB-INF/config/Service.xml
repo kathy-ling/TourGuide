@@ -38,5 +38,12 @@
 		</tx:attributes>
 	</tx:advice>
 	
+	<!-- 自定义登录拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.TourGuide.dao.VisitorInteceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 
 </beans>

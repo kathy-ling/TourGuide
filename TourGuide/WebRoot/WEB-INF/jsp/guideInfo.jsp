@@ -30,8 +30,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<link rel="stylesheet" href="<%=path %>/assets1/css/amazeui.min.css"/>
   	<link rel="stylesheet" href="<%=path %>/assets1/css/admin.css">
   	<link rel="stylesheet" href="<%=path%>/assets/css/bootstrap.css" />
-  	<link rel="stylesheet" href="<%=path%>/assets/css/ace.onpage-help.css" />
-	<link rel="stylesheet" href="<%=path%>/docs/assets/js/themes/sunburst.css" />
 	<script type="text/javascript" src="<%=path %>/assets/js/jquery.js"></script>
 	<script type="text/javascript" src="<%=path %>/assets/js/bootstrap-paginator.min.js"></script>
 
@@ -55,7 +53,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="am-u-sm-12 am-u-md-6">
           <div class="am-btn-toolbar">
             <div class="am-btn-group am-btn-group-xs">
-              <button type="button" class="am-btn am-btn-default" onclick="addGuider()"><span class="am-icon-plus"></span> 新增讲解员</button>
+              
             </div>
           </div>
         </div>
@@ -98,54 +96,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
     
   </div>
-<div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog" style="width:25%">
-				<div class="modal-content">
-					<div class="model-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-	                        <span class="blue">X</span>
-	                    </button>
-						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
-							增加讲解员
-						</h4>
-					</div>
-					<div class="modal-body">
-					<table style="border-collapse:separate; border-spacing:10px;">
-						<tr ><td >手机号：</td>
-						<td><input  type="text" id="add_phone" name="add_phone" /></td>
-						</tr>
-						<tr><td>姓名：</td>
-						<td><input  type="text" id="add_name" name="add_name" /></td>
-						</tr>
-						<tr><td>性别:</td>
-						<td>
-						<input type="radio" value="男" name="add_sex" checked="checked"><label for="男">男</label>
-						<input type="radio" value="女" name="add_sex"><label for="女">女</label>
-						</td></tr>	
-						<tr><td>导游证号:</td>
-						<td><input  type="text"  id="add_certificateID" name="add_certificateID" /></td></tr>
-						<tr><td>讲解语言:</td>
-						<td>
-						<select id="add_language" name="add_language">
-							<option value="1" checked="checked">英语</option>
-							<option value="0">汉语</option>
-							<option value="2">全部</option>
-						</select></td></tr>
-						<tr><td>自我介绍:</td>
-						<td><input  type="text"  id="add_selfIntro" name="add_selfIntro" /></td></tr>
-						<tr><td>年龄:</td>
-						<td><input  type="text"  id="add_age" name="add_age" /></td></tr>
-						<tr><td>工作年限:</td>
-						<td><input  type="text"  id="add_workAge" name="add_workAge" /></td></tr>
-						<tr><td colspan="2" style="text-align:center;"><button class="close"  onclick="addGuiderInfo()">确定</button><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
-						
-					</table>
-					
-									
-					</div>
-				</div>
-			</div>
-</div>
+
 <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog" style="width:25%">
 				<div class="modal-content">
@@ -392,12 +343,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	
   	function loadGuideInfo()
   	{
-  		var url="<%=basePath%>Guider/GetGuider.action";
+  		var url="<%=basePath%>Guide/GetGuider.action";
   		
   		$.ajax(
   		{
   			url:url,
-  			type:"GET",
+  			type:"POST",
   			datatype: "json",
   			data:{currentPage:1,pageRows:pageRows},
   			success: function(data)
@@ -442,7 +393,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                    onPageClicked: function (event, originalEvent, type, page) {
 		                        $.ajax({
 									url: url,
-									type: "GET",
+									type: "POST",
 									datatype: "json",
 									data:{currentPage:page,pageRows:5},
 									success: function(data) {
@@ -501,7 +452,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	
  	function search()
  	{
- 		var url = "<%=basePath%>Guider/GetGuiderinfoBystring.action";
+ 		var url = "<%=basePath%>Guide/GetGuiderinfoBystring.action";
  		var cID = $("#querytxt").val();
  		
  		query(url, cID);
@@ -513,7 +464,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		{
  			url:url,
  			datatype:"json",
- 			type:"get",
+ 			type:"POST",
  			data:{cID:cID},
  			success: function(data)
  			{
@@ -543,53 +494,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		);
  	}
  	
- 	function addGuider()
- 	{
- 		$("#add_name").val("");
-		$("#add_phone").val("");
-		$("#add_certificateID").val("");
-		$("#add_selfIntro").val("");
-		$("#add_age").val("");
-		$("#add_workAge").val("");
- 		$("#addmodal").modal('show');
- 	}
- 	
- 	function addGuiderInfo()
- 	{
- 		var url = "<%=basePath%>Guider/addGuiderInfo.action";
- 		
-		var phone = $("#add_phone").val();
- 		var name = $("#add_name").val();
- 		var sex = $("input[name=add_sex]:checked").val();
- 		var cID = $("#add_certificateID").val();
- 		var language = $("#add_language").val();
- 		var selfIntro = $("#add_selfIntro").val();
- 		var age = $("#add_age").val();
- 		var workAge = $("#add_workAge").val();
- 		
- 		if(phone  != "" && name != "" && sex != "" && cID != "" && language != "" && selfIntro != ""
- 			&& age != "" && workAge != "")
- 		{
- 			$.ajax({
- 				url:url,
- 				datatype:"json",
- 				type:"post",
- 				data:{phone:phone,name:name, sex:sex, cID:cID, language:language, selfIntro:selfIntro,
- 				age:age, workAge:workAge},
- 				success:function(data)
- 				{
-  					if(data == true) {
-	  					$("#addmodal").modal('hide');
-	  					alert("添加成功！");
-  					}
-  					else alert("添加失败！");
- 				}
- 			});
- 			loadGuideInfo();
- 		}
- 		else
- 			alert("输入有误！");
- 	}
  	
  	function deleteGuideInfo(index)
  	{	
@@ -609,7 +513,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	
  	function DeleteGuideInfo() {
- 		var url="<%=basePath%>Guider/DeleteGuideInfo.action";
+ 		var url="<%=basePath%>Guide/DeleteGuideInfo.action";
  		var id = $("#delete_certificateID").val();
  		if (id != "") {
 	 		$.ajax({
@@ -643,9 +547,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	
  	function EditGuideInfo() {
- 	 	var url = "<%=basePath%>Guider/EditGuideInfo.action";
+ 	 	var url = "<%=basePath%>Guide/EditGuideInfo.action";
  		
 		var phone = $("#edit_phone").val();
+		
  		var name = $("#edit_name").val();
  		var sex = $("input[name=edit_sex]:checked").val();
  		var cID = $("#edit_certificateID").val();
@@ -712,11 +617,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	
  	function CheckGuideInfo() {
- 		var url = "<%=basePath%>Guider/CheckGuideInfo.action";
+ 		var url = "<%=basePath%>Guide/CheckGuideInfo.action";
  		var phone = GuideOtherInfo[GlobalIndex].phone;
  		$.ajax ({
  			url:url,
- 			type:"get",
+ 			type:"POST",
  			datatype:"json",
  			data:{phone:phone},
  			success:function(data) {
@@ -741,11 +646,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	
  	function ForbidGuideInfo() {
- 		var url = "<%=basePath%>Guider/ForbidGuideInfo.action";
+ 		var url = "<%=basePath%>Guide/ForbidGuideInfo.action";
  		var phone = GuideOtherInfo[GlobalIndex].phone;
  		$.ajax ({
  			url:url,
- 			type:"get",
+ 			type:"POST",
  			datatype:"json",
  			data:{phone:phone},
  			success:function(data) {
@@ -758,11 +663,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	
  	function RelieveGuideInfo() {
- 		var url = "<%=basePath%>Guider/RelieveGuideInfo.action";
+ 		var url = "<%=basePath%>Guide/RelieveGuideInfo.action";
  		var phone = GuideOtherInfo[GlobalIndex].phone;
  		$.ajax ({
  			url:url,
- 			type:"get",
+ 			type:"POST",
  			datatype:"json",
  			data:{phone:phone},
  			success:function(data) {
@@ -781,51 +686,5 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</script>
 	<script src="<%=path %>/assets/js/bootstrap.js"></script>
 
-	<!-- page specific plugin scripts -->
-	<script src="<%=path%>/assets/js/dataTables/jquery.dataTables.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/dataTables.buttons.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/buttons.flash.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/buttons.html5.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/buttons.print.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/buttons.colVis.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/select/dataTables.select.js"></script>
-
-	<!-- ace scripts -->
-	<script src="<%=path%>/assets/js/ace/elements.scroller.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.colorpicker.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.fileinput.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.typeahead.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.wysiwyg.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.spinner.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.treeview.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.wizard.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.aside.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.ajax-content.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.touch-drag.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.sidebar.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.sidebar-scroll-1.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.submenu-hover.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.widget-box.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.settings.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.settings-rtl.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.settings-skin.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.widget-on-reload.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.searchbox-autocomplete.js"></script>
-
-	
-
-	<!-- the following scripts are used in demo only for onpage help and you don't need them -->
-	<script type="text/javascript">
-		ace.vars['base'] = '..';
-	</script>
-	<script src="<%=path%>/assets/js/ace/elements.onpage-help.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.onpage-help.js"></script>
-	<script src="<%=path%>/docs/assets/js/rainbow.js"></script>
-	<script src="<%=path%>/docs/assets/js/language/generic.js"></script>
-	<script src="<%=path%>/docs/assets/js/language/html.js"></script>
-	<script src="<%=path%>/docs/assets/js/language/css.js"></script>
-	<script src="<%=path%>/docs/assets/js/language/javascript.js"></script>
 </body>
 </html>
