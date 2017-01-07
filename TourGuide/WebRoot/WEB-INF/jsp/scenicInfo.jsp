@@ -626,10 +626,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	
  	function serachoflocation()
  	{
+ 		alert("进入景区位置搜索");
  		var url="<%=basePath%>scenic/SearchScenicInfoByloc.action";
  		var a=$("#province1 option:selected").val();
  		var b=$("#city1 option:selected").val();
  		var c=$("#LocationText").val();
+ 		alert(a+" "+b+" "+c);
  		$.ajax({
  			url:url,
  			type:"POST",
@@ -637,6 +639,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			data:{pro:a,city:b,s:c},
  			success:function(data) {
  				var a=data.jsonStr;
+ 				alert(a);
  				if(a!=null)
  				{
  					SearchSuccess(a); 
@@ -645,8 +648,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  					alert("没有查到任何信息！！");
  				}
  					
- 				},
- 			error:alert("查询失败"),	
+ 				}	
  			});
  	}
 </script>
