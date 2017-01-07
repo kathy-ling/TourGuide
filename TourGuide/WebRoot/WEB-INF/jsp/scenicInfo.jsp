@@ -30,9 +30,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<link rel="stylesheet" href="<%=basePath %>/assets1/css/amazeui.min.css"/>
   	<link rel="stylesheet" href="<%=basePath %>/assets1/css/admin.css">
   	<link rel="stylesheet" href="<%=path%>/assets/css/bootstrap.css" />
-  	<link rel="stylesheet" href="<%=path%>/assets/css/ace.onpage-help.css" />
-	<link rel="stylesheet" href="<%=path%>/docs/assets/js/themes/sunburst.css" />
 	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.js"></script>
+	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath %>/assets/js/bootstrap-paginator.min.js"></script>
 
   </head>
@@ -60,20 +59,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="am-u-sm-12 am-u-md-6">
           <div class="am-btn-toolbar">
             <div class="am-btn-group am-btn-group-xs">
-              <button type="button" class="am-btn am-btn-default" onclick="addScenicInfo()"><span class="am-icon-plus"></span> 发布景区信息</button>
-            </div>
+              <button type="button" class="am-btn am-btn-default" style="margin-right:20px" onclick="addScenicInfo()"><span class="am-icon-plus"></span> 发布景区信息</button>
+              <button type="button" class="am-btn am-btn-default" onclick="queryOflocation()"><span class="fa fa-paper-plane"></span> 景区位置搜索</button>
+           </div>
           </div>
         </div>
         
-        <div class="am-u-sm-12 am-u-md-3">
-          <div class="am-input-group am-input-group-sm">
-            <input type="text" id="searchText" class="am-form-field" placeholder="景区位置">
-          	<span class="am-input-group-btn">
-            <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="serachOflocation()">搜索</button>
-          </span>
-          </div>
-          
-        </div>
+        
         <div class="am-u-sm-12 am-u-md-3">
           <div class="am-input-group am-input-group-sm">
             <input type="text" id="searchText" class="am-form-field" placeholder="景区名称">
@@ -161,6 +153,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 				</div>
 			</div>
+</div>
+<div class="modal fade" id="queryOflocationmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" >
+				<div class="modal-content">
+					<div class="model-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                        <span class="blue">X</span>
+	                    </button>
+						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
+							搜索景区信息
+						</h4>
+					</div>
+					<div class="modal-body">
+							<form class="form-inline">
+      				<div data-toggle="distpicker">
+        			<div class="form-group">
+         				 <label class="sr-only" for="province1">Province</label>
+         				 <select class="form-control" id="province1" onchange=""></select>
+        			</div>
+        <div class="form-group">
+          <label class="sr-only" for="city1">City</label>
+          <select class="form-control" id="city1"></select>
+        </div>
+        
+     		</div>
+ 			</form>	
+ 			<div class="am-input-group am-input-group-sm">
+            <input type="text" id="searchText" class="am-form-field" placeholder="景区详细地址">
+          	<span class="am-input-group-btn">
+            <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="serach()">搜索</button>
+          </span>
+					</div>
+				</div>
+			</div>
+		</div>
 </div>
 <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog" >
@@ -360,7 +387,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                    onPageClicked: function (event, originalEvent, type, page) {
 		                        $.ajax({
 									url: url,
-									type: "PSOT",
+									type: "POST",
 									datatype: "json",
 									data:{currentPage:page,pageRows:5},
 									success: function(data) {
@@ -407,7 +434,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var a = $("#searchText").val();
  		$.ajax( {
  			url:url,
- 			type:"PSOT",
+ 			type:"POST",
  			datatype:"json",
  			data:{sql:a},
  			success:function(data) {
@@ -475,7 +502,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") {
  			$.ajax( {
  				url:url,
- 				type:"PSOT",
+ 				type:"POST",
  				datatype:"json",
  				data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
  					scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
@@ -544,11 +571,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") { 			
  			 $.ajax( {
  				url:url,
- 				type:"PSOT",
+ 				type:"POST",
  				datatype:"json",
  				data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
  					scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
- 					scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson}, 				success:function(data) {
+ 					scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson}, 			
+ 					success:function(data) {
  					if (data.confirm) {
  						$("#editmodal").modal('hide');
  						alert("修改成功！");
@@ -577,7 +605,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var scenicName=$("#delete_scenicName").val();
  		$.ajax({
  				url:url,
- 				type:"PSOT",
+ 				type:"POST",
  				datatype:"json",
  				data:{scenicName:scenicName},
  				success:function(data) {
@@ -590,9 +618,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			});
  		
  	}
- 	
+ 	function queryOflocation()
+ 	{
+ 		$("#queryOflocationmodal").modal('show');
+ 	}
 </script>
-
+	<script src="<%=path%>/assets/js/distpicker.data.js"></script>
+	<script src="<%=path%>/assets/js/distpicker.js"></script>
+	<script src="<%=path%>/assets/js/main.js"></script>
 	<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='<%=path%>/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
 	</script>
@@ -600,48 +633,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!-- page specific plugin scripts -->
 	<script src="<%=path%>/assets/js/dataTables/jquery.dataTables.js"></script>
 	<script
-		src="<%=path%>/assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/dataTables.buttons.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/buttons.flash.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/buttons.html5.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/buttons.print.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/buttons/buttons.colVis.js"></script>
-	<script src="<%=path%>/assets/js/dataTables/extensions/select/dataTables.select.js"></script>
+	src="<%=path%>/assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
+	
 	<!-- ace scripts -->
-	<script src="<%=path%>/assets/js/ace/elements.scroller.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.colorpicker.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.fileinput.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.typeahead.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.wysiwyg.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.spinner.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.treeview.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.wizard.js"></script>
-	<script src="<%=path%>/assets/js/ace/elements.aside.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.ajax-content.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.touch-drag.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.sidebar.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.sidebar-scroll-1.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.submenu-hover.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.widget-box.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.settings.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.settings-rtl.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.settings-skin.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.widget-on-reload.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.searchbox-autocomplete.js"></script>
-
 	
 
 	<!-- the following scripts are used in demo only for onpage help and you don't need them -->
-	<script type="text/javascript">
-		ace.vars['base'] = '..';
-	</script>
-	<script src="<%=path%>/assets/js/ace/elements.onpage-help.js"></script>
-	<script src="<%=path%>/assets/js/ace/ace.onpage-help.js"></script>
+	
+	
 	<script src="<%=path%>/docs/assets/js/rainbow.js"></script>
-	<script src="<%=path%>/docs/assets/js/language/generic.js"></script>
-	<script src="<%=path%>/docs/assets/js/language/html.js"></script>
-	<script src="<%=path%>/docs/assets/js/language/css.js"></script>
-	<script src="<%=path%>/docs/assets/js/language/javascript.js"></script>
 </body>
 </html>

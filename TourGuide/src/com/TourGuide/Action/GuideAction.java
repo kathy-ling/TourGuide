@@ -26,7 +26,7 @@ import com.google.gson.Gson;
  * 讲解员contrller
  * */
 @Controller
-@RequestMapping(value = "/Guider")
+@RequestMapping(value = "/Guide")
 public class GuideAction {
 	@Autowired
 	private GuideService guideService;
@@ -34,7 +34,7 @@ public class GuideAction {
 	/*
 	 * 加载页面时获取讲解员的基本信息及其他信息
 	 * */
-	@RequestMapping(value="/GetGuider.action",method=RequestMethod.GET)
+	@RequestMapping(value="/GetGuider.action",method=RequestMethod.POST)
 	@ResponseBody
 	public Object GetGuideInfoByPage(HttpServletResponse resp,
 			@RequestParam(value="currentPage")int currentPage,
@@ -58,7 +58,7 @@ public class GuideAction {
 	/*
 	 * 通过讲解员证号查找讲解员基本信息
 	 * */
-	@RequestMapping(value="/GetGuiderinfoBystring.action", method=RequestMethod.GET)
+	@RequestMapping(value="/GetGuiderinfoBystring.action", method=RequestMethod.POST)
 	@ResponseBody
 	public Object GetGuiderinfoBystring(HttpServletResponse resp,
 			@RequestParam(value="cID")String cID) throws IOException
@@ -71,33 +71,9 @@ public class GuideAction {
 		return map;
 	}
 	/*
-	 * 添加讲解员的基本信息
-	 * */
-	@RequestMapping(value = "/addGuiderInfo.action", method = RequestMethod.POST)
-	@ResponseBody
-	public boolean addGuiderInfo(HttpServletResponse resp, @RequestParam(value = "phone")String phone,
-			@RequestParam(value = "name")String name, @RequestParam(value = "sex")String sex, 
-			@RequestParam(value = "cID")String cID, @RequestParam(value = "language")String  language,
-			@RequestParam(value = "selfIntro")String selfIntro, @RequestParam(value = "age")int age,
-			@RequestParam(value = "workAge")int workAge)
-	{
-		GuideInfo guideInfo = new GuideInfo();
-		guideInfo.setPhone(phone);
-		guideInfo.setName(name);
-		guideInfo.setSex(sex);
-		guideInfo.setCertificateID(cID);
-		guideInfo.setLanguage(language);
-		guideInfo.setSelfIntro(selfIntro);
-		guideInfo.setAge(age);
-		guideInfo.setWorkAge(workAge);
-		
-		CommonResp.SetUtf(resp);
-		return guideService.isAdd(guideInfo);
-	}
-	/*
 	 * 删除讲解员的信息
 	 * */
-	@RequestMapping(value="/DeleteGuideInfo.action")
+	@RequestMapping(value="/DeleteGuideInfo.action",method = RequestMethod.POST)
 	@ResponseBody
 	public void DeleteGuideInfoById(HttpServletResponse resp,
 			@RequestParam(value="id")String id) throws IOException {
@@ -107,7 +83,7 @@ public class GuideAction {
 	/*
 	 * 编辑讲解员的基本信息
 	 * */
-	@RequestMapping(value="/EditGuideInfo.action")
+	@RequestMapping(value="/EditGuideInfo.action",method = RequestMethod.POST)
 	@ResponseBody
 	public Object EditGuideInfo(HttpServletResponse resp,@RequestParam(value="phone")String phone,
 			@RequestParam(value = "name")String name, @RequestParam(value = "sex")String sex, 
@@ -134,7 +110,7 @@ public class GuideAction {
 	/*
 	 * 查看讲解员的详细信息即讲解员其他信息
 	 * */
-	@RequestMapping(value="/LookGuideInfo.action")
+	@RequestMapping(value="/LookGuideInfo.action",method = RequestMethod.POST)
 	@ResponseBody
 	public Object LookGuideInfo(HttpServletResponse resp,
 			@RequestParam(value="phone")String phone) throws IOException {
@@ -148,7 +124,7 @@ public class GuideAction {
 	/*
 	 * 审核讲解员
 	 * */
-	@RequestMapping(value="/CheckGuideInfo.action")
+	@RequestMapping(value="/CheckGuideInfo.action",method = RequestMethod.POST)
 	@ResponseBody
 	public Object CheckGuideInfo(HttpServletResponse resp,
 			@RequestParam(value="phone")String phone) throws IOException {
@@ -160,7 +136,7 @@ public class GuideAction {
 	/*
 	 * 禁用讲解员
 	 * */
-	@RequestMapping(value="/ForbidGuideInfo.action")
+	@RequestMapping(value="/ForbidGuideInfo.action",method = RequestMethod.POST)
 	@ResponseBody
 	public Object ForbidGuideInfo(HttpServletResponse resp,
 			@RequestParam(value="phone")String phone) throws IOException {
@@ -172,7 +148,7 @@ public class GuideAction {
 	/*
 	 * 解禁讲解员
 	 * */
-	@RequestMapping(value="/RelieveGuideInfo.action")
+	@RequestMapping(value="/RelieveGuideInfo.action",method = RequestMethod.POST)
 	@ResponseBody
 	public Object RelieveGuideInfo(HttpServletResponse resp,
 			@RequestParam(value="phone")String phone) throws IOException {

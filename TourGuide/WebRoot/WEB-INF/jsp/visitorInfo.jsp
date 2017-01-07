@@ -33,6 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<link rel="stylesheet" href="<%=path%>/assets/css/ace.onpage-help.css" />
 	<link rel="stylesheet" href="<%=path%>/docs/assets/js/themes/sunburst.css" />
 	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.js"></script>
+	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath %>/assets/js/bootstrap-paginator.min.js"></script>
 
   </head>
@@ -54,11 +55,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
       <div class="am-g">
         <div class="am-u-sm-12 am-u-md-6">
-          <div class="am-btn-toolbar">
-            <div class="am-btn-group am-btn-group-xs">
-              
-            </div>
-          </div>
+          
         </div> 
         
         <div class="am-u-sm-12 am-u-md-3">
@@ -172,10 +169,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 
-<footer>
-  <hr>
-  <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
-</footer>
+
 
 
 <!--[if (gte IE 9)|!(IE)]><!-->
@@ -402,7 +396,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	
 </script>
-
+	<script src="<%=path%>/assets/js/distpicker.data.js"></script>
+	<script src="<%=path%>/assets/js/distpicker.js"></script>
+	<script src="<%=path%>/assets/js/main.js"></script>
 	<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='<%=path%>/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
 	</script>
