@@ -218,15 +218,15 @@ public class ScenicSpotDao {
 	 * 参数：SQL语句
 	 * 2017-1-2 10:36:30
 	 * */
-	public List<ScenicsSpotInfo> SearchSceincInfoByName_Dao(String a) {
-		final List<ScenicsSpotInfo> list = new ArrayList<ScenicsSpotInfo>();
+	public ScenicsSpotInfo SearchSceincInfoByName_Dao(String a) {
+		final ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
 		String sql=" select * from t_scenicspotinfo where scenicName = '" + a +"'";
 		jdbcTemplate.query(sql, new RowCallbackHandler() {
 			
 			@Override
 			public void processRow(java.sql.ResultSet rSet) throws SQLException {
 				
-				ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
+				
 				scenicsSpotInfo.setScenicNo(rSet.getString(1));
 				scenicsSpotInfo.setScenicImagePath(rSet.getString(2));
 				scenicsSpotInfo.setScenicName(rSet.getString(3));
@@ -239,39 +239,43 @@ public class ScenicSpotDao {
 				scenicsSpotInfo.setIsHotSpot(rSet.getInt(10));
 				scenicsSpotInfo.setScenicLevel(rSet.getString(11));
 				scenicsSpotInfo.setChargePerson(rSet.getString(12));
-				list.add(scenicsSpotInfo);
+			
 			}
 		});
-		return list;
+		return scenicsSpotInfo;
 	}
 	
-	public List<ScenicsSpotInfo> SearchSceincInfoByLocation_Dao(String provin,
+	/**
+	 * 根据景区的省份、市、详细地址进行景区信息查看
+	 * @param provin
+	 * @param city
+	 * @param s
+	 * @return
+	 * 2017-1-8 21:40:19
+	 */
+	public ScenicsSpotInfo SearchSceincInfoByLocation_Dao(String provin,
 			String city ,String s) {
-		final List<ScenicsSpotInfo> list = new ArrayList<ScenicsSpotInfo>();
-		String sql=" select * from t_scenicspotinfo where province = ? and city=? and scenicLocation=?";
-		jdbcTemplate.query(sql, new String[]{provin,city,s}, new RowCallbackHandler()
-		{
-			@Override
-			public void processRow(ResultSet rSet) throws SQLException {
-				// TODO Auto-generated method stub
-				ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
-				scenicsSpotInfo.setScenicNo(rSet.getString(1));
-				scenicsSpotInfo.setScenicImagePath(rSet.getString(2));
-				scenicsSpotInfo.setScenicName(rSet.getString(3));
-				scenicsSpotInfo.setScenicIntro(rSet.getString(4));
-				scenicsSpotInfo.setTotalVisits(rSet.getString(5));
-				scenicsSpotInfo.setOpeningHours(rSet.getString(6));
-				scenicsSpotInfo.setProvince(rSet.getString(7));
-				scenicsSpotInfo.setCity(rSet.getString(8));
-				scenicsSpotInfo.setScenicLocation(rSet.getString(9));
-				scenicsSpotInfo.setIsHotSpot(rSet.getInt(10));
-				scenicsSpotInfo.setScenicLevel(rSet.getString(11));
-				scenicsSpotInfo.setChargePerson(rSet.getString(12));
-				list.add(scenicsSpotInfo);
-			}
-		});
+		ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
+		String sql=" select * from t_scenicspotinfo where province = '"+provin+"' and city='"
+				+city+"' and scenicLocation='"+s+"'";
+		List<Map<String , Object>> list=jdbcTemplate.queryForList(sql);
+		if (list.size()>0) {
+			
+			scenicsSpotInfo.setScenicNo((String) list.get(0).get("scenicNo"));
+			scenicsSpotInfo.setScenicImagePath((String) list.get(0).get("scenicImagePath"));
+			scenicsSpotInfo.setScenicName((String) list.get(0).get("scenicName"));
+			scenicsSpotInfo.setScenicIntro((String) list.get(0).get("scenicIntro"));
+			scenicsSpotInfo.setTotalVisits((String) list.get(0).get("totalVisits"));
+			scenicsSpotInfo.setOpeningHours((String) list.get(0).get("openingHours"));
+			scenicsSpotInfo.setProvince((String) list.get(0).get("province"));
+			scenicsSpotInfo.setCity((String) list.get(0).get("city"));
+			scenicsSpotInfo.setScenicLocation((String) list.get(0).get("scenicLocation"));
+			scenicsSpotInfo.setIsHotSpot((int) list.get(0).get("isHotSpot"));
+			scenicsSpotInfo.setScenicLevel((String) list.get(0).get("scenicLevel"));
+			scenicsSpotInfo.setChargePerson((String) list.get(0).get("chargePerson"));
+		}
 		
-		return list;
+		return scenicsSpotInfo;
 	}
 	
 	/*

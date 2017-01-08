@@ -162,7 +162,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        <span class="blue">X</span>
 	                    </button>
 						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
-							景区位置搜索信息
+							详细位置搜索信息
 						</h4>
 					</div>
 					<div class="modal-body">
@@ -438,18 +438,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			datatype:"json",
  			data:{sql:a},
  			success:function(data) {
- 				if (data.jsonStr == "[]") {
+ 			var d=data.jsonStr;
+ 				if (d == "") {
  					alert("没有搜索到任何信息，请重新搜索!");
 	 			}
 		 		else {
-					SearchSuccess(data.jsonStr);
+					SearchSuccess(d);
+					
 		 		};
  			}
  		});
  	}
  	
  	function SearchSuccess(jsonStr) {
- 			$.each(JSON.parse(jsonStr),function(index,value){
+ 			var value=JSON.parse(jsonStr);
  			$("#search_scenicNo").val(value.scenicNo);
  			$("#search_scenicName").val(value.scenicName);
  			$("#search_totalVisits").val(value.totalVisits);
@@ -462,7 +464,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			if (value.isHotSpot == 1) $("#search_isHotSpot").val("热门");
  			else $("#search_isHotSpot").val("非热门");
  			$("#search_chargePerson").val(value.chargePerson);
- 		});
+ 		
  		$("#SearchModal").modal('show');
  	}
  	
@@ -626,26 +628,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	
  	function serachoflocation()
  	{
- 		alert("进入景区位置搜索");
  		var url="<%=basePath%>scenic/SearchScenicInfoByloc.action";
  		var a=$("#province1 option:selected").val();
  		var b=$("#city1 option:selected").val();
  		var c=$("#LocationText").val();
- 		alert(a+" "+b+" "+c);
  		$.ajax({
  			url:url,
  			type:"POST",
  			datatype:"json",
  			data:{pro:a,city:b,s:c},
  			success:function(data) {
- 				var a=data.jsonStr;
- 				alert(a);
- 				if(a!=null)
- 				{
- 					SearchSuccess(a); 
- 				}else
+ 				var d=data.str;
+ 				if(d=="")
  				{
  					alert("没有查到任何信息！！");
+ 					$("#queryOflocationmodal").modal('hide');
+ 				}else
+ 				{
+ 					SearchSuccess(d); 
+ 					$("#queryOflocationmodal").modal('hide');
  				}
  					
  				}	

@@ -63,5 +63,33 @@ public class CommonAction {
 		return "guideInfo";
 	}
 	
+	/**
+	 * 跳转讲解员日程安排页面的Action
+	 * @return
+	 */
+	@RequestMapping(value="/guideWorkday.action",method=RequestMethod.GET)
+	public String ToGuideWorkDay()
+	{
+		return "GuideWorkday";
+	}
 	
+	/**
+	 * 跳转已审核讲解员页面的Action
+	 * @return
+	 */
+	@RequestMapping(value="/GuideInfoYes.action",method=RequestMethod.GET)
+	public String ToGuideInfoYes()
+	{
+		return "GuideInfoYes";
+	}
+	
+	/**
+	 * 跳转未审核讲解员页面的Action
+	 * @return
+	 */
+	@RequestMapping(value="/GuideInfoNo.action",method=RequestMethod.GET)
+	public String ToGuideInfoNo()
+	{
+		return "GuideInfoNo";
+	}
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.model.GuideInfo;
 import com.TourGuide.model.GuideOtherInfo;
+import com.TourGuide.model.Guideworkday;
 import com.TourGuide.service.GuideService;
 import com.google.gson.Gson;
 
@@ -157,4 +158,7 @@ public class GuideAction {
 		map.put("confirm", guideService.RelieveGuideInfo_Service(phone));
 		return map;
 	}
+	
+	
+	
 }

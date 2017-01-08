@@ -170,6 +170,12 @@ public class GuideDao {
 		return false;
 	}
 	
+	/**
+	 * 已审核讲解员信息获取分页
+	 * @param currentPage
+	 * @param rows
+	 * @return
+	 */
 	public List<GuideOtherInfo> GetGuideOtherInfoByPage_Dao(int currentPage,int rows)
 	{
 		int i = (currentPage-1)*rows;
@@ -192,4 +198,6 @@ public class GuideDao {
 		}
 		return listres;
 	}
+	
+	
 }

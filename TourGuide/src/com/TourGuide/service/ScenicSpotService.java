@@ -21,7 +21,7 @@ public class ScenicSpotService {
 		return scenicSpotDao.getScenicByLocation(province);
 	}
 	
-	public List<ScenicsSpotInfo> SearchSceincInfoByLocation(String provin,String city,String s)
+	public ScenicsSpotInfo SearchSceincInfoByLocation(String provin,String city,String s)
 	{
 		return scenicSpotDao.SearchSceincInfoByLocation_Dao(provin, city, s);
 	}
@@ -78,7 +78,7 @@ public class ScenicSpotService {
 	 * 通过景区名称来获取景区信息
 	 * 2017-1-3 14:44:29
 	 * */
-	public List<ScenicsSpotInfo> SearchScenicInfoByName_Service(String name) {
+	public ScenicsSpotInfo SearchScenicInfoByName_Service(String name) {
 		return scenicSpotDao.SearchSceincInfoByName_Dao(name);
 	}
 	
