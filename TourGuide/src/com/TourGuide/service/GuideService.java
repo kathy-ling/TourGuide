@@ -11,8 +11,29 @@ import com.TourGuide.model.GuideOtherInfo;
 
 @Service
 public class GuideService {
+	
 	@Autowired
 	private GuideDao guideDao;
+	
+	
+	/**
+	 * 讲解员提交相应的信息，申请认证
+	 * @param phone  手机号
+	 * @param name  姓名
+	 * @param sex  性别
+	 * @param language  讲解语言
+	 * @param selfIntro   自我介绍
+	 * @param image  头像
+	 * @param age    年龄
+	 * @return
+	 */
+	public boolean getGuideAuthentication(String phone, String name,String sex, 
+			String language, String selfIntro, String image, int age){
+		
+		return guideDao.getGuideAuthentication(phone, name, sex,
+				language, selfIntro, image, age);
+	}
+	
 
 	public List<GuideInfo> getGuidersByPage(int i, int j) {
 		return guideDao.GetGuiderInfoByPage(i, j);

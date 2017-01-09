@@ -31,6 +31,18 @@ public class VisitorService {
 		return visitorDao.visitorRegister(nickName, sex, name, phone, passwd, image);
 	}
 	
+	
+	/**
+	 * 根据游客的手机号，查询个人详细信息
+	 * @param phone  手机号
+	 * @return 手机号、姓名、性别、昵称、头像
+	 */
+	public VisitorInfo getVisitorInfoWithPhone(String phone){
+		return visitorDao.getVisitorInfoWithPhone(phone);
+	}
+	
+	
+	
 	public List<VisitorInfo> getVisitorInfoByPage(int i,int j) {
 		return visitorDao.GetVisitorInfoByPage(i, j);
 	}

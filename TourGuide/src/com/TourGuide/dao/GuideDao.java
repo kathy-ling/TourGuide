@@ -19,6 +19,41 @@ public class GuideDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
+	
+	/**
+	 * 讲解员提交相应的信息，申请认证
+	 * @param phone  手机号
+	 * @param name  姓名
+	 * @param sex  性别
+	 * @param language  讲解语言
+	 * @param selfIntro   自我介绍
+	 * @param image  头像
+	 * @param age    年龄
+	 * @return
+	 */
+	public boolean getGuideAuthentication(String phone, String name,String sex, 
+			String language, String selfIntro, String image, int age){
+		
+		boolean bool = false;
+		
+		//向t_guideinfo表中插入导游的基本信息
+		String sqlString = "insert into t_guideinfo (phone,name,sex,language,selfIntro,image,age) "
+				+ "values (?,?,?,?,?,?,?)";
+		int i = jdbcTemplate.update(sqlString, new Object[]{phone, name, sex,
+				language, selfIntro, image, age});
+		
+		//向t_guideotherinfo插入其他的信息
+		String sqlString2 = "insert into t_guideotherinfo (phone,historyNum,authorized,disabled) "
+				+ "values (?,?,?,?)";
+		int j = jdbcTemplate.update(sqlString2, new Object[]{phone, 0, 0, 0});
+		
+		if (i!=0 && j!=0) {
+			bool = true;
+		}
+		return bool;
+	}
+	
+	
 	/*
 	 * 获得所有讲解员的基本信息
 	 * */

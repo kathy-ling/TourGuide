@@ -23,13 +23,23 @@ public class LoginController {
 	@Autowired
 	private VisitorloginService visitorloginService;
 	
+	
+	/**
+	 * 游客的登录验证
+	 * @param response
+	 * @param username  用户名：手机号
+	 * @param password  登录密码
+	 * @param session
+	 * @param model
+	 * @return  0：登录失败，1：游客被禁用，2：登录成功
+	 */
 	@RequestMapping(value="login.do")
 	@ResponseBody
 	public Object Login(HttpServletResponse response,
 			@RequestParam(value="username")String username,
 			@RequestParam(value="password")String password,
-			HttpSession session, ModelMap model)
-	{
+			HttpSession session, ModelMap model){
+		
 		CommonResp.SetUtf(response);
 		
 		int i=visitorloginService.Valid_Service(username, password);
@@ -37,13 +47,12 @@ public class LoginController {
 		VisitorLoginInfo visitorLoginInfo=new VisitorLoginInfo();
 		visitorLoginInfo.setPhone(username);
 		visitorLoginInfo.setPassword(password);
+		
 		if (i==2) {
-			model.addAttribute("visitorSession", visitorLoginInfo);
-			
+			model.addAttribute("visitorSession", visitorLoginInfo);	
 		}
+		
 		return i;
-		
-		
 	}
 	
 }

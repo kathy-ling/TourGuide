@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.TourGuide.common.CommonResp;
+import com.TourGuide.model.VisitorInfo;
 import com.TourGuide.service.VisitorService;
 import com.google.gson.Gson;
 
@@ -50,5 +51,26 @@ public class VisitorController {
 		writer.write(new Gson().toJson(bool));
 		writer.flush();
 	}
+	
+	
 
+	/**
+	 * 根据游客的手机号，查询个人详细信息
+	 * @param resp
+	 * @param phone  手机号
+	 * @throws IOException
+	 * @return 手机号、姓名、性别、昵称、头像
+	 */
+	@RequestMapping(value = "/getVisitorInfoWithPhone.do")
+	public void getVisitorInfoWithPhone(HttpServletResponse resp,
+			@RequestParam("phone") String phone) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		VisitorInfo visitorInfo = visitorService.getVisitorInfoWithPhone(phone);
+		
+		PrintWriter writer = resp.getWriter();
+		writer.write(new Gson().toJson(visitorInfo));
+		writer.flush();
+	}
 }
