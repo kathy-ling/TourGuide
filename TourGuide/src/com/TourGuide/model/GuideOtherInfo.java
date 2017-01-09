@@ -15,7 +15,20 @@ public class GuideOtherInfo {
 	private int guideFee; //讲解费
 	private int authorized; //是否审核通过
 	private int disabled; //是否禁用讲解员
-	
+	private int workAge; //工作年限
+	private String certificateID; //导游证号
+	public int getWorkAge() {
+		return workAge;
+	}
+	public void setWorkAge(int workAge) {
+		this.workAge = workAge;
+	}
+	public String getCertificateID() {
+		return certificateID;
+	}
+	public void setCertificateID(String certificateID) {
+		this.certificateID = certificateID;
+	}
 	public String getPhone() {
 		return phone;
 	}

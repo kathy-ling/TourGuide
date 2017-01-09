@@ -96,11 +96,9 @@ public class GuideAction {
 		guideInfo.setPhone(phone);
 		guideInfo.setName(name);
 		guideInfo.setSex(sex);
-		guideInfo.setCertificateID(cID);
 		guideInfo.setLanguage(language);
 		guideInfo.setSelfIntro(selfIntro);
 		guideInfo.setAge(age);
-		guideInfo.setWorkAge(workAge);
 		CommonResp.SetUtf(resp);
 		
 		boolean confirm = guideService.EditGuideInfo_Service(guideInfo);

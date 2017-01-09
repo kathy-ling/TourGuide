@@ -3,6 +3,7 @@ package com.TourGuide.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +37,6 @@ public class GuideDao {
 			guideInfo.setName((String) list.get(k).get("name"));
 			guideInfo.setSex((String) list.get(k).get("sex"));
 			guideInfo.setAge((int) list.get(k).get("age"));
-			guideInfo.setWorkAge((int) list.get(k).get("workAge"));
-			guideInfo.setCertificateID((String) list.get(k).get("certificateID"));
 			guideInfo.setLanguage((String) list.get(k).get("language"));
 			guideInfo.setSelfIntro((String) list.get(k).get("selfIntro"));
 			listres.add(guideInfo);
@@ -66,8 +65,6 @@ public class GuideDao {
 				guideInfo.setName(res.getString(2));
 				guideInfo.setSex(res.getString(3));
 				guideInfo.setAge(res.getInt(4));
-				guideInfo.setWorkAge(res.getInt(5));
-				guideInfo.setCertificateID(res.getString(6));
 				guideInfo.setLanguage(res.getString(7));
 				guideInfo.setSelfIntro(res.getString(8));
 				list.add(guideInfo);
@@ -80,13 +77,13 @@ public class GuideDao {
 	 * */
 	public boolean isAdd(GuideInfo guideInfo)
 	{
-		String sql1 = "select count(*) from t_guideinfo where certificateID = '" + guideInfo.getCertificateID() + "'";
+		String sql1 = "select count(*) from t_guideinfo where certificateID = '"  + "'";
 		String sql2 = "insert into t_guideinfo values(?,?,?,?,?,?,?,?)";
 		if(jdbcTemplate.queryForObject(sql1, Integer.class) != 0)
 			return false;
 		else {
 			jdbcTemplate.update(sql2,new Object[]{guideInfo.getPhone(), guideInfo.getName(), guideInfo.getSex(),
-					guideInfo.getAge(), guideInfo.getWorkAge(), guideInfo.getCertificateID(), guideInfo.getLanguage(), 
+					guideInfo.getAge(),  guideInfo.getLanguage(), 
 					guideInfo.getSelfIntro()});
 			return true;
 		}
@@ -110,9 +107,7 @@ public class GuideDao {
 				guideInfo.getSex(),
 				guideInfo.getLanguage(),
 				guideInfo.getSelfIntro(),
-				guideInfo.getAge(),
-				guideInfo.getWorkAge(),
-				guideInfo.getCertificateID()});
+				guideInfo.getAge()});
 		if (i>0) return true;
 		else return false;
 	}
@@ -199,5 +194,28 @@ public class GuideDao {
 		return listres;
 	}
 	
+	
+	/**
+	 * 根据导游的手机号，查询导游的信息：姓名、性别、讲解语言
+	 * @param phone 手机号
+	 * @return 姓名、性别、讲解语言
+	 */
+	public Map<String, String> getSomeGuideInfoByPhone(String phone){
+		
+		final Map<String, String> map = new HashMap<String, String>();
+		String sqlString = "select name,sex,language from t_guideinfo "
+				+ "where phone='"+phone+"'";
+		
+		jdbcTemplate.query(sqlString,  new RowCallbackHandler() {
+					
+					@Override
+					public void processRow(ResultSet res) throws SQLException {
+						map.put("name", res.getString(1));
+						map.put("sex", res.getString(2));
+						map.put("language", res.getString(3));
+					}
+		});
+		return map;
+	}
 	
 }
