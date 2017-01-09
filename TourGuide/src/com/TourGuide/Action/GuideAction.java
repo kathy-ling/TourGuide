@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.model.GuideInfo;
 import com.TourGuide.model.GuideOtherInfo;
+import com.TourGuide.model.Guideworkday;
 import com.TourGuide.service.GuideService;
 import com.google.gson.Gson;
 
@@ -95,11 +96,9 @@ public class GuideAction {
 		guideInfo.setPhone(phone);
 		guideInfo.setName(name);
 		guideInfo.setSex(sex);
-		guideInfo.setCertificateID(cID);
 		guideInfo.setLanguage(language);
 		guideInfo.setSelfIntro(selfIntro);
 		guideInfo.setAge(age);
-		guideInfo.setWorkAge(workAge);
 		CommonResp.SetUtf(resp);
 		
 		boolean confirm = guideService.EditGuideInfo_Service(guideInfo);
@@ -157,4 +156,7 @@ public class GuideAction {
 		map.put("confirm", guideService.RelieveGuideInfo_Service(phone));
 		return map;
 	}
+	
+	
+	
 }

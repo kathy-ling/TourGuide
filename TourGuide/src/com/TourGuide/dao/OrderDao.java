@@ -26,7 +26,7 @@ public class OrderDao {
 	ScenicSpotDao scenicSpotDao;
 	
 	@Autowired
-	GuideInfoDao guideInfoDao;
+	GuideDao guideInfoDao;
 	
 	@Autowired
 	IntroFeeAndMaxNumDao introFeeAndMaxNumDao;

@@ -10,12 +10,12 @@ public class GuideInfo {
 	private String phone; //导游的手机号
 	private String name; //导游的姓名
 	private String sex; // 性别
-	private String certificateID; //导游证号
+//	private String certificateID; //导游证号
 	private String language; //导游的讲解语言
 	private String selfIntro; //自我介绍
 	private String image;  //头像
 	private int age; //年龄
-	private int workAge; //工作年限
+//	private int workAge; //工作年限
 	
 	public String getPhone() {
 		return phone;
@@ -35,12 +35,12 @@ public class GuideInfo {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	public String getCertificateID() {
+/*	public String getCertificateID() {
 		return certificateID;
 	}
 	public void setCertificateID(String certificateID) {
 		this.certificateID = certificateID;
-	}
+	}*/
 	public String getLanguage() {
 		return language;
 	}
@@ -59,10 +59,10 @@ public class GuideInfo {
 	public void setAge(int age) {
 		this.age = age;
 	}
-	public int getWorkAge() {
+/*	public int getWorkAge() {
 		return workAge;
 	}
 	public void setWorkAge(int workAge) {
 		this.workAge = workAge;
-	}
+	}*/
 }

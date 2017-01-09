@@ -64,7 +64,7 @@ public class ScenicSpotAction {
 		public Object SearchScenicInfoByName(HttpServletResponse resp,
 				@RequestParam(value="sql")String sqlStr) throws IOException {
 			CommonResp.SetUtf(resp);
-			List<ScenicsSpotInfo> list = scenicSpotService.SearchScenicInfoByName_Service(sqlStr);
+			ScenicsSpotInfo list = scenicSpotService.SearchScenicInfoByName_Service(sqlStr);
 			String jsonStr = new Gson().toJson(list).toString();
 			Map<String , Object> map=new HashMap<>();
 			map.put("jsonStr", jsonStr);
@@ -89,11 +89,18 @@ public class ScenicSpotAction {
 				HttpServletResponse resp)
 		{
 			CommonResp.SetUtf(resp);
-			List<ScenicsSpotInfo> list=scenicSpotService.SearchSceincInfoByLocation(provin, city, s);
-			String jsonString=new Gson().toJson(list).toString();
-			Map<String, Object> map=new HashMap<>();
-			map.put("jsonStr", jsonString);
-			return map;		
+			
+			String jsonStr;
+			ScenicsSpotInfo list=scenicSpotService.SearchSceincInfoByLocation(provin, city, s);
+			if(list.getScenicNo()!=null){
+				jsonStr=new Gson().toJson(list).toString();
+			}else
+			{
+				jsonStr="";
+			}
+			Map< String, Object> map=new HashMap<>();
+			map.put("str", jsonStr);
+			return map;
 		}
 		/*
 		 *增加景区信息

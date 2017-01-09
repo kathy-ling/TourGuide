@@ -1,6 +1,8 @@
 package test;
 
-import com.TourGuide.dao.IntroFeeAndMaxNumDao;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
  
@@ -12,14 +14,17 @@ public class Test {
      * @param args 
      * @throws Exception 
      */  
+	
     public static void main(String[] args) throws Exception {
     	
-//        Weather weatherInfo = getWeatherByCity.getCityWeather("西安");
-//        
-//        System.out.println(new Gson().toJson(weatherInfo)); 
-    	
-    	IntroFeeAndMaxNumDao dao = new IntroFeeAndMaxNumDao();
-    	System.out.println(dao.getIntroFee("2016-12-31", "19743"));
+    	Calendar calendar = Calendar.getInstance();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    	calendar.add(Calendar.DAY_OF_YEAR, 2);
+    	Date date = calendar.getTime();
+    	System.out.println(sdf.format(date));
+    	Date date1=new Date();
+    	String day1=new SimpleDateFormat("yyyy-MM-dd").format(date1);
+    	System.out.println(day1);
     }  
 	
 }
