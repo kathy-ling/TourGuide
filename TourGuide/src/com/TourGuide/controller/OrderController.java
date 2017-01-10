@@ -70,32 +70,4 @@ public class OrderController {
 	}
 	
 	
-	
-//	@RequestMapping(value = "/getAllOrdersDetailWithOrderID.do")
-//	public void getAllOrdersDetailWithOrderID(HttpServletResponse resp,
-//			@RequestParam("orderID") String orderID) throws IOException{
-//		
-//		CommonResp.SetUtf(resp);
-//		
-//		List<Map<String, String>> listResult = orderService.getAllOrdersDetailWithOrderID(orderID);
-//		
-//		PrintWriter writer = resp.getWriter();
-//		writer.write(new Gson().toJson(listResult));
-//		writer.flush();
-//	}
-	
-//	@RequestMapping(value = "/getAllOrdersDetailWithVisitorPhone.do")
-//	public void getAllOrdersDetailWithVisitorPhone(HttpServletResponse resp,
-//			@RequestParam("visitorPhone") String visitorPhone) throws IOException{
-//		
-//		CommonResp.SetUtf(resp);
-//		
-//		List<Map<String, String>> listResult = orderService.getAllOrdersDetailWithVisitorPhone(visitorPhone);
-//		
-//		PrintWriter writer = resp.getWriter();
-//		writer.write(new Gson().toJson(listResult));
-//		writer.flush();
-//	}
-	
-	
 }

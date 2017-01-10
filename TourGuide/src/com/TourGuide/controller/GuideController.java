@@ -2,6 +2,8 @@ package com.TourGuide.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,7 +35,6 @@ public class GuideController {
 	 * @param age    年龄
 	 * @throws IOException
 	 */
-	//phone=187156942565&name=kathy&sex=女&language=英语&selfIntro=euiorhiobniogu&image=/test&age=29
 	@RequestMapping(value = "/getGuideAuthentication.do")
 	public void getGuideAuthentication(HttpServletResponse resp,
 			@RequestParam("phone") String phone, 
@@ -53,5 +54,23 @@ public class GuideController {
 		writer.write(new Gson().toJson(bool));
 		writer.flush();
 	}
-
+	
+	
+	
+	/**
+	 * 查询最受欢迎的讲解员
+	 * @param resp
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getPopularGuides.do")
+	public void getPopularGuides(HttpServletResponse resp) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> listResult = guideService.getPopularGuides();
+		
+		PrintWriter writer = resp.getWriter();
+		writer.write(new Gson().toJson(listResult));
+		writer.flush();
+	}
 }

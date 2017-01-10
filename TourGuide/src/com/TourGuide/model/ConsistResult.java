@@ -9,7 +9,8 @@ package com.TourGuide.model;
 public class ConsistResult {
 
 	private String orderID; //订单编号
-	private int currentNum; //当前的总人数
+//	private int currentNum; //当前的总人数
+	private int visitNum; //当前的总人数
 	private int maxNum;  //最大可拼单人数
 	private String visitTime; //参观时间
 	private String scenicID; //景点编号
@@ -20,12 +21,12 @@ public class ConsistResult {
 	public void setOrderID(String orderID) {
 		this.orderID = orderID;
 	}
-	public int getCurrentNum() {
-		return currentNum;
-	}
-	public void setCurrentNum(int currentNum) {
-		this.currentNum = currentNum;
-	}
+//	public int getCurrentNum() {
+//		return currentNum;
+//	}
+//	public void setCurrentNum(int currentNum) {
+//		this.currentNum = currentNum;
+//	}
 	public int getMaxNum() {
 		return maxNum;
 	}
@@ -43,5 +44,11 @@ public class ConsistResult {
 	}
 	public void setScenicID(String scenicID) {
 		this.scenicID = scenicID;
+	}
+	public int getVisitNum() {
+		return visitNum;
+	}
+	public void setVisitNum(int visitNum) {
+		this.visitNum = visitNum;
 	}
 }

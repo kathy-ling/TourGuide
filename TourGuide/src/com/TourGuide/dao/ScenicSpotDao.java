@@ -33,30 +33,16 @@ public class ScenicSpotDao {
 	 * @param location 用户当前的位置
 	 * @return 景区图片、编号、名称、简介、省、市、详细位置、等级、历史参观人数、开放时间
 	 */
- 	public List<ScenicsSpotInfo> getScenicByLocation(String location){
+ 	public List<Map<String , Object>> getScenicByLocation(String location){
 		
-		List<ScenicsSpotInfo> listResult = new ArrayList<>();
-		String sqlString = "select * from `t_scenicspotinfo`  where  province=? and isHotSpot=? limit ?";
+		String sqlString = "select scenicImagePath,scenicNo,scenicName,scenicIntro,province,"
+				+ "city,scenicLocation,scenicLevel,openingHours,totalVisits "
+				+ "from t_scenicspotinfo  where  province like '%"+location+"%' "
+						+ "and isHotSpot='"+isHotSpot+"' limit "+scenicNum+"";
 		
-		List<Map<String , Object>> list2=jdbcTemplate.queryForList(sqlString
-				,new Object[]{location,isHotSpot,scenicNum});
+		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlString);
 		
-		for (int j = 0; j <list2.size(); j++){
-			ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
-			scenicsSpotInfo.setScenicImagePath((String)list2.get(j).get("scenicImagePath"));
-			scenicsSpotInfo.setScenicNo((String)list2.get(j).get("scenicNo"));
-			scenicsSpotInfo.setScenicName((String)list2.get(j).get("scenicName"));
-			scenicsSpotInfo.setScenicIntro((String)list2.get(j).get("scenicIntro"));
-			scenicsSpotInfo.setProvince((String)list2.get(j).get("province"));
-			scenicsSpotInfo.setCity((String)list2.get(j).get("city"));
-			scenicsSpotInfo.setScenicLocation((String)list2.get(j).get("scenicLocation"));
-			scenicsSpotInfo.setScenicLevel((String)list2.get(j).get("scenicLevel"));
-			scenicsSpotInfo.setOpeningHours((String)list2.get(j).get("openingHours"));
-			scenicsSpotInfo.setTotalVisits((String)list2.get(j).get("totalVisits"));
-			listResult.add(scenicsSpotInfo);
-		}
-		
-		return listResult;
+		return list;
 	}
 	
 	
@@ -65,29 +51,15 @@ public class ScenicSpotDao {
 	 * @param location 用户所在的省份
 	 * @return 景区图片、编号、名称、简介、省、市、详细位置、等级、历史参观人数、开放时间
 	 */
-	public List<ScenicsSpotInfo> getAllScenicByLocation(String location){
+	public List<Map<String , Object>> getAllScenicByLocation(String location){
 		
-		List<ScenicsSpotInfo> listResult = new ArrayList<>();
-		String sqlString = "select * from `t_scenicspotinfo`  where  province=?";
+		String sqlString = "select scenicImagePath,scenicNo,scenicName,scenicIntro,province,"
+				+ "city,scenicLocation,scenicLevel,openingHours,totalVisits "
+				+ "from t_scenicspotinfo where province like '%"+location+"%'";
 		
-		List<Map<String , Object>> list2=jdbcTemplate.queryForList(sqlString
-				,new Object[]{location});
+		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlString);
 		
-		for (int j = 0; j <list2.size(); j++){
-			ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
-			scenicsSpotInfo.setScenicImagePath((String)list2.get(j).get("scenicImagePath"));
-			scenicsSpotInfo.setScenicNo((String)list2.get(j).get("scenicNo"));
-			scenicsSpotInfo.setScenicName((String)list2.get(j).get("scenicName"));
-			scenicsSpotInfo.setScenicIntro((String)list2.get(j).get("scenicIntro"));
-			scenicsSpotInfo.setProvince((String)list2.get(j).get("province"));
-			scenicsSpotInfo.setCity((String)list2.get(j).get("city"));
-			scenicsSpotInfo.setScenicLocation((String)list2.get(j).get("scenicLocation"));
-			scenicsSpotInfo.setScenicLevel((String)list2.get(j).get("scenicLevel"));
-			scenicsSpotInfo.setOpeningHours((String)list2.get(j).get("openingHours"));
-			scenicsSpotInfo.setTotalVisits((String)list2.get(j).get("totalVisits"));
-			listResult.add(scenicsSpotInfo);
-		}
-		return listResult;
+		return list;
 	}
 
 	

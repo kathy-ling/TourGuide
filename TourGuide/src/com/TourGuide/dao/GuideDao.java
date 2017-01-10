@@ -55,6 +55,50 @@ public class GuideDao {
 	}
 	
 	
+	/**
+	 * 查询最受欢迎的讲解员,暂定显示10个
+	 * 查询条件：级别、历史带团人数、是否认证、是否禁用（先按级别排序，再按带团人数排序）
+	 * @return  讲解员的基本信息及级别
+	 * phone,image,name,sex,age,language,selfIntro,guideLevel
+	 */
+	public List<Map<String, Object>> getPopularGuides(){
+		
+		int popularNum = 10;
+		
+		String sqlString = "select t_guideinfo.*,t_guideotherinfo.guideLevel from t_guideinfo,t_guideotherinfo "
+				+ "where t_guideinfo.phone=t_guideotherinfo.phone and t_guideotherinfo.phone in "
+				+ "(select phone from t_guideotherinfo where disabled=0 and authorized=1 "
+				+ "order by historyNum,guideLevel desc) limit ?";
+		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlString, new Object[]{popularNum});
+		
+		return list;
+	}
+	
+	
+	
+	/**
+	 * 查询可被预约的讲解员
+	 * 查询条件：讲解员的工作时间、单次最大带团人数、所属景区、是否认证、是否禁用、级别
+	 * @param visitTime  游客的参观时间
+	 * @param visitNum  参观的人数
+	 * @param scenicID  景区编号
+	 * @return 可被预约的讲解员的基本信息（按星级排序）
+	 * phone,image,name,sex,age,language,selfIntro,guideLevel
+	 */
+	public List<Map<String, Object>> getAvailableGuides(String visitTime, 
+			int visitNum, String scenicID){
+		
+		
+		
+		List<Map<String , Object>> list = null;
+		
+		return list;
+	}
+	
+	
+	
+	
+	
 	/*
 	 * 获得所有讲解员的基本信息
 	 * */

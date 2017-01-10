@@ -54,8 +54,5 @@ public class OrderService {
 //	}
 	
 	
-	
-	public List<Map<String, String>> getAllOrdersDetailWithVisitorPhone(String phone){
-		return orderDao.getAllOrdersDetailWithVisitorPhone(phone);
-	}
+
 }

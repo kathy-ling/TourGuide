@@ -1,6 +1,7 @@
 package com.TourGuide.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,17 @@ public class GuideService {
 		
 		return guideDao.getGuideAuthentication(phone, name, sex,
 				language, selfIntro, image, age);
+	}
+	
+	
+	/**
+	 * 查询最受欢迎的讲解员
+	 * 查询条件：级别、历史带团人数、是否认证、是否禁用（先按级别排序，再按带团人数排序）
+	 * @return  讲解员的基本信息及级别
+	 * phone,image,name,sex,age,language,selfIntro,guideLevel
+	 */
+	public List<Map<String, Object>> getPopularGuides(){
+		return guideDao.getPopularGuides();
 	}
 	
 

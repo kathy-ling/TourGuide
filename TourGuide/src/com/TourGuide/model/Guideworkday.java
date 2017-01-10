@@ -7,6 +7,7 @@ public class Guideworkday {
 	private int day2;
 	private int day3;
 	private int day4;
+	
 	public String getPhone() {
 		return phone;
 	}

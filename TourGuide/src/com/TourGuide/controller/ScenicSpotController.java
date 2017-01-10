@@ -42,26 +42,10 @@ public class ScenicSpotController {
 		
 		CommonResp.SetUtf(resp);
 		
-		List<ScenicsSpotInfo> list = scenicSpotService.getScenicByLocation(province);
-		List<Map<String, Object>> listresult = new ArrayList<Map<String, Object>>();
-		
-		for(int i=0; i<list.size(); i++){
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("scenicImagePath", list.get(i).getScenicImagePath());
-			map.put("scenicNo", list.get(i).getScenicNo());
-			map.put("openingHours", list.get(i).getOpeningHours());
-			map.put("scenicIntro", list.get(i).getScenicIntro());
-			map.put("scenicLevel", list.get(i).getScenicLevel());
-			map.put("province", list.get(i).getProvince());
-			map.put("city", list.get(i).getCity());
-			map.put("scenicLocation", list.get(i).getScenicLocation());
-			map.put("scenicName", list.get(i).getScenicName());
-			map.put("totalVisits", list.get(i).getTotalVisits());
-			listresult.add(map);
-		}
-		
+		List<Map<String , Object>> list = scenicSpotService.getScenicByLocation(province);
+
 		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(listresult));
+		writer.write(new Gson().toJson(list));
 		writer.flush();
 	}
 	
@@ -79,26 +63,10 @@ public class ScenicSpotController {
 		
 		CommonResp.SetUtf(resp);
 		
-		List<ScenicsSpotInfo> list = scenicSpotService.getAllScenicByLocation(province);
-		List<Map<String, Object>> listresult = new ArrayList<Map<String, Object>>();
-		
-		for(int i=0; i<list.size(); i++){
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("scenicImagePath", list.get(i).getScenicImagePath());
-			map.put("scenicNo", list.get(i).getScenicNo());
-			map.put("openingHours", list.get(i).getOpeningHours());
-			map.put("scenicIntro", list.get(i).getScenicIntro());
-			map.put("scenicLevel", list.get(i).getScenicLevel());
-			map.put("province", list.get(i).getProvince());
-			map.put("city", list.get(i).getCity());
-			map.put("scenicLocation", list.get(i).getScenicLocation());
-			map.put("scenicName", list.get(i).getScenicName());
-			map.put("totalVisits", list.get(i).getTotalVisits());
-			listresult.add(map);
-		}
+		List<Map<String , Object>> list = scenicSpotService.getAllScenicByLocation(province);
 		
 		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(listresult));
+		writer.write(new Gson().toJson(list));
 		writer.flush();
 	}
 	
