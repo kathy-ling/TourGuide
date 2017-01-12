@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
@@ -175,11 +176,18 @@ public class GuideDao {
 		}
 	}
 	/*
-	 * 通过证号删除讲解员
+	 * 通过手机号删除讲解员
 	 * */
-	public void DeleteGuideInfoById_Dao(String id) {
-		String sql = " delete from t_guideinfo where certificateID = '"+id+"'";
-		jdbcTemplate.update(sql);
+	public int DeleteGuideInfoById_Dao(String phone) {
+		String sql = " delete from t_guideinfo where phone = '"+phone+"'";
+		int i;
+		try {
+			i= jdbcTemplate.update(sql);
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			i=0;
+		}
+		return i;
 	}
 	/*
 	 * 编辑讲解员

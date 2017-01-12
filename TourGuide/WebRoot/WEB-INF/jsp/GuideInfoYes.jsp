@@ -456,22 +456,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	
  	function DeleteGuideInfo() {
  		var url="<%=basePath%>Guide/DeleteGuideInfo.action";
- 		var id = $("#delete_certificateID").val();
- 		if (id != "") {
-	 		$.ajax({
+ 		var phone = $("#delete_phone").val();
+ 		$.ajax({
 	 			url:url,
 	 			type:"post",
 	 			datatype:"json",
-	 			data:{id:id}
+	 			data:{phone:phone},
+	 			success: function(data)
+	 			{
+	 				if(data=="1")
+	 				{
+	 					$("#deletemodal").modal('hide');
+	 					alert("删除成功！");
+	 					loadGuideInfo();
+	 				}else
+	 				{
+	 					$("#deletemodal").modal('hide');
+	 					alert("删除失败！");
+	 					loadGuideInfo();
+	 				}
+	 			}
 	 		});
-	 		$("#deletemodal").modal('hide');
-	 		alert("删除成功！");
-	 		loadGuideInfo();
-	 	}else {
-	 		$("#deletemodal").modal('hide');
-	 		alert("删除失败！");
-	 		loadGuideInfo();
-	 	}
  	}
  	function editGuideInfo(index) {
  		var data=GuiderInfo[index];
@@ -539,27 +544,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#lookmodal").modal('show');
  	}
  	
- 	function checkGuideInfo(index) {
- 		GlobalIndex=index;
- 		if(GuiderInfo[GlobalIndex].authorized=="0")
- 		{
- 			$("#checkmodal").modal('show');
- 		}
- 		
- 	}
  	
- 	
- 	function forbidGuideInfo(index) {
- 		GlobalIndex=index;
- 		if(GuiderInfo[GlobalIndex].disabled=="0")
- 		{
- 			$("#forbidmodal").modal('show');
- 		}else
- 		{
- 			$("#relievemodal").modal('show');
- 		}
- 		
- 	}
  	
  	function ForbidGuideInfo() {
  		var url = "<%=basePath%>Guide/ForbidGuideInfo.action";

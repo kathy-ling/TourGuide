@@ -64,8 +64,8 @@ public class GuideService {
 		return guideDao.isAdd(guideInfo);
 	}
 
-	public void DeleteGuideInfoById_Service(String id) {
-		guideDao.DeleteGuideInfoById_Dao(id);
+	public int DeleteGuideInfoById_Service(String phone) {
+		return guideDao.DeleteGuideInfoById_Dao(phone);
 	}
 	
 	public boolean EditGuideInfo_Service(String level,String historyNum,

@@ -121,16 +121,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</tr>
 						<tr><td>性别:</td>
 						<td><input  type="text"  id="delete_sex" name="delete_sex"  readonly="readonly"/></td></tr>
-						<tr><td>导游证号:</td>
-						<td><input  type="text"  id="delete_certificateID" name="delete_certificateID"  readonly="readonly"/></td></tr>
 						<tr><td>讲解语言:</td>
 						<td><input  type="text"  id="delete_language" name="delete_language"  readonly="readonly"/></td></tr>
 						<tr><td>自我介绍:</td>
 						<td><input  type="text"  id="delete_selfIntro" name="delete_selfIntro"  readonly="readonly"/></td></tr>
 						<tr><td>年龄:</td>
 						<td><input  type="text"  id="delete_age" name="delete_age"  readonly="readonly"/></td></tr>
-						<tr><td>工作年限:</td>
-						<td><input  type="text"  id="delete_workAge" name="delete_workAge"  readonly="readonly"/></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button class="btn btn-danger" onclick="DeleteGuideInfo()">Delete</button><button class="close" data-dismiss="modal" aria-hidden="true">Return</button></td></tr>
 					
 						</table>			
@@ -249,7 +245,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<tr><td colspan="2" style="text-align:center;"><button class="btn btn-warning" onclick="CheckGuideInfo()" data-dismiss="modal" aria-hidden="true">审核通过</button></td></tr>
 					
 						</table>
-						</table>
+						
 					</div>
 				</div>
 			</div>
@@ -423,7 +419,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$("#delete_phone").val(GuiderInfo[index].phone);
 		$("#delete_name").val(GuiderInfo[index].name);
 		$("#delete_sex").val(GuiderInfo[index].sex);
-		$("#delete_certificateID").val(GuiderInfo[index].certificateID);
 		var language = "无";
 		if (GuiderInfo[index].language == 1) language = "英语";else
 		if (GuiderInfo[index].language == 0) language = "汉语";else
@@ -431,32 +426,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$("#delete_language").val(language);
 		$("#delete_selfIntro").val(GuiderInfo[index].selfIntro);
 		$("#delete_age").val(GuiderInfo[index].age);
-		$("#delete_workAge").val(GuiderInfo[index].workAge);
  		$("#deletemodal").modal('show');	
  	}
  	
  	function DeleteGuideInfo() {
  		var url="<%=basePath%>Guide/DeleteGuideInfo.action";
- 		var id = $("#delete_certificateID").val();
- 		if (id != "") {
-	 		$.ajax({
+ 		var phone = $("#delete_phone").val();
+	 	$.ajax({
 	 			url:url,
 	 			type:"post",
 	 			datatype:"json",
-	 			data:{id:id}
+	 			data:{phone:phone},
+	 			success: function(data)
+	 			{
+	 				if(data=="1")
+	 				{
+	 					$("#deletemodal").modal('hide');
+	 					alert("删除成功！");
+	 					loadGuideInfo();
+	 				}else
+	 				{
+	 					$("#deletemodal").modal('hide');
+	 					alert("删除失败！");
+	 					loadGuideInfo();
+	 				}
+	 			}
 	 		});
-	 		$("#deletemodal").modal('hide');
-	 		alert("删除成功！");
-	 		loadGuideInfo();
-	 	}else {
-	 		$("#deletemodal").modal('hide');
-	 		alert("删除失败！");
-	 		loadGuideInfo();
-	 	}
- 	}
-
-
- 	
+ 	}	
  	function LookGuideInfo(index) {
 		lookGuideInfo(GuiderInfo[index]);
  	}

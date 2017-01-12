@@ -109,10 +109,11 @@ public class GuideAction {
 	 * */
 	@RequestMapping(value="/DeleteGuideInfo.action",method = RequestMethod.POST)
 	@ResponseBody
-	public void DeleteGuideInfoById(HttpServletResponse resp,
-			@RequestParam(value="id")String id) throws IOException {
+	public Object DeleteGuideInfoById(HttpServletResponse resp,
+			@RequestParam(value="phone")String phone) throws IOException {
 		CommonResp.SetUtf(resp);
-		guideService.DeleteGuideInfoById_Service(id);
+		int i=guideService.DeleteGuideInfoById_Service(phone);
+		return i;
 	}
 	/*
 	 * 编辑讲解员的基本信息
