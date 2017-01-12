@@ -19,6 +19,100 @@ public class GuideDao {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	
+	/**
+	 * 讲解员提交相应的信息，申请认证
+	 * @param phone  手机号
+	 * @param name  姓名
+	 * @param sex  性别
+	 * @param language  讲解语言
+	 * @param selfIntro   自我介绍
+	 * @param image  头像
+	 * @param age    年龄
+	 * @return 0-失败  1-成功  -1-账号已存在
+	 */
+	public int getGuideAuthentication(String phone, String name,String sex, 
+			String language, String selfIntro, String image, int age){
+		
+		int retValue = 0;
+		final GuideInfo guideInfo = new GuideInfo();
+		
+		String sqlSearch = "select phone from t_guideinfo where phone='"+phone+"'";
+		
+		jdbcTemplate.query(sqlSearch,  new RowCallbackHandler() {
+			
+			@Override
+			public void processRow(ResultSet res) throws SQLException {
+				guideInfo.setPhone(res.getString(1));
+			}
+		});
+		String phoneExist = guideInfo.getPhone();
+		
+		if(phoneExist != null){
+			
+			return retValue = -1;
+		}
+		
+		//向t_guideinfo表中插入导游的基本信息
+		String sqlString = "insert into t_guideinfo (phone,name,sex,language,selfIntro,image,age) "
+				+ "values (?,?,?,?,?,?,?)";
+		int i = jdbcTemplate.update(sqlString, new Object[]{phone, name, sex,
+				language, selfIntro, image, age});
+		
+		
+		//向t_guideotherinfo插入其他的信息
+		String sqlString2 = "insert into t_guideotherinfo (phone,historyNum,authorized,disabled) "
+				+ "values (?,?,?,?)";
+		int j = jdbcTemplate.update(sqlString2, new Object[]{phone, 0, 0, 0});
+		
+		if (i!=0 && j!=0) {
+			retValue = 1;
+		}
+		return retValue;
+	}
+	
+	
+	/**
+	 * 查询最受欢迎的讲解员,暂定显示10个
+	 * 查询条件：级别、历史带团人数、是否认证、是否禁用（先按级别排序，再按带团人数排序）
+	 * @return  讲解员的基本信息及级别
+	 * phone,image,name,sex,age,language,selfIntro,guideLevel
+	 */
+	public List<Map<String, Object>> getPopularGuides(){
+		
+		int popularNum = 10;
+		
+		String sqlString = "select t_guideinfo.*,t_guideotherinfo.guideLevel from t_guideinfo,t_guideotherinfo "
+				+ "where t_guideinfo.phone=t_guideotherinfo.phone and t_guideotherinfo.phone in "
+				+ "(select phone from t_guideotherinfo where disabled=0 and authorized=1 "
+				+ "order by historyNum,guideLevel desc) limit ?";
+		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlString, new Object[]{popularNum});
+		
+		return list;
+	}
+	
+	
+	
+	/**
+	 * 查询可被预约的讲解员
+	 * 查询条件：讲解员的工作时间、单次最大带团人数、所属景区、是否认证、是否禁用、级别
+	 * @param visitTime  游客的参观时间
+	 * @param visitNum  参观的人数
+	 * @param scenicID  景区编号
+	 * @return 可被预约的讲解员的基本信息（按星级排序）
+	 * phone,image,name,sex,age,language,selfIntro,guideLevel
+	 */
+	public List<Map<String, Object>> getAvailableGuides(String visitTime, 
+			int visitNum, String scenicID){
+		
+		
+		
+		List<Map<String , Object>> list = null;
+		
+		return list;
+	}
+
 	/*
 	 * 获得所有讲解员的基本信息
 	 * */

@@ -12,8 +12,40 @@ import com.TourGuide.model.GuideOtherInfo;
 
 @Service
 public class GuideService {
+	
 	@Autowired
 	private GuideDao guideDao;
+	
+	
+	/**
+	 * 讲解员提交相应的信息，申请认证
+	 * @param phone  手机号
+	 * @param name  姓名
+	 * @param sex  性别
+	 * @param language  讲解语言
+	 * @param selfIntro   自我介绍
+	 * @param image  头像
+	 * @param age    年龄
+	 * @return  0-失败  1-成功  -1-账号已存在
+	 */
+	public int getGuideAuthentication(String phone, String name,String sex, 
+			String language, String selfIntro, String image, int age){
+		
+		return guideDao.getGuideAuthentication(phone, name, sex,
+				language, selfIntro, image, age);
+	}
+	
+	
+	/**
+	 * 查询最受欢迎的讲解员
+	 * 查询条件：级别、历史带团人数、是否认证、是否禁用（先按级别排序，再按带团人数排序）
+	 * @return  讲解员的基本信息及级别
+	 * phone,image,name,sex,age,language,selfIntro,guideLevel
+	 */
+	public List<Map<String, Object>> getPopularGuides(){
+		return guideDao.getPopularGuides();
+	}
+	
 
 	public List<GuideInfo> getGuidersByPage(int i, int j) {
 		return guideDao.GetGuiderInfoByPage(i, j);

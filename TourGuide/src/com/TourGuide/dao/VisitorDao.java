@@ -49,6 +49,34 @@ public class VisitorDao {
 			return bool;
 		}
 		
+		
+		/**
+		 * 根据游客的手机号，查询个人详细信息
+		 * @param phone  手机号
+		 * @return 手机号、姓名、性别、昵称、头像
+		 */
+		public VisitorInfo getVisitorInfoWithPhone(String phone){
+			
+			final VisitorInfo visitorInfo = new VisitorInfo();
+			
+			String sqlSearch = "select * from t_visitor where phone='"+phone+"'";
+			
+			jdbcTemplate.query(sqlSearch, new RowCallbackHandler() {
+				
+				@Override
+				public void processRow(java.sql.ResultSet rSet) throws SQLException {
+
+					visitorInfo.setPhone(rSet.getString(1));
+					visitorInfo.setName(rSet.getString(2));
+					visitorInfo.setNickName(rSet.getString(3));
+					visitorInfo.setImage(rSet.getString(4));
+					visitorInfo.setSex(rSet.getString(5));
+				}
+			});
+			
+			return visitorInfo;
+		}  
+		
 		/*
 		 *通过页数与页数容量来获取游客信息 
 		 * time：2017-1-2 17:22:30

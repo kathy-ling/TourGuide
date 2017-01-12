@@ -1,6 +1,7 @@
 package com.TourGuide.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class ScenicSpotService {
 	/*
 	 * 根据用户的位置（省份），获取对应省份的热门景点
 	 */
-	public List<ScenicsSpotInfo> getScenicByLocation(String province){
+	public List<Map<String , Object>> getScenicByLocation(String province){
 		return scenicSpotDao.getScenicByLocation(province);
 	}
 	
@@ -29,7 +30,7 @@ public class ScenicSpotService {
 	/*
 	 * 根据用户的当前所在的省份，获取该省份的所有景点
 	 */
-	public List<ScenicsSpotInfo> getAllScenicByLocation(String location){
+	public List<Map<String , Object>> getAllScenicByLocation(String location){
 		return scenicSpotDao.getAllScenicByLocation(location);
 	}
 	

@@ -29,7 +29,6 @@ public class IntroFeeAndMaxNumDao {
 		int fee = 0;
 		
 		String sql = "select fee from t_introfeeandmaxnum where scenicNo='"+scenicNo+"' and date='"+date+"'";
-//		fee = jdbcTemplate.queryForObject(sql, Integer.class);
 		
 		jdbcTemplate.query(sql,  new RowCallbackHandler() {
 					

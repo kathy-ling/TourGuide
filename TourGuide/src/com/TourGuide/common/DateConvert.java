@@ -2,7 +2,9 @@ package com.TourGuide.common;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DateConvert {
 	
@@ -24,4 +26,29 @@ public class DateConvert {
 		return datetime;
 	}
 	
+	
+	/**
+	 * 计算两个字符串类型的日期间的天数
+	 * @param str1     日期1，字符串类型
+	 * @param str2   日期2，字符串类型
+	 * @return
+	 */
+	public static int getDaysBetweenDate(String str1, String str2){
+		
+		long day = 0;
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date1 = null;
+		Date date2 = null;
+		
+		try {
+			date1 = dateFormat.parse(str1);
+			date2 = dateFormat.parse(str2);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+        	
+    	day = (date1.getTime() - date2.getTime()) / (24 * 60 * 60 * 1000);
+		return (int)day;
+	}
 }

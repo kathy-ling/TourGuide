@@ -136,19 +136,9 @@ public class ConsistOrderController {
 		String timeNow = MyDateFormat.form(new Date());		
 		
 		List<ConsistOrder> list = consistOrderService.getAvailableConsistOrder(scenicID, timeNow);
-		List<Map<String, Object>> listresult = new ArrayList<Map<String, Object>>();
-		
-		for(int i=0; i<list.size(); i++){
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("orderID", list.get(i).getOrderID());
-			map.put("visitTime", list.get(i).getVisitTime());
-			map.put("visitNum", list.get(i).getCurrentNum());
-			map.put("maxNum", list.get(i).getMaxNum());
-			listresult.add(map);
-		}
 		
 		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(listresult));
+		writer.write(new Gson().toJson(list));
 		writer.flush();
 	}
 
@@ -176,8 +166,6 @@ public class ConsistOrderController {
 			@RequestParam("halfPrice") String halfPrice,
 			@RequestParam("discoutPrice") String discoutPrice,
 			@RequestParam("fullPrice") String fullPrice) throws IOException{
-		
-		//orderID=4e06cb84e1684ad28bca53bd1e7ed295&visitNum=6&visitorPhone=18756952269&purchaseTicket=0&halfPrice=0&discoutPrice=0&fullPrice=0
 		
 		CommonResp.SetUtf(resp);
 		

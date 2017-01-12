@@ -13,6 +13,7 @@ public class GuideInfo {
 //	private String certificateID; //导游证号
 	private String language; //导游的讲解语言
 	private String selfIntro; //自我介绍
+	private String image;  //头像
 	private int age; //年龄
 //	private int workAge; //工作年限
 	

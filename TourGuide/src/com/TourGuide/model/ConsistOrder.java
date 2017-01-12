@@ -61,6 +61,12 @@ public class ConsistOrder {
 	public void setVisitNum(int visitNum) {
 		this.visitNum = visitNum;
 	}
+//	public int getCurrentNum() {
+//		return visitNum;
+//	}
+//	public void setCurrentNum(int visitNum) {
+//		this.visitNum = visitNum;
+//	}
 	public String getVisitorPhone() {
 		return visitorPhone;
 	}
@@ -96,12 +102,6 @@ public class ConsistOrder {
 	}
 	public void setTotalMoney(int totalMoney) {
 		this.totalMoney = totalMoney;
-	}
-	public int getCurrentNum() {
-		return visitNum;
-	}
-	public void setCurrentNum(int visitNum) {
-		this.visitNum = visitNum;
 	}
 	public int getMaxNum() {
 		return maxNum;

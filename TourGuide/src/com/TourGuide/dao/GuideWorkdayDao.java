@@ -1,5 +1,7 @@
 package com.TourGuide.dao;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.TourGuide.common.DateConvert;
 import com.TourGuide.model.Guideworkday;
 
 @Repository
@@ -14,6 +17,55 @@ public class GuideWorkdayDao {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	/**
+	 * 设置导游的工作时间，
+	 * @param days 不工作的日期，如2017-1-12
+	 * @param phone  手机号
+	 * @return 
+	 */
+	public boolean setGuideWorkday(List<String> days, String phone){
+		
+		boolean bool = false;
+		
+		int one = 1, two = 1, three = 1, four = 1;
+		
+		Date date1=new Date();
+    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(date1);
+		
+		for(int i=0; i<days.size(); i++){
+			int day = DateConvert.getDaysBetweenDate(days.get(i), dayNow);
+			switch (day) {
+			case 0:
+				one = 0;
+				break;
+			case 1:
+				two = 0;			
+				break;
+			case 2:
+				three = 0;
+				break;
+			case 3:
+				four = 0;
+				break;
+
+			default:
+				break;
+			}
+		}
+		
+		String sqlString = "update t_guideworkday set one=?,two=?,three=?,four=? where phone=? ";
+		int i=jdbcTemplate.update(sqlString, new Object[]{one, two, three, four, phone});
+		
+		if(i != 0){
+			bool = true;
+		}
+		
+		return bool;
+	}
+	
+	
+	
 	
 	/**
 	 * 
