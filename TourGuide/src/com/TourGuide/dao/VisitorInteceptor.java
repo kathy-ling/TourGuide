@@ -34,7 +34,7 @@ public class VisitorInteceptor  implements HandlerInterceptor {
 			Object arg2) throws Exception {
 		
 		request.setCharacterEncoding("UTF-8");
-		String[] Filter = new String[] {"getVisitorInfoWithPhone.do"};
+		String[] Filter = new String[] {" "};  //getVisitorInfoWithPhone.do
 		
 		// 请求的URI
 		String uri = request.getRequestURI();

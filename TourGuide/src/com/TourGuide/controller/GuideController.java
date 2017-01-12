@@ -47,11 +47,11 @@ public class GuideController {
 		
 		CommonResp.SetUtf(resp);
 		
-		boolean bool = guideService.getGuideAuthentication(phone, name, 
+		int ret = guideService.getGuideAuthentication(phone, name, 
 				sex, language, selfIntro, image, Integer.parseInt(age));
 		
 		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(bool));
+		writer.write(new Gson().toJson(ret));
 		writer.flush();
 	}
 	

@@ -75,7 +75,7 @@ public class VisitorDao {
 			});
 			
 			return visitorInfo;
-		}
+		}  
 		
 		/*
 		 *通过页数与页数容量来获取游客信息 

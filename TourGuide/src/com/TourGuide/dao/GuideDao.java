@@ -30,12 +30,29 @@ public class GuideDao {
 	 * @param selfIntro   自我介绍
 	 * @param image  头像
 	 * @param age    年龄
-	 * @return
+	 * @return 0-失败  1-成功  -1-账号已存在
 	 */
-	public boolean getGuideAuthentication(String phone, String name,String sex, 
+	public int getGuideAuthentication(String phone, String name,String sex, 
 			String language, String selfIntro, String image, int age){
 		
-		boolean bool = false;
+		int retValue = 0;
+		final GuideInfo guideInfo = new GuideInfo();
+		
+		String sqlSearch = "select phone from t_guideinfo where phone='"+phone+"'";
+		
+		jdbcTemplate.query(sqlSearch,  new RowCallbackHandler() {
+			
+			@Override
+			public void processRow(ResultSet res) throws SQLException {
+				guideInfo.setPhone(res.getString(1));
+			}
+		});
+		String phoneExist = guideInfo.getPhone();
+		
+		if(phoneExist != null){
+			
+			return retValue = -1;
+		}
 		
 		//向t_guideinfo表中插入导游的基本信息
 		String sqlString = "insert into t_guideinfo (phone,name,sex,language,selfIntro,image,age) "
@@ -43,15 +60,16 @@ public class GuideDao {
 		int i = jdbcTemplate.update(sqlString, new Object[]{phone, name, sex,
 				language, selfIntro, image, age});
 		
+		
 		//向t_guideotherinfo插入其他的信息
 		String sqlString2 = "insert into t_guideotherinfo (phone,historyNum,authorized,disabled) "
 				+ "values (?,?,?,?)";
 		int j = jdbcTemplate.update(sqlString2, new Object[]{phone, 0, 0, 0});
 		
 		if (i!=0 && j!=0) {
-			bool = true;
+			retValue = 1;
 		}
-		return bool;
+		return retValue;
 	}
 	
 	

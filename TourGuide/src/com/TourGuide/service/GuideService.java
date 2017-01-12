@@ -26,9 +26,9 @@ public class GuideService {
 	 * @param selfIntro   自我介绍
 	 * @param image  头像
 	 * @param age    年龄
-	 * @return
+	 * @return  0-失败  1-成功  -1-账号已存在
 	 */
-	public boolean getGuideAuthentication(String phone, String name,String sex, 
+	public int getGuideAuthentication(String phone, String name,String sex, 
 			String language, String selfIntro, String image, int age){
 		
 		return guideDao.getGuideAuthentication(phone, name, sex,
