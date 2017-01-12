@@ -278,7 +278,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               	var t2="<td style='text-align: center; width: 10%;'>"+value.phone+"</td>";
               	var t3="<td style='text-align: center;width: 10%;'>"+value.nickName+"</td>";
               	var t4="<td style='text-align: center; width: 10%;'>"+value.sex+"</td>";
-              	var t6="<td align='center''> <div class='am-btn-toolbar'>"+
+              	var t6="<td align='center'> <div class='am-btn-toolbar'>"+
               	"<div  style='text-align: center;float: none' class='am-btn-group am-btn-group-xs'>"+
               	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='forbidVisitorInfo("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>"+c+"</button>"+
                   "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='deleteVisitor("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
