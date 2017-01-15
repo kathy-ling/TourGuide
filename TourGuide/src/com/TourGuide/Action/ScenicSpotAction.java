@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.aspectj.apache.bcel.generic.RET;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -124,6 +125,8 @@ public class ScenicSpotAction {
 				@RequestParam(value="city")String city,
 				@RequestParam(value="chargePerson")String chargePerson,
 				@RequestParam(value="scenicIntro")String scenicIntro) throws IOException {
+			
+			
 			ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
 			scenicsSpotInfo.setScenicNo(scenicNo);
 			scenicsSpotInfo.setScenicName(scenicName);
@@ -136,6 +139,7 @@ public class ScenicSpotAction {
 			scenicsSpotInfo.setCity(city);
 			scenicsSpotInfo.setChargePerson(chargePerson);
 			scenicsSpotInfo.setIsHotSpot(isHotSpot);
+			
 			
 			boolean confirm = scenicSpotService.AddScenicInfo_Service(scenicsSpotInfo);
 			Map<String, Object> map = new HashMap<>();
@@ -198,13 +202,22 @@ public class ScenicSpotAction {
 		}
 		
 		
-		
+		/**
+		 * 上传景区图片
+		 * @param resp
+		 * @param request
+		 * @param file
+		 * @return
+		 * 
+		 * 2017-1-15 15:52:26
+		 */
 		@RequestMapping(value="/UploadImage.action",method=RequestMethod.POST)
 		@ResponseBody
-		public void UploadImage(HttpServletResponse resp,HttpServletRequest request,
+		public Object UploadImage(HttpServletResponse resp,HttpServletRequest request,
 				@RequestParam MultipartFile file) {
 			
-			
+			CommonResp.SetUtf(resp);
+			Map<String , Object> map=new HashMap<>();
 			String realPath="E:/Project/TourGuide/TourGuide/WebRoot/image/scenics";
 			File pathFile = new File(realPath);
 			if (!pathFile.exists()) {
@@ -222,12 +235,15 @@ public class ScenicSpotAction {
 				File fileImageFile=new File(realPath + "/" + file.getOriginalFilename());
 				file.transferTo(fileImageFile);
 				System.out.println("图片上传成功");
+				map.put("json", "true");
 			} catch (IllegalStateException | IOException e) {
 					
 				e.printStackTrace();
-					
+				map.put("json", "false");
 			}	
+			return  map;
 		}  	
+		
 		
 		
 }

@@ -164,6 +164,7 @@ public class ScenicSpotDao {
 		for (int k = 0; k < list.size(); k++) {
 			ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
 			scenicsSpotInfo.setScenicNo((String) list.get(k).get("scenicNo"));
+			scenicsSpotInfo.setScenicImagePath((String) list.get(k).get("scenicImagePath"));
 			scenicsSpotInfo.setScenicName((String) list.get(k).get("scenicName"));
 			scenicsSpotInfo.setTotalVisits((String) list.get(k).get("totalVisits"));
 			scenicsSpotInfo.setOpeningHours((String) list.get(k).get("openingHours"));

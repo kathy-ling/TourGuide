@@ -33,6 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.js"></script>
 	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath %>/assets/js/bootstrap-paginator.min.js"></script>
+  	<script type="text/javascript" src="<%=basePath %>/assets/js/ajaxfileupload.js"></script>
   </head>
   
  <body>
@@ -118,14 +119,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								景区图片上传：
 							</td>
 							<td>
-							<form action="scenic/UploadImage.action" enctype="multipart/form-data" method="post" target="rfFrame">
+							  <!-- <form action="scenic/UploadImage.action" enctype="multipart/form-data" method="post" target="rfFrame">
 								<table><tr>
 								<td><input type="file" name="file" style="width:200px"></td>
 								<td><input type="submit" value="上传"></td>
 								</tr>
 								</table>	
 							</form>
-							<iframe id="rfFrame" name="rfFrame" src="about:blank" style="display:none;"  onload="a()"></iframe> 
+							<iframe id="rfFrame" name="rfFrame" src="about:blank" style="display:none;"  onload="a()"></iframe>   -->
+							<table>
+								<tr>
+									<td><input type="file" id="file" name="file" style="width:200px"><td>
+									<td><input type="button" value="上传" onclick="uploadfile()"></td>
+								</tr>
+							</table>
 							</td>
 						</tr>
 						<tr ><td >编号：</td>
@@ -138,7 +145,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="add_totalVisits" name="add_totalVisits" /></td></tr>
 						<tr><td>开放时间:</td>
 						<td><input  type="text"  id="add_openingHours" name="add_openingHours" /></td></tr>
-						<tr><form class="form-inline">
+						<tr>
+						<form class="form-inline">
       					<div data-toggle="distpicker">
         					<div class="form-group">
          					 <label class="sr-only" for="province1">Province</label>
@@ -218,6 +226,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr>
+							<td>景区图片：</td>
+							<td><table>
+								<tr>
+									<td><img style="width: 100px;height: 100px" id="edit_headimg" name="edit_headimg" src=""/></td>
+									<td><table>
+									<tr>
+									<td><input type="file" id="file" name="file" style="width:200px"><td>
+									<td><input type="button" value="更改" onclick="uploadfile()"></td>
+									</tr>
+									</table></td>
+								</tr>
+							</table></td>
+						</tr>
 						<tr ><td >编号：</td>
 						<td><input  type="text" id="edit_scenicNo" name="edit_scenicNo" /></td></tr>
 						<tr><td>名称：</td>
@@ -264,6 +286,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr>
+						<td>景区图片：</td>
+						<td><img style="width: 100px;height: 100px" id="search_headimg" name="search_headimg" src=""/></td>
+						</tr>
 						<tr ><td >编号：</td>
 						<td><input  type="text" id="search_scenicNo" name="search_scenicNo" readonly="true" /></td></tr>
 						<tr><td>名称：</td>
@@ -320,12 +346,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="delete_scenicLevel" name="delete_scenicLevel" readonly="true" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><div >
 							<button class="btn btn-danger" onclick="DeleteScenicInfo()">Delete</button>
-											
 						</div></td></tr>
-						
-					</table>
-						
-									
+					</table>			
 					</div>
 				</div>
 			</div>
@@ -453,6 +475,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			data:{sql:a},
  			success:function(data) {
  			var d=data.jsonStr;
+ 			
  				if (d == "") {
  					alert("没有搜索到任何信息，请重新搜索!");
 	 			}
@@ -477,6 +500,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			$("#search_scenicLocation").val(value.scenicLocation);
  			if (value.isHotSpot == 1) $("#search_isHotSpot").val("热门");
  			else $("#search_isHotSpot").val("非热门");
+ 			var f="<%=path%>"+value.scenicImagePath;
+  			document.getElementById("search_headimg").src=f;
  			$("#search_chargePerson").val(value.chargePerson);
  		
  		$("#SearchModal").modal('show');
@@ -493,7 +518,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#add_province").val("");
  		$("#add_city").val("");
  		$("#add_scenicLocation").val("");
- 		//$("#add_isHotSpot").val("");
  		$("#add_chargePerson").val("");
  		$("#LocationText2").val();
  		$("#addmodal").modal('show');
@@ -514,6 +538,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		if (isHotSpot == "HotSpot") isHotSpot = 1;
  		else isHotSpot = 0;
  		var chargePerson = $("#add_chargePerson").val();
+ 		var f=$("#uploadFileCtrl").val();
+ 		if(f==null||f=="")
+ 		{
+ 			alert("上传文件不能为空,请重新选择文件");
+ 			return false;
+ 		}
+ 		
  		
  		if (scenicNo != "" && scenicName != "" && totalVisits != "" && openingHours != "" && scenicLevel != ""
  			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") {
@@ -554,6 +585,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#edit_city").val(ScenicInfo[index].city);
  		$("#edit_scenicIntro").val(ScenicInfo[index].scenicIntro);
  		$("#edit_chargePerson").val(ScenicInfo[index].chargePerson);
+ 		var f="<%=path%>"+ScenicInfo[index].scenicImagePath;
+  		document.getElementById("edit_headimg").src=f;
  		if(ScenicInfo[index].isHotSpot==1) $("input[name=edit_isHotSpot]:eq(0)").attr("checked",'checked'); 
  		else  $("input[name=edit_isHotSpot]:eq(1)").attr("checked",'checked'); 
  		/*if((ScenicInfo[index].)=="0")
@@ -668,10 +701,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			});
  	}
  	
- 	function a()
+ 	function uploadfile()
+ 	{
+ 		
+ 		$.ajaxFileUpload({
+           url : "<%=basePath%>scenic/UploadImage.action",
+           fileElementId:'file',
+           dataType : "json",
+           success: function(data){
+           	if(data.json=="true")
+           	{
+           		alert("上传成功");
+           	}
+           },
+           error: function(data)
+           {
+              	if(data.json=="true")
+           	{
+           		alert("上传成功");
+           	}
+           }
+        });
+ 	
+ 	}
+ 	 /* function a()
  	{
  		alert("上传成功");
- 	}
+ 	} */ 
 </script>
 	<script src="<%=path%>/assets/js/distpicker.data.js"></script>
 	<script src="<%=path%>/assets/js/distpicker.js"></script>
