@@ -1,10 +1,13 @@
 package com.TourGuide.Action;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.model.ScenicsSpotInfo;
@@ -192,4 +196,38 @@ public class ScenicSpotAction {
 			map.put("confirm", confirm);
 			return map;
 		}
-	}
+		
+		
+		
+		@RequestMapping(value="/UploadImage.action",method=RequestMethod.POST)
+		@ResponseBody
+		public void UploadImage(HttpServletResponse resp,HttpServletRequest request,
+				@RequestParam MultipartFile file) {
+			
+			
+			String realPath="E:/Project/TourGuide/TourGuide/WebRoot/image/scenics";
+			File pathFile = new File(realPath);
+			if (!pathFile.exists()) {
+				//文件夹不存 创建文件
+				System.out.println("目录不存在，创建目录");
+				pathFile.mkdirs();
+			}
+			System.out.println("文件类型："+file.getContentType());
+			System.out.println("文件名称："+file.getOriginalFilename());
+			System.out.println("文件大小:"+file.getSize());
+			System.out.println(".................................................");
+				//将文件copy上传到服务器
+			try {
+				System.out.println(realPath + "/" + file.getOriginalFilename());
+				File fileImageFile=new File(realPath + "/" + file.getOriginalFilename());
+				file.transferTo(fileImageFile);
+				System.out.println("图片上传成功");
+			} catch (IllegalStateException | IOException e) {
+					
+				e.printStackTrace();
+					
+			}	
+		}  	
+		
+		
+}

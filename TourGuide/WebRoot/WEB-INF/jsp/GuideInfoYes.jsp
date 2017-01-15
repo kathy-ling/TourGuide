@@ -493,6 +493,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#editmodal").modal('show');	
  	}
  	
+ 	function forbidGuideInfo(index)
+ 	{
+ 		GlobalIndex=index;
+ 		var a=GuiderInfo[GlobalIndex].disabled;
+ 		if(a==0)  $("#forbidmodal").modal('show');
+ 		else $("#relievemodal").modal('show');
+ 	}
+ 	
  	function EditGuideInfomodal() {
  	 	var url = "<%=basePath%>Guide/EditGuideInfo.action";
  		var level= $("#edit_guideLevel").val();
@@ -547,8 +555,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	
  	
  	function ForbidGuideInfo() {
+ 		alert("进入禁用讲解员");
  		var url = "<%=basePath%>Guide/ForbidGuideInfo.action";
  		var phone = GuiderInfo[GlobalIndex].phone;
+ 		alert(phone);
  		$.ajax ({
  			url:url,
  			type:"POST",

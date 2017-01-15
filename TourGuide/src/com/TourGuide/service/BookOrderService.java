@@ -1,5 +1,8 @@
 package com.TourGuide.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +39,26 @@ public class BookOrderService {
 		return bookOrderDao.ReleaseBookOrder(bookOrderID, scenicID, produceTime, 
 				visitTime, visitNum, language, guideSex, visitorPhone, visitorName, 
 				priceRange, purchaseTicket, otherCommand, releaseByVisitor, orderState);
+	}
+	
+	/**
+	 * 
+	 * @param currentPage
+	 * @param pageRows
+	 * @return
+	 */
+	
+	public List<Map<String , Object>> GetBookorderBypage(int currentPage,int pageRows) 
+	{
+		return bookOrderDao.GetBookorderBypage(currentPage, pageRows);
+	}
+	
+	/**
+	 * 得到订单信息表的数目
+	 * @return
+	 * 2017-1-14 20:20:34
+	 */
+	public int GetBookorderCount() {
+		return bookOrderDao.GetBookorderCount();
 	}
 }

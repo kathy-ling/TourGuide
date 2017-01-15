@@ -46,11 +46,6 @@ public class GuideService {
 		return guideDao.getPopularGuides();
 	}
 	
-
-	public List<GuideInfo> getGuidersByPage(int i, int j) {
-		return guideDao.GetGuiderInfoByPage(i, j);
-	}
-	
 	public  int  GetGuideCount()
 	{
 		return guideDao.GetGuideCount();
@@ -92,9 +87,6 @@ public class GuideService {
 		return guideDao.RelieveGuideInfo_Dao(phone);
 	}
 	
-	public List<GuideOtherInfo> getGuideOtherInfoByPage_Service(int i, int j) {
-		return guideDao.GetGuideOtherInfoByPage_Dao(i, j);
-	}
 	
 	public List<Map<String, Object>> GetGuideofYes(int currentPage,int rows)
 	{
@@ -123,4 +115,6 @@ public class GuideService {
 		
 		return guideDao.GetGuiderinfoByPhone(phone);
 	}
+	
+	
 }

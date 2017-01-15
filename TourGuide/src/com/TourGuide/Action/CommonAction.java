@@ -92,4 +92,34 @@ public class CommonAction {
 	{
 		return "GuideInfoNo";
 	}
+	
+	/**
+	 * 跳转景区收入页面的Action
+	 * @return
+	 */
+	@RequestMapping(value="/ScenicFee.action",method=RequestMethod.GET)
+	public String ToScenicFee()
+	{
+		return "ScenicFee";
+	}
+	
+	/**
+	 * 跳转讲解员收入页面的Action
+	 * @return
+	 */
+	@RequestMapping(value="/GuideFee.action",method=RequestMethod.GET)
+	public String ToGuideFee()
+	{
+		return "GuideFee";
+	}
+	
+	/**
+	 * 跳转订单信息界面
+	 * @return
+	 */
+	@RequestMapping(value="/BookOrderInfo.action",method=RequestMethod.GET)
+	public String ToBookOrderInfo()
+	{
+		return "BookOrderInfo";
+	}
 }

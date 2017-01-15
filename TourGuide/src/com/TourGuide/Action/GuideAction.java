@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.model.GuideOtherInfo;
@@ -24,6 +25,7 @@ import com.google.gson.Gson;
  * */
 @Controller
 @RequestMapping(value = "/Guide")
+@SessionAttributes("adminSession")
 public class GuideAction {
 	@Autowired
 	private GuideService guideService;
@@ -41,6 +43,7 @@ public class GuideAction {
 		CommonResp.SetUtf(resp);
 		Map< String , Object> map=new HashMap<>();
 		List<Map<String , Object>> list=guideService.GetGuideofYes(currentPage, pageRows);
+		
 		String jsonStr=new Gson().toJson(list).toString();
 		int i=guideService.GetGuideofYesCount();
 		map.put("jsonStr", jsonStr);
@@ -189,6 +192,8 @@ public class GuideAction {
 		map.put("confirm", guideService.RelieveGuideInfo_Service(phone));
 		return map;
 	}
+	
+	
 	
 	
 	

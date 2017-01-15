@@ -67,7 +67,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       
       <h3 class="am-icon-cart-plus"><em></em> <a href="#"> 订单管理</a></h3>
       <ul>
-        <li>订单信息管理</li>
+      	<li><a href="BookOrderInfo.action" target="targetiframe">订单信息管理</a></li>
         <li>直接派单</li>
       </ul>
       
@@ -78,16 +78,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       </ul>
       <h3 class="am-icon-money"><em></em> <a href="#">收入管理</a></h3>
       <ul>
-        <li>平台收入信息管理</li>
-        <li>讲解员收入查询</li>
+        <li><a href="ScenicFee.action" target="targetiframe">平台收入信息管理</a></li>
+         <li><a href="GuideFee.action" target="targetiframe">讲解员收入查询</a></li>
         
       </ul>
       
-      <h3 class="am-icon-gears"><em></em> <a href="#">系统管理</a></h3>
+      <!-- <h3 class="am-icon-gears"><em></em> <a href="#">系统管理</a></h3>
       <ul>
         <li>个人信息修改</li>
         
-      </ul>
+      </ul> -->
     </div>
     <!-- sideMenu End --> 
     

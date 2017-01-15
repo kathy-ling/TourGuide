@@ -33,17 +33,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.js"></script>
 	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath %>/assets/js/bootstrap-paginator.min.js"></script>
-
   </head>
   
  <body>
 
-
-<!-- <header class="am-topbar am-topbar-inverse admin-header">
-  <div class="am-topbar-brand">
-    <strong>景区信息管理</strong> 
-  </div>
-</header> -->
 
 
   <!-- content start -->
@@ -120,6 +113,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr>
+							<td>
+								景区图片上传：
+							</td>
+							<td>
+							<form action="scenic/UploadImage.action" enctype="multipart/form-data" method="post" target="rfFrame">
+								<table><tr>
+								<td><input type="file" name="file" style="width:200px"></td>
+								<td><input type="submit" value="上传"></td>
+								</tr>
+								</table>	
+							</form>
+							<iframe id="rfFrame" name="rfFrame" src="about:blank" style="display:none;"  onload="a()"></iframe> 
+							</td>
+						</tr>
 						<tr ><td >编号：</td>
 						<td><input  type="text" id="add_scenicNo" name="add_scenicNo" /></td></tr>
 						<tr><td>名称：</td>
@@ -130,12 +138,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="add_totalVisits" name="add_totalVisits" /></td></tr>
 						<tr><td>开放时间:</td>
 						<td><input  type="text"  id="add_openingHours" name="add_openingHours" /></td></tr>
-						<tr><td>所在省份：</td>
-						<td><input  type="text" id="add_province" name="add_province" /></td></tr>
-						<tr><td>所在市:</td>
-						<td><input  type="text"  id="add_city" name="add_city"" /></td></tr>
-						<tr><td>详细位置:</td>
-						<td><input  type="text"  id="add_scenicLocation" name="add_scenicLocation"" /></td></tr>
+						<tr><form class="form-inline">
+      					<div data-toggle="distpicker">
+        					<div class="form-group">
+         					 <label class="sr-only" for="province1">Province</label>
+         				 	<select class="form-control" id="province2" ></select>
+        					</div>
+        					<div class="form-group">
+          					<label class="sr-only" for="city1">City</label>
+          					<select class="form-control" id="city2" ></select>
+        					</div>
+        					<div><input type="text" id="LocationText2" class="am-form-field" placeholder="景区详细地址"></div>
+     					</div>
+ 						</form>	
+ 						</tr>
 						<tr><td>是否为热门景点:</td>
 						<td>
 						<input type="radio" value="HotSpot" name="add_isHotSpot" checked="checked"><label for="热门">热门</label>
@@ -166,7 +182,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</h4>
 					</div>
 					<div class="modal-body">
-							<form class="form-inline">
+					<form class="form-inline">
       				<div data-toggle="distpicker">
         			<div class="form-group">
          				 <label class="sr-only" for="province1">Province</label>
@@ -229,9 +245,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="edit_chargePerson" name="edit_chargePerson"" /></td></tr>
 				<tr><td colspan="2" style="text-align:center;"><button  onclick="editScenicInfo()" >修改</button></td></tr>
 						
-					</table>
-					
-									
+					</table>				
 					</div>
 				</div>
 			</div>
@@ -481,6 +495,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#add_scenicLocation").val("");
  		//$("#add_isHotSpot").val("");
  		$("#add_chargePerson").val("");
+ 		$("#LocationText2").val();
  		$("#addmodal").modal('show');
  	}
  	
@@ -492,9 +507,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var openingHours = $("#add_openingHours").val();
  		var scenicLevel = $("#add_scenicLevel").val();
  		var scenicIntro = $("#add_scenicIntro").val();
- 		var province = $("#add_province").val();
- 		var city = $("#add_city").val();
- 		var scenicLocation = $("#add_scenicLocation").val();
+ 		var province=$("#province2 option:selected").val();
+ 		var city=$("#city2 option:selected").val();
+ 		var scenicLocation=$("#LocationText2").val();
  		var isHotSpot = $("input[name=add_isHotSpot]:checked").val();
  		if (isHotSpot == "HotSpot") isHotSpot = 1;
  		else isHotSpot = 0;
@@ -651,6 +666,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  					
  				}	
  			});
+ 	}
+ 	
+ 	function a()
+ 	{
+ 		alert("上传成功");
  	}
 </script>
 	<script src="<%=path%>/assets/js/distpicker.data.js"></script>
