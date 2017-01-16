@@ -46,7 +46,7 @@ public class GuideService {
 		return guideDao.getPopularGuides();
 	}
 	
-<<<<<<< HEAD
+
 	
 	/**
 	 * 查询可被预约的讲解员
@@ -107,12 +107,11 @@ public class GuideService {
 	
 	
 	
-	public List<GuideInfo> getGuidersByPage(int i, int j) {
-		return guideDao.GetGuiderInfoByPage(i, j);
-	}
+//	public List<GuideInfo> getGuidersByPage(int i, int j) {
+//		return guideDao.GetGuiderInfoByPage(i, j);
+//	}
 	
-=======
->>>>>>> 3e11e707ea040328f321a875dfaeac349fac955c
+
 	public  int  GetGuideCount()
 	{
 		return guideDao.GetGuideCount();

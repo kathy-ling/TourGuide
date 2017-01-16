@@ -1,11 +1,8 @@
 package com.TourGuide.dao;
 
-<<<<<<< HEAD
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-=======
->>>>>>> 3e11e707ea040328f321a875dfaeac349fac955c
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +64,7 @@ public class BookOrderDao {
 		return bool;
 	}
 	
-<<<<<<< HEAD
+
 	
 	/**
 	 * 选定导游后，进行预约
@@ -221,7 +218,8 @@ public class BookOrderDao {
 		 List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlSelect);
 				
 		return list;
-=======
+	}
+
 	/**
 	 * 得到订单信息并进行分页获取
 	 * @param currentPage
@@ -284,7 +282,5 @@ public class BookOrderDao {
 				+ "and t_bookorder.scenicID = t_scenicspotinfo.scenicNo and "+a;
 		
 		return jdbcTemplate.queryForList(sql).size();
-		
->>>>>>> 3e11e707ea040328f321a875dfaeac349fac955c
 	}
 }
