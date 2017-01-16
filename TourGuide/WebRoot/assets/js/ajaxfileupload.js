@@ -201,11 +201,10 @@ jQuery.extend({
             jQuery.globalEval( data );
         // Get the JavaScript object, if JSON is used.
         if ( type == "json" )
-        	alert("进入json");
-        	alert(data);
+        	{
         	data = jQuery.parseJSON(jQuery(data).text());
-        	alert(data.json);
-        // evaluate scripts within html
+        	}
+        	
         if ( type == "html" )
             jQuery("<div>").html(data).evalScripts();
             //alert($('param', data).each(function(){alert($(this).attr('value'));}));

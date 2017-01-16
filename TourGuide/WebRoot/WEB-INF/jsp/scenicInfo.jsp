@@ -130,7 +130,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<table>
 								<tr>
 									<td><input type="file" id="file" name="file" style="width:200px"><td>
-									<td><input type="button" value="上传" onclick="uploadfile()"></td>
 								</tr>
 							</table>
 							</td>
@@ -169,7 +168,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="add_scenicLevel" name="add_scenicLevel"" /></td></tr>
 						<tr><td>负责人:</td>
 						<td><input  type="text"  id="add_chargePerson" name="add_chargePerson"" /></td></tr>
-						<tr><td colspan="2" style="text-align:center;"><button class="close" onclick="AddScenicInfo()" >确定增加</button></td></tr>
+						<tr><td colspan="2" style="text-align:center;">
+						<input type="button" onclick="AddScenicInfo()"  value="确定增加" />
+						</td></tr>
 						
 					</table>
 					
@@ -233,8 +234,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									<td><img style="width: 100px;height: 100px" id="edit_headimg" name="edit_headimg" src=""/></td>
 									<td><table>
 									<tr>
-									<td><input type="file" id="file" name="file" style="width:200px"><td>
-									<td><input type="button" value="更改" onclick="uploadfile()"></td>
+									<td><input type="file" id="editfile" name="editfile" style="width:200px"><td>
 									</tr>
 									</table></td>
 								</tr>
@@ -538,39 +538,52 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		if (isHotSpot == "HotSpot") isHotSpot = 1;
  		else isHotSpot = 0;
  		var chargePerson = $("#add_chargePerson").val();
- 		var f=$("#uploadFileCtrl").val();
- 		if(f==null||f=="")
- 		{
- 			alert("上传文件不能为空,请重新选择文件");
- 			return false;
- 		}
  		
  		
  		if (scenicNo != "" && scenicName != "" && totalVisits != "" && openingHours != "" && scenicLevel != ""
  			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") {
- 			$.ajax( {
- 				url:url,
- 				type:"POST",
- 				datatype:"json",
- 				data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
- 					scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
- 					scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson},
- 				success:function(data) {
- 					if (data.confirm) {
- 						$("#addmodal").modal('hide');
- 						alert("添加成功！");
- 						loadScenicInfo();
- 					}
- 					else {
- 						var str = "\"" + scenicName + "\"已存在，请重新添加！";
- 						alert(str);
- 					}
- 						loadScenicInfo();
- 				}
- 			});
- 		}else{
+ 			$.ajaxFileUpload({
+          			url : "<%=basePath%>scenic/UploadImage.action",
+           			fileElementId:'file',
+          			dataType : "json",
+           			success: function(data){
+           			if(data.json=="true")
+           			{
+           				$.ajax( {
+ 							url:url,
+ 							type:"POST",
+ 							datatype:"json",
+ 							data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
+ 								scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
+ 								scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson},
+ 							success:function(data) {
+ 							if (data.confirm) {
+ 									$("#addmodal").modal('hide');
+ 									alert("添加成功！");
+ 									loadScenicInfo();
+ 							}
+ 							else {
+ 								var str = "\"" + scenicName + "\"已存在，请重新添加！";
+ 								alert(str);
+ 							}
+ 							loadScenicInfo();
+ 							}
+ 							});
+           			}else
+           			{
+           				alert("景区图片上传失败");
+           			}
+          	 },
+           	error: function(data)
+           	{
+           		
+              	alert("景区图片上传异常");
+           	}
+        });
+ 			
+ 	}else{
  		alert("信息不能为空，请重新填写景区信息！");
- 		}
+ 	}
  	}
  
  	function EditScenic(index)
@@ -585,7 +598,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#edit_city").val(ScenicInfo[index].city);
  		$("#edit_scenicIntro").val(ScenicInfo[index].scenicIntro);
  		$("#edit_chargePerson").val(ScenicInfo[index].chargePerson);
+ 		
  		var f="<%=path%>"+ScenicInfo[index].scenicImagePath;
+ 		alert(f);
   		document.getElementById("edit_headimg").src=f;
  		if(ScenicInfo[index].isHotSpot==1) $("input[name=edit_isHotSpot]:eq(0)").attr("checked",'checked'); 
  		else  $("input[name=edit_isHotSpot]:eq(1)").attr("checked",'checked'); 
@@ -619,23 +634,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var chargePerson = $("#edit_chargePerson").val();
  		if (scenicNo != "" && scenicName != "" && totalVisits != "" && openingHours != "" && scenicLevel != ""
  			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") { 			
- 			 $.ajax( {
- 				url:url,
- 				type:"POST",
- 				datatype:"json",
- 				data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
- 					scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
- 					scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson}, 			
- 					success:function(data) {
- 					if (data.confirm) {
- 						$("#editmodal").modal('hide');
- 						alert("修改成功！");
- 					}
- 					else{alert("修改失败，请重新确认修改");
- 						$("#editmodal").modal('hide');
- 					}
- 				}
- 			});
+ 			 $.ajaxFileUpload({
+          			url : "<%=basePath%>scenic/EditImage.action",
+           			fileElementId:'editfile',
+          			dataType : "json",
+           			success: function(data){
+           			if(data.json=="true")
+           			{ 
+           			$.ajax( {
+ 						url:url,
+ 						type:"POST",
+ 						datatype:"json",
+ 						data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
+ 							scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
+ 							scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson}, 			
+ 						success:function(data) {
+ 							if (data.confirm) {
+ 							$("#editmodal").modal('hide');
+ 							alert("修改成功！");
+ 							}
+ 							else{alert("修改失败，请重新确认修改");
+ 							$("#editmodal").modal('hide');
+ 							}
+ 						}
+ 						});
+           			}else
+           			{
+           				alert("景区图片上传失败");
+           			}
+          	 },
+           	error: function(data)
+           	{
+           		
+              	alert("景区图片上传异常");
+           	}
+        });
+ 			
  		}
  		loadScenicInfo();
  	}
@@ -700,34 +734,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  				}	
  			});
  	}
- 	
- 	function uploadfile()
- 	{
- 		
- 		$.ajaxFileUpload({
-           url : "<%=basePath%>scenic/UploadImage.action",
-           fileElementId:'file',
-           dataType : "json",
-           success: function(data){
-           	if(data.json=="true")
-           	{
-           		alert("上传成功");
-           	}
-           },
-           error: function(data)
-           {
-              	if(data.json=="true")
-           	{
-           		alert("上传成功");
-           	}
-           }
-        });
- 	
- 	}
- 	 /* function a()
- 	{
- 		alert("上传成功");
- 	} */ 
+ 	 
 </script>
 	<script src="<%=path%>/assets/js/distpicker.data.js"></script>
 	<script src="<%=path%>/assets/js/distpicker.js"></script>

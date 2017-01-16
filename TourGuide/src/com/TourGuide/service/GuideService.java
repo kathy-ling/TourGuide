@@ -51,8 +51,8 @@ public class GuideService {
 		return guideDao.GetGuideCount();
 	}
 	
-	public List<Map<String , Object>> GetGuiderinfoBystring(String cID) {
-		return guideDao.GetGuiderinfoBystring(cID);
+	public List<Map<String , Object>> GetGuiderinfoBystring(String phone) {
+		return guideDao.GetGuiderinfoBystring(phone);
 	}
 	
 	public boolean isAdd(GuideInfo guideInfo) {

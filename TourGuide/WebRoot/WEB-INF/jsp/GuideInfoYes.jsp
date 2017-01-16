@@ -61,7 +61,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="am-u-sm-12 am-u-md-3">
           <div class="am-input-group am-input-group-sm">
             
-            <input type="text"  id="querytxt" class="am-form-field" placeholder="证号">
+            <input type="text"  id="querytxt" class="am-form-field" placeholder="手机号">
           <span class="am-input-group-btn">
             <button class="am-btn am-btn-default" type="button" onclick="search()">搜索</button>
           </span>
@@ -396,19 +396,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	function search()
  	{
  		var url = "<%=basePath%>Guide/GetGuiderinfoBystring.action";
- 		var cID = $("#querytxt").val();
+ 		var phone = $("#querytxt").val();
  		
- 		query(url, cID);
+ 		query(url, phone);
  	}
  	
- 	function query(url, cID)
+ 	function query(url, phone)
  	{ 		
  		$.ajax(
  		{
  			url:url,
  			datatype:"json",
  			type:"POST",
- 			data:{cID:cID},
+ 			data:{phone:phone},
  			success: function(data)
  			{
  				if (data.jsonStr=="[]") {

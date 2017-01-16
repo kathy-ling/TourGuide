@@ -61,11 +61,10 @@ public class BookOrderDao {
 	public List<Map<String , Object>> GetBookorderBypage(int currentPage,int pageRows) 
 	{
 		int k=(currentPage-1)*pageRows;
-		String sql="select t_bookorder.*,t_visitor.name,t_visitor.phone,t_guideinfo.name as guideName,t_guideinfo.phone,"
+		String sql="select t_bookorder.*,t_visitor.name,t_visitor.phone,"
 				+ "t_scenicspotinfo.scenicName "
-				+ "from t_visitor,t_guideinfo,t_bookorder,t_scenicspotinfo"
-				+ " where t_bookorder.guidePhone=t_guideinfo.phone "
-				+ "and t_bookorder.visitorPhone=t_visitor.phone and t_bookorder.scenicID = t_scenicspotinfo.scenicNo"
+				+ "from t_visitor,t_bookorder,t_scenicspotinfo"
+				+ " where t_bookorder.visitorPhone=t_visitor.phone and t_bookorder.scenicID = t_scenicspotinfo.scenicNo"
 				+ " LIMIT "+k+" ,"+pageRows+"";
 		return jdbcTemplate.queryForList(sql);	
 	}
@@ -76,11 +75,44 @@ public class BookOrderDao {
 	 * 2017-1-14 20:20:03
 	 */
 	public int GetBookorderCount() {
-		 String sql="select t_bookorder.*,t_visitor.name,t_visitor.phone,t_guideinfo.phone,t_guideinfo.name "
-				+ "from t_visitor,t_guideinfo,t_bookorder"
-				+ " where t_bookorder.guidePhone=t_guideinfo.phone "
-				+ "and t_bookorder.visitorPhone=t_visitor.phone ";
+		String sql="select t_bookorder.*,t_visitor.name,t_visitor.phone,"
+				+ "t_scenicspotinfo.scenicName "
+				+ "from t_visitor,t_bookorder,t_scenicspotinfo"
+				+ " where t_bookorder.visitorPhone=t_visitor.phone "
+				+ "and t_bookorder.scenicID = t_scenicspotinfo.scenicNo";
 		 
 		 return jdbcTemplate.queryForList(sql).size();
+	}
+	
+	
+	public List<Map<String , Object>> GetBookorderBySearch(int currentPage,int pageRows,String word,String value )
+	{
+		
+		int k=(currentPage-1)*pageRows;
+		String a="t_bookorder."+word+"='"+value+"'";
+		if (word.equals("visitTime")) {
+			a="t_bookorder."+word+">'"+value+"'";
+		}
+		String sql="select t_bookorder.*,t_visitor.name,t_visitor.phone,"
+				+ "t_scenicspotinfo.scenicName "
+				+ "from t_visitor,t_bookorder,t_scenicspotinfo"
+				+ " where t_bookorder.visitorPhone=t_visitor.phone "
+				+ "and t_bookorder.scenicID = t_scenicspotinfo.scenicNo and "+a
+				+" LIMIT "+k+" ,"+pageRows+"";
+		
+		return jdbcTemplate.queryForList(sql);
+	}
+	
+	public int GetBookorderBySearchCount(String word,String value) 
+	{
+		String a="t_bookorder."+word+"='"+value+"'";
+		String sql="select t_bookorder.*,t_visitor.name,t_visitor.phone,"
+				+ "t_scenicspotinfo.scenicName "
+				+ "from t_visitor,t_bookorder,t_scenicspotinfo"
+				+ " where t_bookorder.visitorPhone=t_visitor.phone "
+				+ "and t_bookorder.scenicID = t_scenicspotinfo.scenicNo and "+a;
+		
+		return jdbcTemplate.queryForList(sql).size();
+		
 	}
 }

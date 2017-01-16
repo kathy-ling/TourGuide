@@ -35,7 +35,7 @@ public class ScenicSpotAction {
 
 		@Autowired
 		private ScenicSpotService scenicSpotService;
-		 
+		private String fileName; 
 		/*
 		 * 通过当前页面与页面容量数目获取景区信息数目
 		 * 参数：当前页，页面容量
@@ -139,7 +139,7 @@ public class ScenicSpotAction {
 			scenicsSpotInfo.setCity(city);
 			scenicsSpotInfo.setChargePerson(chargePerson);
 			scenicsSpotInfo.setIsHotSpot(isHotSpot);
-			
+			scenicsSpotInfo.setScenicImagePath(fileName);
 			
 			boolean confirm = scenicSpotService.AddScenicInfo_Service(scenicsSpotInfo);
 			Map<String, Object> map = new HashMap<>();
@@ -195,6 +195,7 @@ public class ScenicSpotAction {
 			scenicsSpotInfo.setCity(city);
 			scenicsSpotInfo.setChargePerson(chargePerson);
 			scenicsSpotInfo.setIsHotSpot(isHotSpot);
+			scenicsSpotInfo.setScenicImagePath(fileName);
 			boolean confirm = scenicSpotService.UpdateScenicInfo_Service(scenicsSpotInfo);
 			Map<String, Object> map = new HashMap<>();
 			map.put("confirm", confirm);
@@ -218,13 +219,15 @@ public class ScenicSpotAction {
 			
 			CommonResp.SetUtf(resp);
 			Map<String , Object> map=new HashMap<>();
-			String realPath="E:/Project/TourGuide/TourGuide/WebRoot/image/scenics";
+//			String realPath="E:/Project/TourGuide/TourGuide/WebRoot/image/scenics";
+			String realPath=request.getSession().getServletContext().getRealPath("image/scenics");
 			File pathFile = new File(realPath);
 			if (!pathFile.exists()) {
 				//文件夹不存 创建文件
 				System.out.println("目录不存在，创建目录");
 				pathFile.mkdirs();
 			}
+			fileName="/image/scenics/"+file.getOriginalFilename();
 			System.out.println("文件类型："+file.getContentType());
 			System.out.println("文件名称："+file.getOriginalFilename());
 			System.out.println("文件大小:"+file.getSize());
@@ -246,4 +249,38 @@ public class ScenicSpotAction {
 		
 		
 		
+		@RequestMapping(value="/EditImage.action",method=RequestMethod.POST)
+		@ResponseBody
+		public Object EditImage(HttpServletResponse resp,HttpServletRequest request,
+				@RequestParam MultipartFile editfile) {
+			
+			CommonResp.SetUtf(resp);
+			Map<String , Object> map=new HashMap<>();
+//			String realPath="E:/Project/TourGuide/TourGuide/WebRoot/image/scenics";
+			String realPath=request.getSession().getServletContext().getRealPath("image/scenics");
+			File pathFile = new File(realPath);
+			if (!pathFile.exists()) {
+				//文件夹不存 创建文件
+				System.out.println("目录不存在，创建目录");
+				pathFile.mkdirs();
+			}
+			fileName="/image/scenics/"+editfile.getOriginalFilename();
+			System.out.println("文件类型："+editfile.getContentType());
+			System.out.println("文件名称："+editfile.getOriginalFilename());
+			System.out.println("文件大小:"+editfile.getSize());
+			System.out.println(".................................................");
+				//将文件copy上传到服务器
+			try {
+				System.out.println(realPath + "/" + editfile.getOriginalFilename());
+				File fileImageFile=new File(realPath + "/" + editfile.getOriginalFilename());
+				editfile.transferTo(fileImageFile);
+				System.out.println("图片上传成功");
+				map.put("json", "true");
+			} catch (IllegalStateException | IOException e) {
+					
+				e.printStackTrace();
+				map.put("json", "false");
+			}	
+			return  map;
+		}  	
 }

@@ -30,9 +30,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<link rel="stylesheet" href="<%=path %>/assets1/css/amazeui.min.css"/>
   	<link rel="stylesheet" href="<%=path %>/assets1/css/admin.css">
   	<link rel="stylesheet" href="<%=path%>/assets/css/bootstrap.css" />
+  	<link rel="stylesheet" href="<%=path%>/css/jquery.fancyspinbox.css" />
+	<link rel="stylesheet" href="<%=path%>/css/dateSelect.css" />
 	<script type="text/javascript" src="<%=path %>/assets/js/jquery.js"></script>
 	<script type="text/javascript" src="<%=path %>/assets/js/bootstrap-paginator.min.js"></script>
-
+	<script type="text/javascript" src="<%=path %>/js/jquery.fancyspinbox.js"></script>
+  	<script type="text/javascript" src="<%=basePath %>/js/dateSelect.js"></script>
   </head>
   
  <body>
@@ -60,11 +63,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         <div class="am-u-sm-12 am-u-md-3">
           <div class="am-input-group am-input-group-sm">
-            
-            <input type="text"  id="querytxt" class="am-form-field" placeholder="证号">
-          <span class="am-input-group-btn">
-            <button class="am-btn am-btn-default" type="button" onclick="search()">搜索</button>
-          </span>
+            <table>
+            	<tr>
+            		
+            		<td><select id="my-menu" onchange="selectchange(this.value)" style="width:110px">
+            			<option value="*"  >全部</option>
+    					<option value="scenicID">景区编号</option>
+    					<option value="visitTime">游览时间</option>
+   				 		<option value="guidePhone">讲解员手机号</option>	
+					</select></td>
+					<td><input type="text"  id="querytxt" class="am-form-field" style="width:100px" readonly="true" ></td>
+            		<td><button class="am-btn am-btn-default" type="button" onclick="search()">搜索</button></td>
+            	</tr>
+            </table>
+          
           </div>
         </div>
       </div>
@@ -101,7 +113,50 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
     
   </div>
-
+<div class="modal fade" id="lookmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" >
+				<div class="modal-content">
+					<div class="model-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                        <span class="blue">X</span>
+	                    </button>
+						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
+							订单详情
+						</h4>
+					</div>
+					<div class="modal-body">
+					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr ><td>订单编号：</td>
+						<td><input type="text" id="look_orderID" name="look_orderID"  readonly="readonly"/></td>
+						</tr>
+						<tr><td >景区名称：</td>
+						<td><input  type="text" id="look_scenicName" name="look_scenicName" readonly="readonly" /></td>
+						</tr>
+						<tr><td>游览时间:</td>
+						<td><input  type="text"  id="look_visitTime" name="look_visitTime"  readonly="readonly"/></td></tr>
+						<tr><td>游客手机号:</td>
+						<td><input  type="text"  id="look_visitorPhone" name="look_visitorPhone"  readonly="readonly"/></td></tr>
+						<tr><td>游客姓名:</td>
+						<td><input  type="text"  id="look_visitorName" name="look_visitorName"  readonly="readonly"/></td></tr>
+						<tr><td>讲解员手机号:</td>
+						<td><input  type="text"  id="look_guidePhone" name="look_guidePhone"  readonly="readonly"/></td></tr>
+						<tr><td>讲解员姓名:</td>
+						<td><input  type="text"  id="look_guideName" name="look_guideName"  readonly="readonly"/></td></tr>
+						<tr><td>讲解语言:</td>
+						<td><input  type="text"  id="look_language" name="look_language"  readonly="readonly"/></td></tr>
+						<tr><td>订单总额:</td>
+						<td><input  type="text"  id="look_totalMoney" name="look_totalMoney"  readonly="readonly"/></td></tr>
+						<tr><td>订单状态:</td>
+						<td><input  type="text"  id="look_orderState" name="look_orderState"  readonly="readonly"/></td></tr>
+						<tr><td>游览人数:</td>
+						<td><input  type="text"  id="look_visitNum" name="look_visitNum"  readonly="readonly"/></td></tr>
+						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
+					
+						</table>
+					</div>
+				</div>
+			</div>
+</div>
 
 <footer>
   <hr>
@@ -119,6 +174,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	var currentPage=1;
 	var pageRows=5;
 	var GlobalIndex;
+	var selectValue;
 	$(document).ready(function()
   	{
   			loadOrderInfo();
@@ -192,7 +248,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	
   	function initTable(jsonStr,currentPage)
   	{
-  		alert(jsonStr);
+  		
   		$("#tby").html("");
   		$.each(JSON.parse(jsonStr),function(index,value)
   			{
@@ -206,18 +262,131 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               	var t7="<td style='text-align: center; width: 8%;'>"+value.visitNum+"</td>";
               	var t8="<td style='text-align: center; '> <div class='am-btn-toolbar'>"+
 	              	"<div style='text-align: center;float: none' class='am-btn-group am-btn-group-xs'>"+
-	              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='LookGuideInfo("+index+")'>"+"<span class='am-icon-pencil-square-o'></span> 查看</button>";		
+	              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='LookBookOrderInfo("+index+")'>"+"<span class='am-icon-pencil-square-o'></span> 查看</button>";		
                 var t9="</div></div> </td></tr>";
                
                 $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8).append(t9);
   			});
   	}
  	
+ 	
+ 	function LookBookOrderInfo(index)
+ 	{
+ 		
+ 		var a="中文";
+ 		var b=JSON.parse(OrderInfo);
+ 		$("#look_orderID").val(b[index].bookOrderID);
+ 		$("#look_scenicName").val(b[index].scenicName);
+ 		$("#look_visitTime").val(b[index].time);
+ 		$("#look_visitorPhone").val(b[index].visitorPhone);
+ 		$("#look_visitorName").val(b[index].name);
+ 		$("#look_guidePhone").val(b[index].guidePhone1);
+ 		$("#look_orderState").val(b[index].orderState);
+ 		if(b[index].language==1) a="英语";
+ 		$("#look_language").val(a);
+ 		$("#look_totalMoney").val(b[index].totalMoney);
+ 		$("#look_visitNum").val(b[index].visitNum);
+ 		$("#look_guideName").val(b[index].guideName);
+ 		$("#lookmodal").modal('show');
+ 	}
+ 	
+ 	function selectchange(s)
+		{
+			$("#querytxt").val("");
+			if(s=="*")
+			{
+				document.getElementById("querytxt").readOnly = true;
+				loadOrderInfo();
+				$("#querytxt").val();
+			}else if(s=="visitTime")
+			{
+				selectValue=s;
+				document.getElementById("querytxt").readOnly = false;
+				$("#querytxt").dateSelect();
+			}
+			else
+			{
+				selectValue=s;
+				document.getElementById("querytxt").readOnly = false;
+			}
+			
+		}
+		
+	function search()
+  	{
+  			var a=selectValue;
+  			var b=$("#querytxt").val();
+  			var url="<%=basePath%>bookorder/getBookorderBySearch.action";
+  			alert(a+" "+b);
+  		$.ajax(
+  		{
+  			url:url,
+  			type:"POST",
+  			datatype: "json",
+  			data:{currentPage:1,pageRows:pageRows,word:a,value:b},
+  			success: function(data)
+  					{
+  					    if(data!=null){
+  					    OrderInfo = data.jsonStr;
+  					    initTable(data.jsonStr,data.page);	
+  					       // 获取currentPage 请求页面
+						var currentPage = data.page;
+						// 获取totalPages 总页面
+						var totalPages = data.total;
+						// 获取numberofPages 显示的页面
+						var numberofPages = totalPages > 10 ? 10 : totalPages;
+						
+						var options = {
+							bootstrapMajorVersion: 3,
+		                    currentPage: currentPage,       // 当前页
+		                    totalPages: totalPages,      	// 总页数
+		                    numberofPages: numberofPages,   // 显示的页数
+		                    itemTexts: function (type, page, current) {
+		                        switch (type) {
+		                            case "first":
+		                                return "首页";
+		                                break;
+		                            case "prev":
+		                                return "上一页";
+		                                break;
+		                            case "next":
+		                                return "下一页";
+		                                break;
+		                            case "last":
+		                                return "末页";
+		                                break;
+		                            case "page":
+		                                return page;
+		                                break;
+		                        }
+		                    },
+		                    onPageClicked: function (event, originalEvent, type, page) {
+		                        $.ajax({
+									url: url,
+									type: "POST",
+									datatype: "json",
+									data:{currentPage:1,pageRows:pageRows,word:a,value:b},
+									success: function(data) {
+										OrderInfo = data.jsonStr;
+  					   					initTable(data.jsonStr,page);	
+						            }
+						        });
+						     }  					
+						};					
+						$("#paginator").bootstrapPaginator(options);
+  					    }
+  					},	
+  		});
+  			$("#querytxt").val();
+  		}		
 </script>
 
 	<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='<%=path%>/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
 	</script>
+	<script>
+$('#my-menu').fancyspinbox();
+</script>
 	<script src="<%=path %>/assets/js/bootstrap.js"></script>
 
 </body>

@@ -76,15 +76,15 @@ public class GuideAction {
 	
 	
 	/*
-	 * 通过讲解员证号查找讲解员基本信息
+	 * 通过讲解员手机号查找讲解员基本信息
 	 * */
 	@RequestMapping(value="/GetGuiderinfoBystring.action", method=RequestMethod.POST)
 	@ResponseBody
 	public Object GetGuiderinfoBystring(HttpServletResponse resp,
-			@RequestParam(value="cID")String cID) throws IOException
+			@RequestParam(value="phone")String phone) throws IOException
 	{
 		CommonResp.SetUtf(resp);
-		List<Map<String, Object>> list=guideService.GetGuiderinfoBystring(cID);
+		List<Map<String, Object>> list=guideService.GetGuiderinfoBystring(phone);
 		String jsonStr=new Gson().toJson(list).toString();
 		Map<String, Object> map = new HashMap<>();
 		map.put("jsonStr", jsonStr);

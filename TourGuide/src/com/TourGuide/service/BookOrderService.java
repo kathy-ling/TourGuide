@@ -61,4 +61,14 @@ public class BookOrderService {
 	public int GetBookorderCount() {
 		return bookOrderDao.GetBookorderCount();
 	}
+	
+	public List<Map<String , Object>> GetBookorderBySearch(int currentPage,int pageRows,String word,String value )
+	{
+		return bookOrderDao.GetBookorderBySearch(currentPage,pageRows,word, value);
+	}
+	
+	public int GetBookorderBySearchCount(String word,String value)
+	{
+		return bookOrderDao.GetBookorderBySearchCount(word, value);
+	}
 }

@@ -266,7 +266,7 @@ public class ScenicSpotDao {
 			sql =  " insert into t_scenicspotinfo values (?,?,?,?,?,?,?,?,?,?,?,?) ";
 			jdbcTemplate.update(sql, new Object[]{
 				scenicsSpotInfo.getScenicNo(),
-				"0",
+				scenicsSpotInfo.getScenicImagePath(),
 				scenicsSpotInfo.getScenicName(),
 				scenicsSpotInfo.getScenicIntro(),
 				scenicsSpotInfo.getTotalVisits(),

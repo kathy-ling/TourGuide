@@ -125,7 +125,7 @@ public class GuideDao {
 	/*
 	 * 按证号查找讲解员的基本信息
 	 * */
-	public List<Map<String , Object>> GetGuiderinfoBystring(String cID)
+	public List<Map<String , Object>> GetGuiderinfoBystring(String phone)
 	{
 		
 		String sql="SELECT t_guideotherinfo.*,t_guideinfo.*,t_scenicspotinfo.scenicName "
@@ -134,7 +134,7 @@ public class GuideDao {
 				+ " AND t_guideinfo.phone in"
 				+ "(select phone from t_guideotherinfo "
 				+ "where authorized=1) AND 	t_scenicspotinfo.scenicNo=t_guideotherinfo.scenicBelong "
-				+ "and t_guideotherinfo.certificateID='"+cID+"'";
+				+ "and t_guideotherinfo.phone='"+phone+"'";
 		return jdbcTemplate.queryForList(sql);
 	}
 	/*
