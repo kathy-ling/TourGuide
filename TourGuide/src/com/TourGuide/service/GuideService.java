@@ -46,7 +46,66 @@ public class GuideService {
 		return guideDao.getPopularGuides();
 	}
 	
+	
+	/**
+	 * 查询可被预约的讲解员
+	 * 查询条件：讲解员的工作时间、单次最大带团人数、所属景区、是否认证、是否禁用、级别
+	 * @param visitDate  游客的参观日期
+	 * @param visitNum  参观的人数
+	 * @param scenicID  景区编号
+	 * @return 可被预约的讲解员的基本信息（按星级排序）
+	 * phone,image,name,sex,age,language,selfIntro,guideLevel
+	 */
+	public List<Map<String, Object>> getAvailableGuides(String visitDate, 
+			int visitNum, String scenicID){
+		return guideDao.getAvailableGuides(visitDate, visitNum, scenicID);
+	}
+	
+	
+	/**
+	 * 按用户的筛选条件，查询相应的讲解员信息
+	 * @param visitDate  参观日期
+	 * @param visitNum  参观人数
+	 * @param scenicID  景区编号
+	 * @param sex  筛选讲解员的性别   （男，女）
+	 * @param age   年龄 （20-30，30-40，40-50）
+	 * @param languange   讲解语言 （0-中文、1-英文）
+	 * @param level  级别   （1，2，3，4，5，6，7）
+	 * @return  符合条件的讲解员的信息
+	 * phone,image,name,sex,age,language,selfIntro,guideLevel
+	 */
+	public List<Map<String, Object>> getAvailableGuidesWithSelector(String visitDate, 
+			int visitNum, String scenicID, 
+			String sex, String age, String languange, String level){
+		return guideDao.getAvailableGuidesWithSelector(visitDate, visitNum, scenicID,
+				sex, age, languange, level);
+	}
 
+	
+	/**
+	 * 根据手机号，查询导游的详细信息
+	 * @param phone 手机号
+	 * @return  导游的详细信息
+	 * phone,image,name,sex,age,language,selfIntro,historyNum,guideFee,guideLevel
+	 */
+	public List<Map<String, Object>> getDetailGuideInfoByPhone(String phone){
+		return guideDao.getDetailGuideInfoByPhone(phone);
+	}
+	
+	
+	/**
+	 * 该导游在visitDate这天，是否被预约了
+	 * @param guidePhone  导游的手机号
+	 * @param visitDate  日期
+	 * @return 1-被预约了    0-未被预约
+	 */
+	public int WhetherBooked(String guidePhone, String visitDate){
+		return guideDao.WhetherBooked(guidePhone, visitDate);
+	}
+	
+	
+	
+	
 	public List<GuideInfo> getGuidersByPage(int i, int j) {
 		return guideDao.GetGuiderInfoByPage(i, j);
 	}

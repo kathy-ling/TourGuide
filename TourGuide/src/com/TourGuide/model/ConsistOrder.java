@@ -23,6 +23,12 @@ public class ConsistOrder {
 	private int visitNum; //参观人数 
 	private int maxNum; //每单可带的最大人数
 	private int purchaseTicket; //是否代购门票
+	private int fullPrice;  //购买全票的数量
+	private int discoutPrice;  //购买折扣票的数量
+	private int halfPrice;  //购买半票的数量
+	private int guideFee; //参观日的讲解费
+	private int totalGuideFee;   //讲解费总额
+	private int totalTicket;  //门票费总额
 	private int isConsisted; //是否被拼单
 	
 	public String getConsistOrderID() {
@@ -61,12 +67,6 @@ public class ConsistOrder {
 	public void setVisitNum(int visitNum) {
 		this.visitNum = visitNum;
 	}
-//	public int getCurrentNum() {
-//		return visitNum;
-//	}
-//	public void setCurrentNum(int visitNum) {
-//		this.visitNum = visitNum;
-//	}
 	public String getVisitorPhone() {
 		return visitorPhone;
 	}
@@ -114,6 +114,42 @@ public class ConsistOrder {
 	}
 	public void setPurchaseTicket(int purchaseTicket) {
 		this.purchaseTicket = purchaseTicket;
+	}
+	public int getFullPrice() {
+		return fullPrice;
+	}
+	public void setFullPrice(int fullPrice) {
+		this.fullPrice = fullPrice;
+	}
+	public int getGuideFee() {
+		return guideFee;
+	}
+	public void setGuideFee(int guideFee) {
+		this.guideFee = guideFee;
+	}
+	public int getDiscoutPrice() {
+		return discoutPrice;
+	}
+	public void setDiscoutPrice(int discoutPrice) {
+		this.discoutPrice = discoutPrice;
+	}
+	public int getHalfPrice() {
+		return halfPrice;
+	}
+	public void setHalfPrice(int halfPrice) {
+		this.halfPrice = halfPrice;
+	}
+	public int getTotalGuideFee() {
+		return totalGuideFee;
+	}
+	public void setTotalGuideFee(int totalGuideFee) {
+		this.totalGuideFee = totalGuideFee;
+	}
+	public int getTotalTicket() {
+		return totalTicket;
+	}
+	public void setTotalTicket(int totalTicket) {
+		this.totalTicket = totalTicket;
 	}
 	public int getIsConsisted() {
 		return isConsisted;

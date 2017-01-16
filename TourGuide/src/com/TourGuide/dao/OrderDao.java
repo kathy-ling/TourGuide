@@ -57,8 +57,12 @@ public class OrderDao {
 						
 			map.put("visitTime", visitTime);   //参观时间
 			map.put("OrderID", (String)list.get(j).get(orderID));     //订单编号
-			map.put("visitNum", (int)list.get(j).get("visitNum")+"");		 //参观人数	
-			map.putAll(scenicSpotDao.getSomeScenicInfoByscenicID(scenicID)); //景区名称、图片
+			map.put("visitNum", (int)list.get(j).get("visitNum")+"");		 //参观人数
+			List<Map<String , Object>> list2 = scenicSpotDao.getSomeScenicInfoByscenicID(scenicID);
+			String scenicName = (String)list2.get(0).get("scenicName");
+			String scenicImagePath = (String)list2.get(0).get("scenicImagePath");
+			map.put("scenicName", scenicName); //景区名称、图片
+			map.put("scenicImagePath", scenicImagePath);
 			map.put("orderState", (String)list.get(j).get("orderState"));   //订单状态
 			listResult.add(map);
 		}
@@ -131,78 +135,90 @@ public class OrderDao {
 	
 	/**
 	 * 根据订单编号和订单状态，查询订单的详细信息
-	 * @param orderID  订单号
-	 * @param orderState  订单状态
+	 * @param orderID  订单编号
+	 * @param orderState   订单状态
 	 * @return
-	 * 订单编号、订单生成时间、参观时间、结束时间、订单状态、总金额、参观人数、其他需求、
-	 * 景区ID（景区名称、图片）、
-	 * 讲解员Phone（性别、讲解语言、姓名）
 	 */
-//	public List<Map<String, String>> getAllOrdersDetailWithOrderID(String orderID, String orderState){
-//		
-//		List<Map<String, String>> listResult = new ArrayList<>();
-//		
-//		//从拼单表中查找相关的拼单
-//		String sqlString = "select consistOrderID,visitTime,visitNum,scenicID,totalMoney，orderState "
-//				+ "from t_consistorder where consistOrderID='"+orderID+"' and orderState='"+orderState+"'";
-//		
-//		switch (orderState) {
-//		case "待接单":
-//			
-//			break;
-//		case "待付款":
-//					
-//			break;
-//		case "待游览":
-//			
-//			break;
-//		case "待评价":
-//			
-//			break;
-//
-//		default:
-//			break;
-//		}
-//		
-//		//从拼单表中查找相关的拼单
-//		String sqlString = "select consistOrderID,produceTime,visitTime,endTime,"
-//				+ "guidePhone,scenicID,totalMoney,orderState,otherCommand,visitNum"
-//				+ " from t_consistorder where consistOrderID='"+orderID+"'";
-//		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlString);
-//		
-//		for(int i=0; i<list.size(); i++){
-//			Map<String, String> map = new HashMap<String, String>();					
-//			Timestamp timestamp1 = (Timestamp) list.get(i).get("produceTime");
-//			String produceTime = DateConvert.timeStamp2DateTime(timestamp1);			
-//			Timestamp timestamp2 = (Timestamp) list.get(i).get("visitTime");
-//			String visitTime = DateConvert.timeStamp2DateTime(timestamp2);
-//			Timestamp timestamp3 = (Timestamp) list.get(i).get("endTime");
-//			String endTime = null;
-//			if(timestamp3 != null){
-//				endTime = DateConvert.timeStamp2DateTime(timestamp3);
-//			} 
-//			String guidePhone = (String)list.get(i).get("guidePhone");
-//			String scenicID = (String)list.get(i).get("scenicID");
-//			
-//			map.put("consistOrderID", (String)list.get(i).get("consistOrderID"));
-//			map.put("produceTime", produceTime);
-//			map.put("visitTime", visitTime);
-//			map.put("endTime", endTime);
-//			map.put("guidePhone", guidePhone);
-//			if(guidePhone != null){
-//				map.putAll(guideInfoDao.getSomeGuideInfoByPhone(guidePhone)); //性别、讲解语言、姓名
-//			}			
-//			map.putAll(scenicSpotDao.getSomeScenicInfoByscenicID(scenicID)); //景区名称、图片			
-//			map.put("totalMoney", (int)list.get(i).get("totalMoney")+"");
-//			map.put("visitNum", (int)list.get(i).get("visitNum")+"");
-//			map.put("orderState", (String)list.get(i).get("orderState"));
-//			map.put("otherCommand", (String)list.get(i).get("otherCommand"));
-//			
-//			listResult.add(map);
-//		}
-//		return listResult;
-//	}
+	public List<Map<String, Object>> getDetailOrderInfo(String orderID, String orderState){
+		
+		List<Map<String, Object>> listResult = new ArrayList<>();
+		String sqlString = null;
+		
+		switch (orderState) {
+		case "待接单":
+			sqlString = "select produceTime,visitTime,scenicID,visitNum,"
+					+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
+					+ "from t_bookorder where bookOrderID='"+orderID+"'";
+			listResult = jdbcTemplate.queryForList(sqlString);
+			
+			if(listResult == null){
+				sqlString = "select produceTime,visitTime,scenicID,visitNum,"
+						+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
+						+ "from t_consistorder where consistOrderID='"+orderID+"'";
+				listResult = jdbcTemplate.queryForList(sqlString);
+			}
+			break;
+		case "待付款":
+			
+		case "待游览":
+			sqlString = "select produceTime,visitTime,scenicID,visitNum,guidePhone,"
+					+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
+					+ "from t_bookorder where bookOrderID='"+orderID+"'";
+			listResult = jdbcTemplate.queryForList(sqlString);
+			
+			if(listResult == null){
+				sqlString = "select produceTime,visitTime,scenicID,visitNum,guidePhone,"
+						+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
+						+ "from t_consistorder where consistOrderID='"+orderID+"'";
+				listResult = jdbcTemplate.queryForList(sqlString);
+			}
+			break;
+		case "待评价":
+			sqlString = "select produceTime,visitTime,scenicID,visitNum,guidePhone,endTime,"
+					+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
+					+ "from t_bookorder where bookOrderID='"+orderID+"'";
+			listResult = jdbcTemplate.queryForList(sqlString);
+			
+			if(listResult == null){
+				sqlString = "select produceTime,visitTime,scenicID,visitNum,guidePhone,endTime,"
+						+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
+						+ "from t_consistorder where consistOrderID='"+orderID+"'";
+				listResult = jdbcTemplate.queryForList(sqlString);
+			}
+			break;
+
+		default:
+			break;
+		}
+		
+		return listResult;
+	}
 	
+	
+	/**
+	 * 根据订单的编号，查询游客的手机和讲解员的手机号
+	 * @param orderID  订单号（拼单、预约订单）
+	 * @return
+	 */
+	public List<Map<String, Object>> getPhoneByOrderID(String orderID){
+		
+		List<Map<String, Object>> listResult = new ArrayList<>();
+		String sqlString = null;
+		
+		sqlString = "select guidePhone,visitorPhone from t_bookorder where bookOrderID='"+orderID+"'";
+		listResult = jdbcTemplate.queryForList(sqlString);
+		
+		if(listResult == null){
+			sqlString = "select guidePhone,visitorPhone from t_consistorder where"
+					+ " consistOrderID='"+orderID+"'";
+			listResult = jdbcTemplate.queryForList(sqlString);
+		}
+		
+		return listResult;
+	}
+	
+	
+
 	
 	
 	

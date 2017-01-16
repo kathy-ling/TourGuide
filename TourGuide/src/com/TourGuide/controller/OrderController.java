@@ -2,6 +2,7 @@ package com.TourGuide.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.dao.ScenicTicketsDao;
@@ -70,4 +72,27 @@ public class OrderController {
 	}
 	
 	
+	
+	
+	/**
+	 * 根据订单编号、状态，查看订单的详细信息
+	 * @param resp
+	 * @param orderID  订单编号
+	 * @param orderState  订单状态
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getDetailOrderInfo.do")
+	@ResponseBody
+	public Object getDetailOrderInfo(HttpServletResponse resp,
+			@RequestParam("orderID") String orderID,
+			@RequestParam("orderState") String orderState) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String, Object>> listResult = new ArrayList<>();
+		listResult = orderService.getDetailOrderInfo(orderID, orderState);
+		
+		return listResult;
+	}
 }

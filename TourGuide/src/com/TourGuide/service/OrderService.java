@@ -42,16 +42,15 @@ public class OrderService {
 	
 	
 	/**
-	 * 根据订单编号，查询订单的详细信息
-	 * @param orderID  订单号
+	 * 根据订单编号和订单状态，查询订单的详细信息
+	 * @param orderID  订单编号
+	 * @param orderState   订单状态
 	 * @return
-	 * 订单编号、订单生成时间、参观时间、结束时间、订单状态、总金额、参观人数、其他需求、
-	 * 景区ID（景区名称、图片）、
-	 * 讲解员Phone（性别、讲解语言、姓名）
 	 */
-//	public List<Map<String, String>> getAllOrdersDetailWithOrderID(String orderID){
-//		return orderDao.getAllOrdersDetailWithOrderID(orderID);
-//	}
+	public List<Map<String, Object>> getDetailOrderInfo(String orderID, String orderState){
+		return orderDao.getDetailOrderInfo(orderID, orderState);
+	}
+	
 	
 	
 

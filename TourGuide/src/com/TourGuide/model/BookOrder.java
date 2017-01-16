@@ -17,7 +17,6 @@ public class BookOrder {
 	private String guidePhone; //被预约的导游的手机号
 	private String orderState; //订单状态
 	private String scenicID; //景区编号
-	private String priceRange; //价位区间
 	private String otherCommand; //其他需求
 	private String language;  //讲解语言
 	private String guideSex;  //讲解员性别
@@ -25,6 +24,13 @@ public class BookOrder {
 	private int visitNum; //此次参观的人数
 	private int totalMoney; //订单总额（讲解费+门票）
 	private int purchaseTicket; //是否代购门票
+	private int fullPrice;  //购买全票的数量
+	private int discoutPrice;  //购买折扣票的数量
+	private int halfPrice;  //购买半票的数量
+	private int guideFee;  //讲解费
+	private int totalGuideFee;   //讲解费总额
+	private int totalTicket;  //门票费总额
+	private int priceRange; //价位区间
 	private int releaseByVisitor; //是否是游客发布的订单
 	
 	public String getBookOrderID() {
@@ -75,10 +81,10 @@ public class BookOrder {
 	public void setScenicID(String scenicID) {
 		this.scenicID = scenicID;
 	}
-	public String getPriceRange() {
+	public int getPriceRange() {
 		return priceRange;
 	}
-	public void setPriceRange(String priceRange) {
+	public void setPriceRange(int priceRange) {
 		this.priceRange = priceRange;
 	}
 	public String getOtherCommand() {
@@ -123,11 +129,47 @@ public class BookOrder {
 	public void setPurchaseTicket(int purchaseTicket) {
 		this.purchaseTicket = purchaseTicket;
 	}
+	public int getFullPrice() {
+		return fullPrice;
+	}
+	public void setFullPrice(int fullPrice) {
+		this.fullPrice = fullPrice;
+	}
+	public int getDiscoutPrice() {
+		return discoutPrice;
+	}
+	public void setDiscoutPrice(int discoutPrice) {
+		this.discoutPrice = discoutPrice;
+	}
+	public int getHalfPrice() {
+		return halfPrice;
+	}
+	public void setHalfPrice(int halfPrice) {
+		this.halfPrice = halfPrice;
+	}
+	public int getTotalGuideFee() {
+		return totalGuideFee;
+	}
+	public void setTotalGuideFee(int totalGuideFee) {
+		this.totalGuideFee = totalGuideFee;
+	}
+	public int getTotalTicket() {
+		return totalTicket;
+	}
+	public void setTotalTicket(int totalTicket) {
+		this.totalTicket = totalTicket;
+	}
 	public int getReleaseByVisitor() {
 		return releaseByVisitor;
 	}
 	public void setReleaseByVisitor(int releaseByVisitor) {
 		this.releaseByVisitor = releaseByVisitor;
+	}
+	public int getGuideFee() {
+		return guideFee;
+	}
+	public void setGuideFee(int guideFee) {
+		this.guideFee = guideFee;
 	}
 	
 }

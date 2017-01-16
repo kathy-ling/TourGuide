@@ -2,7 +2,9 @@ package com.TourGuide.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +14,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
+import com.TourGuide.common.DateConvert;
 import com.TourGuide.model.GuideInfo;
 import com.TourGuide.model.GuideOtherInfo;
+import com.TourGuide.model.ScenicsSpotInfo;
 @Repository
 public class GuideDao {
 	
@@ -38,8 +42,8 @@ public class GuideDao {
 		int retValue = 0;
 		final GuideInfo guideInfo = new GuideInfo();
 		
-		String sqlSearch = "select phone from t_guideinfo where phone='"+phone+"'";
-		
+		//查询该账号是否被注册了
+		String sqlSearch = "select phone from t_guideinfo where phone='"+phone+"'";	
 		jdbcTemplate.query(sqlSearch,  new RowCallbackHandler() {
 			
 			@Override
@@ -49,8 +53,8 @@ public class GuideDao {
 		});
 		String phoneExist = guideInfo.getPhone();
 		
-		if(phoneExist != null){
-			
+		//账号已存在
+		if(phoneExist != null){			
 			return retValue = -1;
 		}
 		
@@ -87,7 +91,7 @@ public class GuideDao {
 				+ "where t_guideinfo.phone=t_guideotherinfo.phone and t_guideotherinfo.phone in "
 				+ "(select phone from t_guideotherinfo where disabled=0 and authorized=1 "
 				+ "order by historyNum,guideLevel desc) limit ?";
-		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlString, new Object[]{popularNum});
+		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlString, new Object[]{popularNum});
 		
 		return list;
 	}
@@ -97,24 +101,179 @@ public class GuideDao {
 	/**
 	 * 查询可被预约的讲解员
 	 * 查询条件：讲解员的工作时间、单次最大带团人数、所属景区、是否认证、是否禁用、级别
-	 * @param visitTime  游客的参观时间
+	 * @param visitDate  游客的参观日期
 	 * @param visitNum  参观的人数
 	 * @param scenicID  景区编号
 	 * @return 可被预约的讲解员的基本信息（按星级排序）
 	 * phone,image,name,sex,age,language,selfIntro,guideLevel
 	 */
-	public List<Map<String, Object>> getAvailableGuides(String visitTime, 
+	public List<Map<String, Object>> getAvailableGuides(String visitDate, 
 			int visitNum, String scenicID){
 		
 		
+		Date date1=new Date();
+    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(date1);
+    	//计算参观日期与今日之间相隔的天数
+    	int day = DateConvert.getDaysBetweenDate(visitDate, dayNow);
+    	
+		String selectDay = null;
+		switch (day) {
+		
+		case 0:
+			selectDay = "one";
+			break;
+		case 1:
+			selectDay = "two";			
+			break;
+		case 2:
+			selectDay = "three";
+			break;
+		case 3:
+			selectDay = "four";
+			break;
+		default:
+			break;
+		}
 		
 		List<Map<String , Object>> list = null;
-		
+		String sqlString = "select t_guideinfo.*,t_guideotherinfo.guideLevel from t_guideinfo,t_guideotherinfo "
+				+ "where t_guideinfo.phone=t_guideotherinfo.phone and t_guideotherinfo.phone in "
+				+ "(select phone from t_guideotherinfo where disabled=0 and authorized=1 and "
+				+ "singleMax > '"+visitNum+"' and scenicBelong='"+scenicID+"' and t_guideotherinfo.phone in "
+				+ "(select phone from t_guideworkday where "+selectDay+"=1)"
+				+ "order by guideLevel desc) ";
+		list = jdbcTemplate.queryForList(sqlString);
 		return list;
 	}
 	
 	
+	/**
+	 * 该导游在visitDate这天，是否被预约了
+	 * @param guidePhone  导游的手机号
+	 * @param visitDate  日期
+	 * @return 1-被预约了    0-未被预约
+	 */
+	public int WhetherBooked(String guidePhone, String visitDate){
+		
+		int booked = 0;
+		Date date1=new Date();
+    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(date1);
+    	//计算参观日期与今日之间相隔的天数
+    	int day = DateConvert.getDaysBetweenDate(visitDate, dayNow);
+    	
+		String selectDay = null;
+		
+		switch (day) {
+		
+		case 0:
+			selectDay = "one";
+			break;
+		case 1:
+			selectDay = "two";			
+			break;
+		case 2:
+			selectDay = "three";
+			break;
+		case 3:
+			selectDay = "four";
+			break;
+		default:
+			break;
+		}
+		
+		//查看该讲解员改天是否被预约了，2-被预约
+		String sqlString = "select * from t_guideworkday where phone='"+guidePhone+"' and "+selectDay+"=2";
+		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlString);
+		
+		//被预约了
+		if(list.size() != 0){
+			booked = 1;
+		}
+		
+		return booked;
+	}
 	
+	
+	
+	/**
+	 * 按用户的筛选条件，查询相应的讲解员信息
+	 * @param visitDate  参观日期
+	 * @param visitNum  参观人数
+	 * @param scenicID  景区编号
+	 * @param sex  筛选讲解员的性别   （男，女）
+	 * @param age   年龄 （20-30，30-40，40-50）
+	 * @param languange   讲解语言 （0-中文、1-英文）
+	 * @param level  级别   （1，2，3，4，5，6，7）
+	 * @return  符合条件的讲解员的信息
+	 * phone,image,name,sex,age,language,selfIntro,guideLevel
+	 */
+	public List<Map<String, Object>> getAvailableGuidesWithSelector(String visitDate, 
+			int visitNum, String scenicID, 
+			String sex, String age, String languange, String level){
+				
+		List<Map<String , Object>> listResult = new ArrayList<>(); 
+		
+		List<Map<String , Object>> list = getAvailableGuides(visitDate, visitNum, scenicID);
+		
+		for(int i=0; i<list.size(); i++){
+			listResult.add(list.get(i));
+		}
+		
+		for(int i=0; i<list.size(); i++){
+			
+			String sexString = (String)list.get(i).get("sex");
+			int guideAge = (int)list.get(i).get("age");
+			String languageString = (String)list.get(i).get("language");
+			String levelString = (String)list.get(i).get("guideLevel");
+			
+			if(!sex.equals("null") && !sex.equals(sexString)){
+				listResult.remove(list.get(i));
+			}
+			
+			if(!age.equals("null")){
+				
+				String[] ages = age.split("-");
+				int age1 = Integer.parseInt(ages[0]);
+				int age2 = Integer.parseInt(ages[1]);
+				
+				if(guideAge < age1 || guideAge > age2){
+					listResult.remove(list.get(i));
+				}
+			}			
+			
+			if(!languange.equals("null") && !languange.equals(languageString)){				
+				listResult.remove(list.get(i));
+			}
+			
+			if(!level.equals("null") && !level.equals(levelString)){
+				listResult.remove(list.get(i));
+			}
+		}
+		
+		return listResult;
+	}
+	
+	
+	
+	/**
+	 * 根据手机号，查询导游的详细信息
+	 * @param phone 手机号
+	 * @return  导游的详细信息
+	 * phone,image,name,sex,age,language,selfIntro,historyNum,guideFee,guideLevel
+	 */
+	public List<Map<String, Object>> getDetailGuideInfoByPhone(String phone){
+		
+		List<Map<String , Object>> listResult = new ArrayList<>(); 
+		
+		String sqlString = "select t_guideinfo.*,t_guideotherinfo.guideLevel,"
+				+ "t_guideotherinfo.historyNum,t_guideotherinfo.guideFee from "
+				+ "t_guideinfo,t_guideotherinfo where t_guideinfo.phone=t_guideotherinfo.phone "
+				+ "and t_guideinfo.phone='"+phone+"'";
+		
+		listResult = jdbcTemplate.queryForList(sqlString);
+		
+		return listResult;
+	}
 	
 	
 	/*

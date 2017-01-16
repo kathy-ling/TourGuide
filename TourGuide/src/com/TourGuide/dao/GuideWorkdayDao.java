@@ -22,6 +22,7 @@ public class GuideWorkdayDao {
 	 * 设置导游的工作时间，
 	 * @param days 不工作的日期，如2017-1-12
 	 * @param phone  手机号
+	 * 1：工作          0：请假
 	 * @return 
 	 */
 	public boolean setGuideWorkday(List<String> days, String phone){

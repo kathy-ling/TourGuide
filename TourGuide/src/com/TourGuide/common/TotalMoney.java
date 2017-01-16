@@ -1,5 +1,8 @@
 package com.TourGuide.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TotalMoney {
 	
 	/**
@@ -13,27 +16,31 @@ public class TotalMoney {
 	 * @param halfPriceNum  购买半价票的人数  
 	 * @param discoutPriceNum  购买折扣票的人数
 	 * @param fullPriceNum  购买全价票的人数	 
-	 * @return   订单总额
+	 * @return   讲解费总额、门票费总额、订单总额
 	 */
-	public static int getTotalMoney(int fee, int visitNum, int purchaseTicket, 
+	public static List<Integer> getMoney(int fee, int visitNum, int purchaseTicket, 
 			int halfPrice, int discoutPrice, int fullPrice,
 			int halfPriceNum, int discoutPriceNum, int fullPriceNum){
 		
-		int total = 0;
+		List<Integer> list = new ArrayList<>();
 		
 		//讲解费总额
-		int totalFee = 0;
-		if(purchaseTicket == 1){
-			totalFee = fee * visitNum;
-		}
-				
+		int totalFee = fee * visitNum;
+		
 		//门票费总额
-		int totalTickets = halfPrice * halfPriceNum + discoutPrice * discoutPriceNum +
-				fullPrice * fullPriceNum;
+		int totalTickets = 0;
+		if(purchaseTicket == 1){
+			totalTickets = halfPrice * halfPriceNum + discoutPrice * discoutPriceNum +
+					fullPrice * fullPriceNum;
+		}	 
 		
-		total = totalFee + totalTickets;
+		//讲解费总额 + 门票费总额
+		int total = totalFee + totalTickets;
 		
-		return total;
+		list.add(totalFee);
+		list.add(totalTickets);
+		list.add(total);
+		
+		return list;
 	}
-
 }

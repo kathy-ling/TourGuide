@@ -52,9 +52,18 @@ public class IntroFeeAndMaxNumDao {
 	public int getMaxNum(String date, String scenicNo){
 		
 		int maxNum = 0;
+		final IntroFeeAndMaxNum introFeeAndMaxNum = new IntroFeeAndMaxNum();
 		
 		String sql = "select maxNum from t_introfeeandmaxnum where scenicNo='"+scenicNo+"' and date='"+date+"'";
-		maxNum = jdbcTemplate.queryForObject(sql, Integer.class);
+		jdbcTemplate.query(sql,  new RowCallbackHandler() {
+			
+			@Override
+			public void processRow(ResultSet res) throws SQLException {
+				introFeeAndMaxNum.setMaxNum(res.getInt(1));
+			}
+		});
+		
+		maxNum = introFeeAndMaxNum.getMaxNum();
 		
 		return maxNum;
 	}

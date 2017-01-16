@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.model.ScenicTickets;
@@ -56,58 +58,81 @@ public class ScenicSpotController {
 	 * @param resp
 	 * @param province  用户当前所在的省份
 	 * @throws IOException
+	 * @return 景区图片、编号、名称
 	 */
 	@RequestMapping(value = "/getAllScenicByLocation.do")
-	public void getAllScenicByLocation(HttpServletResponse resp,
+	@ResponseBody
+	public Object getAllScenicByLocation(HttpServletResponse resp,
 			@RequestParam("province") String province) throws IOException{
 		
 		CommonResp.SetUtf(resp);
 		
 		List<Map<String , Object>> list = scenicSpotService.getAllScenicByLocation(province);
 		
-		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(list));
-		writer.flush();
+		return list;
+	}
+	
+	
+	
+	/**
+	 * 根据景区编号，查看景区的详细信息
+	 * @param resp
+	 * @param scenicID   景区编号
+	 * @return 景区详细信息
+ 	 * 景区图片、编号、名称、简介、省、市、详细位置、等级、历史参观人数、开放时间
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getDetailScenicByScenicID.do")
+	@ResponseBody
+	public Object getDetailScenicByScenicID(HttpServletResponse resp,
+			@RequestParam("scenicID") String scenicID) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> list = scenicSpotService.getDetailScenicByScenicID(scenicID);
+		
+		return list;
 	}
 	
 	
 	/**
-	 * 1、根据景区的名称进行搜索。
-	 * 2、根据搜索的特定的景区的地址，进行相关的景区推荐，暂定推荐数为4个
-	 * 返回 ：此景区的详细信息，相关的推荐景区的详细信息。
-	 * 景区图片、编号、名称、简介、省、市、详细位置、等级、历史参观人数、开放时间
-	 * @param resp
+	 * 根据景区的名称进行搜索。
 	 * @param scenicName  景区的名称
-	 * @throws IOException
+	 * @return
 	 */
-	@RequestMapping(value = "/getScenicByNameAndRelates.do")
-	public void getScenicByNameAndRelates(HttpServletResponse resp,
+	@RequestMapping(value = "/getScenicByName.do")
+	@ResponseBody
+	public Object getScenicByName(HttpServletResponse resp,
 			@RequestParam("scenicName") String scenicName) throws IOException{
 		
 		CommonResp.SetUtf(resp);
 		
-		List<ScenicsSpotInfo> list = scenicSpotService.getScenicByNameAndRelates(scenicName);
-		List<Map<String, Object>> listresult = new ArrayList<Map<String, Object>>();
+		List<Map<String , Object>> list = scenicSpotService.getScenicByName(scenicName);
 		
-		for(int i=0; i<list.size(); i++){
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("scenicImagePath", list.get(i).getScenicImagePath());
-			map.put("scenicNo", list.get(i).getScenicNo());
-			map.put("openingHours", list.get(i).getOpeningHours());
-			map.put("scenicIntro", list.get(i).getScenicIntro());
-			map.put("scenicLevel", list.get(i).getScenicLevel());
-			map.put("province", list.get(i).getProvince());
-			map.put("city", list.get(i).getCity());
-			map.put("scenicLocation", list.get(i).getScenicLocation());
-			map.put("scenicName", list.get(i).getScenicName());
-			map.put("totalVisits", list.get(i).getTotalVisits());
-			listresult.add(map);
-		}
-		
-		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(listresult));
-		writer.flush();
+		return list;
 	}
+	
+	
+	
+	/**
+	 * 根据搜索的特定的景区的地址，进行相关的景区推荐，暂定推荐数为4个
+	 * @param name 景区的名称
+	 * @return 相关的推荐景区的信息。
+	 * 景区图片、编号、名称
+	 */
+	@RequestMapping(value = "/getScenicRelatesByName.do")
+	@ResponseBody
+	public Object getScenicRelatesByName(HttpServletResponse resp,
+			@RequestParam("scenicName") String scenicName) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> list = scenicSpotService.getScenicRelatesByName(scenicName);
+		
+		return list;
+	}
+	
+	
 	
 	/**
 	 * 根据景区编号，查询该景区的门票信息
@@ -126,5 +151,49 @@ public class ScenicSpotController {
 		PrintWriter writer = resp.getWriter();
 		writer.write(new Gson().toJson(scenicTickets));
 		writer.flush();
+	}
+	
+	
+	
+	/**
+	 * 根据景区名称，搜索名称相似的景区
+	 * @param resp
+	 * @param scenicName 景区名称
+	 * @return  相似景区的名称、编号
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getNameSimilarScenics.do")
+	@ResponseBody
+	public Object getNameSimilarScenics(HttpServletResponse resp,
+			@RequestParam("scenicName") String scenicName) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> listResult = new ArrayList<>();
+		listResult = scenicSpotService.getNameSimilarScenics(scenicName);
+		
+		return listResult;
+	}
+	
+	
+	
+	/**
+	 * 根据景区的编号， 查询景区的信息,景区名称、图片
+	 * @param resp
+	 * @param scenicID  景区的编号
+	 * @return  景区名称、图片
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getSomeScenicInfoByscenicID.do")
+	@ResponseBody
+	public Object getSomeScenicInfoByscenicID(HttpServletResponse resp,
+			@RequestParam("scenicID") String scenicID) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> listResult = new ArrayList<>();
+		listResult = scenicSpotService.getSomeScenicInfoByscenicID(scenicID);
+		
+		return listResult;
 	}
 }

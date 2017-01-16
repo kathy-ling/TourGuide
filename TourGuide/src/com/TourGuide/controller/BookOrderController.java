@@ -2,11 +2,16 @@ package com.TourGuide.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 import javax.servlet.http.HttpServletResponse;
+
+import org.aspectj.apache.bcel.generic.NEW;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,15 +21,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.common.MyDateFormat;
+import com.TourGuide.model.ScenicTickets;
 import com.TourGuide.service.BookOrderService;
+import com.TourGuide.service.GuideService;
 import com.TourGuide.service.IntroFeeAndMaxNumService;
+import com.TourGuide.service.ScenicTicketService;
 import com.google.gson.Gson;
 
 @Controller
 public class BookOrderController {
 
 	@Autowired
-	public BookOrderService bookOrderService;
+	private BookOrderService bookOrderService;
+	
+	@Autowired
+	private ScenicTicketService scenicTicketService;
+	
+	@Autowired
+	private GuideService guideService;
 	
 	private final int releaseByVisitor = 1;  //是否是游客自己发布的订单
 	private final String orderState = "待接单";  //游客刚发布的订单的状态为“待接单”
@@ -42,11 +56,15 @@ public class BookOrderController {
 	 * @param visitorName   游客的姓名
 	 * @param priceRange   游客可接受的价位区间
 	 * @param purchaseTicket  是否代购门票
+	 * @param halfPrice  若代购门票，购买半价票的人数
+	 * @param discoutPrice 若代购门票，购买折扣票的人数
+	 * @param fullPrice  若代购门票，购买全价票的人数
 	 * @param otherCommand    其他需求
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/releaseBookOrder.do", method=RequestMethod.POST)
-	public void releaseBookOrder(HttpServletResponse resp,
+	@RequestMapping(value = "/releaseBookOrder.do")
+	@ResponseBody
+	public Object releaseBookOrder(HttpServletResponse resp,
 			@RequestParam("scenicID") String scenicID, 
 			@RequestParam("visitTime") String visitTime, 
 			@RequestParam("visitNum") String visitNum,
@@ -56,6 +74,9 @@ public class BookOrderController {
 			@RequestParam("visitorName") String visitorName,
 			@RequestParam("priceRange") String priceRange,
 			@RequestParam("purchaseTicket") String purchaseTicket,
+			@RequestParam("fullPrice") String fullPrice,
+			@RequestParam("halfPrice") String halfPrice,
+			@RequestParam("discoutPrice") String discoutPrice,
 			@RequestParam("otherCommand") String otherCommand
 			) throws IOException{
 		
@@ -64,14 +85,165 @@ public class BookOrderController {
 		String bookOrderID = UUID.randomUUID().toString().replace("-", "");
 		String produceTime = MyDateFormat.form(new Date());
 		
+		//查询该景区的门票信息
+		ScenicTickets scenicTickets = scenicTicketService.geTicketsByScenicNo(scenicID);
+		
+		//计算门票总额
+		int totalTicket = scenicTickets.getHalfPrice() * Integer.parseInt(halfPrice) +
+				scenicTickets.getDiscoutPrice() * Integer.parseInt(discoutPrice) +
+				scenicTickets.getFullPrice() * Integer.parseInt(fullPrice);
+		
 		boolean bool = bookOrderService.ReleaseBookOrder(bookOrderID, scenicID, produceTime,
 				visitTime, Integer.parseInt(visitNum), language, guideSex, 
-				visitorPhone, visitorName, priceRange, Integer.parseInt(purchaseTicket), 
-				otherCommand, releaseByVisitor, orderState);
+				visitorPhone, visitorName, Integer.parseInt(priceRange), Integer.parseInt(purchaseTicket), 
+				otherCommand, releaseByVisitor, orderState, totalTicket, 
+				Integer.parseInt(fullPrice), Integer.parseInt(discoutPrice), Integer.parseInt(halfPrice));
 		
-		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(bool));
-		writer.flush();
+		return bool;
 	}
 
+	
+	
+	/**
+	 * 选定导游后，进行预约
+	 * @param resp
+	 * @param scenicID  景区编号
+	 * @param visitTime 参观时间
+	 * @param visitNum   参观人数
+	 * @param guidePhone   导游手机号
+	 * @param visitorPhone  游客手机号
+	 * @param purchaseTicket  是否代购门票
+	 * @param halfPrice  若代购门票，购买半价票的人数
+	 * @param discoutPrice 若代购门票，购买折扣票的人数
+	 * @param fullPrice  若代购门票，购买全价票的人数
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/BookOrderWithGuide.do")
+	@ResponseBody
+	public Object BookOrderWithGuide(HttpServletResponse resp,
+			@RequestParam("scenicID") String scenicID, 
+			@RequestParam("visitTime") String visitTime, 
+			@RequestParam("visitNum") String visitNum,
+			@RequestParam("guidePhone") String guidePhone,
+			@RequestParam("visitorPhone") String visitorPhone,
+			@RequestParam("purchaseTicket") String purchaseTicket,
+			@RequestParam("fullPrice") String fullPrice,
+			@RequestParam("halfPrice") String halfPrice,
+			@RequestParam("discoutPrice") String discoutPrice) throws IOException{
+		//http://10.50.63.83:8080/TourGuide/BookOrderWithGuide.do?scenicID=19743&visitTime=2017-1-17 14:00&visitNum=6
+		//&guidePhone=13823456789&visitorPhone=18191762572&purchaseTicket=0&fullPrice=0&halfPrice=0&discoutPrice=0
+		CommonResp.SetUtf(resp);
+		
+		String orderID = UUID.randomUUID().toString().replace("-", "");
+		String produceTime = MyDateFormat.form(new Date());
+		
+		//查询该景区的门票信息
+		ScenicTickets scenicTickets = scenicTicketService.geTicketsByScenicNo(scenicID);
+		
+		//计算门票总额
+		int totalTicket = scenicTickets.getHalfPrice() * Integer.parseInt(halfPrice) +
+				scenicTickets.getDiscoutPrice() * Integer.parseInt(discoutPrice) +
+				scenicTickets.getFullPrice() * Integer.parseInt(fullPrice);
+		
+		//得到该讲解员的讲解费
+		List<Map<String , Object>> guideInfo = guideService.getDetailGuideInfoByPhone(guidePhone);
+		int guideFee = (int)guideInfo.get(0).get("guideFee");
+		
+		int totalMoney = totalTicket + guideFee;
+		
+		int ret = bookOrderService.BookOrderWithGuide(orderID, produceTime, guidePhone, 
+				visitorPhone, visitTime, scenicID, Integer.parseInt(visitNum),
+				Integer.parseInt(purchaseTicket), Integer.parseInt(fullPrice), 
+				Integer.parseInt(discoutPrice), Integer.parseInt(halfPrice), 
+				totalTicket, guideFee, guideFee, totalMoney);
+		
+		return ret;
+	}
+	
+	
+	
+	/**
+	 * 讲解员查看游客发布的预约订单（简要信息）
+	 * @param resp
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getReleasedOrders.do")
+	@ResponseBody
+	public Object getReleasedOrders(HttpServletResponse resp) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		String timeNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		
+		List<Map<String , Object>> list = bookOrderService.getReleasedOrders(timeNow);
+		
+		return list;
+	}
+	
+	
+	
+	/**
+	 * 讲解员根据订单编号查看游客发布的预约订单（详细信息）
+	 * @param resp
+	 * @param orderID   订单编号
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getDetailedReleasedOrders.do")
+	@ResponseBody
+	public Object getDetailedReleasedOrders(HttpServletResponse resp,
+			@RequestParam("orderID") String orderID) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> list = bookOrderService.getDetailedReleasedOrders(orderID);
+		
+		return list;
+	}
+	
+	
+	
+	/**
+	 * 讲解员接单
+	 * @param resp
+	 * @param orderID  订单编号
+	 * @param guidePhone   讲解员手机号
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/takeReleasedOrderByGuide.do")
+	@ResponseBody
+	public Object takeReleasedOrderByGuide(HttpServletResponse resp,
+			@RequestParam("orderID") String orderID,
+			@RequestParam("guidePhone") String guidePhone) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		boolean bool = bookOrderService.takeReleasedOrderByGuide(orderID, guidePhone);
+		
+		return bool;
+	}
+	
+	
+	
+	/**
+	 * 讲解员查看被预约的还未讲解的订单
+	 * @param resp
+	 * @param guidePhone  讲解员手机号
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getMyBookedOrder.do")
+	@ResponseBody
+	public Object getMyBookedOrder(HttpServletResponse resp,
+			@RequestParam("guidePhone") String guidePhone) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> list = bookOrderService.getMyBookedOrder(guidePhone) ;
+		
+		return list;
+	}
 }

@@ -2,6 +2,7 @@ package com.TourGuide.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.TourGuide.common.CommonResp;
+import com.TourGuide.common.DateConvert;
 import com.TourGuide.common.MyDateFormat;
 import com.TourGuide.common.TotalMoney;
 import com.TourGuide.model.ConsistOrder;
@@ -42,8 +45,6 @@ public class ConsistOrderController {
 	
 	private int isConsisted = 0;  //游客刚发布的拼单，没有被拼单
 	
-	private int fee = 0;  //讲解费,？元/人
-	
 	
 	/**
 	 * 查询某天该景区的拼单讲解费
@@ -59,7 +60,8 @@ public class ConsistOrderController {
 	
 		CommonResp.SetUtf(resp);
 		
-		fee = introFeeService.getIntroFee(date, scenicID);
+		//讲解费,？元/人
+		int fee = introFeeService.getIntroFee(date, scenicID);
 		
 		PrintWriter writer = resp.getWriter();
 		writer.write(new Gson().toJson(fee));
@@ -82,7 +84,8 @@ public class ConsistOrderController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/releaseConsistOrder.do")
-	public void releaseConsistOrder(HttpServletResponse resp,
+	@ResponseBody
+	public Object releaseConsistOrder(HttpServletResponse resp,
 			@RequestParam("scenicID") String scenicID, 
 			@RequestParam("visitTime") String visitTime, 
 			@RequestParam("visitNum") String visitNum,
@@ -104,19 +107,24 @@ public class ConsistOrderController {
 		//查询给景区该日的最大可拼单人数
 		String[] date = visitTime.toString().split(" ");
 		int maxNum = introFeeService.getMaxNum(date[0], scenicID);
+		int fee = introFeeService.getIntroFee(date[0], scenicID);
 		
-		//计算每个订单的应付总额
-		int totalMoney = TotalMoney.getTotalMoney(fee, Integer.parseInt(visitNum), Integer.parseInt(purchaseTicket), 
+		//订单相关的计算
+		List<Integer> money = TotalMoney.getMoney(fee, Integer.parseInt(visitNum), Integer.parseInt(purchaseTicket), 
 				scenicTickets.getHalfPrice(), scenicTickets.getDiscoutPrice(), scenicTickets.getFullPrice(), 
 				Integer.parseInt(halfPrice), Integer.parseInt(discoutPrice), Integer.parseInt(fullPrice));
 		
+		int totalFee = money.get(0);  //讲解费总额
+		int totalTicket = money.get(1);  //门票费总额
+		int totalMoney = money.get(2);  //讲解费总额 + 门票费总额
+		
 		boolean bool = consistOrderService.ReleaseConsistOrder(consistOrderID, orderID, scenicID,
 				produceTime, visitTime, Integer.parseInt(visitNum), visitorPhone, 
-				totalMoney, Integer.parseInt(purchaseTicket), orderState, isConsisted, maxNum);
+				totalMoney, Integer.parseInt(purchaseTicket), orderState, isConsisted, maxNum,
+				Integer.parseInt(fullPrice), Integer.parseInt(discoutPrice), Integer.parseInt(halfPrice),
+				totalFee, totalTicket, fee);
 		
-		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(bool));
-		writer.flush();
+		return bool;
 	}
 	
 	
@@ -158,7 +166,8 @@ public class ConsistOrderController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/consistWithconsistOrderID.do")
-	public void consistWithconsistOrderID(HttpServletResponse resp,
+	@ResponseBody
+	public Object consistWithconsistOrderID(HttpServletResponse resp,
 			@RequestParam("orderID") String orderID,  
 			@RequestParam("visitNum") String visitNum,
 			@RequestParam("visitorPhone") String visitorPhone,
@@ -172,41 +181,40 @@ public class ConsistOrderController {
 		String consistOrderID = UUID.randomUUID().toString().replace("-", "");
 		String produceTime = MyDateFormat.form(new Date());
 		
-		//根据订单编号，查询该订单中的所有拼单的编号
-		List<String> ConsistOrderIDList = consistOrderService.getConsistOrderIDsWithOrderID(orderID);
+		//查询该拼单结果的详细信息
+		List<Map<String , Object>> consistResult = consistOrderService.getDetailConsistResult(orderID);
+		int currentNum = (int)consistResult.get(0).get("visitNum");
+		int maxNum = (int)consistResult.get(0).get("maxNum");
+		String scenicID = (String)consistResult.get(0).get("scenicID");
+		Timestamp timestamp = (Timestamp)consistResult.get(0).get("visitTime");
+		String visitTime = DateConvert.timeStamp2DateTime(timestamp);
 		
-		//查询订单编号中，第一个拼单编号的详细信息
-		ConsistOrder consistOrder = consistOrderService.getDetailConsistOrder(ConsistOrderIDList.get(0));
+		currentNum = currentNum + Integer.parseInt(visitNum);
 		
-		//查询该订单的参观总人数
-		int currentNum = 0;
-		for(int i=0; i<ConsistOrderIDList.size(); i++){
-			//单个拼单的参观人数
-			ConsistOrder order = consistOrderService.getDetailConsistOrder(ConsistOrderIDList.get(i));
-			int num = order.getVisitNum();
-			currentNum += num;
-		}
-		currentNum += Integer.parseInt(visitNum);
+		String[] date = visitTime.toString().split(" ");
+		int fee = introFeeService.getIntroFee(date[0], scenicID);
 		
 		//查询该景区的门票信息
-		String scenicID = consistOrder.getScenicID();
 		ScenicTickets scenicTickets = scenicTicketService.geTicketsByScenicNo(scenicID);
 		
 		//计算每个订单的应付总额
-		int totalMoney = TotalMoney.getTotalMoney(fee, Integer.parseInt(visitNum), Integer.parseInt(purchaseTicket), 
+		List<Integer> money= TotalMoney.getMoney(fee, Integer.parseInt(visitNum), Integer.parseInt(purchaseTicket), 
 				scenicTickets.getHalfPrice(), scenicTickets.getDiscoutPrice(), scenicTickets.getFullPrice(), 
 				Integer.parseInt(halfPrice), Integer.parseInt(discoutPrice), Integer.parseInt(fullPrice));
+		int totalFee = money.get(0);  //讲解费总额
+		int totalTicket = money.get(1);  //门票费总额
+		int totalMoney = money.get(2);  //讲解费总额 + 门票费总额
 		
 		isConsisted = 1;
 		
 		boolean bool = consistOrderService.consistWithconsistOrderID(orderID, 
-				consistOrderID, scenicID, produceTime, consistOrder.getVisitTime(), 
+				consistOrderID, scenicID, produceTime, visitTime, 
 				Integer.parseInt(visitNum), visitorPhone, totalMoney, currentNum,
-				Integer.parseInt(purchaseTicket), orderState, isConsisted, consistOrder.getMaxNum());
+				Integer.parseInt(purchaseTicket), orderState, isConsisted, maxNum,
+				Integer.parseInt(halfPrice), Integer.parseInt(discoutPrice), Integer.parseInt(fullPrice),
+				totalFee, totalTicket, fee);
 		
-		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(bool));
-		writer.flush();
+		return bool;
 	}
 	
 	

@@ -29,32 +29,50 @@ public class ScenicSpotDao {
 	
 	
 	/**
+ 	 * 根据景区编号，查看景区的详细信息
+ 	 * @param scenicNo  景区编号
+ 	 * @return 景区详细信息
+ 	 * 景区图片、编号、名称、简介、省、市、详细位置、等级、历史参观人数、开放时间
+ 	 */
+ 	public List<Map<String , Object>> getDetailScenicByScenicID(String scenicNo){
+ 		
+ 		String sqlString = "select scenicImagePath,scenicNo,scenicName,scenicIntro,province,"
+ 				+ "city,scenicLocation,scenicLevel,openingHours,totalVisits "
+ 				+ "from t_scenicspotinfo where scenicNo='"+scenicNo+"'";
+ 		
+ 		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlString);
+ 		
+ 		return list;
+ 	}
+	
+	
+	/**
 	 * 根据用户的位置（省份），获取对应省份的热门景点
 	 * @param location 用户当前的位置
-	 * @return 景区图片、编号、名称、简介、省、市、详细位置、等级、历史参观人数、开放时间
+	 * @return 景区图片、编号、名称
 	 */
  	public List<Map<String , Object>> getScenicByLocation(String location){
 		
-		String sqlString = "select scenicImagePath,scenicNo,scenicName,scenicIntro,province,"
-				+ "city,scenicLocation,scenicLevel,openingHours,totalVisits "
+		String sqlString = "select scenicImagePath,scenicNo,scenicName "
 				+ "from t_scenicspotinfo  where  province like '%"+location+"%' "
 						+ "and isHotSpot='"+isHotSpot+"' limit "+scenicNum+"";
 		
-		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlString);
+		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlString);
 		
 		return list;
 	}
-	
+ 	
+ 	
+ 	
 	
 	/**
 	 * 根据用户所在的省份，获取该省内的所有景点
 	 * @param location 用户所在的省份
-	 * @return 景区图片、编号、名称、简介、省、市、详细位置、等级、历史参观人数、开放时间
+	 * @return 景区图片、编号、名称
 	 */
 	public List<Map<String , Object>> getAllScenicByLocation(String location){
 		
-		String sqlString = "select scenicImagePath,scenicNo,scenicName,scenicIntro,province,"
-				+ "city,scenicLocation,scenicLevel,openingHours,totalVisits "
+		String sqlString = "select scenicImagePath,scenicNo,scenicName "
 				+ "from t_scenicspotinfo where province like '%"+location+"%'";
 		
 		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlString);
@@ -64,62 +82,45 @@ public class ScenicSpotDao {
 
 	
 	/**
-	 * 1、根据景区的名称进行搜索。
-	 * 2、根据搜索的特定的景区的地址，进行相关的景区推荐，暂定推荐数为4个
-	 * @param name 景区的名称
-	 * @return  此景区的详细信息，相关的推荐景区的详细信息。
-	 * 景区图片、编号、名称、简介、省、市、详细位置、等级、历史参观人数、开放时间
+	 * 根据景区的名称进行搜索。
+	 * @param scenicName  景区的名称
+	 * @return
 	 */
-	public List<ScenicsSpotInfo> getScenicByNameAndRelates(String name){
-		
-		final ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
-		String cityString = null;
-		List<ScenicsSpotInfo> listResult = new ArrayList<>();
+	public List<Map<String , Object>> getScenicByName(String scenicName){
 		
 		//根据景区的名称，搜索对应景区的详细信息
 		String sqlSearch = "select scenicImagePath,scenicNo,scenicName,scenicIntro,"
 				+ "province,city,scenicLocation,scenicLevel,openingHours,totalVisits "
-				+ "from `t_scenicspotinfo`  where scenicName like '%"+name+"%'";
+				+ "from `t_scenicspotinfo`  where scenicName='"+scenicName+"'";
 		
-		jdbcTemplate.query(sqlSearch,  new RowCallbackHandler() {
-			
-			@Override
-			public void processRow(ResultSet res) throws SQLException {
-				scenicsSpotInfo.setScenicImagePath(res.getString(1));
-				scenicsSpotInfo.setScenicNo(res.getString(2));
-				scenicsSpotInfo.setScenicName(res.getString(3));
-				scenicsSpotInfo.setScenicIntro(res.getString(4));
-				scenicsSpotInfo.setProvince(res.getString(5));
-				scenicsSpotInfo.setCity(res.getString(6));
-				scenicsSpotInfo.setScenicLocation(res.getString(7));
-				scenicsSpotInfo.setScenicLevel(res.getString(8));
-				scenicsSpotInfo.setOpeningHours(res.getString(9));
-				scenicsSpotInfo.setTotalVisits(res.getString(10));
-			}
-		});
+		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlSearch);
 		
-		listResult.add(scenicsSpotInfo);
-		cityString = scenicsSpotInfo.getCity();
+		return list;
+	}
+	
+	/**
+	 * 根据搜索的特定的景区的地址，进行相关的景区推荐，暂定推荐数为4个
+	 * @param name 景区的名称
+	 * @return 相关的推荐景区的信息。
+	 * 景区图片、编号、名称
+	 */
+	public List<Map<String , Object>> getScenicRelatesByName(String scenicName){
+		
+		List<Map<String , Object>> list = getScenicByName(scenicName);
+		String cityString = null;
+		String scenicID = null;
+		if(list.size() != 0){
+			cityString = (String)list.get(0).get("city");
+			scenicID = (String)list.get(0).get("scenicNo");
+		}
 		
 		//根据查询的景区的地址，推荐其它相关的景区
-		String sqlString = "select * from t_scenicspotinfo where city like '%"+cityString+"%' limit ?";
-		List<Map<String , Object>> list2=jdbcTemplate.queryForList(sqlString
-				,new Object[]{recommandNum});
+		String sqlString = "select scenicImagePath,scenicNo,scenicName"
+				+ " from t_scenicspotinfo where scenicNo !='"+scenicID+"'"
+				+ " and city like '%"+cityString+"%' limit ?";
 		
-		for (int j = 0; j <list2.size(); j++){
-			ScenicsSpotInfo scenicsSpotInfos = new ScenicsSpotInfo();
-			scenicsSpotInfos.setScenicImagePath((String)list2.get(j).get("scenicImagePath"));
-			scenicsSpotInfos.setScenicNo((String)list2.get(j).get("scenicNo"));
-			scenicsSpotInfos.setScenicName((String)list2.get(j).get("scenicName"));
-			scenicsSpotInfos.setScenicIntro((String)list2.get(j).get("scenicIntro"));
-			scenicsSpotInfos.setProvince((String)list2.get(j).get("province"));
-			scenicsSpotInfos.setCity((String)list2.get(j).get("city"));
-			scenicsSpotInfos.setScenicLocation((String)list2.get(j).get("scenicLocation"));
-			scenicsSpotInfos.setScenicLevel((String)list2.get(j).get("scenicLevel"));
-			scenicsSpotInfos.setOpeningHours((String)list2.get(j).get("openingHours"));
-			scenicsSpotInfos.setTotalVisits((String)list2.get(j).get("totalVisits"));
-			listResult.add(scenicsSpotInfos);
-		}
+		List<Map<String , Object>> listResult=jdbcTemplate.queryForList(sqlString
+				,new Object[]{recommandNum});	
 		
 		return listResult;
 	}
@@ -131,21 +132,30 @@ public class ScenicSpotDao {
 	 * @param scenicID   景区编号
 	 * @return 景区名称、图片
 	 */
-	public Map<String, String> getSomeScenicInfoByscenicID(String scenicID){
+	public List<Map<String , Object>> getSomeScenicInfoByscenicID(String scenicID){
 		
-		final Map<String, String> map = new HashMap<String, String>();
 		String sqlString = "select scenicName,scenicImagePath from t_scenicspotinfo "
 				+ "where scenicNo='"+scenicID+"'";
 		
-		jdbcTemplate.query(sqlString,  new RowCallbackHandler() {
-					
-					@Override
-					public void processRow(ResultSet res) throws SQLException {
-						map.put("scenicName", res.getString(1));
-						map.put("scenicImagePath", res.getString(2));
-					}
-		});
-		return map;
+		List<Map<String , Object>> list = new ArrayList<>();
+		
+		list = jdbcTemplate.queryForList(sqlString);
+		
+		return list;
+	}
+	
+	
+	/**
+	 * 根据景区名称，搜索名称相似的景区
+	 * @param scenicName 景区名称
+	 * @return  相似景区的名称、编号
+	 */
+	public List<Map<String , Object>> getNameSimilarScenics(String scenicName){
+		
+		String sql = "select scenicName,scenicNo from t_scenicspotinfo  "
+				+ "where scenicName like '%"+scenicName+"%'";
+		List<Map<String , Object>> list = jdbcTemplate.queryForList(sql);
+		return list;
 	}
 	
 	

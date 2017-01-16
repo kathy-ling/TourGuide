@@ -32,11 +32,13 @@ public class ConsistOrderService {
 	 */
 	public boolean ReleaseConsistOrder(String consistOrderID, String orderID, String scenicID,
 			String produceTime, String visitTime, int visitNum, String visitorPhone, 
-			int totalMoney, int purchaseTicket, String orderState, int isConsisted, int maxNum){
+			int totalMoney, int purchaseTicket, String orderState, int isConsisted, int maxNum,
+			int fullPrice, int discoutPrice, int halfPrice, int totalFee, int totalTicket, int fee){
 		
 		return consistOrderDao.ReleaseConsistOrder(consistOrderID, orderID, scenicID, 
 				produceTime, visitTime, visitNum, visitorPhone, 
-				totalMoney, purchaseTicket, orderState, isConsisted, maxNum);
+				totalMoney, purchaseTicket, orderState, isConsisted, maxNum, fullPrice,
+				discoutPrice, halfPrice, totalFee, totalTicket, fee);
 	}
 	
 	
@@ -68,11 +70,13 @@ public class ConsistOrderService {
 	 */
 	public boolean consistWithconsistOrderID(String orderID, String consistOrderID, String scenicID,
 			String produceTime, String visitTime, int visitNum, String visitorPhone, int totalMoney, 
-			int currentNum, int purchaseTicket, String orderState, int isConsisted, int maxNum){
+			int currentNum, int purchaseTicket, String orderState, int isConsisted, int maxNum,
+			int fullPrice, int discoutPrice, int halfPrice, int totalFee, int totalTicket, int fee){
 		
 		return consistOrderDao.consistWithconsistOrderID(orderID, consistOrderID, scenicID, 
 				produceTime, visitTime, visitNum, visitorPhone, totalMoney, currentNum,
-				purchaseTicket, orderState, isConsisted, maxNum);
+				purchaseTicket, orderState, isConsisted, maxNum, fullPrice,
+				discoutPrice, halfPrice, totalFee, totalTicket, fee);
 	}
 	
 	
@@ -87,12 +91,13 @@ public class ConsistOrderService {
 	
 	
 	/**
-	 * 根据拼单编号，查询每个拼单的详细信息
-	 * @param consistOrderID  拼单编号
-	 * @return
+	 * 根据订单编号，查询每个拼单结果的详细信息
+	 * @param OrderID  订单编号
+	 * @return 订单编号、参观时间、当前人数、最大人数、景区编号
 	 */
-	public ConsistOrder getDetailConsistOrder(String consistOrderID){
-		return consistOrderDao.getDetailConsistOrder(consistOrderID);
+	public List<Map<String , Object>> getDetailConsistResult(String OrderID){
+		return consistOrderDao.getDetailConsistResult(OrderID);
 	}
+
 
 }

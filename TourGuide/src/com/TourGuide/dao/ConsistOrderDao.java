@@ -44,7 +44,8 @@ public class ConsistOrderDao {
 	 */
 	public boolean ReleaseConsistOrder(String consistOrderID, String orderID, String scenicID,
 			String produceTime, String visitTime, int visitNum, String visitorPhone, 
-			int totalMoney, int purchaseTicket, String orderState, int isConsisted, int maxNum){
+			int totalMoney, int purchaseTicket, String orderState, int isConsisted, int maxNum,
+			int fullPrice, int discoutPrice, int halfPrice, int totalFee, int totalTicket, int fee){
 		
 		boolean bool = false;
 		
@@ -54,11 +55,13 @@ public class ConsistOrderDao {
 				maxNum, visitTime, scenicID});
 		
 		String sqlString = "insert into t_consistOrder (consistOrderID,orderID,scenicID,produceTime,"
-				+ "visitTime,visitNum,visitorPhone,totalMoney,purchaseTicket,orderState,isConsisted,maxNum) "
-				+ "values (?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "visitTime,visitNum,visitorPhone,totalMoney,purchaseTicket,orderState,isConsisted,maxNum,"
+				+ "fullPrice,discoutPrice,halfPrice,totalGuideFee,totalTicket,guideFee) "
+				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlString, new Object[]{consistOrderID, orderID, scenicID, 
 				produceTime, visitTime, visitNum, visitorPhone, 
-				totalMoney, purchaseTicket, orderState, isConsisted,maxNum});
+				totalMoney, purchaseTicket, orderState, isConsisted,maxNum, fullPrice,
+				discoutPrice, halfPrice, totalFee, totalTicket, fee});
 		
 		if(i == 1 && j == 1){
 			bool = true;
@@ -86,17 +89,20 @@ public class ConsistOrderDao {
 	 */
 	public boolean consistWithconsistOrderID(String orderID, String consistOrderID, String scenicID, 
 			String produceTime, String visitTime, int visitNum, String visitorPhone, int totalMoney,
-			int currentNum, int purchaseTicket, String orderState, int isConsisted, int maxNum){
+			int currentNum, int purchaseTicket, String orderState, int isConsisted, int maxNum, 
+			int fullPrice, int discoutPrice, int halfPrice, int totalFee, int totalTicket, int fee){
 		
 		boolean bool = false;
 		
 		//将拼单信息插入拼单表
 		String sqlString = "insert into t_consistOrder (orderID,consistOrderID,scenicID,produceTime,"
-				+ "visitTime,visitNum,visitorPhone,totalMoney,purchaseTicket,orderState,isConsisted,maxNum) "
-				+ "values (?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "visitTime,visitNum,visitorPhone,totalMoney,purchaseTicket,orderState,isConsisted,maxNum,"
+				+ "fullPrice,discoutPrice,halfPrice,totalGuideFee,totalTicket,guideFee) "
+				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlString, new Object[]{orderID, consistOrderID, scenicID, 
 				produceTime, visitTime, visitNum, visitorPhone, 
-				totalMoney, purchaseTicket, orderState, isConsisted,maxNum});
+				totalMoney, purchaseTicket, orderState, isConsisted,maxNum,fullPrice,
+				discoutPrice, halfPrice, totalFee, totalTicket, fee});
 		
 		//更新拼单状态，已拼单
 		String sqlString1 = "update t_consistorder set isConsisted=1 where orderID=?";
@@ -172,38 +178,16 @@ public class ConsistOrderDao {
 	
 	
 	/**
-	 * 根据拼单编号，查询每个拼单的详细信息
-	 * @param consistOrderID  拼单编号
-	 * @return
+	 * 根据订单编号，查询每个拼单结果的详细信息
+	 * @param OrderID  订单编号
+	 * @return 订单编号、参观时间、当前人数、最大人数、景区编号
 	 */
-	public ConsistOrder getDetailConsistOrder(String consistOrderID){
+	public List<Map<String , Object>> getDetailConsistResult(String OrderID){
 		
-		final ConsistOrder consistOrder = new ConsistOrder();
+		String sqlSearch = "select * from t_consistresult where orderID='"+OrderID+"'";
 		
-		String sqlSearch = "select * from t_consistorder where consistOrderID='"+consistOrderID+"'";
+		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlSearch);
 		
-		jdbcTemplate.query(sqlSearch,  new RowCallbackHandler() {
-			
-			@Override
-			public void processRow(ResultSet res) throws SQLException {
-				consistOrder.setConsistOrderID(res.getString(1));
-				consistOrder.setOrderID(res.getString(2));
-				consistOrder.setProduceTime(res.getString(3));
-				consistOrder.setVisitTime(res.getString(4));
-				consistOrder.setEndTime(res.getString(5));
-				consistOrder.setVisitorPhone(res.getString(6));
-				consistOrder.setGuidePhone(res.getString(7));
-				consistOrder.setScenicID(res.getString(8));
-				consistOrder.setTotalMoney(res.getInt(9));
-				consistOrder.setOrderState(res.getString(10));
-				consistOrder.setOtherCommand(res.getString(11));
-				consistOrder.setVisitNum(res.getInt(12));
-				consistOrder.setMaxNum(res.getInt(13));
-				consistOrder.setPurchaseTicket(res.getInt(14));
-				consistOrder.setIsConsisted(res.getInt(15));
-			}
-		});
-		
-		return consistOrder;
+		return list;
 	}
 }

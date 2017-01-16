@@ -15,48 +15,82 @@ public class ScenicSpotService {
 	@Autowired
 	public ScenicSpotDao scenicSpotDao;
 	
-	/*
+	/**
 	 * 根据用户的位置（省份），获取对应省份的热门景点
+	 * @param location 用户当前的位置
+	 * @return 景区图片、编号、名称、简介、省、市、详细位置、等级、历史参观人数、开放时间
 	 */
 	public List<Map<String , Object>> getScenicByLocation(String province){
 		return scenicSpotDao.getScenicByLocation(province);
 	}
 	
-	public ScenicsSpotInfo SearchSceincInfoByLocation(String provin,String city,String s)
-	{
-		return scenicSpotDao.SearchSceincInfoByLocation_Dao(provin, city, s);
-	}
 	
-	/*
-	 * 根据用户的当前所在的省份，获取该省份的所有景点
+	/**
+	 * 根据用户所在的省份，获取该省内的所有景点
+	 * @param location 用户所在的省份
+	 * @return 景区图片、编号、名称
 	 */
 	public List<Map<String , Object>> getAllScenicByLocation(String location){
 		return scenicSpotDao.getAllScenicByLocation(location);
 	}
 	
 	
-	/*
-	 * 1、根据景区的名称进行搜索,查看该景区的详细信息
-	 * 2、根据搜索的特定的景区的地址，进行相关的景区推荐，暂定推荐数为4个
+	/**
+ 	 * 根据景区编号，查看景区的详细信息
+ 	 * @param scenicNo  景区编号
+ 	 * @return 景区详细信息
+ 	 * 景区图片、编号、名称、简介、省、市、详细位置、等级、历史参观人数、开放时间
+ 	 */
+ 	public List<Map<String , Object>> getDetailScenicByScenicID(String scenicNo){
+ 		return scenicSpotDao.getDetailScenicByScenicID(scenicNo);
+ 	}
+	
+ 	/**
+	 * 根据景区的名称进行搜索。
+	 * @param scenicName  景区的名称
+	 * @return
 	 */
-	public List<ScenicsSpotInfo> getScenicByNameAndRelates(String name){
-		return scenicSpotDao.getScenicByNameAndRelates(name);
+	public List<Map<String , Object>> getScenicByName(String scenicName){
+		return scenicSpotDao.getScenicByName(scenicName);
 	}
 	
 	
-//	/*
-//	 * 根据景区的名称，进行搜索，查看景区的详细信息
-//	 */
-//	public ScenicsSpotInfo getScenicByName(String name){
-//		return scenicSpotDao.getScenicByName(name);
-//	}
-//	
-//	/*
-//	 * 
-//	 */
-//	public List<ScenicsSpotInfo> getRelatedScenicByLocation(String location){
-//		return scenicSpotDao.getRelatedScenicByLocation(location);
-//	}
+	/**
+	 * 根据搜索的特定的景区的地址，进行相关的景区推荐，暂定推荐数为4个
+	 * @param name 景区的名称
+	 * @return 相关的推荐景区的信息。
+	 * 景区图片、编号、名称
+	 */
+	public List<Map<String , Object>> getScenicRelatesByName(String scenicName){
+		return scenicSpotDao.getScenicRelatesByName(scenicName);
+	}
+	
+	
+	
+	/**
+	 * 根据景区名称，搜索名称相似的景区
+	 * @param scenicName 景区名称
+	 * @return  相似景区的名称、编号
+	 */
+	public List<Map<String , Object>> getNameSimilarScenics(String scenicName){
+		return scenicSpotDao.getNameSimilarScenics(scenicName);
+	}
+	
+	
+	/**
+	 * 根据景区的编号， 查询景区的信息,景区名称、图片
+	 * @param scenicID   景区编号
+	 * @return 景区名称、图片
+	 */
+	public List<Map<String , Object>> getSomeScenicInfoByscenicID(String scenicID){
+		return scenicSpotDao.getSomeScenicInfoByscenicID(scenicID);
+	}
+
+	public ScenicsSpotInfo SearchSceincInfoByLocation(String provin,String city,String s)
+	{
+		return scenicSpotDao.SearchSceincInfoByLocation_Dao(provin, city, s);
+	}
+	
 	
 	/*
 	 * 为景区信息进行分页
