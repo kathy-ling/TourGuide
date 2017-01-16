@@ -600,7 +600,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#edit_chargePerson").val(ScenicInfo[index].chargePerson);
  		
  		var f="<%=path%>"+ScenicInfo[index].scenicImagePath;
- 		alert(f);
   		document.getElementById("edit_headimg").src=f;
  		if(ScenicInfo[index].isHotSpot==1) $("input[name=edit_isHotSpot]:eq(0)").attr("checked",'checked'); 
  		else  $("input[name=edit_isHotSpot]:eq(1)").attr("checked",'checked'); 

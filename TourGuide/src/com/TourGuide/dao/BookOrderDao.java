@@ -1,5 +1,9 @@
 package com.TourGuide.dao;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4af5823607f17478222e56d80f455c589db2e085
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -219,7 +223,10 @@ public class BookOrderDao {
 				
 		return list;
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4af5823607f17478222e56d80f455c589db2e085
 	/**
 	 * 得到订单信息并进行分页获取
 	 * @param currentPage
