@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.TourGuide.dao.VisitorDao;
-import com.TourGuide.model.GuideOtherInfo;
 import com.TourGuide.model.VisitorInfo;
 import com.TourGuide.model.VisitorLoginInfo;
 

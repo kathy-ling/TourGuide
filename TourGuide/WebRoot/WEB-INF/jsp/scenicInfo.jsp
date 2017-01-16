@@ -33,17 +33,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.js"></script>
 	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath %>/assets/js/bootstrap-paginator.min.js"></script>
-
+  	<script type="text/javascript" src="<%=basePath %>/assets/js/ajaxfileupload.js"></script>
   </head>
   
  <body>
 
-
-<!-- <header class="am-topbar am-topbar-inverse admin-header">
-  <div class="am-topbar-brand">
-    <strong>景区信息管理</strong> 
-  </div>
-</header> -->
 
 
   <!-- content start -->
@@ -120,6 +114,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr>
+							<td>
+								景区图片上传：
+							</td>
+							<td>
+							  <!-- <form action="scenic/UploadImage.action" enctype="multipart/form-data" method="post" target="rfFrame">
+								<table><tr>
+								<td><input type="file" name="file" style="width:200px"></td>
+								<td><input type="submit" value="上传"></td>
+								</tr>
+								</table>	
+							</form>
+							<iframe id="rfFrame" name="rfFrame" src="about:blank" style="display:none;"  onload="a()"></iframe>   -->
+							<table>
+								<tr>
+									<td><input type="file" id="file" name="file" style="width:200px"><td>
+								</tr>
+							</table>
+							</td>
+						</tr>
 						<tr ><td >编号：</td>
 						<td><input  type="text" id="add_scenicNo" name="add_scenicNo" /></td></tr>
 						<tr><td>名称：</td>
@@ -130,12 +144,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="add_totalVisits" name="add_totalVisits" /></td></tr>
 						<tr><td>开放时间:</td>
 						<td><input  type="text"  id="add_openingHours" name="add_openingHours" /></td></tr>
-						<tr><td>所在省份：</td>
-						<td><input  type="text" id="add_province" name="add_province" /></td></tr>
-						<tr><td>所在市:</td>
-						<td><input  type="text"  id="add_city" name="add_city"" /></td></tr>
-						<tr><td>详细位置:</td>
-						<td><input  type="text"  id="add_scenicLocation" name="add_scenicLocation"" /></td></tr>
+						<tr>
+						<form class="form-inline">
+      					<div data-toggle="distpicker">
+        					<div class="form-group">
+         					 <label class="sr-only" for="province1">Province</label>
+         				 	<select class="form-control" id="province2" ></select>
+        					</div>
+        					<div class="form-group">
+          					<label class="sr-only" for="city1">City</label>
+          					<select class="form-control" id="city2" ></select>
+        					</div>
+        					<div><input type="text" id="LocationText2" class="am-form-field" placeholder="景区详细地址"></div>
+     					</div>
+ 						</form>	
+ 						</tr>
 						<tr><td>是否为热门景点:</td>
 						<td>
 						<input type="radio" value="HotSpot" name="add_isHotSpot" checked="checked"><label for="热门">热门</label>
@@ -145,7 +168,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="add_scenicLevel" name="add_scenicLevel"" /></td></tr>
 						<tr><td>负责人:</td>
 						<td><input  type="text"  id="add_chargePerson" name="add_chargePerson"" /></td></tr>
-						<tr><td colspan="2" style="text-align:center;"><button class="close" onclick="AddScenicInfo()" >确定增加</button></td></tr>
+						<tr><td colspan="2" style="text-align:center;">
+						<input type="button" onclick="AddScenicInfo()"  value="确定增加" />
+						</td></tr>
 						
 					</table>
 					
@@ -166,7 +191,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</h4>
 					</div>
 					<div class="modal-body">
-							<form class="form-inline">
+					<form class="form-inline">
       				<div data-toggle="distpicker">
         			<div class="form-group">
          				 <label class="sr-only" for="province1">Province</label>
@@ -202,6 +227,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr>
+							<td>景区图片：</td>
+							<td><table>
+								<tr>
+									<td><img style="width: 100px;height: 100px" id="edit_headimg" name="edit_headimg" src=""/></td>
+									<td><table>
+									<tr>
+									<td><input type="file" id="editfile" name="editfile" style="width:200px"><td>
+									</tr>
+									</table></td>
+								</tr>
+							</table></td>
+						</tr>
 						<tr ><td >编号：</td>
 						<td><input  type="text" id="edit_scenicNo" name="edit_scenicNo" /></td></tr>
 						<tr><td>名称：</td>
@@ -229,9 +267,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="edit_chargePerson" name="edit_chargePerson"" /></td></tr>
 				<tr><td colspan="2" style="text-align:center;"><button  onclick="editScenicInfo()" >修改</button></td></tr>
 						
-					</table>
-					
-									
+					</table>				
 					</div>
 				</div>
 			</div>
@@ -250,6 +286,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr>
+						<td>景区图片：</td>
+						<td><img style="width: 100px;height: 100px" id="search_headimg" name="search_headimg" src=""/></td>
+						</tr>
 						<tr ><td >编号：</td>
 						<td><input  type="text" id="search_scenicNo" name="search_scenicNo" readonly="true" /></td></tr>
 						<tr><td>名称：</td>
@@ -306,12 +346,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="delete_scenicLevel" name="delete_scenicLevel" readonly="true" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><div >
 							<button class="btn btn-danger" onclick="DeleteScenicInfo()">Delete</button>
-											
 						</div></td></tr>
-						
-					</table>
-						
-									
+					</table>			
 					</div>
 				</div>
 			</div>
@@ -439,6 +475,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			data:{sql:a},
  			success:function(data) {
  			var d=data.jsonStr;
+ 			
  				if (d == "") {
  					alert("没有搜索到任何信息，请重新搜索!");
 	 			}
@@ -463,6 +500,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			$("#search_scenicLocation").val(value.scenicLocation);
  			if (value.isHotSpot == 1) $("#search_isHotSpot").val("热门");
  			else $("#search_isHotSpot").val("非热门");
+ 			var f="<%=path%>"+value.scenicImagePath;
+  			document.getElementById("search_headimg").src=f;
  			$("#search_chargePerson").val(value.chargePerson);
  		
  		$("#SearchModal").modal('show');
@@ -479,8 +518,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#add_province").val("");
  		$("#add_city").val("");
  		$("#add_scenicLocation").val("");
- 		//$("#add_isHotSpot").val("");
  		$("#add_chargePerson").val("");
+ 		$("#LocationText2").val();
  		$("#addmodal").modal('show');
  	}
  	
@@ -492,39 +531,59 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var openingHours = $("#add_openingHours").val();
  		var scenicLevel = $("#add_scenicLevel").val();
  		var scenicIntro = $("#add_scenicIntro").val();
- 		var province = $("#add_province").val();
- 		var city = $("#add_city").val();
- 		var scenicLocation = $("#add_scenicLocation").val();
+ 		var province=$("#province2 option:selected").val();
+ 		var city=$("#city2 option:selected").val();
+ 		var scenicLocation=$("#LocationText2").val();
  		var isHotSpot = $("input[name=add_isHotSpot]:checked").val();
  		if (isHotSpot == "HotSpot") isHotSpot = 1;
  		else isHotSpot = 0;
  		var chargePerson = $("#add_chargePerson").val();
  		
+ 		
  		if (scenicNo != "" && scenicName != "" && totalVisits != "" && openingHours != "" && scenicLevel != ""
  			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") {
- 			$.ajax( {
- 				url:url,
- 				type:"POST",
- 				datatype:"json",
- 				data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
- 					scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
- 					scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson},
- 				success:function(data) {
- 					if (data.confirm) {
- 						$("#addmodal").modal('hide');
- 						alert("添加成功！");
- 						loadScenicInfo();
- 					}
- 					else {
- 						var str = "\"" + scenicName + "\"已存在，请重新添加！";
- 						alert(str);
- 					}
- 						loadScenicInfo();
- 				}
- 			});
- 		}else{
+ 			$.ajaxFileUpload({
+          			url : "<%=basePath%>scenic/UploadImage.action",
+           			fileElementId:'file',
+          			dataType : "json",
+           			success: function(data){
+           			if(data.json=="true")
+           			{
+           				$.ajax( {
+ 							url:url,
+ 							type:"POST",
+ 							datatype:"json",
+ 							data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
+ 								scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
+ 								scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson},
+ 							success:function(data) {
+ 							if (data.confirm) {
+ 									$("#addmodal").modal('hide');
+ 									alert("添加成功！");
+ 									loadScenicInfo();
+ 							}
+ 							else {
+ 								var str = "\"" + scenicName + "\"已存在，请重新添加！";
+ 								alert(str);
+ 							}
+ 							loadScenicInfo();
+ 							}
+ 							});
+           			}else
+           			{
+           				alert("景区图片上传失败");
+           			}
+          	 },
+           	error: function(data)
+           	{
+           		
+              	alert("景区图片上传异常");
+           	}
+        });
+ 			
+ 	}else{
  		alert("信息不能为空，请重新填写景区信息！");
- 		}
+ 	}
  	}
  
  	function EditScenic(index)
@@ -539,6 +598,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#edit_city").val(ScenicInfo[index].city);
  		$("#edit_scenicIntro").val(ScenicInfo[index].scenicIntro);
  		$("#edit_chargePerson").val(ScenicInfo[index].chargePerson);
+ 		
+ 		var f="<%=path%>"+ScenicInfo[index].scenicImagePath;
+ 		alert(f);
+  		document.getElementById("edit_headimg").src=f;
  		if(ScenicInfo[index].isHotSpot==1) $("input[name=edit_isHotSpot]:eq(0)").attr("checked",'checked'); 
  		else  $("input[name=edit_isHotSpot]:eq(1)").attr("checked",'checked'); 
  		/*if((ScenicInfo[index].)=="0")
@@ -571,23 +634,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var chargePerson = $("#edit_chargePerson").val();
  		if (scenicNo != "" && scenicName != "" && totalVisits != "" && openingHours != "" && scenicLevel != ""
  			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") { 			
- 			 $.ajax( {
- 				url:url,
- 				type:"POST",
- 				datatype:"json",
- 				data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
- 					scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
- 					scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson}, 			
- 					success:function(data) {
- 					if (data.confirm) {
- 						$("#editmodal").modal('hide');
- 						alert("修改成功！");
- 					}
- 					else{alert("修改失败，请重新确认修改");
- 						$("#editmodal").modal('hide');
- 					}
- 				}
- 			});
+ 			 $.ajaxFileUpload({
+          			url : "<%=basePath%>scenic/EditImage.action",
+           			fileElementId:'editfile',
+          			dataType : "json",
+           			success: function(data){
+           			if(data.json=="true")
+           			{ 
+           			$.ajax( {
+ 						url:url,
+ 						type:"POST",
+ 						datatype:"json",
+ 						data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
+ 							scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
+ 							scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson}, 			
+ 						success:function(data) {
+ 							if (data.confirm) {
+ 							$("#editmodal").modal('hide');
+ 							alert("修改成功！");
+ 							}
+ 							else{alert("修改失败，请重新确认修改");
+ 							$("#editmodal").modal('hide');
+ 							}
+ 						}
+ 						});
+           			}else
+           			{
+           				alert("景区图片上传失败");
+           			}
+          	 },
+           	error: function(data)
+           	{
+           		
+              	alert("景区图片上传异常");
+           	}
+        });
+ 			
  		}
  		loadScenicInfo();
  	}
@@ -652,6 +734,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  				}	
  			});
  	}
+ 	 
 </script>
 	<script src="<%=path%>/assets/js/distpicker.data.js"></script>
 	<script src="<%=path%>/assets/js/distpicker.js"></script>

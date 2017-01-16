@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
@@ -145,6 +146,7 @@ public class GuideDao {
 		list = jdbcTemplate.queryForList(sqlString);
 		return list;
 	}
+<<<<<<< HEAD
 	
 	
 	/**
@@ -275,58 +277,31 @@ public class GuideDao {
 		return listResult;
 	}
 	
+=======
+
+>>>>>>> 3e11e707ea040328f321a875dfaeac349fac955c
 	
 	/*
-	 * 获得所有讲解员的基本信息
-	 * */
-	public List<GuideInfo> GetGuiderInfoByPage(int currentPage,int rows)
-	{
-		int i=(currentPage-1)*rows;
-		int j=currentPage*rows;
-		String sql="SELECT * FROM t_guideinfo LIMIT "+i+" ,"+j+"";
-		
-		List<Map<String , Object>> list=jdbcTemplate.queryForList(sql);
-		List<GuideInfo> listres=new ArrayList<>();
-		for (int k = 0; k < list.size(); k++) {
-			GuideInfo guideInfo=new GuideInfo();
-			guideInfo.setPhone((String) list.get(k).get("phone"));
-			guideInfo.setName((String) list.get(k).get("name"));
-			guideInfo.setSex((String) list.get(k).get("sex"));
-			guideInfo.setAge((int) list.get(k).get("age"));
-			guideInfo.setLanguage((String) list.get(k).get("language"));
-			guideInfo.setSelfIntro((String) list.get(k).get("selfIntro"));
-			listres.add(guideInfo);
-		}
-		return listres;
-	}
-	/*
-	 * 获得讲解员人数
+	 * 获得已审核讲解员人数
 	 * */
 	public int GetGuideCount() {
-		String sql="SELECT * FROM t_guideinfo";
+		String sql="SELECT * FROM t_guideotherinfo where authorized=1";
 		return jdbcTemplate.queryForList(sql).size();
 	}
 	/*
 	 * 按证号查找讲解员的基本信息
 	 * */
-	public List<GuideInfo> GetGuiderinfoBystring(String cID)
+	public List<Map<String , Object>> GetGuiderinfoBystring(String phone)
 	{
-		final List<GuideInfo> list = new ArrayList<>();
-		String sql = "select * from t_guideinfo where certificateID = '" + cID + "'";
-		jdbcTemplate.query(sql,  new RowCallbackHandler(){
-			@Override
-			public void processRow(ResultSet res) throws SQLException{
-				GuideInfo guideInfo = new GuideInfo();
-				guideInfo.setPhone(res.getString(1));
-				guideInfo.setName(res.getString(2));
-				guideInfo.setSex(res.getString(3));
-				guideInfo.setAge(res.getInt(4));
-				guideInfo.setLanguage(res.getString(7));
-				guideInfo.setSelfIntro(res.getString(8));
-				list.add(guideInfo);
-			}
-		});
-		return list;
+		
+		String sql="SELECT t_guideotherinfo.*,t_guideinfo.*,t_scenicspotinfo.scenicName "
+				+ "FROM t_guideotherinfo, t_guideinfo,t_scenicspotinfo "
+				+ "where t_guideinfo.phone=t_guideotherinfo.phone"
+				+ " AND t_guideinfo.phone in"
+				+ "(select phone from t_guideotherinfo "
+				+ "where authorized=1) AND 	t_scenicspotinfo.scenicNo=t_guideotherinfo.scenicBelong "
+				+ "and t_guideotherinfo.phone='"+phone+"'";
+		return jdbcTemplate.queryForList(sql);
 	}
 	/*
 	 * 添加讲解员基本信息
@@ -345,25 +320,30 @@ public class GuideDao {
 		}
 	}
 	/*
-	 * 通过证号删除讲解员
+	 * 通过手机号删除讲解员
 	 * */
-	public void DeleteGuideInfoById_Dao(String id) {
-		String sql = " delete from t_guideinfo where certificateID = '"+id+"'";
-		jdbcTemplate.update(sql);
+	public int DeleteGuideInfoById_Dao(String phone) {
+		String sql = " delete from t_guideinfo where phone = '"+phone+"'";
+		int i;
+		try {
+			i= jdbcTemplate.update(sql);
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			i=0;
+		}
+		return i;
 	}
 	/*
 	 * 编辑讲解员
 	 * */
-	public boolean EditGuideInfo_Dao(GuideInfo guideInfo) {
-		String sql = " update t_guideinfo set phone=?,name=?,sex=?,language=?, "
-				+" selfIntro=?,age=?,workAge=? where certificateID=?";
+	public boolean EditGuideInfo_Dao(String level,String historyNum,
+			String guideNum,String fee,String phone) {
+		String sql = " update t_guideotherinfo set guideLevel=?,historyNum=?,"
+				+ "singleMax=?,guideFee=? "
+				+"  where phone=?";
 		int i=jdbcTemplate.update(sql, new Object[]{
-				guideInfo.getPhone(),
-				guideInfo.getName(),
-				guideInfo.getSex(),
-				guideInfo.getLanguage(),
-				guideInfo.getSelfIntro(),
-				guideInfo.getAge()});
+				level,historyNum,guideNum,fee,phone
+		});
 		if (i>0) return true;
 		else return false;
 	}
@@ -393,9 +373,18 @@ public class GuideDao {
 	/*
 	 * 修改讲解员的审核状态
 	 * */
-	public boolean CheckGuideInfo_Dao(String phone) {
-		String sql = " update t_guideotherinfo set authorized=1 where phone='"+phone+"'";
-		int i = jdbcTemplate.update(sql);
+	public boolean CheckGuideInfo_Dao(String phone,int historyNum,
+				int singleMax,int guideFee,String guideLevel,String scenicBelong,
+				int workAge,String certificateID)
+	{
+		String sql1="select scenicNo from t_scenicspotinfo where scenicName='"+scenicBelong+"'";
+		String scenicNo=jdbcTemplate.queryForObject(sql1, String.class);
+		String sql = " update t_guideotherinfo set authorized=1, "
+				+ " historyNum=?,singleMax=?,guideFee=?,"
+				+ "guideLevel=?,scenicBelong=?,workAge=?,"
+				+ "certificateID=? where phone='"+phone+"'";
+		int i = jdbcTemplate.update(sql,new Object[]{historyNum,singleMax,
+				guideFee,guideLevel,scenicNo,workAge,certificateID});
 		
 		if (i > 0) return true;
 		return false;
@@ -421,35 +410,6 @@ public class GuideDao {
 		return false;
 	}
 	
-	/**
-	 * 已审核讲解员信息获取分页
-	 * @param currentPage
-	 * @param rows
-	 * @return
-	 */
-	public List<GuideOtherInfo> GetGuideOtherInfoByPage_Dao(int currentPage,int rows)
-	{
-		int i = (currentPage-1)*rows;
-		int j = currentPage*rows;
-		String sql = "SELECT * FROM t_guideotherinfo LIMIT "+i+" ,"+j+"";
-		
-		List<Map<String , Object>> list = jdbcTemplate.queryForList(sql);
-		List<GuideOtherInfo> listres = new ArrayList<>();
-		for (int k = 0; k < list.size(); k++) {
-			GuideOtherInfo guideOtherInfo = new GuideOtherInfo();
-			guideOtherInfo.setAuthorized((int)list.get(k).get("authorized"));
-			guideOtherInfo.setDisabled((int)list.get(k).get("disabled"));
-			guideOtherInfo.setGuideFee((int)list.get(k).get("guideFee"));
-			guideOtherInfo.setGuideLevel((String)list.get(k).get("guideLevel"));
-			guideOtherInfo.setHistoryNum((int)list.get(k).get("historyNum"));
-			guideOtherInfo.setPhone((String)list.get(k).get("phone"));
-			guideOtherInfo.setScenicBelong((String)list.get(k).get("scenicBelong"));
-			guideOtherInfo.setSingleMax((int)list.get(k).get("singleMax"));
-			listres.add(guideOtherInfo);
-		}
-		return listres;
-	}
-	
 	
 	/**
 	 * 根据导游的手机号，查询导游的信息：姓名、性别、讲解语言
@@ -473,5 +433,77 @@ public class GuideDao {
 		});
 		return map;
 	}
+	
+	/**
+	 * 分页得到已审核的讲解员
+	 * @param currentPage
+	 * @param rows
+	 * @return
+	 */
+	public List<Map<String, Object>> GetGuideofYes(int currentPage,int rows)
+	{
+		int k=(currentPage-1)*rows;
+		String sql="SELECT t_guideotherinfo.*,t_guideinfo.*,t_scenicspotinfo.scenicName "
+				+ "FROM t_guideotherinfo, t_guideinfo,t_scenicspotinfo "
+				+ "where t_guideinfo.phone=t_guideotherinfo.phone"
+				+ " AND t_guideinfo.phone in"
+				+ "(select phone from t_guideotherinfo "
+				+ "where authorized=1)  and t_scenicspotinfo.scenicNo=t_guideotherinfo.scenicBelong "
+				+ " LIMIT "+k+" ,"+rows+"";
+		List<Map<String, Object>> list=jdbcTemplate.queryForList(sql);
+		k=list.size();		
+		return list;
+	}
+	
+	/**
+	 * 分页得到未审核讲解员的信息
+	 * @param currentPage
+	 * @param rows
+	 * @return
+	 */
+	public List<Map<String, Object>> GetGuideofNo(int currentPage,int rows)
+	{
+		int k=(currentPage-1)*rows;
+		String sql="select * from t_guideinfo where t_guideinfo.phone in"
+				+ "(select phone from t_guideotherinfo "
+				+ "where authorized=0) LIMIT "+k+" ,"+rows+"";
+		List<Map<String, Object>> list=jdbcTemplate.queryForList(sql);	
+		return list;
+	}
+	
+	/**
+	 * 得到已审核讲解员的信息数目
+	 * @return int
+	 * 2017-1-12 08:25:58
+	 */
+	public int  GetGuideofYesCount()
+	{
+		String sql="SELECT * FROM t_guideotherinfo where authorized=1";
+		return jdbcTemplate.queryForList(sql).size();
+	}
+	
+	/**
+	 * 得到未审核讲解员的信息数目
+	 * @return int
+	 * 2017-1-12 08:25:58
+	 */
+	public int  GetGuideofNoCount()
+	{
+		String sql="SELECT * FROM t_guideotherinfo where authorized=0";
+		return jdbcTemplate.queryForList(sql).size();
+	}
+	
+	/**
+	 * 通过手机号得到未审核讲解员的基本信息
+	 * @param phone
+	 * @return
+	 * 2017-1-12 08:27:11
+	 */
+	public List<Map<String, Object>> GetGuiderinfoByPhone(String phone) {
+		
+		String sql="SELECT * FROM t_guideinfo where   phone='"+phone+"'";
+		return jdbcTemplate.queryForList(sql);
+	}
+	
 	
 }

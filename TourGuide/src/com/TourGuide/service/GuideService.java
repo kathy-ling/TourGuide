@@ -46,6 +46,7 @@ public class GuideService {
 		return guideDao.getPopularGuides();
 	}
 	
+<<<<<<< HEAD
 	
 	/**
 	 * 查询可被预约的讲解员
@@ -110,33 +111,39 @@ public class GuideService {
 		return guideDao.GetGuiderInfoByPage(i, j);
 	}
 	
+=======
+>>>>>>> 3e11e707ea040328f321a875dfaeac349fac955c
 	public  int  GetGuideCount()
 	{
 		return guideDao.GetGuideCount();
 	}
 	
-	public List<GuideInfo> GetGuiderinfoBystring(String cID) {
-		return guideDao.GetGuiderinfoBystring(cID);
+	public List<Map<String , Object>> GetGuiderinfoBystring(String phone) {
+		return guideDao.GetGuiderinfoBystring(phone);
 	}
 	
 	public boolean isAdd(GuideInfo guideInfo) {
 		return guideDao.isAdd(guideInfo);
 	}
 
-	public void DeleteGuideInfoById_Service(String id) {
-		guideDao.DeleteGuideInfoById_Dao(id);
+	public int DeleteGuideInfoById_Service(String phone) {
+		return guideDao.DeleteGuideInfoById_Dao(phone);
 	}
 	
-	public boolean EditGuideInfo_Service(GuideInfo guideInfo) {
-		return guideDao.EditGuideInfo_Dao(guideInfo);
+	public boolean EditGuideInfo_Service(String level,String historyNum,
+			String guideNum,String fee,String phone) {
+		return guideDao.EditGuideInfo_Dao(level, historyNum, guideNum, fee, phone);
 	}
 
 	public List<GuideOtherInfo> LookGuideInfo_Service(String phone) {
 		return guideDao.LookGuideInfo_Dao(phone);
 	}
 	
-	public boolean CheckGuideInfo_Service(String phone) {
-		return guideDao.CheckGuideInfo_Dao(phone);
+	public boolean CheckGuideInfo_Dao(String phone,int historyNum,
+			int singleMax,int guideFee,String guideLevel,String scenicBelong,
+			int workAge,String certificateID){
+		return guideDao.CheckGuideInfo_Dao(phone, historyNum, singleMax, guideFee, guideLevel, 
+				scenicBelong, workAge, certificateID);
 	}
 	
 	public boolean ForbidGuideInfo_Service(String phone) {
@@ -147,7 +154,34 @@ public class GuideService {
 		return guideDao.RelieveGuideInfo_Dao(phone);
 	}
 	
-	public List<GuideOtherInfo> getGuideOtherInfoByPage_Service(int i, int j) {
-		return guideDao.GetGuideOtherInfoByPage_Dao(i, j);
+	
+	public List<Map<String, Object>> GetGuideofYes(int currentPage,int rows)
+	{
+		return guideDao.GetGuideofYes(currentPage, rows);
 	}
+	
+	public List<Map<String, Object>> GetGuideofNo(int currentPage,int rows)
+	{
+		return guideDao.GetGuideofNo(currentPage, rows);
+	}
+	
+	
+	public int  GetGuideofYesCount()
+	{
+		
+		return guideDao.GetGuideofYesCount();
+	}
+	
+	public int  GetGuideofNoCount()
+	{
+		
+		return guideDao.GetGuideofNoCount();
+	}
+
+	public List<Map<String, Object>> GetGuiderinfoByPhone(String phone) {
+		
+		return guideDao.GetGuiderinfoByPhone(phone);
+	}
+	
+	
 }

@@ -1,7 +1,6 @@
 package com.TourGuide.Action;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,16 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.TourGuide.common.CommonResp;
-import com.TourGuide.model.GuideInfo;
 import com.TourGuide.model.GuideOtherInfo;
-import com.TourGuide.model.Guideworkday;
 import com.TourGuide.service.GuideService;
 import com.google.gson.Gson;
 
@@ -28,80 +25,112 @@ import com.google.gson.Gson;
  * */
 @Controller
 @RequestMapping(value = "/Guide")
+@SessionAttributes("adminSession")
 public class GuideAction {
 	@Autowired
 	private GuideService guideService;
 	
 	/*
-	 * 加载页面时获取讲解员的基本信息及其他信息
+	 * 加载页面时获取已审核讲解员的基本信息及其他信息
 	 * */
-	@RequestMapping(value="/GetGuider.action",method=RequestMethod.POST)
+	@RequestMapping(value="/GetGuiderofYes.action",method=RequestMethod.POST)
 	@ResponseBody
-	public Object GetGuideInfoByPage(HttpServletResponse resp,
+	public Object GetGuideofYesByPage(HttpServletResponse resp,
 			@RequestParam(value="currentPage")int currentPage,
 			@RequestParam(value="pageRows")int pageRows ) throws IOException
 	{
 		
 		CommonResp.SetUtf(resp);
-		List<GuideInfo> list=guideService.getGuidersByPage(currentPage, pageRows);
-		List<GuideOtherInfo> listOther = guideService.getGuideOtherInfoByPage_Service(currentPage, pageRows);
 		Map< String , Object> map=new HashMap<>();
+		List<Map<String , Object>> list=guideService.GetGuideofYes(currentPage, pageRows);
+		
 		String jsonStr=new Gson().toJson(list).toString();
-		String otherInfo =new Gson().toJson(listOther).toString();
-		int i=guideService.GetGuideCount();
+		int i=guideService.GetGuideofYesCount();
 		map.put("jsonStr", jsonStr);
 		map.put("page", currentPage);
 		map.put("total", (int)(i%pageRows==0? i/pageRows:i/pageRows + 1));
-		map.put("otherInfo", otherInfo);
+		return map;
+	}
+	
+	/*
+	 * 加载页面时获取未审核讲解员的基本信息及其他信息
+	 * */
+	@RequestMapping(value="/GetGuiderofNo.action",method=RequestMethod.POST)
+	@ResponseBody
+	public Object GetGuideofNoByPage(HttpServletResponse resp,
+			@RequestParam(value="currentPage")int currentPage,
+			@RequestParam(value="pageRows")int pageRows ) throws IOException
+	{
+		
+		CommonResp.SetUtf(resp);
+		Map< String , Object> map=new HashMap<>();
+		List<Map<String , Object>> list=guideService.GetGuideofNo(currentPage, pageRows);
+		String jsonStr=new Gson().toJson(list).toString();
+		int i=guideService.GetGuideofNoCount();
+		map.put("jsonStr", jsonStr);
+		map.put("page", currentPage);
+		map.put("total", (int)(i%pageRows==0? i/pageRows:i/pageRows + 1));
+		return map;
+	}
+	
+	
+	
+	/*
+	 * 通过讲解员手机号查找讲解员基本信息
+	 * */
+	@RequestMapping(value="/GetGuiderinfoBystring.action", method=RequestMethod.POST)
+	@ResponseBody
+	public Object GetGuiderinfoBystring(HttpServletResponse resp,
+			@RequestParam(value="phone")String phone) throws IOException
+	{
+		CommonResp.SetUtf(resp);
+		List<Map<String, Object>> list=guideService.GetGuiderinfoBystring(phone);
+		String jsonStr=new Gson().toJson(list).toString();
+		Map<String, Object> map = new HashMap<>();
+		map.put("jsonStr", jsonStr);
 		return map;
 	}
 	
 	/*
 	 * 通过讲解员证号查找讲解员基本信息
 	 * */
-	@RequestMapping(value="/GetGuiderinfoBystring.action", method=RequestMethod.POST)
+	@RequestMapping(value="/GetGuiderinfoByPhone.action", method=RequestMethod.POST)
 	@ResponseBody
-	public Object GetGuiderinfoBystring(HttpServletResponse resp,
-			@RequestParam(value="cID")String cID) throws IOException
+	public Object GetGuiderinfoByPhone(HttpServletResponse resp,
+			@RequestParam(value="phone")String phone) throws IOException
 	{
 		CommonResp.SetUtf(resp);
-		List<GuideInfo> list=guideService.GetGuiderinfoBystring(cID);
+		List<Map<String, Object>> list=guideService.GetGuiderinfoByPhone(phone);
 		String jsonStr=new Gson().toJson(list).toString();
 		Map<String, Object> map = new HashMap<>();
 		map.put("jsonStr", jsonStr);
 		return map;
 	}
+	
 	/*
 	 * 删除讲解员的信息
 	 * */
 	@RequestMapping(value="/DeleteGuideInfo.action",method = RequestMethod.POST)
 	@ResponseBody
-	public void DeleteGuideInfoById(HttpServletResponse resp,
-			@RequestParam(value="id")String id) throws IOException {
+	public Object DeleteGuideInfoById(HttpServletResponse resp,
+			@RequestParam(value="phone")String phone) throws IOException {
 		CommonResp.SetUtf(resp);
-		guideService.DeleteGuideInfoById_Service(id);
+		int i=guideService.DeleteGuideInfoById_Service(phone);
+		return i;
 	}
 	/*
 	 * 编辑讲解员的基本信息
 	 * */
 	@RequestMapping(value="/EditGuideInfo.action",method = RequestMethod.POST)
 	@ResponseBody
-	public Object EditGuideInfo(HttpServletResponse resp,@RequestParam(value="phone")String phone,
-			@RequestParam(value = "name")String name, @RequestParam(value = "sex")String sex, 
-			@RequestParam(value = "cID")String cID, @RequestParam(value = "language")String  language,
-			@RequestParam(value = "selfIntro")String selfIntro, @RequestParam(value = "age")int age,
-			@RequestParam(value = "workAge")int workAge) throws IOException
+	public Object EditGuideInfo(HttpServletResponse resp,@RequestParam(value="level")String level,
+			@RequestParam(value = "historyNum")String historyNum, @RequestParam(value = "guideNum")String guideNum, 
+			@RequestParam(value = "fee")String fee,@RequestParam(value = "phone")String phone) throws IOException
 	{
-		GuideInfo guideInfo = new GuideInfo();
-		guideInfo.setPhone(phone);
-		guideInfo.setName(name);
-		guideInfo.setSex(sex);
-		guideInfo.setLanguage(language);
-		guideInfo.setSelfIntro(selfIntro);
-		guideInfo.setAge(age);
+		
 		CommonResp.SetUtf(resp);
 		
-		boolean confirm = guideService.EditGuideInfo_Service(guideInfo);
+		boolean confirm = guideService.EditGuideInfo_Service(level, historyNum, guideNum, fee, phone);
 		Map<String, Object> map = new HashMap<>();
 		map.put("confirm", confirm);
 		return map;
@@ -126,10 +155,17 @@ public class GuideAction {
 	@RequestMapping(value="/CheckGuideInfo.action",method = RequestMethod.POST)
 	@ResponseBody
 	public Object CheckGuideInfo(HttpServletResponse resp,
-			@RequestParam(value="phone")String phone) throws IOException {
+			@RequestParam(value="phone")String phone,
+			@RequestParam(value="historyNum")int historyNum,
+			@RequestParam(value="singleMax")int singleMax,
+			@RequestParam(value="guideFee")int guideFee,
+			@RequestParam(value="guideLevel")String guideLevel,
+			@RequestParam(value="scenicBelong")String scenicBelong,
+			@RequestParam(value="workAge")int workAge,
+			@RequestParam(value="certificateID")String certificateID) throws IOException {
 		CommonResp.SetUtf(resp);
 		Map<String, Object> map = new HashMap<>();
-		map.put("confirm", guideService.CheckGuideInfo_Service(phone));
+		map.put("confirm", guideService.CheckGuideInfo_Dao(phone, historyNum, singleMax, guideFee, guideLevel, scenicBelong, workAge, certificateID));
 		return map;
 	}
 	/*
@@ -156,6 +192,8 @@ public class GuideAction {
 		map.put("confirm", guideService.RelieveGuideInfo_Service(phone));
 		return map;
 	}
+	
+	
 	
 	
 	

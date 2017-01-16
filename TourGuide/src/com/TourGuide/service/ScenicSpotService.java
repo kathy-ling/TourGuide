@@ -140,5 +140,8 @@ public class ScenicSpotService {
 	public boolean UpdateScenicInfo_Service(ScenicsSpotInfo scenicsSpotInfo) {
 		return scenicSpotDao.UpdateScenicInfo(scenicsSpotInfo);
 	}
+	
+	
+	
 }
 

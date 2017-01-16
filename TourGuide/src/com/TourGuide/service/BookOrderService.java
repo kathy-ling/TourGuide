@@ -118,4 +118,35 @@ public class BookOrderService {
 	public List<Map<String , Object>> getMyBookedOrder(String guidePhone){
 		return bookOrderDao.getMyBookedOrder(guidePhone);
 	}
+	
+	/**
+	 * 
+	 * @param currentPage
+	 * @param pageRows
+	 * @return
+	 */
+	
+	public List<Map<String , Object>> GetBookorderBypage(int currentPage,int pageRows) 
+	{
+		return bookOrderDao.GetBookorderBypage(currentPage, pageRows);
+	}
+	
+	/**
+	 * 得到订单信息表的数目
+	 * @return
+	 * 2017-1-14 20:20:34
+	 */
+	public int GetBookorderCount() {
+		return bookOrderDao.GetBookorderCount();
+	}
+	
+	public List<Map<String , Object>> GetBookorderBySearch(int currentPage,int pageRows,String word,String value )
+	{
+		return bookOrderDao.GetBookorderBySearch(currentPage,pageRows,word, value);
+	}
+	
+	public int GetBookorderBySearchCount(String word,String value)
+	{
+		return bookOrderDao.GetBookorderBySearchCount(word, value);
+	}
 }

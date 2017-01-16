@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -173,6 +174,7 @@ public class ScenicSpotDao {
 		for (int k = 0; k < list.size(); k++) {
 			ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
 			scenicsSpotInfo.setScenicNo((String) list.get(k).get("scenicNo"));
+			scenicsSpotInfo.setScenicImagePath((String) list.get(k).get("scenicImagePath"));
 			scenicsSpotInfo.setScenicName((String) list.get(k).get("scenicName"));
 			scenicsSpotInfo.setTotalVisits((String) list.get(k).get("totalVisits"));
 			scenicsSpotInfo.setOpeningHours((String) list.get(k).get("openingHours"));
@@ -274,7 +276,7 @@ public class ScenicSpotDao {
 			sql =  " insert into t_scenicspotinfo values (?,?,?,?,?,?,?,?,?,?,?,?) ";
 			jdbcTemplate.update(sql, new Object[]{
 				scenicsSpotInfo.getScenicNo(),
-				"0",
+				scenicsSpotInfo.getScenicImagePath(),
 				scenicsSpotInfo.getScenicName(),
 				scenicsSpotInfo.getScenicIntro(),
 				scenicsSpotInfo.getTotalVisits(),
@@ -337,6 +339,9 @@ public class ScenicSpotDao {
 		
 		
 	}
+	
+	
+	
 }
 
 
