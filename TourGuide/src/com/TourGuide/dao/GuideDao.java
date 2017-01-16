@@ -146,7 +146,7 @@ public class GuideDao {
 		list = jdbcTemplate.queryForList(sqlString);
 		return list;
 	}
-<<<<<<< HEAD
+
 	
 	
 	/**
@@ -277,9 +277,7 @@ public class GuideDao {
 		return listResult;
 	}
 	
-=======
 
->>>>>>> 3e11e707ea040328f321a875dfaeac349fac955c
 	
 	/*
 	 * 获得已审核讲解员人数
