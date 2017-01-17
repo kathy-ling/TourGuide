@@ -146,11 +146,7 @@ public class GuideDao {
 		list = jdbcTemplate.queryForList(sqlString);
 		return list;
 	}
-<<<<<<< HEAD
-=======
 
->>>>>>> 4af5823607f17478222e56d80f455c589db2e085
-	
 	
 	/**
 	 * 该导游在visitDate这天，是否被预约了
@@ -280,12 +276,7 @@ public class GuideDao {
 		return listResult;
 	}
 	
-<<<<<<< HEAD
-	
-	
-=======
 
->>>>>>> 4af5823607f17478222e56d80f455c589db2e085
 	
 	/*
 	 * 获得已审核讲解员人数
