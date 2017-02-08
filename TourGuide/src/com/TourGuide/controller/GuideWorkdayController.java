@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.service.GuideworkdayService;
@@ -43,4 +44,45 @@ public class GuideWorkdayController {
 		
 	}
 	
+	
+	
+	/**
+	 * 导游签到
+	 * @param resp
+	 * @param phone  导游手机号
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/guideCheckIn.do")
+	@ResponseBody
+	public Object guideCheckIn(HttpServletResponse resp,
+			@RequestParam("phone") String phone) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		boolean bool = guideworkdayService.guideCheckIn(phone);
+		
+		return bool;
+	}
+	
+	
+	
+	/**
+	 * 判断今天是否已经签到
+	 * @param resp
+	 * @param phone  导游手机号
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/whetherCheckIn.do")
+	@ResponseBody
+	public Object whetherCheckIn(HttpServletResponse resp,
+			@RequestParam("phone") String phone) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		boolean bool = guideworkdayService.whetherCheckIn(phone);
+		
+		return bool;
+	}
 }

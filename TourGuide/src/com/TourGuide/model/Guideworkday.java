@@ -1,5 +1,9 @@
 package com.TourGuide.model;
 
+import java.sql.Date;
+
+import com.TourGuide.common.DateConvert;
+
 public class Guideworkday {
 	
 	private String phone;
@@ -7,6 +11,7 @@ public class Guideworkday {
 	private int day2;
 	private int day3;
 	private int day4;
+	private String date;
 	
 	public String getPhone() {
 		return phone;
@@ -37,6 +42,12 @@ public class Guideworkday {
 	}
 	public void setDay4(int day4) {
 		this.day4 = day4;
+	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
 	}
 	
 }

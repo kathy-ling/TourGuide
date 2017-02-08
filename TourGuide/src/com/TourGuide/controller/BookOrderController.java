@@ -246,4 +246,24 @@ public class BookOrderController {
 		
 		return list;
 	}
+	
+	
+	/**
+	 * 讲解员查看被预约的已经完成的订单
+	 * @param resp
+	 * @param guidePhone  讲解员手机号
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getFinishedBookedOrder.do")
+	@ResponseBody
+	public Object getFinishedBookedOrder(HttpServletResponse resp,
+			@RequestParam("guidePhone") String guidePhone) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> list = bookOrderService.getFinishedBookedOrder(guidePhone) ;
+		
+		return list;
+	}
 }

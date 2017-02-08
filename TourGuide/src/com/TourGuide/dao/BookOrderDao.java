@@ -1,9 +1,5 @@
 package com.TourGuide.dao;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 4af5823607f17478222e56d80f455c589db2e085
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -209,12 +205,12 @@ public class BookOrderDao {
 	 * 讲解员查看被预约的还未讲解的订单
 	 * @param guidePhone
 	 * 查询条件：guidePhone、visitTime
-	 * @return 订单编号、景区名称、参观时间、人数、讲解费
+	 * @return 订单编号、景区名称、参观时间、人数、讲解费、订单状态
 	 */
 	public List<Map<String , Object>> getMyBookedOrder(String guidePhone){
 		
 		String timeNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-		String sqlSelect = "select t_bookorder.bookOrderID,t_bookorder.visitTime,"
+		String sqlSelect = "select t_bookorder.bookOrderID,t_bookorder.visitTime,t_bookorder.orderState,"
 		 		+ "t_bookorder.visitNum,t_bookorder.guideFee,t_scenicspotinfo.scenicName "
 		 		+ "from t_bookorder,t_scenicspotinfo where t_bookorder.guidePhone='"+guidePhone+"' "
 		 		+ "and t_bookorder.visitTime > '"+timeNow+"' and t_bookorder.scenicID=t_scenicspotinfo.scenicNo";
@@ -223,10 +219,28 @@ public class BookOrderDao {
 				
 		return list;
 	}
-<<<<<<< HEAD
+	
+	
+	/**
+	 * 讲解员查看被预约的已经完成的订单
+	 * @param guidePhone  讲解员手机号
+	 * @return
+	 */
+	public List<Map<String , Object>> getFinishedBookedOrder(String guidePhone){
+		
+		String state = "待评价";
+		String timeNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		String sqlSelect = "select t_bookorder.bookOrderID,t_bookorder.visitTime,t_bookorder.orderState,"
+		 		+ "t_bookorder.visitNum,t_bookorder.guideFee,t_scenicspotinfo.scenicName "
+		 		+ "from t_bookorder,t_scenicspotinfo where t_bookorder.guidePhone='"+guidePhone+"' "
+		 		+ "and t_bookorder.visitTime < '"+timeNow+"' and t_bookorder.scenicID=t_scenicspotinfo.scenicNo "
+		 		+ "and t_bookorder.orderState='"+state+"'";
+		
+		 List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlSelect);
+				
+		return list;
+	}
 
-=======
->>>>>>> 4af5823607f17478222e56d80f455c589db2e085
 	/**
 	 * 得到订单信息并进行分页获取
 	 * @param currentPage

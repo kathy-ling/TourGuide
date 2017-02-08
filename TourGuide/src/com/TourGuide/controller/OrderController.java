@@ -37,6 +37,7 @@ public class OrderController {
 	public void getAllOrders(HttpServletResponse resp,
 			@RequestParam("visitorPhone") String visitorPhone) throws IOException{
 		
+		resp.setHeader("Access-Control-Allow-Origin","*");
 		CommonResp.SetUtf(resp);
 		
 		List<Map<String, String>> listResult =orderService.getAllOrders(visitorPhone);

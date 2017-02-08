@@ -119,6 +119,18 @@ public class BookOrderService {
 		return bookOrderDao.getMyBookedOrder(guidePhone);
 	}
 	
+	
+	/**
+	 * 讲解员查看被预约的已经完成的订单
+	 * @param guidePhone  讲解员手机号
+	 * @return
+	 */
+	public List<Map<String , Object>> getFinishedBookedOrder(String guidePhone){
+		return bookOrderDao.getFinishedBookedOrder(guidePhone);
+	}
+	
+	
+	
 	/**
 	 * 
 	 * @param currentPage

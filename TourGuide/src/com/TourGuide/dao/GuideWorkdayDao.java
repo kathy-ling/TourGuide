@@ -1,5 +1,7 @@
 package com.TourGuide.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
 import com.TourGuide.common.DateConvert;
@@ -56,7 +59,7 @@ public class GuideWorkdayDao {
 		}
 		
 		String sqlString = "update t_guideworkday set one=?,two=?,three=?,four=? where phone=? ";
-		int i=jdbcTemplate.update(sqlString, new Object[]{one, two, three, four, phone});
+		int i = jdbcTemplate.update(sqlString, new Object[]{one, two, three, four, phone});
 		
 		if(i != 0){
 			bool = true;
@@ -66,6 +69,60 @@ public class GuideWorkdayDao {
 	}
 	
 	
+	/**
+	 * 导游签到，若已经签到，则显示当日的日期
+	 * @param phone  手机号
+	 * @return
+	 */
+	public boolean guideCheckIn(String phone){
+		
+		boolean bool = false;
+		
+		Date date1=new Date();
+    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(date1);
+    	
+    	String sql = "update t_guideworkday set checkin=? where phone=?";
+    	int i = jdbcTemplate.update(sql, new Object[]{dayNow, phone});
+    	
+    	if(i != 0){
+			bool = true;
+		}
+    	return bool;
+	}
+	
+	
+	
+	/**
+	 * 判断讲解员当天是否签到了
+	 * @param phone  手机号
+	 * @return
+	 */
+	public boolean whetherCheckIn(String phone){
+	
+		boolean bool = false;
+		
+		final Guideworkday guideworkday = new Guideworkday();
+		
+		Date date1=new Date();
+    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(date1);
+    	
+    	String sqlString = "select checkin from t_guideworkday where phone='"+phone+"'";
+    	jdbcTemplate.query(sqlString,  new RowCallbackHandler() {
+			
+			@Override
+			public void processRow(ResultSet res) throws SQLException {
+				guideworkday.setDate(res.getString(1));
+			}
+		});
+    	
+    	String chekDay = guideworkday.getDate();
+    	if(dayNow.equals(chekDay)){
+    		bool = true;
+    	}
+    	
+    	return bool;
+	}
+
 	
 	
 	/**

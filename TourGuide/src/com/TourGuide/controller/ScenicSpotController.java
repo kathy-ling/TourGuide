@@ -159,6 +159,7 @@ public class ScenicSpotController {
 	 * 根据景区名称，搜索名称相似的景区
 	 * @param resp
 	 * @param scenicName 景区名称
+	 * 
 	 * @return  相似景区的名称、编号
 	 * @throws IOException
 	 */

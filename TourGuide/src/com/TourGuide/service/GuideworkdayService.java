@@ -27,6 +27,26 @@ public class GuideworkdayService {
 	}
 	
 	
+	/**
+	 * 导游签到，若已经签到，则显示当日的日期
+	 * @param phone  手机号
+	 * @return
+	 */
+	public boolean guideCheckIn(String phone){
+		return guideWorkdayDao.guideCheckIn(phone);
+	}
+	
+	
+	/**
+	 * 判断讲解员当天是否签到了
+	 * @param phone  手机号
+	 * @return
+	 */
+	public boolean whetherCheckIn(String phone){
+		return guideWorkdayDao.whetherCheckIn(phone);
+	}
+	
+	
 	public List<Map<String , Object>> GetGuideworkday(int currentPage,int rows)
 	{
 		return guideWorkdayDao.GetGuideworkday(currentPage,rows);
