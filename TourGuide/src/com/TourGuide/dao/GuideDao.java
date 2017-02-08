@@ -147,7 +147,10 @@ public class GuideDao {
 		return list;
 	}
 
+<<<<<<< HEAD
 	
+=======
+>>>>>>> b700829608653de6f6056d5d488a6fbe3eeeda01
 	
 	/**
 	 * 该导游在visitDate这天，是否被预约了

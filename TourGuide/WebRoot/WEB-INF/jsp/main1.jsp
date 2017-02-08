@@ -68,7 +68,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <h3 class="am-icon-cart-plus"><em></em> <a href="#"> 订单管理</a></h3>
       <ul>
       	<li><a href="BookOrderInfo.action" target="targetiframe">订单信息管理</a></li>
-        <li>直接派单</li>
       </ul>
       
       <h3 class="am-icon-location-arrow"><em></em> <a href="#">景区管理</a></h3>

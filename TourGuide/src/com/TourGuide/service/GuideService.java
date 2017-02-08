@@ -107,12 +107,18 @@ public class GuideService {
 	
 	
 	
+<<<<<<< HEAD
 
 //	public List<GuideInfo> getGuidersByPage(int i, int j) {
 //		return guideDao.GetGuiderInfoByPage(i, j);
 //	}
 	
 
+=======
+
+
+
+>>>>>>> b700829608653de6f6056d5d488a6fbe3eeeda01
 
 	public  int  GetGuideCount()
 	{
