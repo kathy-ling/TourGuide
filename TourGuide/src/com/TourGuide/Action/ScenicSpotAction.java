@@ -124,7 +124,9 @@ public class ScenicSpotAction {
 				@RequestParam(value="province")String province,
 				@RequestParam(value="city")String city,
 				@RequestParam(value="chargePerson")String chargePerson,
-				@RequestParam(value="scenicIntro")String scenicIntro) throws IOException {
+				@RequestParam(value="scenicIntro")String scenicIntro,
+				@RequestParam(value="account")String account,
+				@RequestParam(value="password")String password) throws IOException {
 			
 			
 			ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
@@ -140,6 +142,9 @@ public class ScenicSpotAction {
 			scenicsSpotInfo.setChargePerson(chargePerson);
 			scenicsSpotInfo.setIsHotSpot(isHotSpot);
 			scenicsSpotInfo.setScenicImagePath(fileName);
+			scenicsSpotInfo.setAccount(account);
+			scenicsSpotInfo.setPassword(password);
+			
 			
 			boolean confirm = scenicSpotService.AddScenicInfo_Service(scenicsSpotInfo);
 			Map<String, Object> map = new HashMap<>();
@@ -182,7 +187,11 @@ public class ScenicSpotAction {
 				@RequestParam(value="province")String province,
 				@RequestParam(value="city")String city,
 				@RequestParam(value="chargePerson")String chargePerson,
-				@RequestParam(value="scenicIntro")String scenicIntro) throws IOException {
+				@RequestParam(value="scenicIntro")String scenicIntro,
+				@RequestParam(value="account")String account,
+				@RequestParam(value="password")String password) throws IOException {
+			
+			
 			ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
 			scenicsSpotInfo.setScenicNo(scenicNo);
 			scenicsSpotInfo.setScenicName(scenicName);
@@ -196,6 +205,9 @@ public class ScenicSpotAction {
 			scenicsSpotInfo.setChargePerson(chargePerson);
 			scenicsSpotInfo.setIsHotSpot(isHotSpot);
 			scenicsSpotInfo.setScenicImagePath(fileName);
+			scenicsSpotInfo.setAccount(account);
+			scenicsSpotInfo.setPassword(password);
+			
 			boolean confirm = scenicSpotService.UpdateScenicInfo_Service(scenicsSpotInfo);
 			Map<String, Object> map = new HashMap<>();
 			map.put("confirm", confirm);

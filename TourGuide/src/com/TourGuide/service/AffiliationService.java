@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.TourGuide.dao.AffiliationDao;
-import com.TourGuide.model.Affiliation;
 
 @Service
 public class AffiliationService {

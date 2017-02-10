@@ -119,14 +119,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								景区图片上传：
 							</td>
 							<td>
-							  <!-- <form action="scenic/UploadImage.action" enctype="multipart/form-data" method="post" target="rfFrame">
-								<table><tr>
-								<td><input type="file" name="file" style="width:200px"></td>
-								<td><input type="submit" value="上传"></td>
-								</tr>
-								</table>	
-							</form>
-							<iframe id="rfFrame" name="rfFrame" src="about:blank" style="display:none;"  onload="a()"></iframe>   -->
+							  
 							<table>
 								<tr>
 									<td><input type="file" id="file" name="file" style="width:200px"><td>
@@ -168,6 +161,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="add_scenicLevel" name="add_scenicLevel"" /></td></tr>
 						<tr><td>负责人:</td>
 						<td><input  type="text"  id="add_chargePerson" name="add_chargePerson"" /></td></tr>
+						<tr><td>账号:</td>
+						<td><input  type="text"  id="add_account" name="add_account"" /></td></tr>
+						<tr><td>密码:</td>
+						<td><input  type="text"  id="add_password" name="add_password"" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;">
 						<input type="button" onclick="AddScenicInfo()"  value="确定增加" />
 						</td></tr>
@@ -265,6 +262,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="edit_scenicLevel" name="edit_scenicLevel"" /></td></tr>
 						<tr><td>负责人:</td>
 						<td><input  type="text"  id="edit_chargePerson" name="edit_chargePerson"" /></td></tr>
+						<tr><td>账号:</td>
+						<td><input  type="text"  id="edit_account" name="edit_account"" /></td></tr>
+						<tr><td>密码:</td>
+						<td><input  type="text"  id="edit_password" name="edit_password"" /></td></tr>
 				<tr><td colspan="2" style="text-align:center;"><button  onclick="editScenicInfo()" >修改</button></td></tr>
 						
 					</table>				
@@ -312,6 +313,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="search_scenicLevel" name="search_scenicLevel" readonly="true" /></td></tr>
 						<tr><td>负责人:</td>
 						<td><input  type="text"  id="search_chargePerson" name="search_chargePerson"" readonly="true" /></td></tr>
+						<tr><td>账号:</td>
+						<td><input  type="text"  id="search_account" name="search_account"" /></td></tr>
+						<tr><td>密码:</td>
+						<td><input  type="text"  id="search_password" name="search_password"" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true" >确定</button></td></tr>
 					</table>
 									
@@ -503,8 +508,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			var f="<%=path%>"+value.scenicImagePath;
   			document.getElementById("search_headimg").src=f;
  			$("#search_chargePerson").val(value.chargePerson);
+ 			$("#search_account").val(value.account);
+ 			$("#search_password").val(value.password);
  		
- 		$("#SearchModal").modal('show');
+ 			$("#SearchModal").modal('show');
  	}
  	
  	function addScenicInfo()
@@ -520,6 +527,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#add_scenicLocation").val("");
  		$("#add_chargePerson").val("");
  		$("#LocationText2").val();
+ 		$("#add_account").val("");
+ 		$("#add_account").val("");
  		$("#addmodal").modal('show');
  	}
  	
@@ -538,10 +547,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		if (isHotSpot == "HotSpot") isHotSpot = 1;
  		else isHotSpot = 0;
  		var chargePerson = $("#add_chargePerson").val();
- 		
- 		
+ 		var account=$("#add_account").val();
+ 		var password=$("#add_password").val();
  		if (scenicNo != "" && scenicName != "" && totalVisits != "" && openingHours != "" && scenicLevel != ""
- 			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") {
+ 			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != ""
+ 			 && account != ""&& password != "") {
  			$.ajaxFileUpload({
           			url : "<%=basePath%>scenic/UploadImage.action",
            			fileElementId:'file',
@@ -555,7 +565,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  							datatype:"json",
  							data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
  								scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
- 								scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson},
+ 								scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson,account:account,password:password},
  							success:function(data) {
  							if (data.confirm) {
  									$("#addmodal").modal('hide');
@@ -598,7 +608,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#edit_city").val(ScenicInfo[index].city);
  		$("#edit_scenicIntro").val(ScenicInfo[index].scenicIntro);
  		$("#edit_chargePerson").val(ScenicInfo[index].chargePerson);
- 		
+ 		$("#edit_account").val(ScenicInfo[index].account);
+ 		$("#edit_password").val(ScenicInfo[index].password);
  		var f="<%=path%>"+ScenicInfo[index].scenicImagePath;
   		document.getElementById("edit_headimg").src=f;
  		if(ScenicInfo[index].isHotSpot==1) $("input[name=edit_isHotSpot]:eq(0)").attr("checked",'checked'); 
@@ -631,8 +642,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		if (isHotSpot == "HotSpot") isHotSpot = 1;
  		else isHotSpot = 0;
  		var chargePerson = $("#edit_chargePerson").val();
+ 		var account = $("#edit_account").val();
+ 		var password = $("#edit_password").val();
  		if (scenicNo != "" && scenicName != "" && totalVisits != "" && openingHours != "" && scenicLevel != ""
- 			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != "") { 			
+ 			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != ""
+ 			 && account != ""&& password != "") { 			
  			 $.ajaxFileUpload({
           			url : "<%=basePath%>scenic/EditImage.action",
            			fileElementId:'editfile',
@@ -646,7 +660,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  						datatype:"json",
  						data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
  							scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
- 							scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson}, 			
+ 							scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson,account:account,password:password}, 			
  						success:function(data) {
  							if (data.confirm) {
  							$("#editmodal").modal('hide');

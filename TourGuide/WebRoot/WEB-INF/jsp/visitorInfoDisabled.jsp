@@ -47,7 +47,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <div class="admin-content">
     <div class="admin-content-body">
       <div class="am-cf am-padding am-padding-bottom-0">
-        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">游客信息管理</strong> / <small>游客基本信息</small></div>
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">游客信息管理</strong> / <small>游客黑名单信息</small></div>
       </div>
 
       <hr>
@@ -126,26 +126,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </div>
 
 
-<div class="modal fade" id="forbidmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog" style="width:25%">
-				<div class="modal-content">
-					<div class="model-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-	                        <span class="blue">X</span>
-	                    </button>
-					</div>
-					<div class="modal-body">
-						<table style="border-collapse:separate; border-spacing:10px;">
-						<tr><td>&nbsp;</td></tr>
-						<tr><td style="text-align:center;">确定将该游客加入到黑名单</td></tr>
-						<tr><td>&nbsp;</td></tr>
-						<tr><td  style="text-align:center;"><button class="close" onclick="ForbidVisitorInfo()">确定</button></td><td><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
-						</table>
-					</div>
-				</div>
-			</div>
-</div>
-
 <div class="modal fade" id="relievemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog" style="width:25%">
 				<div class="modal-content">
@@ -157,7 +137,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="modal-body">
 						<table style="border-collapse:separate; border-spacing:10px;">
 						<tr><td>&nbsp;</td></tr>
-						<tr><td style="text-align:center;">确定解禁该游客？</td></tr>
+						<tr><td style="text-align:center;">确定将该游客移出黑名单？</td></tr>
 						<tr><td>&nbsp;</td></tr>
 						<tr><td  style="text-align:center;"><button class="close" onclick="RelieveVisitorInfo()">确定</button></td><td><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
 						</table>
@@ -190,7 +170,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	function loadVisitorInfo()
   	{
   	
-  		var url="<%=basePath%>visitor/GetVisitorInfo.action";
+  		var url="<%=basePath%>visitor/GetVisitorDisabled.action";
   		$.ajax(
   		{
   			url:url,
@@ -272,7 +252,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               	var t6="<td align='center'> <div class='am-btn-toolbar'>"+
               	"<div  style='text-align: center;float: none' class='am-btn-group am-btn-group-xs'>"+
               	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='queryVisitor("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>查看</button>"+
-                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='forbidVisitorInfo("+index+")'>"+"<span class='am-icon-trash-o'></span>加黑</button>"+
+                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='RelieveVisitor("+index+")'>"+"<span class='am-icon-trash-o'></span>移出</button>"+
                   "</div></div> </td>";		
                 var t7="</tr>";
                $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t6).append(t7);
@@ -280,8 +260,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	}
  	function search()
  	{
- 		var url = "<%=basePath%>visitor/SearchVisitorInfo.action";
+ 		var url = "<%=basePath%>visitor/SearchVisitorDisabled.action";
  		var a = $("#searchText").val();
+ 		alert(a);
  		$.ajax( {
  			url:url,
  			type:"post",
@@ -315,13 +296,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	}
  	
  	
- 	function forbidVisitorInfo(index) {
- 		forbidIndex=index;	
- 		$("#forbidmodal").modal('show');
+ 	function RelieveVisitor(index) {
+ 		forbidIndex=index;
+ 		$("#relievemodal").modal('show');
  	}
- 	
- 	function ForbidVisitorInfo() {
- 		var url = "<%=basePath%>visitor/ForbidVisitorInfo.action";
+ 	function RelieveVisitorInfo() {
+ 		var url = "<%=basePath%>visitor/RelieveVisitorInfo.action";
+ 		
  		var phone=VisitorInfo[forbidIndex].phone;
  		alert(phone);
  		$.ajax ({
@@ -330,31 +311,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			datatype:"json",
  			data:{phone:phone},
  			success:function(data) {
- 				if (data.confirm) {alert("成功把该游客加入黑名单！");loadVisitorInfo();}
- 				else alert("无法将该游客加入黑名单，请重新试试！");
- 			}
- 		});
- 		$("#forbidmodal").modal('hide');
- 		
- 	}
- 	
- 	
- 	
- 	function RelieveVisitorInfo() {
- 		var url = "<%=basePath%>visitor/RelieveVisitorInfo.action";
- 		var phone=VisitorOtherInfo[forbidIndex].phone;
- 		$.ajax ({
- 			url:url,
- 			type:"post",
- 			datatype:"json",
- 			data:{phone:phone},
- 			success:function(data) {
- 				if (data.confirm) alert("解禁成功！");
- 				else alert("解禁失败！");
+ 				if (data.confirm) {alert("成功将游客移出黑名单！");loadVisitorInfo(); }
+ 				else alert("移出失败！");
  			}
  		});
  		$("#relievemodal").modal('hide');
- 		loadVisitorInfo();
+ 		
  	}
  	
 </script>

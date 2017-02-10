@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,8 +59,8 @@ public class OperateAction {
 	}
 	
 	/*
-	 * 通过sql语句获取运营人员的信息
-	 * 参数：sql语句
+	 * 通过账号获取运营人员的信息
+	 * 参数：账号
 	 * 2016-12-31 15:12:07	
 */
 	@RequestMapping(value="/SearchOperateUser.action",method=RequestMethod.POST)
@@ -87,7 +86,9 @@ public class OperateAction {
 			@RequestParam(value="name")String name,
 			@RequestParam(value="account")String account,
 			@RequestParam(value="role")String role,
-			@RequestParam(value="phone")String phone) throws IOException {
+			@RequestParam(value="phone")String phone,
+			@RequestParam(value="scenicID")String scenicID,
+			@RequestParam(value="password")String password) throws IOException {
 		
 		CommonResp.SetUtf(resp);
 		Operateper operateper = new Operateper();
@@ -95,7 +96,8 @@ public class OperateAction {
 		operateper.setOperateper_account(account);
 		operateper.setOperateper_role(role);
 		operateper.setOperateper_phone(phone);
-		
+		operateper.setOperateper_scenic(scenicID);
+		operateper.setOperateper_password(password);
 		boolean confirm = operateperService.AddOperateperInfo_Service(operateper);
 		Map<String, Object> map = new HashMap<>();
 		map.put("confirm", confirm);
@@ -133,13 +135,15 @@ public class OperateAction {
 			@RequestParam(value="account")String account,
 			@RequestParam(value="role")String role,
 			@RequestParam(value="phone")String phone,
-			@RequestParam(value="bool")int bool) throws IOException {
+			@RequestParam(value="scenicID")String  scenicID,
+			@RequestParam(value="password")String password) throws IOException {
 		Operateper operateper = new Operateper();
 		operateper.setOperateper_name(name);
 		operateper.setOperateper_account(account);
 		operateper.setOperateper_role(role);
 		operateper.setOperateper_phone(phone);
-		operateper.setOperateper_bool(bool);
+		operateper.setOperateper_scenic(scenicID);;
+		operateper.setOperateper_password(password);
 		boolean confirm = operateperService.UpdateOperateperInfo_Service(operateper);
 		Map<String, Object> map = new HashMap<>();
 		map.put("confirm", confirm);

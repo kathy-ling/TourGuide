@@ -1,20 +1,15 @@
 package com.TourGuide.dao;
 
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
-import org.springframework.jdbc.core.RowCountCallbackHandler;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.test.web.servlet.ResultHandler;
 
 import com.TourGuide.model.ScenicsSpotInfo;
 
@@ -185,6 +180,8 @@ public class ScenicSpotDao {
 			scenicsSpotInfo.setChargePerson((String) list.get(k).get("chargePerson"));
 			scenicsSpotInfo.setIsHotSpot((int) list.get(k).get("isHotSpot"));
 			scenicsSpotInfo.setScenicIntro((String) list.get(k).get("scenicIntro"));
+			scenicsSpotInfo.setAccount((String) list.get(k).get("account"));
+			scenicsSpotInfo.setPassword((String) list.get(k).get("password"));
 			listres.add(scenicsSpotInfo);
 		}
 		
@@ -223,7 +220,8 @@ public class ScenicSpotDao {
 				scenicsSpotInfo.setIsHotSpot(rSet.getInt(10));
 				scenicsSpotInfo.setScenicLevel(rSet.getString(11));
 				scenicsSpotInfo.setChargePerson(rSet.getString(12));
-			
+				scenicsSpotInfo.setAccount(rSet.getString(13));
+				scenicsSpotInfo.setPassword(rSet.getString(14));
 			}
 		});
 		return scenicsSpotInfo;
@@ -257,6 +255,8 @@ public class ScenicSpotDao {
 			scenicsSpotInfo.setIsHotSpot((int) list.get(0).get("isHotSpot"));
 			scenicsSpotInfo.setScenicLevel((String) list.get(0).get("scenicLevel"));
 			scenicsSpotInfo.setChargePerson((String) list.get(0).get("chargePerson"));
+			scenicsSpotInfo.setAccount((String) list.get(0).get("account"));
+			scenicsSpotInfo.setPassword((String) list.get(0).get("password"));
 		}
 		
 		return scenicsSpotInfo;
@@ -273,7 +273,7 @@ public class ScenicSpotDao {
 		 
 		
 		if (jdbcTemplate.queryForObject(sql, Integer.class) == 0) {
-			sql =  " insert into t_scenicspotinfo values (?,?,?,?,?,?,?,?,?,?,?,?) ";
+			sql =  " insert into t_scenicspotinfo values (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 			jdbcTemplate.update(sql, new Object[]{
 				scenicsSpotInfo.getScenicNo(),
 				scenicsSpotInfo.getScenicImagePath(),
@@ -286,7 +286,9 @@ public class ScenicSpotDao {
 				scenicsSpotInfo.getScenicLocation(),
 				scenicsSpotInfo.getIsHotSpot(),
 				scenicsSpotInfo.getScenicLevel(),
-				scenicsSpotInfo.getChargePerson()
+				scenicsSpotInfo.getChargePerson(),
+				scenicsSpotInfo.getAccount(),
+				scenicsSpotInfo.getPassword()
 			});
 			return true;
 		}
@@ -316,7 +318,7 @@ public class ScenicSpotDao {
 	public boolean UpdateScenicInfo(ScenicsSpotInfo scenicsSpotInfo) {
 		String sql = " update t_scenicspotinfo set scenicNo=?,scenicImagePath=?,scenicName=?, "+
 					" scenicIntro=?,totalVisits=?,openingHours=?,province=?,city=?,scenicLocation=?, "+
-					" isHotSpot=?,scenicLevel=?,chargePerson=?  where scenicName=? ";
+					" isHotSpot=?,scenicLevel=?,chargePerson=?,account=?,password=?  where scenicName=? ";
 		int i=jdbcTemplate.update(sql, new Object[]{
 				scenicsSpotInfo.getScenicNo(),
 				scenicsSpotInfo.getScenicImagePath(),
@@ -330,7 +332,9 @@ public class ScenicSpotDao {
 				scenicsSpotInfo.getIsHotSpot(),
 				scenicsSpotInfo.getScenicLevel(),
 				scenicsSpotInfo.getChargePerson(),
-				scenicsSpotInfo.getScenicName()});
+				scenicsSpotInfo.getScenicName(),
+				scenicsSpotInfo.getAccount(),
+				scenicsSpotInfo.getPassword()});
 		if (i>0) {
 			return true;
 		} else {
