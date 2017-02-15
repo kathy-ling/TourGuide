@@ -61,42 +61,88 @@ public class VisitorService {
 	}
 	
 	
-	
+	/**
+	 * 分页得到未禁用游客的基本信息
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	public List<VisitorInfo> getVisitorInfoByPage(int i,int j) {
 		return visitorDao.GetVisitorInfoByPage(i, j);
 	}
 	
+	/**
+	 * 得到未禁用游客的数目
+	 * @return
+	 */
 	public  int  GetVisitorCount()
 	{
 		return visitorDao.GetVisitorCount();
 	}
 	
-	public List<VisitorInfo> SearchVisitorInfoByPhone_Service(String sql) {
-		return visitorDao.SearchVisitorInfoByPhone_Dao(sql);
+	/**
+	 * 分页得到未禁用游客的基本信息
+	 * @param currentPage
+	 * @param rows
+	 * @return
+	 * 2017-2-9 16:28:54
+	 */
+	public List<VisitorInfo> GetVisitorInfoDisabled(int currentPage,int rows)
+	{
+		return visitorDao.GetVisitorInfoDisabled(currentPage, rows);
 	}
 	
-	public boolean AddVisitorInfo_Service(VisitorInfo visitorInfo) {
-		return visitorDao.AddVisitorInfo_Dao(visitorInfo);
+	/**
+	 * 通过手机号查询未禁用游客的基本信息
+	 * @param phone
+	 * @return
+	 * 2017-2-9 16:11:52
+	 */
+	public List<VisitorInfo> SearchVisitorInfoByPhone_Service(String phone) {
+		return visitorDao.SearchVisitorInfoByPhone(phone);
 	}
 	
-	public boolean DeleteVisitorInfo_Service(String s) {
-		return visitorDao.DeleteVisitorInfo(s);
+	
+	public List<VisitorInfo> SearchVisitorDisByPhone(String phone) 
+	{
+		return visitorDao.SearchVisitorDisByPhone(phone);
 	}
 	
-	public boolean UpdateVisitorInfo_Service(VisitorInfo visitorInfo) {
-		return visitorDao.UpdateVisitorInfo(visitorInfo);
+	
+	/**
+	 * 获取黑名单游客的数目
+	 * @return
+	 * 2017-2-9 16:25:31
+	 */
+	public  int  GetVisitorDisabledCount() 
+	{
+		return visitorDao.GetVisitorDisabledCount();
 	}
 	
+	
+	/**
+	 * 通过手机号将游客移入黑名单
+	 * @param phone
+	 * @return
+	 * 2017-2-9 16:13:52
+	 */
 	public boolean ForbidVisitorInfo_Service(String phone) {
 		return visitorDao.ForbidVisitorInfo_Dao(phone);
 	}
 	
+	
+	/**
+	 * 通过手机号将游客移出黑名单
+	 * @param phone
+	 * @return
+	 * 2017-2-9 16:14:34
+	 */
 	public boolean RelieveVisitorInfo_Service(String phone) {
 		return visitorDao.RelieveVisitorInfo_Dao(phone);
 	}
 	
-	public List<VisitorLoginInfo> getVisitorLoginInfoByPage_Service(int i, int j) {
-		return visitorDao.GetVisitorLoginInfoByPage_Dao(i, j);
-	}
+	
+	
+	
 }
 

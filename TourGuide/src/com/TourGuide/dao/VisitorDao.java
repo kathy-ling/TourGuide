@@ -1,10 +1,18 @@
 package com.TourGuide.dao;
 
+<<<<<<< HEAD
+=======
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+>>>>>>> a8d0bc35bd4f4235ff875f200acff562a01f8d44
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,7 +28,6 @@ public class VisitorDao {
 
 		@Autowired
 		private JdbcTemplate jdbcTemplate;
-		
 		private final int disable = 0;  //用户是否被禁止登陆，0-否，1-是
 		
 		
@@ -138,48 +145,134 @@ public class VisitorDao {
 		}  
 		
 		/*
-		 *通过页数与页数容量来获取游客信息 
+		 *通过页数与页数容量来获取未禁用游客信息 
 		 * time：2017-1-2 17:22:30
 		 * */
 		public List<VisitorInfo> GetVisitorInfoByPage(int currentPage,int rows)
 		{
-			int j=(currentPage-1)*rows;
-			String sql="SELECT * FROM t_visitor LIMIT "+j+" ,"+rows+"";
-			
-			List<Map<String , Object>> list=jdbcTemplate.queryForList(sql);
+			int i=(currentPage-1)*rows;
 			List<VisitorInfo> listres=new ArrayList<>();
-			for (int k = 0; k < list.size(); k++) {
-				VisitorInfo visitorInfo=new VisitorInfo();
-				visitorInfo.setPhone((String) list.get(k).get("phone"));
-				visitorInfo.setName((String) list.get(k).get("name"));
-				visitorInfo.setNickName((String) list.get(k).get("nickName"));
-				visitorInfo.setImage((String) list.get(k).get("image"));
-				visitorInfo.setSex((String) list.get(k).get("sex"));
-				listres.add(visitorInfo);
+			DataSource dataSource=jdbcTemplate.getDataSource();
+			try {
+				Connection conn=dataSource.getConnection();
+				CallableStatement cst=conn.prepareCall("call getvisitorNo(?,?)");
+				cst.setInt(1, i);
+				cst.setInt(2, rows);
+				ResultSet rst=cst.executeQuery();
+				while (rst.next()) {
+					VisitorInfo visitorInfo=new VisitorInfo();
+					visitorInfo.setPhone( rst.getString(1));
+					visitorInfo.setName(rst.getString(2));
+					visitorInfo.setNickName(rst.getString(3));
+					visitorInfo.setImage(rst.getString(4));
+					visitorInfo.setSex(rst.getString(5));
+					listres.add(visitorInfo);
+				}
+				conn.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
 			}
+			
+			
 			
 			return listres;
 		}
 		
-		public  int  GetVisitorCount() {
-			String sql="SELECT * FROM t_visitor";
-			return jdbcTemplate.queryForList(sql).size();
+		/**
+		 * 分页得到禁用的游客基本信息
+		 * @param currentPage
+		 * @param rows
+		 * @return
+		 * 2017-2-9 16:03:40
+		 */
+		public List<VisitorInfo> GetVisitorInfoDisabled(int currentPage,int rows)
+		{
+			int i=(currentPage-1)*rows;
+			List<VisitorInfo> listres=new ArrayList<>();
+			DataSource dataSource=jdbcTemplate.getDataSource();
+			try {
+				Connection conn=dataSource.getConnection();
+				CallableStatement cst=conn.prepareCall("call getvisitorDisabled(?,?)");
+				cst.setInt(1, i);
+				cst.setInt(2, rows);
+				ResultSet rst=cst.executeQuery();
+				while (rst.next()) {
+					VisitorInfo visitorInfo=new VisitorInfo();
+					visitorInfo.setPhone( rst.getString(1));
+					visitorInfo.setName(rst.getString(2));
+					visitorInfo.setNickName(rst.getString(3));
+					visitorInfo.setImage(rst.getString(4));
+					visitorInfo.setSex(rst.getString(5));
+					listres.add(visitorInfo);
+				}
+				conn.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+			
+			
+			
+			return listres;
 		}
 		
 		
-		/*
-		 * 通过sql查询语句进行查询游客的详细信息
-		 * 参数：SQL语句
-		 * 2017-1-2 17:22:30
-		 * */
-		public List<VisitorInfo> SearchVisitorInfoByPhone_Dao(String a) {
-			final List<VisitorInfo> list = new ArrayList<VisitorInfo>();
-			String sql=" select * from t_visitor where phone = '" + a +"'";
-			jdbcTemplate.query(sql, new RowCallbackHandler() {
+		/**
+		 * 获取未禁用游客的数量
+		 * @return
+		 * 2017-2-8 19:45:59
+		 */
+		public  int  GetVisitorCount() {
+			DataSource dataSource=jdbcTemplate.getDataSource();
+			int i=0;
+			try {
+				Connection connection=dataSource.getConnection();
+				CallableStatement cst=connection.prepareCall("call getVisitorCount(?)");
+				cst.registerOutParameter(1, java.sql.Types.BIGINT);
+				cst.execute();
+				i=cst.getInt(1);
+				connection.close();
+			} catch (SQLException e) {
 				
-				@Override
-				public void processRow(java.sql.ResultSet rSet) throws SQLException {
-
+				e.printStackTrace();
+			}
+			
+			return i;
+		}
+		
+		/**
+		 * 获取黑名单游客的数量
+		 * @return
+		 * 2017-2-9 16:15:30
+		 */
+		public  int  GetVisitorDisabledCount() {
+			DataSource dataSource=jdbcTemplate.getDataSource();
+			int i=0;
+			try {
+				Connection connection=dataSource.getConnection();
+				CallableStatement cst=connection.prepareCall("call getVisitorDisabledCount(?)");
+				cst.registerOutParameter(1, java.sql.Types.BIGINT);
+				cst.execute();
+				i=cst.getInt(1);
+				connection.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+			
+			return i;
+		}
+		
+		public List<VisitorInfo> SearchVisitorDisByPhone(String phone) {
+			List<VisitorInfo> list = new ArrayList<VisitorInfo>();
+			DataSource dataSource=jdbcTemplate.getDataSource();
+			try {
+				Connection connection=dataSource.getConnection();
+				CallableStatement cst=connection.prepareCall("call getVisiDisableByPhone(?)") ;
+				cst.setString(1, phone);
+				ResultSet rSet=cst.executeQuery();
+				while (rSet.next()) {
 					VisitorInfo visitorInfo = new VisitorInfo();
 					visitorInfo.setPhone(rSet.getString(1));
 					visitorInfo.setName(rSet.getString(2));
@@ -188,47 +281,45 @@ public class VisitorDao {
 					visitorInfo.setSex(rSet.getString(5));
 					list.add(visitorInfo);
 				}
-			});
+				connection.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+				
 			return list;
 		}
-		/*
-		 * 增加游客
-		 * 参数：游客信息类
-		 * 2017-1-2 17:23:30
-		 * */
-		public boolean AddVisitorInfo_Dao(VisitorInfo visitorInfo) {
-			String sql = " select count(*) from t_visitor where phone = '"
-						+visitorInfo.getPhone()+"'";
-			 
-			
-			if (jdbcTemplate.queryForObject(sql, Integer.class) == 0) {
-				sql =  " insert into t_visitor values (?,?,?,?,?) ";
-				jdbcTemplate.update(sql, new Object[]{
-					visitorInfo.getPhone(),
-					visitorInfo.getName(),
-					visitorInfo.getNickName(),
-					"0",
-					visitorInfo.getSex() });
-				return true;
-			}
-			return false;
-		}
-		/*
-		 * 	删除游客
-		 * 	参数：游客账号
-		 * 2017-1-2 17:23:30
-		 * */
-		public boolean DeleteVisitorInfo(String s) {
-			String sql = "delete from t_visitor where phone='"+s+"'";
-			if (jdbcTemplate.update(sql)>0) {
-				return true;
-			} else {
-				return false;
-			}
-			
-			
-		}
 		
+		/*
+		 * 通过游客手机号进行查询未禁用游客的详细信息
+		 * 参数：SQL语句
+		 * 2017-1-2 17:22:30
+		 * */
+		public List<VisitorInfo> SearchVisitorInfoByPhone(String phone) {
+			List<VisitorInfo> list = new ArrayList<VisitorInfo>();
+			DataSource dataSource=jdbcTemplate.getDataSource();
+			try {
+				Connection connection=dataSource.getConnection();
+				CallableStatement cst=connection.prepareCall("call getVisitorByphone(?)") ;
+				cst.setString(1, phone);
+				ResultSet rSet=cst.executeQuery();
+				while (rSet.next()) {
+					VisitorInfo visitorInfo = new VisitorInfo();
+					visitorInfo.setPhone(rSet.getString(1));
+					visitorInfo.setName(rSet.getString(2));
+					visitorInfo.setNickName(rSet.getString(3));
+					visitorInfo.setImage(rSet.getString(4));
+					visitorInfo.setSex(rSet.getString(5));
+					list.add(visitorInfo);
+				}
+				connection.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+				
+			return list;
+		}
 		/*
 		 * 更新游客信息
 		 * 参数：游客信息类
@@ -270,22 +361,5 @@ public class VisitorDao {
 			if (i > 0) return true;
 			return false;
 		}
-		//获取游客其他信息
-		public List<VisitorLoginInfo> GetVisitorLoginInfoByPage_Dao(int currentPage,int rows)
-		{
-			int i = (currentPage-1)*rows;
-			int j = currentPage*rows;
-			String sql = "SELECT * FROM t_visitorlogin LIMIT "+i+" ,"+j+"";
-			
-			List<Map<String , Object>> list = jdbcTemplate.queryForList(sql);
-			List<VisitorLoginInfo> listres = new ArrayList<>();
-			for (int k = 0; k < list.size(); k++) {
-				VisitorLoginInfo visitorLoginInfo = new VisitorLoginInfo();
-				visitorLoginInfo.setPhone((String)list.get(k).get("phone"));
-				visitorLoginInfo.setPassword((String)list.get(k).get("password"));
-				visitorLoginInfo.setDisable((int)list.get(k).get("disable"));
-				listres.add(visitorLoginInfo);
-			}
-			return listres;
-		}
+		
 }

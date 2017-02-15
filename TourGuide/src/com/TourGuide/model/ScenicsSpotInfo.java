@@ -17,6 +17,8 @@ public class ScenicsSpotInfo {
 	private int isHotSpot; //是否是热门景点（是：1  否：0）
 	private String scenicLevel; //景区级别
 	private String chargePerson; //负责人
+	private String account;//景区管理员账号
+	private String password;
 	
 	public String getScenicNo() {
 		return scenicNo;
@@ -89,6 +91,18 @@ public class ScenicsSpotInfo {
 	}
 	public void setChargePerson(String chargePerson) {
 		this.chargePerson = chargePerson;
+	}
+	public String getAccount() {
+		return account;
+	}
+	public void setAccount(String account) {
+		this.account = account;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 }

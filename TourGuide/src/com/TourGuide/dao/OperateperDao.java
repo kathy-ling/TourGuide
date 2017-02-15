@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
-import com.TourGuide.model.GuideOtherInfo;
 import com.TourGuide.model.Operateper;
 
 @Repository
@@ -37,6 +36,8 @@ public class OperateperDao {
 			operateper.setOperateper_role((String) list.get(k).get("role"));
 			operateper.setOperateper_phone((String) list.get(k).get("phone"));
 			operateper.setOperateper_bool((int) list.get(k).get("bool"));
+			operateper.setOperateper_scenic((String)list.get(k).get("scenicSpot"));
+			operateper.setOperateper_password((String) list.get(k).get("password"));
 			listres.add(operateper);
 		}
 		
@@ -69,6 +70,8 @@ public class OperateperDao {
 				operateper.setOperateper_role(rSet.getString(3));
 				operateper.setOperateper_phone(rSet.getString(4));
 				operateper.setOperateper_bool(rSet.getInt(5));
+				operateper.setOperateper_scenic(rSet.getString(6));
+				operateper.setOperateper_password(rSet.getString(7));
 				list.add(operateper);
 			}
 		});
@@ -85,12 +88,14 @@ public class OperateperDao {
 		 
 		
 		if (jdbcTemplate.queryForObject(sql, Integer.class) == 0) {
-			sql =  " insert into t_operateper (name,account,role,phone) values (?,?,?,?) ";
+			sql =  " insert into t_operateper (name,account,role,phone,scenicSpot,password) values (?,?,?,?,?,?) ";
 			jdbcTemplate.update(sql, new Object[]{
 				operateper.getOperateper_name(),
 				operateper.getOperateper_account(),
 				operateper.getOperateper_role(),
-				operateper.getOperateper_phone()
+				operateper.getOperateper_phone(),
+				operateper.getOperateper_scenic(),
+				operateper.getOperateper_password()
 			});
 			return true;
 		}
@@ -118,11 +123,11 @@ public class OperateperDao {
 	 * 2016-12-31 20:48:22
 	 * */
 	public boolean UpdateOperateperInfo(Operateper operateper) {
-		String sql = "update   t_operateper set name=?,account=?,role=?,phone=?,bool=?   where account=?";
+		String sql = "update   t_operateper set name=?,role=?,phone=?,scenicSpot=?,password=?   where account=?";
 		int i=jdbcTemplate.update(sql, new Object[]{operateper.getOperateper_name()
-				,operateper.getOperateper_account(),operateper.getOperateper_role(),
-				operateper.getOperateper_phone(),operateper.getOperateper_bool()
-				,operateper.getOperateper_account()});
+				,operateper.getOperateper_role(),
+				operateper.getOperateper_phone(),operateper.getOperateper_scenic(),
+				operateper.getOperateper_password(),operateper.getOperateper_account()});
 		if (i>0) {
 			return true;
 		} else {

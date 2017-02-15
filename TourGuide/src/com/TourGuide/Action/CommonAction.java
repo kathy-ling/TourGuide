@@ -122,4 +122,15 @@ public class CommonAction {
 	{
 		return "BookOrderInfo";
 	}
+	
+	
+	/**
+	 * 跳转游客黑名单信息界面
+	 * @return
+	 */
+	@RequestMapping(value="/visitorInfoDisabled.action",method=RequestMethod.GET)
+	public String ToVisitorDisabled()
+	{
+		return "visitorInfoDisabled";
+	}
 }

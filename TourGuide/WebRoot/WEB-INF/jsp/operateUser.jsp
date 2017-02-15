@@ -81,7 +81,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <table  class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px; " >
               <thead>
               <tr>
-                <th  style="text-align:center; width: 10%;">姓名</th><th  style="text-align:center; width: 10%;">账号</th><th style="text-align:center; width: 10%;">角色</th><th style="text-align:center; width: 10%;">手机号</th><th style="text-align:center; width: 10%;">禁用状态</th><th style="text-align:center; width: 10%;">操作</th>
+                <th  style="text-align:center; width: 10%;">姓名</th>
+                <th  style="text-align:center; width: 10%;">账号</th>
+                <th style="text-align:center; width: 10%;">角色</th>
+                <th style="text-align:center; width: 10%;">手机号</th>
+                <th style="text-align:center; width: 10%;">所属景区编号</th>
+                <th style="text-align:center; width: 10%;">禁用状态</th>
+                <th style="text-align:center; width: 10%;">操作</th>
               </tr>
               </thead>
               <tbody id="tby" >
@@ -123,6 +129,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="add_role" name="add_role" /></td></tr>
 						<tr><td>手机号:</td>
 						<td><input  type="text"  id="add_phone" name="add_phone" /></td></tr>
+						<tr><td>所属景区编号:</td>
+						<td><input  type="text"  id="add_scenicID" name="add_scenicID" /></td></tr>
+						<tr><td>登录密码:</td>
+						<td><input  type="text"  id="add_password" name="add_password" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button class="close" onclick="AddOperateperInfo()" >确定增加</button></td></tr>
 						
 					</table>
@@ -155,10 +165,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="edit_role" name="edit_role" /></td></tr>
 						<tr><td>手机号:</td>
 						<td><input  type="text"  id="edit_phone" name="edit_phone" /></td></tr>
-						<tr><td>状态</td><td align="center">
-							<input type="radio" id="yes" name="1" value="1"/>禁用
-							<input style="" id="no" type="radio" name="1" value="0"/>未禁用
-							</td></tr>
+						<tr><td>所属景区编号:</td>
+						<td><input  type="text"  id="edit_scenicID" name="edit_scenicID" /></td></tr>
+						<tr><td>登录密码:</td>
+						<td><input  type="text"  id="edit_password" name="edit_password" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button  onclick="editOperateperInfo()" >修改</button></td></tr>
 						
 					</table>
@@ -189,9 +199,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input id="SearchAccount" style="text-align:center;" readonly= "true "/></td>
 						</tr>
 						<tr><td>角色：</td>
-						<td><input id="SearchRole" style="text-align:center;"readonly= "true " /></td></tr>
+						<td><input id="SearchRole" style="text-align:center;" readonly="true" /></td></tr>
 						<tr><td>手机号：</td>
-						<td><input id="SearchPhone" style="text-align:center;"readonly= "true " /></td></tr>						
+						<td><input id="SearchPhone" style="text-align:center;" readonly="true" /></td></tr>						
+						<tr><td>所属景区编号：</td>
+						<td><input id="SearchscenicID" style="text-align:center;" readonly="true" /></td></tr>
+						<tr><td>登录密码：</td>
+						<td><input id="Searchpassword" style="text-align:center;" readonly="true" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true" >确定</button></td></tr>
 					</table>
 					
@@ -223,6 +237,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="delete_role" name="delete_role"  readonly="true"/></td></tr>
 						<tr><td>手机号:</td>
 						<td><input  type="text"  id="delete_phone" name="delete_phone" readonly="true" /></td></tr>
+						<tr><td>所属景区编号:</td>
+						<td><input  type="text"  id="delete_scenicID" name="delete_scenicID" readonly="true" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><div >
 							<button class="btn btn-danger" onclick="DeleteOperateInfo()">Delete</button>
 											
@@ -270,10 +286,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 </div>
 
-<footer>
-  <hr>
-  <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
-</footer>
+
 
 
 <!--[if (gte IE 9)|!(IE)]><!-->
@@ -367,6 +380,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               	var t3="<td style='width: 10%; text-align:center;'>"+value.Operateper_account+"</td>";
               	var t4="<td style='width: 10%; text-align:center;'>"+value.operateper_role+"</td>";
               	var t5="<td style='width: 10%; text-align:center;'>"+value.Operateper_phone+"</td>";
+              	var t6="<td style='width: 10%; text-align:center;'>"+value.Operateper_scenic+"</td>";
               	var c;
               	var a;
               	if(value.Operateper_bool=="0"){
@@ -378,16 +392,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               	}
               	
               	
-              	var	t6="<td style=' width: 8%; text-align:center;'>"+c+"</td>";
-              	var t7="<td align='center' style=' width: 15%; '> <div class='am-btn-toolbar'>"+
+              	var	t7="<td style=' width: 8%; text-align:center;'>"+c+"</td>";
+              	var t8="<td align='center' style=' width: 15%; '> <div class='am-btn-toolbar'>"+
               	"<div style='float: none' class='am-btn-group am-btn-group-xs'>"+
               	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='EditOperate("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"+
                   "<button class='am-btn am-btn-default am-btn-xs am-text-danger ' type='button' onclick='DeleteOperate("+index+")'>"+"<span class='am-icon-trash-o'></span>删除</button>"+
                   "<button class='am-btn am-btn-default am-btn-xs am-text-danger ' type='button' onclick='forbidOperate("+index+")'>"+"<span class='am-icon-cog'></span>"+a+"</button>"+
                   "</div></div> </td>";
                  				
-                var t8="</tr>";
-                $("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8);
+                var t9="</tr>";
+                $("#tby").append(t0).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8).append(t9);
   			});
   	}
  	function serach()
@@ -416,7 +430,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			$("#SearchAccount").val(value.Operateper_account);
  			$("#SearchRole").val(value.operateper_role);
  			$("#SearchPhone").val(value.Operateper_phone);
- 			
+ 			$("#SearchscenicID").val(value.Operateper_scenic);
+ 			$("#Searchpassword").val(value.Operateper_password);
  		});
  		$("#SearchModal").modal('show');
  	}
@@ -427,6 +442,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#add_account").val("");
  		$("#add_role").val("");
  		$("#add_phone").val("");
+ 		$("#add_scenicID").val("");
+ 		$("#add_password").val("");
  		$("#addmodal").modal('show');
  	}
  	function AddOperateperInfo() {
@@ -435,13 +452,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var account = $("#add_account").val();
  		var role = $("#add_role").val();
  		var phone = $("#add_phone").val();
- 		
- 		if (name != "" && account != "" && role != "" && phone != "") {
+ 		var scenicID=$("#add_scenicID").val();
+ 		var password=$("#add_password").val();
+ 		if (name != "" && account != "" && role != "" && phone != ""&& password != "") {
  			$.ajax( {
  				url:url,
  				type:"POST",
  				datatype:"json",
- 				data:{name:name,account:account,role:role,phone:phone},
+ 				data:{name:name,account:account,role:role,phone:phone,scenicID:scenicID,password:password},
  				success:function(data) {
  					if (data.confirm) {
  						$("#addmodal").modal('hide');
@@ -465,15 +483,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#edit_account").val(OperateUseInfo[index].Operateper_account);
  		$("#edit_role").val(OperateUseInfo[index].operateper_role);
  		
- 		if((OperateUseInfo[index].Operateper_bool)=="0")
- 		{
- 			$("#no").attr("checked","checked");
- 		}
- 		else
- 		{
- 			$("#yes").attr("checked","checked");
- 		}
 		$("#edit_phone").val(OperateUseInfo[index].Operateper_phone);
+		$("#edit_scenicID").val(OperateUseInfo[index].Operateper_scenic);
+		$("#edit_password").val(OperateUseInfo[index].Operateper_password);
  		$("#editmodal").modal('show');
  		
  	}
@@ -484,13 +496,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var account = $("#edit_account").val();
  		var role = $("#edit_role").val();
  		var phone = $("#edit_phone").val();
- 		var a = $("input[name='1']:checked").val();
- 		if (name != "" && account != "" && role != "" && phone != "") {
+ 		var scenicID=$("#edit_scenicID").val();
+ 		var password=$("#edit_password").val();
+ 		if (name != "" && account != "" && role != "" && phone != ""&& password != "") {
  			$.ajax( {
  				url:url,
  				type:"POST",
  				datatype:"json",
- 				data:{name:name,account:account,role:role,phone:phone,bool:a},
+ 				data:{name:name,account:account,role:role,phone:phone,scenicID:scenicID,password:password},
  				success:function(data) {
  					if (data.confirm) {
  						$("#editmodal").modal('hide');
@@ -514,6 +527,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#delete_account").val(OperateUseInfo[index].Operateper_account);
  		$("#delete_role").val(OperateUseInfo[index].operateper_role);
 		$("#delete_phone").val(OperateUseInfo[index].Operateper_phone);
+		$("#delete_scenicID").val(OperateUseInfo[index].Operateper_scenic);
+		
  		$("#deletemodal").modal('show');	
  	}
  	
