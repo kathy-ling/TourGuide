@@ -156,5 +156,9 @@ public class CommonAction {
 		return "Authority";
 	}
 	
-	
+	@RequestMapping(value="/register.action",method=RequestMethod.GET)
+	public String Toregist()
+	{
+		return "regist";
+	}
 }

@@ -105,13 +105,7 @@ public class GuideService {
 	}
 	
 	
-<<<<<<< HEAD
-=======
-	
-	
 
-
->>>>>>> a8d0bc35bd4f4235ff875f200acff562a01f8d44
 	public  int  GetGuideCount()
 	{
 		return guideDao.GetGuideCount();

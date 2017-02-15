@@ -8,10 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
 
-import com.TourGuide.dao.VisitorDao;
-import com.TourGuide.model.SNSUserInfo;
 import com.TourGuide.model.WeixinOauth2Token;
 import com.TourGuide.weixin.util.Oauth2Util;
 import com.TourGuide.weixin.util.SNSUserInfoUtil;
@@ -27,7 +25,7 @@ public class OAuthServlet extends HttpServlet{
 	private static final long serialVersionUID = -1847238807216447030L;
 	
 	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) 
+	public void doGet(HttpServletRequest request, HttpServletResponse response,ModelMap model) 
 			throws ServletException, IOException {
 		
 		request.setCharacterEncoding("utf-8");
@@ -48,7 +46,9 @@ public class OAuthServlet extends HttpServlet{
 			String openId = weixinOauth2Token.getOpenId();
 			// 获取用户信息
 			SNSUserInfoUtil.snsUserInfo = SNSUserInfoUtil.getSNSUserInfo(accessToken, openId);
-											
+			SNSUserInfoUtil.snsUserInfo.getNickname();
+			SNSUserInfoUtil.snsUserInfo.getSex();
+			model.addAttribute("visitor", SNSUserInfoUtil.snsUserInfo);							
 			// 设置要传递的参数
 			request.setAttribute("snsUserInfo", SNSUserInfoUtil.snsUserInfo);
 		}

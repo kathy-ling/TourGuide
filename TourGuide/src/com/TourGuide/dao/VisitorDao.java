@@ -1,11 +1,9 @@
 package com.TourGuide.dao;
 
-<<<<<<< HEAD
-=======
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
->>>>>>> a8d0bc35bd4f4235ff875f200acff562a01f8d44
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
