@@ -34,9 +34,6 @@ public class PromotionDao {
 		//按照活动开始时间排序，并过滤已经结束的活动，最后选取若干个
 		String sqlSearch = "select * from (select * from t_promotion as a where a.promotionEndTime>?) as p "
 				+ "order by p.promotionStartTime asc limit ?";
-//		String sqlSearch = "select * from (select * from t_promotion as p "
-//				+ "order by p.promotionStartTime asc) as a "
-//				+ "where a.promotionEndTime>? limit ?";
 		
 		List<Map<String , Object>> list2=jdbcTemplate.queryForList(sqlSearch, 
 				new Object[]{dateNow, promotionNum});
@@ -45,10 +42,6 @@ public class PromotionDao {
 			Promotion promotion = new Promotion();
 			promotion.setPromotionImage((String)list2.get(j).get("promotionImage"));
 			promotion.setPromotionLinks((String)list2.get(j).get("promotionLinks"));
-//			promotion.setPromotionNo((String)list2.get(j).get("promotionNo"));
-//			promotion.setPromotionStartTime((String)list2.get(j).get("promotionStartTime"));
-//			promotion.setPromotionReleaseTime((String)list2.get(j).get("promotionReleaseTime"));
-//			promotion.setPromotionEndTime((String)list2.get(j).get("promotionEndTime"));
 			promotions.add(promotion);
 		}
 		

@@ -1,4 +1,4 @@
-package com.TourGuide.common;
+package com.TourGuide.weixin.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

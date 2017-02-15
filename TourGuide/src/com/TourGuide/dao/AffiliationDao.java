@@ -26,18 +26,24 @@ public class AffiliationDao {
 		
 		boolean bool = false;
 		
-		String sqlUpdate = "update t_guideotherinfo set scenicBelong='"+scenicID+"' "
-				+ "where phone='"+guidePhone+"'";
-		int i = jdbcTemplate.update(sqlUpdate);
+		List<Map<String , Object>> listResult = getCurrentAffiliation(guidePhone);
+		String belong = listResult.get(0).get("scenicBelong").toString();
 		
-		String sqlInsert = "insert into t_affiliation (guidePhone,scenicID,applyDate) "
-				+ "values (?,?,?)";
-		int j = jdbcTemplate.update(sqlInsert, new Object[]{guidePhone, scenicID, applyDate});
-		
-		if (i != 0 && j != 0){
-			bool = true;
+		if(belong != null){
+			
+			String sqlUpdate = "update t_guideotherinfo set scenicBelong='"+scenicID+"' "
+					+ "where phone='"+guidePhone+"'";
+			int i = jdbcTemplate.update(sqlUpdate);
+			
+			String sqlInsert = "insert into t_affiliation (guidePhone,scenicID,applyDate) "
+					+ "values (?,?,?)";
+			int j = jdbcTemplate.update(sqlInsert, new Object[]{guidePhone, scenicID, applyDate});
+			
+			if (i != 0 && j != 0){
+				bool = true;
+			}
 		}
-		
+				
 		return bool;
 	}
 	
@@ -99,6 +105,21 @@ public class AffiliationDao {
 		List<Map<String , Object>> listResult = new ArrayList<>();
 		
 		String sql = "select * from t_affiliation where guidePhone='"+guidePhone+"'";
+		listResult = jdbcTemplate.queryForList(sql);
+		
+		return listResult;
+	}
+	
+	
+	/**
+	 * 查看该导游的当前挂靠景区
+	 * @param guidePhone  手机号
+	 * @return
+	 */
+	public List<Map<String , Object>> getCurrentAffiliation(String guidePhone){
+		
+		List<Map<String , Object>> listResult = new ArrayList<>();
+		String sql = "select scenicBelong from t_guideotherinfo where phone='"+guidePhone+"' ";
 		listResult = jdbcTemplate.queryForList(sql);
 		
 		return listResult;

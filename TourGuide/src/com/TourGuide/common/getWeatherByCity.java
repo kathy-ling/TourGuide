@@ -129,104 +129,104 @@ public class getWeatherByCity {
      */
     public static String getImageString(String image){
     	
-    	String imagePath = null;
+    	String imagePath = "http://1f656026j8.imwork.net/TourGuide/image/weather/";
     	
     	switch (image) {
 		case "0.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/0.gif";
+			imagePath = imagePath + "0.gif";
 			break;
 		case "1.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/1.gif";
+			imagePath = imagePath + "1.gif";
 			break;
 		case "2.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/2.gif";
+			imagePath = imagePath + "2.gif";
 			break;
 		case "3.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/3.gif";
+			imagePath = imagePath + "3.gif";
 			break;
 		case "4.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/4.gif";
+			imagePath = imagePath + "4.gif";
 			break;
 		case "5.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/5.gif";
+			imagePath = imagePath + "5.gif";
 			break;
 		case "6.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/6.gif";
+			imagePath = imagePath + "6.gif";
 			break;
 		case "7.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/7.gif";
+			imagePath = imagePath + "7.gif";
 			break;
 		case "8.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/8.gif";
+			imagePath = imagePath + "8.gif";
 			break;
 		case "9.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/9.gif";
+			imagePath = imagePath + "9.gif";
 			break;
 		case "10.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/10.gif";
+			imagePath = imagePath + "10.gif";
 			break;
 		case "11.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/11.gif";
+			imagePath = imagePath + "11.gif";
 			break;
 		case "12.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/12.gif";
+			imagePath = imagePath + "12.gif";
 			break;
 		case "13.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/13.gif";
+			imagePath = imagePath + "13.gif";
 			break;
 		case "14.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/14.gif";
+			imagePath = imagePath + "14.gif";
 			break;
 		case "15.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/15.gif";
+			imagePath = imagePath + "15.gif";
 			break;
 		case "16.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/16.gif";
+			imagePath = imagePath + "16.gif";
 			break;
 		case "17.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/17.gif";
+			imagePath = imagePath + "17.gif";
 			break;
 		case "18.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/18.gif";
+			imagePath = imagePath + "18.gif";
 			break;
 		case "19.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/19.gif";
+			imagePath = imagePath + "19.gif";
 			break;
 		case "20.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/20.gif";
+			imagePath = imagePath + "20.gif";
 			break;
 		case "21.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/21.gif";
+			imagePath = imagePath + "21.gif";
 			break;
 		case "22.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/22.gif";
+			imagePath = imagePath + "22.gif";
 			break;
 		case "23.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/23.gif";
+			imagePath = imagePath + "23.gif";
 			break;
 		case "24.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/24.gif";
+			imagePath = imagePath + "24.gif";
 			break;
 		case "25.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/25.gif";
+			imagePath = imagePath + "25.gif";
 			break;
 		case "26.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/26.gif";
+			imagePath = imagePath + "26.gif";
 			break;
 		case "27.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/27.gif";
+			imagePath = imagePath + "27.gif";
 			break;
 		case "28.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/28.gif";
+			imagePath = imagePath + "28.gif";
 			break;
 		case "29.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/29.gif";
+			imagePath = imagePath + "29.gif";
 			break;
 		case "30.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/30.gif";
+			imagePath = imagePath + "30.gif";
 			break;
 		case "31.gif":
-			imagePath = "http://10.50.63.83:8080/TourGuide/image/weather/31.gif";
+			imagePath = imagePath + "31.gif";
 			break;
 		default:
 			break;

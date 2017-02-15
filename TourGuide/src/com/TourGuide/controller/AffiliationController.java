@@ -119,4 +119,28 @@ public class AffiliationController {
 		
 		return listResult;
 	}
+	
+	
+	/**
+	 * 查看该导游的当前挂靠景区
+	 * @param resp
+	 * @param guidePhone
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value="/getCurrentAffiliation.do")
+	@ResponseBody
+	public Object getCurrentAffiliation(HttpServletResponse resp,
+			@RequestParam("guidePhone") String guidePhone) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> listResult = new ArrayList<>();
+		
+		listResult = affiliationService.getCurrentAffiliation(guidePhone);
+		
+		return listResult;
+	}
+	
+	
 }
