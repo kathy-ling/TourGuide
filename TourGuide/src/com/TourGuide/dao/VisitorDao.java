@@ -1,5 +1,6 @@
 package com.TourGuide.dao;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
+import com.TourGuide.model.SNSUserInfo;
 import com.TourGuide.model.VisitorInfo;
 import com.TourGuide.model.VisitorLoginInfo;
 
@@ -20,6 +22,64 @@ public class VisitorDao {
 		private JdbcTemplate jdbcTemplate;
 		
 		private final int disable = 0;  //用户是否被禁止登陆，0-否，1-是
+		
+		
+		
+		/**
+		 * 将微信端获取到的用户信息，存入数据库
+		 * @param snsUserInfo
+		 * @return
+		 */
+		public boolean recordWeixinInfo(SNSUserInfo snsUserInfo){
+			
+			boolean bool = false;
+			String TEST = "test";
+			
+			String select = "select * from t_visitor where openID='"+snsUserInfo.getOpenId()+"'";
+			List<Map<String , Object>> list = jdbcTemplate.queryForList(select);
+			
+			if(list.size() == 0){
+				String insert = "insert into t_visitor (nickName,sex,name,phone,image,openID) "
+						+ "values ('"+snsUserInfo.getNickname()+"','"+snsUserInfo.getSex()+"',"
+						+ "'"+TEST+"','"+snsUserInfo.getOpenId()+"','"+snsUserInfo.getHeadImgUrl()+"',"
+						+ "'"+snsUserInfo.getOpenId()+"')";
+				int i = jdbcTemplate.update(insert);
+				
+				if(i != 0){
+					bool = true;
+				}
+			}
+						
+			return bool;
+		}
+		
+		
+		/**
+		 * 根据openID，查看用户的信息
+		 * @param openID
+		 * @return
+		 */
+		public VisitorInfo getInfobyOpenID(String openID){
+					
+			final VisitorInfo visitorInfo = new VisitorInfo();
+			String sql = "select * from t_visitor where openID='"+openID+"'";
+			
+			jdbcTemplate.query(sql,  new RowCallbackHandler() {
+				
+				@Override
+				public void processRow(ResultSet res) throws SQLException {
+					visitorInfo.setPhone(res.getString(1));
+					visitorInfo.setName(res.getString(2));
+					visitorInfo.setNickName(res.getString(3));
+					visitorInfo.setImage(res.getString(4));
+					visitorInfo.setSex(res.getString(5));
+					visitorInfo.setOpenID(res.getString(6));
+				}
+			});
+			
+			return visitorInfo;
+		}
+		
 		
 		/**
 		 * 用户注册

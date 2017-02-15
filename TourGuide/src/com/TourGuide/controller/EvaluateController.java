@@ -76,7 +76,7 @@ public class EvaluateController {
 		List<Map<String, Object>> list = new ArrayList<>();
 		list = evaluateService.getComments(guidePhone);
 		
-		System.out.println(list.get(0).get("evaluateTime"));
+//		System.out.println(list.get(0).get("evaluateTime"));
 		
 		PrintWriter writer = resp.getWriter();
 		writer.write(new Gson().toJson(list));

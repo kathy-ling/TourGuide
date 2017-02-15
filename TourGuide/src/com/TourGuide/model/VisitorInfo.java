@@ -12,6 +12,7 @@ public class VisitorInfo {
 	private String nickName; //昵称
 	private String image; // 头像
 	private String sex; //性别
+	private String openID; //用户唯一标识
 	
 	public String getPhone() {
 		return phone;
@@ -43,6 +44,12 @@ public class VisitorInfo {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-
+	public String getOpenID() {
+		return openID;
+	}
+	public void setOpenID(String openID) {
+		this.openID = openID;
+	}
+	
 	
 }

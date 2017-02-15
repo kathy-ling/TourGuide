@@ -1,5 +1,7 @@
 package com.TourGuide.model;
 
+import java.util.Date;
+
 /**
  * 挂靠景区信息（包含历史记录）
  * @author Tian
@@ -9,8 +11,8 @@ public class Affiliation {
 
 	private String guidePhone; //导游的手机号
 	private String scenicID;   //景区编号
-	private String applyDate;   //申请挂靠的日期
-	private String quitDate;  //取消挂靠的日期
+	private Date applyDate;   //申请挂靠的日期
+	private Date quitDate;  //取消挂靠的日期
 	
 	public String getGuidePhone() {
 		return guidePhone;
@@ -24,16 +26,16 @@ public class Affiliation {
 	public void setScenicID(String scenicID) {
 		this.scenicID = scenicID;
 	}
-	public String getApplyDate() {
+	public Date getApplyDate() {
 		return applyDate;
 	}
-	public void setApplyDate(String applyDate) {
+	public void setApplyDate(Date applyDate) {
 		this.applyDate = applyDate;
 	}
-	public String getQuitDate() {
+	public Date getQuitDate() {
 		return quitDate;
 	}
-	public void setQuitDate(String quitDate) {
+	public void setQuitDate(Date quitDate) {
 		this.quitDate = quitDate;
 	}
 }

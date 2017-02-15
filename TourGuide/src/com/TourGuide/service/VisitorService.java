@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.TourGuide.dao.VisitorDao;
+import com.TourGuide.model.SNSUserInfo;
 import com.TourGuide.model.VisitorInfo;
 import com.TourGuide.model.VisitorLoginInfo;
 
@@ -14,6 +15,25 @@ public class VisitorService {
 	
 	@Autowired
 	private VisitorDao visitorDao;
+	
+	/**
+	 * 将微信端获取到的用户信息，存入数据库
+	 * @param snsUserInfo
+	 * @return
+	 */
+	public boolean recordWeixinInfo(SNSUserInfo snsUserInfo){
+		return visitorDao.recordWeixinInfo(snsUserInfo);
+	}
+	
+	
+	/**
+	 * 根据openID，查看用户的信息
+	 * @param openID
+	 * @return
+	 */
+	public VisitorInfo getInfobyOpenID(String openID){
+		return visitorDao.getInfobyOpenID(openID);
+	}
 	
 	/**
 	 * 用户注册

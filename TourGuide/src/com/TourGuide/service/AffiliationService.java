@@ -58,4 +58,14 @@ public class AffiliationService {
 	public List<Map<String , Object>> getApplyHistory(String guidePhone){
 		return affiliationDao.getApplyHistory(guidePhone);
 	}
+	
+	
+	/**
+	 * 查看该导游的当前挂靠景区
+	 * @param guidePhone  手机号
+	 * @return
+	 */
+	public List<Map<String , Object>> getCurrentAffiliation(String guidePhone){
+		return affiliationDao.getCurrentAffiliation(guidePhone);
+	}
 }

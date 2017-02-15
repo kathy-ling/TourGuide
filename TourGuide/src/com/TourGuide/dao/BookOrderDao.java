@@ -1,9 +1,4 @@
 package com.TourGuide.dao;
-
-<<<<<<< HEAD
-=======
-
->>>>>>> b700829608653de6f6056d5d488a6fbe3eeeda01
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -99,11 +94,11 @@ public class BookOrderDao {
 		
 		List<Map<String , Object>> list = null;
 		String sqlString = "insert into t_bookorder (bookOrderID,produceTime,visitTime,"
-				+ "visitorPhone,visitNum,scenicID,purchaseTicket,fullPrice,discoutPrice,totalTicket,"
+				+ "visitorPhone,visitNum,scenicID,purchaseTicket,fullPrice,discoutPrice,halfPrice,totalTicket,"
 				+ "guideFee,totalGuideFee,totalMoney,guidePhone,orderState) "
-				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlString, new Object[]{orderID,produceTime,visitTime,
-				visitorPhone,visitNum, scenicID, purchaseTicket, fullPrice, discoutPrice, totalTicket,
+				visitorPhone,visitNum, scenicID, purchaseTicket, fullPrice, discoutPrice, halfPrice, totalTicket,
 				guideFee, totalGuideFee, totalMoney, guidePhone, orderState});
 		
     	String[] visitDate = visitTime.split(" ");		
@@ -223,7 +218,6 @@ public class BookOrderDao {
 				
 		return list;
 	}
-<<<<<<< HEAD
 	
 	
 	/**
@@ -245,8 +239,6 @@ public class BookOrderDao {
 				
 		return list;
 	}
-=======
->>>>>>> b700829608653de6f6056d5d488a6fbe3eeeda01
 
 	/**
 	 * 得到订单信息并进行分页获取
