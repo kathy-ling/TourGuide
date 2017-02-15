@@ -60,14 +60,13 @@ public class VisitorAction {
 		 * 参数：手机号
 		 * 2016-12-31 15:12:07	
 		 */
-		@RequestMapping(value="/SearchVisitorInfo.action",method=RequestMethod.POST)
+		@RequestMapping(value="/SearchVisitorInfo.action",produces = "text/html;charset=UTF-8",method=RequestMethod.POST)
 		@ResponseBody
 		public Object SearchVisitorInfoByPhone(HttpServletResponse resp,
 				@RequestParam(value="phone")String phone) throws IOException {
 			CommonResp.SetUtf(resp);
 			List<VisitorInfo> list = visitorService.SearchVisitorInfoByPhone_Service(phone);
 			String jsonStr = new Gson().toJson(list).toString();
-			System.out.println(jsonStr);
 			return jsonStr;
 		}
 		
@@ -83,6 +82,7 @@ public class VisitorAction {
 		public Object ForbidVisitorInfo(HttpServletResponse resp,
 				@RequestParam(value="phone")String phone) throws IOException {
 			CommonResp.SetUtf(resp);
+			
 			Map<String, Object> map = new HashMap<>();
 			map.put("confirm", visitorService.ForbidVisitorInfo_Service(phone));
 			return map;
@@ -120,14 +120,13 @@ public class VisitorAction {
 		 * 参数：手机号
 		 * 2016-12-31 15:12:07	
 		 */
-		@RequestMapping(value="/SearchVisitorDisabled.action",method=RequestMethod.POST)
+		@RequestMapping(value="/SearchVisitorDisabled.action",produces = "text/html;charset=UTF-8",method=RequestMethod.POST)
 		@ResponseBody
 		public Object SearchVisitorDisabledByPhone(HttpServletResponse resp,
 				@RequestParam(value="phone")String phone) throws IOException {
 			CommonResp.SetUtf(resp);
 			List<VisitorInfo> list = visitorService.SearchVisitorDisByPhone(phone);
 			String jsonStr = new Gson().toJson(list).toString();
-			System.out.println(jsonStr);
 			return jsonStr;
 		}
 		

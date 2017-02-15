@@ -70,6 +70,7 @@ public class OperateAction {
 		CommonResp.SetUtf(resp);
 		List<Operateper> list = operateperService.SearchOperateInfoByAccount_Service(sqlStr);
 		String jsonStr = new Gson().toJson(list).toString();
+		System.out.println(jsonStr);
 		Map<String , Object> map=new HashMap<>();
 		map.put("jsonStr", jsonStr);
 		return map;
@@ -97,8 +98,7 @@ public class OperateAction {
 		operateper.setOperateper_role(role);
 		operateper.setOperateper_phone(phone);
 		operateper.setOperateper_scenic(scenicID);
-		operateper.setOperateper_password(password);
-		boolean confirm = operateperService.AddOperateperInfo_Service(operateper);
+		boolean confirm = operateperService.AddOperateperInfo_Service(operateper,password);
 		Map<String, Object> map = new HashMap<>();
 		map.put("confirm", confirm);
 		HttpSession session=req.getSession();
@@ -135,15 +135,13 @@ public class OperateAction {
 			@RequestParam(value="account")String account,
 			@RequestParam(value="role")String role,
 			@RequestParam(value="phone")String phone,
-			@RequestParam(value="scenicID")String  scenicID,
-			@RequestParam(value="password")String password) throws IOException {
+			@RequestParam(value="scenicID")String  scenicID) throws IOException {
 		Operateper operateper = new Operateper();
 		operateper.setOperateper_name(name);
 		operateper.setOperateper_account(account);
 		operateper.setOperateper_role(role);
 		operateper.setOperateper_phone(phone);
-		operateper.setOperateper_scenic(scenicID);;
-		operateper.setOperateper_password(password);
+		operateper.setOperateper_scenic(scenicID);
 		boolean confirm = operateperService.UpdateOperateperInfo_Service(operateper);
 		Map<String, Object> map = new HashMap<>();
 		map.put("confirm", confirm);

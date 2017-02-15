@@ -167,8 +167,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="edit_phone" name="edit_phone" /></td></tr>
 						<tr><td>所属景区编号:</td>
 						<td><input  type="text"  id="edit_scenicID" name="edit_scenicID" /></td></tr>
-						<tr><td>登录密码:</td>
-						<td><input  type="text"  id="edit_password" name="edit_password" /></td></tr>
+						
 						<tr><td colspan="2" style="text-align:center;"><button  onclick="editOperateperInfo()" >修改</button></td></tr>
 						
 					</table>
@@ -204,8 +203,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input id="SearchPhone" style="text-align:center;" readonly="true" /></td></tr>						
 						<tr><td>所属景区编号：</td>
 						<td><input id="SearchscenicID" style="text-align:center;" readonly="true" /></td></tr>
-						<tr><td>登录密码：</td>
-						<td><input id="Searchpassword" style="text-align:center;" readonly="true" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true" >确定</button></td></tr>
 					</table>
 					
@@ -431,7 +428,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			$("#SearchRole").val(value.operateper_role);
  			$("#SearchPhone").val(value.Operateper_phone);
  			$("#SearchscenicID").val(value.Operateper_scenic);
- 			$("#Searchpassword").val(value.Operateper_password);
  		});
  		$("#SearchModal").modal('show');
  	}
@@ -485,7 +481,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		
 		$("#edit_phone").val(OperateUseInfo[index].Operateper_phone);
 		$("#edit_scenicID").val(OperateUseInfo[index].Operateper_scenic);
-		$("#edit_password").val(OperateUseInfo[index].Operateper_password);
  		$("#editmodal").modal('show');
  		
  	}
@@ -497,13 +492,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var role = $("#edit_role").val();
  		var phone = $("#edit_phone").val();
  		var scenicID=$("#edit_scenicID").val();
- 		var password=$("#edit_password").val();
- 		if (name != "" && account != "" && role != "" && phone != ""&& password != "") {
+ 		if (name != "" && account != "" && role != "" && phone != "") {
  			$.ajax( {
  				url:url,
  				type:"POST",
  				datatype:"json",
- 				data:{name:name,account:account,role:role,phone:phone,scenicID:scenicID,password:password},
+ 				data:{name:name,account:account,role:role,phone:phone,scenicID:scenicID},
  				success:function(data) {
  					if (data.confirm) {
  						$("#editmodal").modal('hide');

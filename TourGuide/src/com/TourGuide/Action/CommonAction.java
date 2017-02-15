@@ -1,5 +1,7 @@
 package com.TourGuide.Action;
 
+
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -133,4 +135,26 @@ public class CommonAction {
 	{
 		return "visitorInfoDisabled";
 	}
+	
+	/**
+	 * 跳转景区门票信息界面
+	 * @return
+	 */
+	@RequestMapping(value="/scenicTicket.action",method=RequestMethod.GET)
+	public String ToscenicTicket()
+	{
+		return "scenicTicket";
+	}
+	
+	/**
+	 * 跳转景区门票信息界面
+	 * @return
+	 */
+	@RequestMapping(value="/authority.action",method=RequestMethod.GET)
+	public String ToAuthority()
+	{
+		return "Authority";
+	}
+	
+	
 }

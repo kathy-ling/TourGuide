@@ -18,8 +18,6 @@ public class Operateper {
 	private String Operateper_scenic;
 	//运营人员是否禁用
 	private int Operateper_bool;
-	//运营人员密码
-	private String Operateper_password;
 	
 	public String getOperateper_name() {
 		return Operateper_name;
@@ -57,10 +55,5 @@ public class Operateper {
 	public void setOperateper_scenic(String operateper_scenic) {
 		Operateper_scenic = operateper_scenic;
 	}
-	public String getOperateper_password() {
-		return Operateper_password;
-	}
-	public void setOperateper_password(String operateper_password) {
-		Operateper_password = operateper_password;
-	}
+	
 }

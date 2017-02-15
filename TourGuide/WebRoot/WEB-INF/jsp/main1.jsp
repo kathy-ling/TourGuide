@@ -45,8 +45,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div class="nav-navicon admin-main admin-sidebar">
     
     
-    <div class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"> 欢迎系统管理员</div>
-    <div class="sideMenu">
+    <div id="welcomeRole" class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"></div>
+    <div class="sideMenu" id="menu1">
+       <!-- <h3 class="am-icon-flag"><em></em> <a href="#">微信平台</a></h3>
+      	<ul>
+        <li><a href="FirstShow.action" target="targetiframe">微信平台数据分析</a></li>
+      	</ul>
       <h3 class="am-icon-flag"><em></em> <a href="#">运营人员管理</a></h3>
       <ul>
         <li><a href="operateUser.action" target="targetiframe">运营人员信息管理</a></li>
@@ -72,7 +76,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <h3 class="am-icon-location-arrow"><em></em> <a href="#">景区管理</a></h3>
       <ul>
        <li><a href="scenicInfo.action" target="targetiframe">景区信息管理</a></li>
-        
+        <li><a href="scenicTicket.action" target="targetiframe">景区门票管理</a></li>
       </ul>
       <h3 class="am-icon-money"><em></em> <a href="#">收入管理</a></h3>
       <ul>
@@ -80,26 +84,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <li><a href="GuideFee.action" target="targetiframe">讲解员收入查询</a></li>
         
       </ul>
-      
-      <!-- <h3 class="am-icon-gears"><em></em> <a href="#">系统管理</a></h3>
+      <h3 class="am-icon-money"><em></em> <a href="#">权限管理</a></h3>
       <ul>
-        <li>个人信息修改</li>
-        
-      </ul> -->
+        <li><a href="authority.action" target="targetiframe">后台权限设置</a></li>
+      </ul>  -->
     </div>
-    <!-- sideMenu End --> 
     
-    <script type="text/javascript">
-			jQuery(".sideMenu").slide({
-				titCell:"h3", //鼠标触发对象
-				targetCell:"ul", //与titCell一一对应，第n个titCell控制第n个targetCell的显示隐藏
-				effect:"slideDown", //targetCell下拉效果
-				delayTime:300 , //效果时间
-				triggerTime:150, //鼠标延迟触发时间（默认150）
-				defaultPlay:true,//默认是否执行效果（默认true）
-				returnDefault:true //鼠标从.sideMen移走后返回默认状态（默认false）
-				});
-		</script> 
+      
 
     
     
@@ -111,35 +102,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </div>
 
 <div class=" admin-content">
-	
 		<div class="daohang">
-			<ul>
-				
+			<ul>	
 			</ul>
-
-       
-
-	
-</div>
+		</div>
 	
 	
 
 
-<div class="admin-biaogelist" style="width: 85%;height:90%">
-   
-          <iframe name="targetiframe" style="width: 100%; height:90% ; " src="FirstShow.action"  ></iframe>
-    
- <div class="foods">
-  <ul>版权所有@2016 </ul>
-</div>
+	<div class="admin-biaogelist" style="width: 85%;height:90%">
+   		<iframe name="targetiframe" style="width: 100%; height:95% ; " src="FirstShow.action"  ></iframe>
+	</div>
 
 </div>
-
-</div>
-
-
-
-
 </div>
 
 <!--[if lt IE 9]>
@@ -155,8 +130,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!--<![endif]-->
 <script type="text/javascript">
 			window.jQuery || document.write("<script src='<%=basePath %>/assets/js/jquery.js'>"+"<"+"/script>");
+</script>
+ 
+<script type="text/javascript">
+		
+  		 var url="<%=basePath%>Menu/getMenu.action";
+  		$.ajax({
+ 			url:url,
+ 			type:"post",
+ 			async:false,
+ 			datatype:"json",
+ 			success:function(data)
+ 			{
+ 				
+ 				$("#welcomeRole").append('欢迎'+data.role+','+data.account);
+ 				$("#menu1").append(data.menuHtml);
+ 				
+ 			}
+ 		
+ 		}); 
+			jQuery(".sideMenu").slide({
+				titCell:"h3", //鼠标触发对象
+				targetCell:"ul", //与titCell一一对应，第n个titCell控制第n个targetCell的显示隐藏
+				effect:"slideDown", //targetCell下拉效果
+				delayTime:300 , //效果时间
+				triggerTime:150, //鼠标延迟触发时间（默认150）
+				defaultPlay:true,//默认是否执行效果（默认true）
+				returnDefault:true //鼠标从.sideMen移走后返回默认状态（默认false）
+				});
 		</script>
-
-
+		
 </body>
 </html>

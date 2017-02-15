@@ -47,7 +47,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <div class="admin-content">
     <div class="admin-content-body">
       <div class="am-cf am-padding am-padding-bottom-0">
-        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">游客信息管理</strong> / <small>游客基本信息</small></div>
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">景区门票管理</strong> / <small>景区门票管理</small></div>
       </div>
 
       <hr>
@@ -60,7 +60,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="am-u-sm-12 am-u-md-3">
           <div class="am-input-group am-input-group-sm">
             
-            <input type="text" id="searchText" class="am-form-field" placeholder="手机号">
+            <input type="text" id="searchText" class="am-form-field" placeholder="景区编号">
           <span class="am-input-group-btn">
             <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="search()">搜索</button>
           </span>
@@ -74,7 +74,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <table  class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px; " >
               <thead>
               <tr>
-                <th  style="text-align: center; width: 10%;">姓名</th><th  style="text-align: center; width: 10%;">手机号</th><th style="text-align: center; width: 10%;">昵称</th><th style="text-align: center; width: 10%;">性别</th><th style="text-align: center; width: 10%;">操作</th>
+                <th  style="text-align: center; width: 10%;">景区编号</th>
+                <th  style="text-align: center; width: 10%;">景区名称</th>
+                <th style="text-align: center; width: 10%;">半价</th>
+                <th style="text-align: center; width: 10%;">全价</th>
+                <th style="text-align: center; width: 10%;">折扣价</th>
+                <th style="text-align: center; width: 10%;">操作</th>
               </tr>
               </thead>
               <tbody id="tby" >
@@ -109,15 +114,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr><td>姓名：</td>
+						<tr><td>景区编号：</td>
+						<td><input  type="text" id="search_scenicID" name="search_scenicID" readonly="true" /></td></tr>
+						<tr><td>景区名称：</td>
 						<td><input  type="text" id="search_name" name="search_name" readonly="true" /></td></tr>
-						<tr><td>手机号：</td>
-						<td><input  type="text" id="search_phone" name="search_phone" readonly="true" /></td></tr>
-						<tr><td>昵称:</td>
-						<td><input  type="text"  id="search_nickName" name="search_nickName" readonly="true" /></td></tr>
-						<tr><td>性别:</td>
-						<td><input  type="text"  id="search_sex" name="search_sex" readonly="true" /></td></tr>	
-						
+						<tr><td>半价:</td>
+						<td><input  type="text"  id="search_half" name="search_half" readonly="true" /></td></tr>
+						<tr><td>全价:</td>
+						<td><input  type="text"  id="search_full" name="search_full" readonly="true" /></td></tr>	
+						<tr><td>折扣价:</td>
+						<td><input  type="text"  id="search_discount" name="search_discount" readonly="true" /></td></tr>	
 						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true" >确定</button></td></tr>
 					</table>			
 					</div>
@@ -125,50 +131,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 </div>
 
-
-<div class="modal fade" id="forbidmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog" style="width:25%">
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+			<div class="modal-dialog" >
 				<div class="modal-content">
 					<div class="model-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 	                        <span class="blue">X</span>
 	                    </button>
+	                    <h4 class="modal-title" id="myModalLabel" style="text-align:center;">
+							编辑景区门票信息
+						</h4>
 					</div>
 					<div class="modal-body">
-						<table style="border-collapse:separate; border-spacing:10px;">
-						<tr><td>&nbsp;</td></tr>
-						<tr><td style="text-align:center;">确定将该游客加入到黑名单</td></tr>
-						<tr><td>&nbsp;</td></tr>
-						<tr><td  style="text-align:center;"><button class="close" onclick="ForbidVisitorInfo()">确定</button></td><td><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
-						</table>
+					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr><td>景区编号：</td>
+						<td><input  type="text" id="edit_scenicID" name="edit_scenicID" readonly="true" /></td></tr>
+						<tr><td>景区名称：</td>
+						<td><input  type="text" id="edit_name" name="edit_name" readonly="true" /></td></tr>
+						<tr><td>半价:</td>
+						<td><input  type="text"  id="edit_half" name="edit_half"  /></td></tr>
+						<tr><td>全价:</td>
+						<td><input  type="text"  id="edit_full" name="edit_full"  /></td></tr>	
+						<tr><td>折扣价:</td>
+						<td><input  type="text"  id="edit_discount" name="edit_discount"  /></td></tr>	
+						<tr><td colspan="2" style="text-align:center;"><button  data-dismiss="modal" aria-hidden="true"  onclick="SaveScenicTicket()">保存</button></td></tr>
+					</table>			
 					</div>
 				</div>
 			</div>
 </div>
-
-<div class="modal fade" id="relievemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog" style="width:25%">
-				<div class="modal-content">
-					<div class="model-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-	                        <span class="blue">X</span>
-	                    </button>
-					</div>
-					<div class="modal-body">
-						<table style="border-collapse:separate; border-spacing:10px;">
-						<tr><td>&nbsp;</td></tr>
-						<tr><td style="text-align:center;">确定解禁该游客？</td></tr>
-						<tr><td>&nbsp;</td></tr>
-						<tr><td  style="text-align:center;"><button class="close" onclick="RelieveVisitorInfo()">确定</button></td><td><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
-						</table>
-					</div>
-				</div>
-			</div>
-</div>
-
-
-
-
 
 
 <!--[if (gte IE 9)|!(IE)]><!-->
@@ -177,20 +168,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="<%=basePath %>/assets1/js/app.js"></script>
 <script type="text/javascript">
 	var id=1;
-	var VisitorInfo="";
-	var VisitorOtherInfo="";
+	var scenicTicket;
 	var currentPage=1;
 	var pageRows=5;
-	var forbidIndex;
+	var queryindex;
 	$(document).ready(function()
   	{
   		
-  		loadVisitorInfo();
+  		loadScenicTicket();
   	});
-  	function loadVisitorInfo()
+  	function loadScenicTicket()
   	{
   	
-  		var url="<%=basePath%>visitor/GetVisitorInfo.action";
+  		var url="<%=basePath%>scenicTicket/getScenicTicket.action";
   		$.ajax(
   		{
   			url:url,
@@ -201,8 +191,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   					{
   						
   					    if(data!=null){
-  					    VisitorInfo = data.jsonStr;
-  					    VisitorInfo = JSON.parse(VisitorInfo);
+  					    scenicTicket = data.jsonStr;
+  					    scenicTicket = JSON.parse(scenicTicket);
   					    initTable(data.jsonStr,data.page);
   					    
   					    
@@ -244,7 +234,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									datatype: "json",
 									data:{currentPage:page,pageRows:5},
 									success: function(data) {
-										VisitorInfo = data.jsonStr;
+										scenicTicket = data.jsonStr;
   					   					initTable(data.jsonStr,page);	
 						            }
 						        });
@@ -265,33 +255,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			{
   				
   				var t0="<tr>";
-  				var t1="<td style='text-align: center; width: 10%;'>"+value.name+"</td>";
-              	var t2="<td style='text-align: center; width: 10%;'>"+value.phone+"</td>";
-              	var t3="<td style='text-align: center;width: 10%;'>"+value.nickName+"</td>";
-              	var t4="<td style='text-align: center; width: 10%;'>"+value.sex+"</td>";
+  				var t1="<td style='text-align: center; width: 10%;'>"+value.scenicID+"</td>";
+              	var t2="<td style='text-align: center; width: 10%;'>"+value.scenicName+"</td>";
+              	var t3="<td style='text-align: center;width: 10%;'>"+value.half+"</td>";
+              	var t4="<td style='text-align: center; width: 10%;'>"+value.full+"</td>";
+              	var t5="<td style='text-align: center; width: 10%;'>"+value.discount+"</td>";
               	var t6="<td align='center'> <div class='am-btn-toolbar'>"+
               	"<div  style='text-align: center;float: none' class='am-btn-group am-btn-group-xs'>"+
-              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='queryVisitor("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>查看</button>"+
-                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='forbidVisitorInfo("+index+")'>"+"<span class='am-icon-trash-o'></span>加黑</button>"+
-                  "</div></div> </td>";		
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='queryTicket("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>查看</button>"+
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='editTicket("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"
+                  +"</div></div> </td>";		
                 var t7="</tr>";
-               $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t6).append(t7);
+               $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7);
   			});
   	}
  	function search()
  	{
- 		var url = "<%=basePath%>visitor/SearchVisitorInfo.action";
+ 		var url = "<%=basePath%>scenicTicket/getScenicTicketByscenicID.action";
  		var a = $("#searchText").val();
  		$.ajax( {
  			url:url,
  			type:"post",
  			datatype:"json",
- 			data:{phone:a},
+ 			data:{scenicID:a},
  			success:function(data) {
  				if (data == "[]") {
  					alert("没有搜索到任何信息，请重新搜索!");
 	 			}
 		 		else {
+		 			
 		 			var b=JSON.parse(data);
 					SearchSuccess(b[0]);
 		 		};
@@ -299,43 +291,69 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		});
  	}
  	
- 	function SearchSuccess(jsonStr) {
- 			$("#search_name").val(jsonStr.name);
- 			$("#search_phone").val(jsonStr.phone);
- 			$("#search_nickName").val(jsonStr.nickName);
- 			$("#search_sex").val(jsonStr.sex);
+ 	function queryTicket(index)
+ 	{
+ 		
+ 		QuerySuccess(scenicTicket[index]);
+ 	}
+ 	
+ 	
+ 	function QuerySuccess(jsonStr) {
+ 			
+ 			$("#search_scenicID").val(jsonStr.scenicID);
+ 			$("#search_name").val(jsonStr.scenicName);
+ 			$("#search_half").val(jsonStr.half);
+ 			$("#search_full").val(jsonStr.full);
+ 			$("#search_discount").val(jsonStr.discount);
  			$("#SearchModal").modal('show');
  	}
  	
- 	function queryVisitor(index)
+ 	function SearchSuccess(jsonStr) {
+ 			
+ 			$("#search_scenicID").val(jsonStr.scenicNo);
+ 			$("#search_name").val(jsonStr.scenicName);
+ 			$("#search_half").val(jsonStr.halfPrice);
+ 			$("#search_full").val(jsonStr.fullPrice);
+ 			$("#search_discount").val(jsonStr.discoutPrice);
+ 			$("#SearchModal").modal('show');
+ 	}
+ 	
+ 	function editTicket(index)
  	{	
- 		var a=VisitorInfo[index];	
- 		SearchSuccess(a);
+ 		$("#edit_scenicID").val(scenicTicket[index].scenicID);
+ 		$("#edit_name").val(scenicTicket[index].scenicName);
+ 		$("#edit_half").val(scenicTicket[index].half);
+ 		$("#edit_full").val(scenicTicket[index].full);
+ 		$("#edit_discount").val(scenicTicket[index].discount);	
+ 		$("#EditModal").modal('show');
  	}
  	
- 	
- 	function forbidVisitorInfo(index) {
- 		forbidIndex=index;	
- 		$("#forbidmodal").modal('show');
- 	}
- 	
- 	function ForbidVisitorInfo() {
- 		var url = "<%=basePath%>visitor/ForbidVisitorInfo.action";
- 		var phone=VisitorInfo[forbidIndex].phone;
- 		$.ajax ({
- 			url:url,
- 			type:"post",
- 			datatype:"json",
- 			data:{phone:phone},
- 			success:function(data) {
- 				if (data.confirm) {alert("成功把该游客加入黑名单！");loadVisitorInfo();}
- 				else alert("无法将该游客加入黑名单，请重新试试！");
- 			}
- 		});
- 		$("#forbidmodal").modal('hide');
+ 	function SaveScenicTicket()
+ 	{
+ 		var url="<%=basePath%>scenicTicket/updateScenicTicket.action";
+ 		var scenicID=$("#edit_scenicID").val();
+ 		var half=$("#edit_half").val();
+ 		var full=$("#edit_full").val();
+ 		var discount=$("#edit_discount").val();
+ 		$.ajax( {
+ 						url:url,
+ 						type:"POST",
+ 						datatype:"json",
+ 						data:{scenicID:scenicID,half:half,full:full,discount:discount}, 			
+ 						success:function(data) {
+ 							
+ 							if (data==1) {
+ 							$("#editmodal").modal('hide');
+ 							alert("保存成功！");
+ 							loadScenicTicket();
+ 							}
+ 							else{alert("修改失败，请重新确认修改");
+ 							$("#editmodal").modal('hide');
+ 							}
+ 						}
+ 						});
  		
  	}
- 	
  	
  	
  	

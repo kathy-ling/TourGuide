@@ -36,6 +36,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="<%=path %>/assets/js/bootstrap-paginator.min.js"></script>
 	<script type="text/javascript" src="<%=path %>/js/jquery.fancyspinbox.js"></script>
   	<script type="text/javascript" src="<%=basePath %>/js/dateSelect.js"></script>
+  	<script type="text/javascript" src="<%=basePath %>/js/jquery.PrintArea.min.js"></script>
   </head>
   
  <body>
@@ -110,16 +111,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
       </div>
     </div>
-
-    
-  </div>
+</div>
+<div id="print">
 <div class="modal fade" id="lookmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog" >
-				<div class="modal-content">
+				<div  class="modal-content">
 					<div class="model-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-	                        <span class="blue">X</span>
-	                    </button>
+						
 						<h4 class="modal-title" id="myModalLabel" style="text-align:center;">
 							订单详情
 						</h4>
@@ -150,22 +148,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="look_orderState" name="look_orderState"  readonly="readonly"/></td></tr>
 						<tr><td>游览人数:</td>
 						<td><input  type="text"  id="look_visitNum" name="look_visitNum"  readonly="readonly"/></td></tr>
-						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
+						<tr><td colspan="2" style="text-align:center;"><button id="c1"  class="btn btn-danger" onclick="print()">打印</button><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
 					
 						</table>
 					</div>
 				</div>
 			</div>
 </div>
+</div>
 
-<footer>
-  <hr>
-  <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
-</footer>
-
-
-<!--[if (gte IE 9)|!(IE)]><!-->
-<!--<![endif]-->
 <script src="<%=path %>/assets1/js/amazeui.min.js"></script>
 <script src="<%=path %>/assets1/js/app.js"></script>
 <script type="text/javascript">
@@ -378,9 +369,45 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   					},	
   		});
   			$("#querytxt").val();
-  		}		
+  		}	
+  		
+  		function print()
+  		{
+  			
+  			bindData();
+  			
+  			$("#print").printArea();
+  		}	
+  		
+  		function bindData(){  
+    		//搞定 type=text, 同时如果checkbox,radio,select>option的值有变化, 也绑定一下, 这里忽略button  
+    		$("input,select option").each(function(){  
+        	$(this).attr('value',$(this).val());  
+    		});  
+      
+    		//搞定 type=checkbox,type=radio 选中状态  
+    		$("input[type='checkbox'],input[type='radio']").each(function(){  
+        	if($(this).attr('checked'))  
+            $(this).attr('checked',true);  
+       		 else  
+            $(this).removeAttr('checked');  
+   			});  
+      
+    //搞定select选中状态  
+    		$("select option").each(function(){  
+        		if($(this).attr('selected'))  
+            	$(this).attr('selected',true);  
+        	else  
+           	 $(this).removeAttr('selected');  
+   			 });  
+      
+    //搞定 textarea  
+    $("textarea").each(function(){  
+        $(this).html($(this).val());  
+    });  
+      
+} 
 </script>
-
 	<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='<%=path%>/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
 	</script>

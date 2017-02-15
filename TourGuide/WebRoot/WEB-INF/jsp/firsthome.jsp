@@ -4,34 +4,282 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <base href="<%=basePath%>">
-    
-    <title>My JSP 'firsthome.jsp' starting page</title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-
-  </head>
-  
+  <meta charset="UTF-8">
+  <title>将页面平均分成四部分</title>
+  <style type="text/css">
+ .main1{
+ width: 100%;
+ height: 100%;
+ position: absolute;
+ }
+.quarter-div{
+ width: 50%;
+ height: 50%;
+ float: left;
+ }
+ 
+ </style>
+ <script src="<%=basePath %>/assets/js/jquery.js"></script>
+<script type="text/javascript" src="<%=basePath %>/js/echarts.js"></script>
+ </head>
  <body>
-		<div style="margin-top: 1%;">本系统的管理员初始密码是123456。</div>
+ <div class="main1">
+ 	<div style="text-align: center;">微信平台数据统计结果</div>
+ 	<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+ 	<div  class="quarter-div " >
+ 		<div  style="text-align: center;">微信平台关注状态</div>
+ 		<div id="Guanzhu" style="width: 100%;height:80%;">
+ 		
+ 		</div>
+ 		<div  style="text-align: center;width: 100%;height:10%;">关注总人数：1900</div>
+ 	</div>
+ 	
+ 	<div class="quarter-div ">
+ 		<div  style="text-align: center;">讲解员实时状况</div>
+ 		<div id="Zhuangkuang" style="width: 100%;height:100%;">	
+ 		</div>
+ 	</div>
+	<div class="quarter-div ">
+		<div  style="text-align: center;">订单完成状态</div>
+ 		<div id="Order" style="width: 100%;height:100%;">
+ 			
+ 			
+ 		</div>
+	</div>
+	<div class="quarter-div ">
+		<div  style="text-align: center;">代购门票情况</div>
+ 		<div id="Ticket" style="width: 100%;height:100%;">
 		
-		<div style="margin-top: 1%;">运营人员管理：管理员可以对运营人员进行增加、编辑、查看。并且可以对运营人员的信息编辑或者删除禁用运营人员。</div>
-		
-		<div style="margin-top: 1%;">讲解员管理:管理员对讲解员进行审核、浏览、删除禁用等功能。</div>
-		<div style="margin-top: 1%;">景区管理:管理员可以自己发布景区信息供游客进行游览，对景区搜索时可以直接搜索也可以进行景区名称、位置搜索查看景区。</div>
-		<div style="margin-top: 1%;">游客管理：管理员可以查看注册过的游客信息并且可以对其进行锁定与删除。</div>
-		<div style="margin-top: 1%;">订单管理：订单分为直接预约订单、拼接订单，查看订单可以进行搜索查看订单详情，每个订单都提供打印与导出功能。</div>
-		<div style="margin-top: 1%;">收入管理：管理员与运营人员可以对平台总收入、平台净利润、每个讲解员收入进行查询
-</div>
-	</body>
+	</div>
+ </div>
+ </div>
+ <script type="text/javascript">
+ 	 $(document).ready(function()
+ 	 {
+ 	 	loadPerson();
+ 	 	loadGuide();
+ 	 	loadOrder();
+ 	 	loadTicket();
+ 	 });
+ 	 
+ 	 
+ 	 function loadTicket()
+ 	 {
+ 	 	
+ 		var myChart = echarts.init(document.getElementById('Ticket'));
+        // 指定图表的配置项和数据
+    	var option = {
+    tooltip: {
+        trigger: 'item',
+        formatter: "{a} <br/>{b}: {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        x: 'left',
+        data:['代购门票','未代购门票']
+    },
+    series: [
+        {
+            name:'订单数',
+            type:'pie',
+            radius: ['50%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+                normal: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            data:[
+                {value:400, name:'代购门票'},
+                {value:300, name:'未代购门票'}
+            ]
+        }
+    	]
+		};
+	
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+ 		
+ 	
+ 	 }
+ 	 function loadPerson()
+ 	 {
+ 	 	
+ 		var myChart = echarts.init(document.getElementById('Guanzhu'));
+        // 指定图表的配置项和数据
+    	var option = {
+    	tooltip: {
+        	trigger: 'axis'
+   		},
+    	
+    	legend: {
+        	data:['关注人数','取关人数']
+    	},
+    	xAxis: [
+        {
+            name: '时间',
+            type: 'category',
+            data: ['8:00-10:00','10:00-12:00','12:00-14:00','14:00-16:00',
+            '16:00-18:00','18:00-20:00']
+        }
+    	],
+   	 	yAxis: [
+    		   {
+            type: 'value',
+            name: '人数',
+            min: 0,
+            max: 250,
+            interval: 50,
+            axisLabel: {
+                formatter: '{value} 人'
+            }
+        }
+    	],
+   		 series: [
+        {
+            name:'关注人数',
+            type:'bar',
+            data:[180,200,170,150,160,176]
+        },
+        {
+            name:'取关人数',
+            type:'bar',
+            data:[20,40,10,50,60,30]
+       	 }
+    		]
+		};
+	
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+ 		
+ 	
+ 	 }
+ 	 
+ 	 
+ 	 function loadOrder()
+ 	 {
+ 	 	
+ 		var myChart = echarts.init(document.getElementById('Order'));
+        // 指定图表的配置项和数据
+    	var option = {
+    	tooltip: {
+        	trigger: 'axis'
+   		},
+    	
+    	legend: {
+        	data:['完成订单','订单总数']
+    	},
+    	xAxis: [
+        {
+            name: '订单种类',
+            type: 'category',
+            data: ['拼团订单','预约订单']
+        }
+    	],
+   	 	yAxis: [
+    		   {
+            type: 'value',
+            name: '个数',
+            min: 0,
+            max: 10000,
+            axisLabel: {
+                formatter: '{value} 个'
+            }
+        }
+    	],
+   		 series: [
+        {
+            name:'完成订单',
+            type:'bar',
+            data:[4000,5000]
+        },
+        {
+            name:'订单总数',
+            type:'bar',
+            data:[8000,9000],
+            
+       	 }
+    		]
+		};
+	
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+ 		
+ 	
+ 	 }
+ 	 function loadGuide()
+ 	 {
+ 	 	
+ 	 	
+ 		var myChart = echarts.init(document.getElementById('Zhuangkuang'));
+        // 指定图表的配置项和数据
+    	var option = {
+    tooltip: {
+        trigger: 'item',
+        formatter: "{a} <br/>{b}: {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        x: 'left',
+        data:['待接单','已接单']
+    },
+    series: [
+        {
+            name:'讲解员人数',
+            type:'pie',
+            radius: ['50%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+                normal: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            data:[
+                {value:335, name:'待接单'},
+                {value:310, name:'已接单'}
+            ]
+        }
+    	]
+		};
+// 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+ 		
+ 	
+ 	 
+ 	 	
+ 	 };
+ </script>
+ </body>
 </html>

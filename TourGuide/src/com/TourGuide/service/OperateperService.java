@@ -45,8 +45,8 @@ public class OperateperService {
 	 * 添加运营人员
 	 * 2017-1-3 14:17:50
 	 * */
-	public boolean AddOperateperInfo_Service(Operateper operateper) {
-		return operateperDao.AddOperateperInfo_Dao(operateper);
+	public boolean AddOperateperInfo_Service(Operateper operateper, String password) {
+		return operateperDao.AddOperateperInfo_Dao(operateper,password);
 	}
 	
 	

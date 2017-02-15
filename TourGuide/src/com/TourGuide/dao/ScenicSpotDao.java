@@ -1,10 +1,13 @@
 package com.TourGuide.dao;
 
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -181,7 +184,6 @@ public class ScenicSpotDao {
 			scenicsSpotInfo.setIsHotSpot((int) list.get(k).get("isHotSpot"));
 			scenicsSpotInfo.setScenicIntro((String) list.get(k).get("scenicIntro"));
 			scenicsSpotInfo.setAccount((String) list.get(k).get("account"));
-			scenicsSpotInfo.setPassword((String) list.get(k).get("password"));
 			listres.add(scenicsSpotInfo);
 		}
 		
@@ -221,7 +223,6 @@ public class ScenicSpotDao {
 				scenicsSpotInfo.setScenicLevel(rSet.getString(11));
 				scenicsSpotInfo.setChargePerson(rSet.getString(12));
 				scenicsSpotInfo.setAccount(rSet.getString(13));
-				scenicsSpotInfo.setPassword(rSet.getString(14));
 			}
 		});
 		return scenicsSpotInfo;
@@ -256,7 +257,6 @@ public class ScenicSpotDao {
 			scenicsSpotInfo.setScenicLevel((String) list.get(0).get("scenicLevel"));
 			scenicsSpotInfo.setChargePerson((String) list.get(0).get("chargePerson"));
 			scenicsSpotInfo.setAccount((String) list.get(0).get("account"));
-			scenicsSpotInfo.setPassword((String) list.get(0).get("password"));
 		}
 		
 		return scenicsSpotInfo;
@@ -267,30 +267,45 @@ public class ScenicSpotDao {
 	 * 参数：景区信息类
 	 * 2017-1-2 10:36:30
 	 * */
-	public boolean AddScenicInfo_Dao(ScenicsSpotInfo scenicsSpotInfo) {
+	public boolean AddScenicInfo_Dao(ScenicsSpotInfo scenicsSpotInfo, String password) {
 		String sql = " select count(*) from t_scenicspotinfo where scenicName = '"
 					+scenicsSpotInfo.getScenicName()+"'";
-		 
+		String sql1="select count(*) from t_admin where username="+scenicsSpotInfo.getAccount(); 
 		
-		if (jdbcTemplate.queryForObject(sql, Integer.class) == 0) {
-			sql =  " insert into t_scenicspotinfo values (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
-			jdbcTemplate.update(sql, new Object[]{
-				scenicsSpotInfo.getScenicNo(),
-				scenicsSpotInfo.getScenicImagePath(),
-				scenicsSpotInfo.getScenicName(),
-				scenicsSpotInfo.getScenicIntro(),
-				scenicsSpotInfo.getTotalVisits(),
-				scenicsSpotInfo.getOpeningHours(),
-				scenicsSpotInfo.getProvince(),
-				scenicsSpotInfo.getCity(),
-				scenicsSpotInfo.getScenicLocation(),
-				scenicsSpotInfo.getIsHotSpot(),
-				scenicsSpotInfo.getScenicLevel(),
-				scenicsSpotInfo.getChargePerson(),
-				scenicsSpotInfo.getAccount(),
-				scenicsSpotInfo.getPassword()
-			});
-			return true;
+		if ((jdbcTemplate.queryForObject(sql, Integer.class) == 0)&&
+				((jdbcTemplate.queryForObject(sql, Integer.class) == 0))) {
+			
+			DataSource dataSource=jdbcTemplate.getDataSource();
+			Connection  conn;
+			try {
+				  conn=dataSource.getConnection();
+				  conn.setAutoCommit(false);
+				  sql =  " insert into t_scenicspotinfo values (?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+					jdbcTemplate.update(sql, new Object[]{
+						scenicsSpotInfo.getScenicNo(),
+						scenicsSpotInfo.getScenicImagePath(),
+						scenicsSpotInfo.getScenicName(),
+						scenicsSpotInfo.getScenicIntro(),
+						scenicsSpotInfo.getTotalVisits(),
+						scenicsSpotInfo.getOpeningHours(),
+						scenicsSpotInfo.getProvince(),
+						scenicsSpotInfo.getCity(),
+						scenicsSpotInfo.getScenicLocation(),
+						scenicsSpotInfo.getIsHotSpot(),
+						scenicsSpotInfo.getScenicLevel(),
+						scenicsSpotInfo.getChargePerson(),
+						scenicsSpotInfo.getAccount(),
+					});
+					sql1="insert into t_admin(role,username,password)  values(?,?,?)";
+					jdbcTemplate.update(sql1, new Object[]{"景区管理人员",scenicsSpotInfo.getAccount(),password});
+					conn.commit();//提交JDBC事务 
+					conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+					return true;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}	
 		}
 		return false;
 	}
@@ -318,7 +333,7 @@ public class ScenicSpotDao {
 	public boolean UpdateScenicInfo(ScenicsSpotInfo scenicsSpotInfo) {
 		String sql = " update t_scenicspotinfo set scenicNo=?,scenicImagePath=?,scenicName=?, "+
 					" scenicIntro=?,totalVisits=?,openingHours=?,province=?,city=?,scenicLocation=?, "+
-					" isHotSpot=?,scenicLevel=?,chargePerson=?,account=?,password=?  where scenicName=? ";
+					" isHotSpot=?,scenicLevel=?,chargePerson=?,account=?  where scenicNo=? ";
 		int i=jdbcTemplate.update(sql, new Object[]{
 				scenicsSpotInfo.getScenicNo(),
 				scenicsSpotInfo.getScenicImagePath(),
@@ -332,9 +347,8 @@ public class ScenicSpotDao {
 				scenicsSpotInfo.getIsHotSpot(),
 				scenicsSpotInfo.getScenicLevel(),
 				scenicsSpotInfo.getChargePerson(),
-				scenicsSpotInfo.getScenicName(),
 				scenicsSpotInfo.getAccount(),
-				scenicsSpotInfo.getPassword()});
+				scenicsSpotInfo.getScenicNo()});
 		if (i>0) {
 			return true;
 		} else {
