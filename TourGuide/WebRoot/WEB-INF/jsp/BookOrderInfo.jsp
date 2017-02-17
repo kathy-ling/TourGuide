@@ -23,7 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<meta name="renderer" content="webkit">
  	 <meta http-equiv="Cache-Control" content="no-siteapp" />
- 	 <link rel="stylesheet" href="<%=path%>/assets/css/ace.onpage-help.css" />
+ 	<link rel="stylesheet" href="<%=path%>/assets/css/ace.onpage-help.css" />
 	<link rel="stylesheet" href="<%=path%>/docs/assets/js/themes/sunburst.css" />
   	<link rel="icon" type="image/png" href="<%=path %>/assets1/i/favicon.png">
   	<link rel="apple-touch-icon-precomposed" href="<%=path %>/assets1/i/app-icon72x72@2x.png">
@@ -32,6 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<link rel="stylesheet" href="<%=path%>/assets/css/bootstrap.css" />
   	<link rel="stylesheet" href="<%=path%>/css/jquery.fancyspinbox.css" />
 	<link rel="stylesheet" href="<%=path%>/css/dateSelect.css" />
+	
 	<script type="text/javascript" src="<%=path %>/assets/js/jquery.js"></script>
 	<script type="text/javascript" src="<%=path %>/assets/js/bootstrap-paginator.min.js"></script>
 	<script type="text/javascript" src="<%=path %>/js/jquery.fancyspinbox.js"></script>
@@ -62,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           </div>
         </div>
         
-        <div class="am-u-sm-12 am-u-md-3">
+        <div  class="am-u-sm-12 am-u-md-3">
           <div class="am-input-group am-input-group-sm">
             <table>
             	<tr>
@@ -74,7 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    				 		<option value="guidePhone">讲解员手机号</option>	
 					</select></td>
 					<td><input type="text"  id="querytxt" class="am-form-field" style="width:100px" readonly="true" ></td>
-            		<td><button class="am-btn am-btn-default" type="button" onclick="search()">搜索</button></td>
+            		<td><button class="am-btn am-btn-default " type="button" onclick="search()">搜索</button></td>
             	</tr>
             </table>
           
@@ -107,14 +108,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		   </div>
 		  
           </form>
+          
         </div>
 
       </div>
     </div>
 </div>
-<div id="print">
+
 <div class="modal fade" id="lookmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog" >
+				
 				<div  class="modal-content">
 					<div class="model-header">
 						
@@ -122,7 +125,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							订单详情
 						</h4>
 					</div>
-					<div class="modal-body">
+					<div id="printArea"   class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
 						<tr ><td>订单编号：</td>
 						<td><input type="text" id="look_orderID" name="look_orderID"  readonly="readonly"/></td>
@@ -148,14 +151,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="look_orderState" name="look_orderState"  readonly="readonly"/></td></tr>
 						<tr><td>游览人数:</td>
 						<td><input  type="text"  id="look_visitNum" name="look_visitNum"  readonly="readonly"/></td></tr>
-						<tr><td colspan="2" style="text-align:center;"><button id="c1"  class="btn btn-danger" onclick="print()">打印</button><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
-					
+						
 						</table>
+					</div>
+					<div>
+					<button class="close" data-dismiss="modal" aria-hidden="true">Return</button>
+					<button  class="btn btn-warning" onclick="printDiv()">打印</button>
 					</div>
 				</div>
 			</div>
 </div>
-</div>
+
 
 <script src="<%=path %>/assets1/js/amazeui.min.js"></script>
 <script src="<%=path %>/assets1/js/app.js"></script>
@@ -371,14 +377,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			$("#querytxt").val();
   		}	
   		
-  		function print()
+  		function printDiv()
   		{
-  			
+  		    
+  		    
   			bindData();
-  			
-  			$("#print").printArea();
-  		}	
-  		
+  			$("#printArea").printArea();
+  		}
   		function bindData(){  
     		//搞定 type=text, 同时如果checkbox,radio,select>option的值有变化, 也绑定一下, 这里忽略button  
     		$("input,select option").each(function(){  
