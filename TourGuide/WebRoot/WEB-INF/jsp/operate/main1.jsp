@@ -48,7 +48,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
     
     <div id="welcomeRole" class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"></div>
     <div class="sideMenu" id="menu1">
-       <!-- <h3 class="am-icon-flag"><em></em> <a href="#">微信平台</a></h3>
+        <h3 class="am-icon-flag"><em></em> <a href="#">微信平台</a></h3>
       	<ul>
         <li><a href="FirstShow.action" target="targetiframe">微信平台数据分析</a></li>
       	</ul>
@@ -71,9 +71,12 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
       
       <h3 class="am-icon-cart-plus"><em></em> <a href="#"> 订单管理</a></h3>
       <ul>
-      	<li><a href="BookOrderInfo.action" target="targetiframe">订单信息管理</a></li>
+      	<li><a href="BookOrderInfo.action" target="targetiframe">预约信息管理</a></li>
       </ul>
-      
+      <h3 class="am-icon-cart-plus"><em></em> <a href="#"> 记录管理</a></h3>
+      <ul>
+      	<li><a href="RewardOrPunishRecord.action" target="targetiframe">奖励惩罚记录管理</a></li>
+      </ul>
       <h3 class="am-icon-location-arrow"><em></em> <a href="#">景区管理</a></h3>
       <ul>
        <li><a href="scenicInfo.action" target="targetiframe">景区信息管理</a></li>
@@ -88,7 +91,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
       <h3 class="am-icon-money"><em></em> <a href="#">权限管理</a></h3>
       <ul>
         <li><a href="authority.action" target="targetiframe">后台权限设置</a></li>
-      </ul>  -->
+      </ul>  
     </div>
     
       
@@ -135,7 +138,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
  
 <script type="text/javascript">
 		
-  		 var url="<%=basePath%>Menu/getMenu.action";
+  		 <%-- var url="<%=basePath%>Menu/getMenu.action";
   		$.ajax({
  			url:url,
  			type:"post",
@@ -149,7 +152,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
  				
  			}
  		
- 		}); 
+ 		});  --%>
 			jQuery(".sideMenu").slide({
 				titCell:"h3", //鼠标触发对象
 				targetCell:"ul", //与titCell一一对应，第n个titCell控制第n个targetCell的显示隐藏

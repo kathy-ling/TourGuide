@@ -88,8 +88,7 @@ public class OperateAction {
 			@RequestParam(value="account")String account,
 			@RequestParam(value="role")String role,
 			@RequestParam(value="phone")String phone,
-			@RequestParam(value="scenicID")String scenicID,
-			@RequestParam(value="password")String password) throws IOException {
+			@RequestParam(value="scenicID")String scenicID) throws IOException {
 		
 		CommonResp.SetUtf(resp);
 		Operateper operateper = new Operateper();
@@ -98,6 +97,8 @@ public class OperateAction {
 		operateper.setOperateper_role(role);
 		operateper.setOperateper_phone(phone);
 		operateper.setOperateper_scenic(scenicID);
+		int i=phone.length();
+		String password=phone.substring(i-6, i);
 		boolean confirm = operateperService.AddOperateperInfo_Service(operateper,password);
 		Map<String, Object> map = new HashMap<>();
 		map.put("confirm", confirm);
@@ -150,7 +151,7 @@ public class OperateAction {
 	/*
 	 * 禁用运营人员
 	 * */
-	@RequestMapping(value="/ForbidOperate.action")
+	@RequestMapping(value="/ForbidOperate.action",method=RequestMethod.POST)
 	@ResponseBody
 	public Object ForbidOperate(HttpServletResponse resp,
 			@RequestParam(value="account")String account) throws IOException {
@@ -162,7 +163,7 @@ public class OperateAction {
 	/*
 	 * 解禁运营人员
 	 * */
-	@RequestMapping(value="/RelieveOperate.action")
+	@RequestMapping(value="/RelieveOperate.action",method=RequestMethod.POST)
 	@ResponseBody
 	public Object RelieveOperate(HttpServletResponse resp,
 			@RequestParam(value="account")String account) throws IOException {
@@ -170,6 +171,28 @@ public class OperateAction {
 		Map<String, Object> map = new HashMap<>();
 		map.put("confirm", operateperService.RelieveOperate_Service(account));
 		return map;
+	}
+	
+	/**
+	 * 重置运营人员登录密码
+	 * @param resp
+	 * @param account
+	 * @param phone
+	 * @return
+	 * 2017-2-18 15:13:04
+	 */
+	@RequestMapping(value="/resetPassword.action",method=RequestMethod.POST)
+	@ResponseBody
+	public Object resetPassword(HttpServletResponse resp,
+			@RequestParam(value="account")String account,
+			@RequestParam(value="phone")String phone) {
+		
+		
+		CommonResp.SetUtf(resp);
+		
+		int i=operateperService.ResetPassword(account, phone);
+		
+		return i;
 	}
 }
 

@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<link rel="stylesheet" href="<%=path%>/assets/css/bootstrap.css" />
 	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.js"></script>
 	<script type="text/javascript" src="<%=basePath %>/assets/js/bootstrap-paginator.min.js"></script>
-
+	<script type="text/javascript" src="<%=basePath %>/js/bootstrap.min.js"></script>
   </head>
   
  <body>
@@ -131,8 +131,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="add_phone" name="add_phone" /></td></tr>
 						<tr><td>所属景区编号:</td>
 						<td><input  type="text"  id="add_scenicID" name="add_scenicID" /></td></tr>
-						<tr><td>登录密码:</td>
-						<td><input  type="text"  id="add_password" name="add_password" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button class="close" onclick="AddOperateperInfo()" >确定增加</button></td></tr>
 						
 					</table>
@@ -168,7 +166,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<tr><td>所属景区编号:</td>
 						<td><input  type="text"  id="edit_scenicID" name="edit_scenicID" /></td></tr>
 						
-						<tr><td colspan="2" style="text-align:center;"><button  onclick="editOperateperInfo()" >修改</button></td></tr>
+						<tr>
+						<td  style="text-align:center;"><button class="btn btn-warning"  onclick="editOperateperInfo()" >修改</button></td>
+						<td  style="text-align:center;"><button class="btn btn-warning"  onclick="resetPassword()" >重置密码</button></td>
+						</tr>
 						
 					</table>
 					
@@ -439,7 +440,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#add_role").val("");
  		$("#add_phone").val("");
  		$("#add_scenicID").val("");
- 		$("#add_password").val("");
  		$("#addmodal").modal('show');
  	}
  	function AddOperateperInfo() {
@@ -449,13 +449,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		var role = $("#add_role").val();
  		var phone = $("#add_phone").val();
  		var scenicID=$("#add_scenicID").val();
- 		var password=$("#add_password").val();
- 		if (name != "" && account != "" && role != "" && phone != ""&& password != "") {
+ 		if (name != "" && account != "" && role != "" && phone != "") {
  			$.ajax( {
  				url:url,
  				type:"POST",
  				datatype:"json",
- 				data:{name:name,account:account,role:role,phone:phone,scenicID:scenicID,password:password},
+ 				data:{name:name,account:account,role:role,phone:phone,scenicID:scenicID},
  				success:function(data) {
  					if (data.confirm) {
  						$("#addmodal").modal('hide');
@@ -594,7 +593,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
  	}
  	
- 	
+ 	function resetPassword()
+ 	{
+ 		var account=$("#edit_account").val();
+ 		var phone=$("#edit_phone").val();
+ 		alert(account+" "+phone);
+ 		$.ajax(
+ 		{
+ 			url:"<%=basePath%>operate/resetPassword.action",
+ 			type:"POST",
+ 			datatype:"json",
+ 			data:{account:account,phone:phone},
+ 			success:function(data) {
+ 					if (data==1) {
+ 						alert("重置成功");
+ 					}else alert("重置失败");
+ 					loadGuideInfo();
+ 				}
+ 			});
+ 	}
 </script>
 
 	<script type="text/javascript">

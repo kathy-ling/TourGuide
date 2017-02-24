@@ -253,10 +253,12 @@ public class BookOrderDao {
 	public List<Map<String , Object>> GetBookorderBypage(int currentPage,int pageRows) 
 	{
 		int k=(currentPage-1)*pageRows;
-		String sql="select t_bookorder.*,t_visitor.name,t_visitor.phone,"
+		String sql="select t_guideinfo.phone,t_bookorder.*,t_visitor.name,t_visitor.phone,"
 				+ "t_scenicspotinfo.scenicName "
-				+ "from t_visitor,t_bookorder,t_scenicspotinfo"
-				+ " where t_bookorder.visitorPhone=t_visitor.phone and t_bookorder.scenicID = t_scenicspotinfo.scenicNo"
+				+ "from t_visitor,t_bookorder,t_scenicspotinfo,t_guideinfo "
+				+ " where t_bookorder.visitorPhone=t_visitor.phone and"
+				+ " t_bookorder.scenicID = t_scenicspotinfo.scenicNo and  "
+				+ "t_guideinfo.id=t_bookorder.guideID"
 				+ " LIMIT "+k+" ,"+pageRows+"";
 		return jdbcTemplate.queryForList(sql);	
 	}
@@ -269,21 +271,30 @@ public class BookOrderDao {
 	public int GetBookorderCount() {
 		String sql="select t_bookorder.*,t_visitor.name,t_visitor.phone,"
 				+ "t_scenicspotinfo.scenicName "
-				+ "from t_visitor,t_bookorder,t_scenicspotinfo"
+				+ "from t_visitor,t_bookorder,t_scenicspotinfo,t_guideinfo "
 				+ " where t_bookorder.visitorPhone=t_visitor.phone "
-				+ "and t_bookorder.scenicID = t_scenicspotinfo.scenicNo";
+				+ "and t_bookorder.scenicID = t_scenicspotinfo.scenicNo and "
+				+ "t_guideinfo.id=t_bookorder.guideID";
 		 
 		 return jdbcTemplate.queryForList(sql).size();
 	}
 	
-	
+	/**
+	 * 通过关键字来搜索订单信息（日期，景区编号等）
+	 * @param currentPage
+	 * @param pageRows
+	 * @param word
+	 * @param value
+	 * @return
+	 * 2017-2-19 15:00:34
+	 */
 	public List<Map<String , Object>> GetBookorderBySearch(int currentPage,int pageRows,String word,String value )
 	{
 		
 		int k=(currentPage-1)*pageRows;
 		String a="t_bookorder."+word+"='"+value+"'";
 		if (word.equals("visitTime")) {
-			a="t_bookorder."+word+">'"+value+"'";
+			a="t_bookorder."+word+"='"+value+"'";
 		}
 		String sql="select t_bookorder.*,t_visitor.name,t_visitor.phone,"
 				+ "t_scenicspotinfo.scenicName "

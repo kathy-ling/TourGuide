@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.TourGuide.dao.GuideFeeDao;
+import com.TourGuide.model.GuideFee;
 
 @Service
 public class GuideFeeService {
@@ -14,7 +15,7 @@ public class GuideFeeService {
 	@Autowired
 	private GuideFeeDao guideFeeDao;
 	
-	public List<Map<String, Object>> GetGuideFee(int currentPage,int rows)
+	public List<GuideFee> GetGuideFee(int currentPage,int rows)
 	{
 		return guideFeeDao.GetGuideFee(currentPage, rows);
 	}
@@ -24,9 +25,20 @@ public class GuideFeeService {
 		return guideFeeDao.GetGuideFeeCount();
 	}
 	
-	public List<Map<String, Object>> GetguideFeeByID(String guideID)
+	public GuideFee GetguideFeeByID(String guideID)
 	{
 		
-		return guideFeeDao.GetguideFeeByID(guideID);
+		return guideFeeDao.getguideFeeByPhone(guideID);
+	}
+	
+	public  int  RewardGuideFee(String phone,int money,String reason, String loginphone) 
+	{
+		return guideFeeDao.RewardGuideFee(phone, money, reason,loginphone);
+	}
+	
+	public int PunishGuideFee(String phone,int money,String reason, String loginphone)
+	{
+		return guideFeeDao.PunishGuideFee(phone, money, reason,loginphone);
+		
 	}
 }

@@ -78,4 +78,15 @@ public class OperateperService {
 	public boolean RelieveOperate_Service(String account) {
 		return operateperDao.RelieveOperate_Dao(account);
 	}
+	
+	/**
+	 * 通过账号修改运营人员密码为手机号后六位
+	 * @param account
+	 * @param phone
+	 * @return
+	 */
+	public int ResetPassword(String account,String phone)
+	{
+		return operateperDao.ResetPassword(account, phone);
+	}
 }

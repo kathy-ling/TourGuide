@@ -49,7 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <div class="admin-content">
     <div class="admin-content-body">
       <div class="am-cf am-padding am-padding-bottom-0">
-        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">订单管理</strong> / <small>订单信息管理</small></div>
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">订单管理</strong> / <small>预约信息管理</small></div>
       </div>
 
       <hr>

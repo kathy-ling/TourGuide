@@ -172,4 +172,16 @@ public class OperateperDao {
 		return false;
 	}
 	
+	
+	public int ResetPassword(String account,String phone) {
+		
+		int i=phone.length();
+		String password=phone.substring(i-6, i);
+		
+		String sql="UPDATE t_admin set `password`="+password+
+				" WHERE username='"+account+"'";
+		i=jdbcTemplate.update(sql);
+		return i;
+	}
+	
 }

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Repository;
 import com.TourGuide.common.DateConvert;
 import com.TourGuide.model.GuideInfo;
 import com.TourGuide.model.GuideOtherInfo;
-import com.TourGuide.model.ScenicsSpotInfo;
 @Repository
 public class GuideDao {
 	
@@ -443,9 +442,9 @@ public class GuideDao {
 		int k=(currentPage-1)*rows;
 		String sql="SELECT t_guideotherinfo.*,t_guideinfo.*,t_scenicspotinfo.scenicName "
 				+ "FROM t_guideotherinfo, t_guideinfo,t_scenicspotinfo "
-				+ "where t_guideinfo.phone=t_guideotherinfo.phone"
-				+ " AND t_guideinfo.phone in"
-				+ "(select phone from t_guideotherinfo "
+				+ "where t_guideinfo.id=t_guideotherinfo.id"
+				+ " AND t_guideinfo.id in"
+				+ "(select id from t_guideotherinfo "
 				+ "where authorized=1)  and t_scenicspotinfo.scenicNo=t_guideotherinfo.scenicBelong "
 				+ " LIMIT "+k+" ,"+rows+"";
 		List<Map<String, Object>> list=jdbcTemplate.queryForList(sql);
@@ -462,8 +461,8 @@ public class GuideDao {
 	public List<Map<String, Object>> GetGuideofNo(int currentPage,int rows)
 	{
 		int k=(currentPage-1)*rows;
-		String sql="select * from t_guideinfo where t_guideinfo.phone in"
-				+ "(select phone from t_guideotherinfo "
+		String sql="select * from t_guideinfo where t_guideinfo.id in"
+				+ "(select id from t_guideotherinfo "
 				+ "where authorized=0) LIMIT "+k+" ,"+rows+"";
 		List<Map<String, Object>> list=jdbcTemplate.queryForList(sql);	
 		return list;

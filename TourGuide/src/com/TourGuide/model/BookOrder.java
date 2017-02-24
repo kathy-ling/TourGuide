@@ -1,6 +1,6 @@
 package com.TourGuide.model;
 
-import java.sql.Date;
+
 
 /**
  * 预约订单的信息
