@@ -28,5 +28,28 @@ public class AdminDao {
 		}
 		
 	}
+	
+	/**
+	 * 更新用户密码
+	 * @param username
+	 * @param passNew
+	 * @param passOld
+	 * @return
+	 * 2017-2-27 15:10:48
+	 */
+	public int UpdatePass(String username,String passNew,String passOld)
+	{
+		int j=0;
+		
+		String sql="select count(*) from t_admin where username=? and password=?";
+		int i=jdbcTemplate.queryForObject(sql, new Object[]{username,passOld}, Integer.class);
+		
+		if (i>0) {
+			String sql1="update t_admin set password=? where username=?";
+			j=jdbcTemplate.update(sql1, new Object[]{passNew,username});
+		}
+			return j;
+		
+	}
 
 }

@@ -19,4 +19,16 @@ public class AdminService {
 	{
 		return adminDao.isValid(username, password);
 	}
+	/**
+	 * 修改密码
+	 * @param username
+	 * @param passNew
+	 * @param passOld
+	 * @return
+	 * 2017-2-27 15:35:40
+	 */
+	public int UpdatePass(String username,String passNew,String passOld)
+	{
+		return adminDao.UpdatePass(username, passNew, passOld);
+	}
 }
