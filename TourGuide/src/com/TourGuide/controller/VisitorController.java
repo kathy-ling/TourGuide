@@ -41,11 +41,12 @@ public class VisitorController {
 			@RequestParam("name") String name,
 			@RequestParam("phone") String phone,
 			@RequestParam("passwd") String passwd,
-			@RequestParam("image") String image) throws IOException{
+			@RequestParam("image") String image,
+			@RequestParam("openID") String openID) throws IOException{
 		
 		CommonResp.SetUtf(resp);
 		
-		boolean bool = visitorService.visitorRegister(nickName, sex, name, phone, passwd, image);
+		boolean bool = visitorService.visitorRegister(nickName, sex, name, phone, passwd, image, openID);
 		
 		PrintWriter writer = resp.getWriter();
 		writer.write(new Gson().toJson(bool));

@@ -55,26 +55,6 @@ public class PromotionController {
 			listresult.add(map);
 		}
 		
-		/**
-		 * 将微信端获取到的用户信息存入数据库
-		 */
-		if(SNSUserInfoUtil.snsUserInfo != null){
-			
-			boolean bool = visitorService.recordWeixinInfo(SNSUserInfoUtil.snsUserInfo);
-			String openId = SNSUserInfoUtil.snsUserInfo.getOpenId();
-			
-//			//通过openID，获取用户的信息
-//			VisitorInfo visitorInfo = new VisitorInfo();
-//			visitorInfo = visitorService.getInfobyOpenID(openId);
-//			
-//			//用户未注册
-//			if(visitorInfo.getPhone().equals(openId)){
-//				
-//			}
-		}
-		
-		
-		
 		PrintWriter writer = resp.getWriter();
 		writer.write(new Gson().toJson(listresult));
 		writer.flush();		

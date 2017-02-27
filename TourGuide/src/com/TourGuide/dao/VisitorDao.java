@@ -1,11 +1,8 @@
 package com.TourGuide.dao;
 
-<<<<<<< HEAD
-=======
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
->>>>>>> a8d0bc35bd4f4235ff875f200acff562a01f8d44
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -96,15 +93,16 @@ public class VisitorDao {
 		 * @param phone  手机号
 		 * @param passwd  用户密码
 		 * @param image   用户头像
+		 * 
 		 * @return
 		 */
 		public boolean visitorRegister(String nickName, String sex,
-				String name, String phone, String passwd, String image){
+				String name, String phone, String passwd, String image,String openID){
 			
 			boolean bool = false;
-			String sqlRegister = "insert into t_visitor (nickName,sex,name,phone,image) "
-					+ "values (?,?,?,?,?)";
-			int i = jdbcTemplate.update(sqlRegister, new Object[]{nickName, sex, name, phone, image});
+			String sqlRegister = "insert into t_visitor (nickName,sex,name,phone,image,openID) "
+					+ "values (?,?,?,?,?,?)";
+			int i = jdbcTemplate.update(sqlRegister, new Object[]{nickName, sex, name, phone, image, openID});
 			
 			String sqlSetPass = "insert into t_visitorlogin (phone,password,disable) "
 					+ "values (?,?,?)";

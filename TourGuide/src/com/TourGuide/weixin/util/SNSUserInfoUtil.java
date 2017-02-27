@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 
 public class SNSUserInfoUtil {
 	
-	public static SNSUserInfo snsUserInfo = null;
+//	public static SNSUserInfo snsUserInfo = null;
 	
 	
 	/**

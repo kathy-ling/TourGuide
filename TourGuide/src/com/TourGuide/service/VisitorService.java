@@ -3,6 +3,7 @@ package com.TourGuide.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Service;
 
 import com.TourGuide.dao.VisitorDao;
@@ -10,7 +11,7 @@ import com.TourGuide.model.SNSUserInfo;
 import com.TourGuide.model.VisitorInfo;
 import com.TourGuide.model.VisitorLoginInfo;
 
-@Service
+@Service(value="visitorService")
 public class VisitorService {
 	
 	@Autowired
@@ -46,8 +47,8 @@ public class VisitorService {
 	 * @return
 	 */
 	public boolean visitorRegister(String nickName, String sex,
-			String name, String phone, String passwd, String image){
-		return visitorDao.visitorRegister(nickName, sex, name, phone, passwd, image);
+			String name, String phone, String passwd, String image, String openID){
+		return visitorDao.visitorRegister(nickName, sex, name, phone, passwd, image, openID);
 	}
 	
 	
