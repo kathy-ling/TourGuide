@@ -1,9 +1,6 @@
 package com.TourGuide.dao;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 1cd26ad85b2f2d9c3f8afc9df813e4e7793fd550
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -419,7 +419,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script>
 $('#my-menu').fancyspinbox();
 </script>
-	<script src="<%=path %>/assets/js/bootstrap.js"></script>
+	<script src="<%=path%>/assets/js/bootstrap.js"></script>
 
 </body>
 </html>

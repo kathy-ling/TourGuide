@@ -22,21 +22,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="renderer" content="webkit">
 <meta http-equiv="Cache-Control" content="no-siteapp" />
-<link rel="stylesheet"
-	href="<%=basePath %>/assets/css/ace.onpage-help.css" />
-<link rel="stylesheet"
-	href="<%=basePath %>/docs/assets/js/themes/sunburst.css" />
+<link rel="stylesheet" href="<%=basePath %>/assets/css/ace.onpage-help.css" />
+<link rel="stylesheet" href="<%=basePath %>/docs/assets/js/themes/sunburst.css" />
 <link rel="stylesheet" href="<%=basePath %>/assets1/css/amazeui.min.css" />
 <link rel="stylesheet" href="<%=basePath %>/assets1/css/admin.css">
 <link rel="stylesheet" href="<%=path%>/assets/css/bootstrap.css" />
 <link rel="stylesheet" href="<%=path%>/assets/css/ace.onpage-help.css" />
-<link rel="stylesheet"
-	href="<%=path%>/docs/assets/js/themes/sunburst.css" />
+<link rel="stylesheet" href="<%=path%>/docs/assets/js/themes/sunburst.css" />
 <link rel="stylesheet" href="<%=path%>/css/dateSelect.css" />
 <script type="text/javascript" src="<%=basePath %>/assets/js/jquery.js"></script>
 <script type="text/javascript"
 	src="<%=basePath %>/assets/js/bootstrap-paginator.min.js"></script>
-<script type="text/javascript" src="<%=basePath %>/js/echarts.js"></script>
 <script type="text/javascript" src="<%=basePath %>/js/dateSelect.js"></script>
 </head>
 

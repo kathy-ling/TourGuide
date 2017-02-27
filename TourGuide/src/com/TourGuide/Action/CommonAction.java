@@ -168,4 +168,10 @@ public class CommonAction {
 	{
 		return "admin/OperateRecord";
 	}
+	
+	@RequestMapping(value="/SysManager.action",method=RequestMethod.GET)
+	public String ToSysManager()
+	{
+		return "admin/SysManager";
+	}
 }

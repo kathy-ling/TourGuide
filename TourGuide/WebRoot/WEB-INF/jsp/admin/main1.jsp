@@ -1,8 +1,7 @@
-<%@ page language="java" import="java.util.*,com.TourGuide.model.AdminInfo,javax.servlet.http.HttpSession" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 %>
 
 <!doctype html>
@@ -85,9 +84,13 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
       </ul>
       <h3 class="am-icon-money"><em></em> <a href="#">收入管理</a></h3>
       <ul>
-        <li><a href="ScenicFee.action" target="targetiframe">平台收入信息管理</a></li>
-         <li><a href="GuideFee.action" target="targetiframe">讲解员收入查询</a></li>
+        <li><a href="ScenicFee.action" target="targetiframe">景区收入信息管理</a></li>
+        <li><a href="GuideFee.action" target="targetiframe">讲解员收入查询</a></li>
         
+      </ul>
+      <h3 class="am-icon-money"><em></em> <a href="#">系统管理</a></h3>
+      <ul>
+        <li><a href="SysManager.action" target="targetiframe">平台系统设置</a></li>
       </ul> 
     </div>
     
