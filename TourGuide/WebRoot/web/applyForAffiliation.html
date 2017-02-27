@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>挂靠景区详情</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/workPlace.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
+    <link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+	<style type="text/css">
+		.ui-li-has-thumb > .ui-btn > img:first-child{
+			width: 5em;
+			height: 5em;
+		}
+		.sidebtn{
+				position:absolute;
+				right:1em;
+				top:50%;
+				margin-top:-0.5em;		
+			}
+	</style>
+</head>
+<body>
+<div data-role="page" id="main">
+    <div data-role="header"  id="header" class="header" data-position="fixed">
+       <h1>挂靠景区</h1>
+        <ul id="currentW_ul" data-icon="false" data-role="listview" >
+           <!--<li><a href="#spaceInfo">
+                <img src="img/bmy.jpg">
+                <p>
+                    <span >秦始皇兵马俑</span><br/>
+                    <span>世界第八大奇迹</span><br/>
+                    景点等级：<span class="starLevel">AAAAA</span><br/>
+                    景点地址：<sapn calss="location">陕西省西安市临潼区临蓝路</sapn>
+                </p>
+                </a>
+            </li>-->
+        </ul>
+        <form class="ui-filterable">
+            <input id="searchWorkSpace" data-type="search" placeholder="请输入景点名称">
+        </form>
+    </div>
+    <div data-role="main" class="ui-content">
+        <ul data-icon="false" id="apply_ul" data-role="listview" data-filter="true" data-input="#searchWorkSpace">
+            
+        </ul>
+    </div>
+</div>
+
+<div data-role="page" id="spaceInfo">
+    <div data-role="header"  id="header" class="header">
+        <h1>我挂靠的景区</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+        <ul data-role="listview">
+            <!--<li>
+                <div class="my-imgcard">
+                <img class="my-imgcard-img squareImg" src="img/bmy.jpg">
+                </div>
+                <div class="my-imgcard-dic">
+                <span class="my-li-h ">秦始皇兵马俑</span><br/>
+                    <span>世界第八大奇迹</span><br/>
+                    景点等级：<span class="starLevel">AAAAA</span><br/>
+                    景点地址：<sapn calss="location">陕西省西安市临潼区临蓝路</sapn>
+                </div>
+            </li>
+            <li>
+                申请时间：<span>2014-05-21</span><br/>
+                挂靠时间：<sapn>2016-05-21</sapn><br/>
+                挂靠时长：<span>812天</span><br/>-->
+            </li>
+        </ul>
+    </div>
+<script type="text/javascript">
+    $(".my-imgcard").height($(window).width()*0.3);
+    $(window).bind('resize load',function(){
+   	 $(".my-imgcard").height($(window).width()*0.3);
+    });
+</script>
+<script type="text/javascript" src="js/applyForAffiliation.js"></script>
+</div>
+
+</body>
+</html>

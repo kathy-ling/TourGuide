@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>个人信息注册页面</title>
+		<link rel="stylesheet" href="css/TourRegist.css" type="text/css" />
+		<script type="text/javascript" src="js/TourRegist.js" ></script>
+	</head>
+	<body>
+		<div id="regis_div_id">
+			
+			<table>
+				<tr>
+					<th>昵称</th>
+					<th>
+						<form>
+							<input type="text" id="regis_tour_pname">
+						</form>
+					</th>
+				</tr>
+				<tr>
+					<th>性别</th>
+					<th id="regis_sex">
+						<form>
+						   <input type="radio" name="sex" value="man">男
+						   <input type="radio" name="sex" value="woman">女
+					    </form> 
+					</th>
+					
+				</tr>
+				<tr>
+					<th>姓名</th>
+					<th>
+						<form>
+							<input type="text" id="regis_tour_name">
+						</form>
+					</th>
+				</tr>
+				<tr>
+					<th>*电话</th>
+					<th>
+						<form>
+							<input type="tel" id="regis_tour_tel" required="required">
+						</form>
+					</th>
+				</tr>
+				<tr>
+					<th>密码</th>
+					<th>
+						<form>
+							<input type="password" id="regis_tour_password" required="required">
+						</form>
+					</th>
+				</tr>
+				<tr>
+					<th>确认密码</th>
+					<th>
+						<form>
+							<input type="password" id="regis_tour_confirm_password" required="required">
+						</form>
+					</th>
+				</tr>
+				<tr>
+					<th>头像</th>
+					<th>
+						<form>
+							<input type="image" id="regis_tour_image" alt="图像"src="">							
+						</form>
+					</th>
+				</tr>
+				<tr>
+					<th></th>
+					<th id="regis_file">
+					    <form>
+					        <input type="file" id="regis_tour_file" onchange="selectImage(this)">
+					    </form>
+					</th>
+				</tr>
+			</table>
+		</div>
+		<div id="regis_clau">
+			<input type="checkbox" id="checkbox_id">我已阅读并同意
+		    <a href="index.html">相关条款服务</a>
+		</div>
+		
+		<div id="regis_btn_div">
+			<input type="button" id="regis_btn_id" value="注册" onclick="Regist()"
+		</div>
+		
+	</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>订单列表</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/orderFormList.css">   
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
+     <link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+ 	
+</head>
+<body>
+<div data-role="page" id="orderFormListPage" data-add-back-btn="true">
+    <div data-role="header"  id="header" class="header">
+        <div data-role="navbar">
+           <ul>
+               <li><a class="navList" id="allOrderForm"  href="#">全部</a></li>
+               <li><a class="navList" id="notVistOrderForm"  href="#">待接单</a></li>
+               <li><a class="navList" id="vistedOrderForm"  href="#">待游览</a></li>
+               <li><a class="navList" id="vistedOrderForm"  href="#">待付款</a></li>
+			   <li><a class="navList" id="vistedOrderForm"  href="#">待评价</a></li>
+           </ul>
+       </div>
+    </div>
+    <div data-role="main" class="ui-content">
+         <ul data-role="listview" id="OrderStateUl">
+                <!-- <li>
+                    <a href="orderFormInfo.html" target="_top">
+                    <p>
+                        订单号：<span class="orderFormId">201701020015</span>
+                        <span class="viewState">待游览</span><br/>
+                        时间：<span class="vistTime">2017-01-02 16:00</span><br/>
+                        人数：<span class="existedVisitor">5</span><br/>
+                        价格：<span class="">10</span>
+                    </p>
+                    </a>
+                    <div class="libtn"><a class="abtn">去评价</a></div>
+                </li>-->
+            </ul>
+    </div>
+    <script type="text/javascript" src="js/OrderFormList.js"></script>
+</div>
+</body>
+</html>

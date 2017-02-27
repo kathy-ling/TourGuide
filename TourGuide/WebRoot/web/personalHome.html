@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>个人中心</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/personalHome.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
+    <link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    
+</head>
+<body>
+<div data-role="page" data-add-back-btn="true">
+    <div data-role="header"  id="header"  class="perheader">
+        <div class="personalHomeBGimg">
+            <img  src="img/angelababy.jpg" class="perhead">
+        </div>
+        <div class="about">
+        <a href="about.html">关于</a>
+        </div>
+        <div class="personalHomeHead">
+        <img src="img/angelababy.jpg" class="perhead">
+        <a href="personalInfo.html"></a>
+        </div>
+        <p class="guideHeadername" id="guideHeadername">Angelababy</p>
+
+    </div>
+    <div data-role="main">
+        <div class="titlebar">
+            <p >我的订单</p>
+            <a  class="rightlink" id="viewmyorder" href="orderFormList.html" > >查看全部订单</a>
+            </div>
+        <div class="marginRL myorder">
+            <table class="per"><tbody>
+            <tr>
+                <td><a href="#" class="my-ui-block orderFormLink"><span>待接单</span></a></td>
+                <td><a href="#" class="my-ui-block orderFormLink borderLeft borderRight"><span>待付款</span></a></td>
+                <td><a href="#" class="my-ui-block orderFormLink borderLeft borderRight"><span>待游览 </span></a></td>
+                <td><a href="#" class="my-ui-block orderFormLink"><span>待评价</span></a></td>
+            </tr>
+            </tbody></table>
+        </div>
+        <div class="titlebar">
+            <p>我是导游</p>
+            <div class="rightlink"><a id="signINbtn" class=" btn ui-btn ui-btn-mini ui-btn-inline" href="#" >签到</a></div>
+        </div>
+        <div class="marginRL ImGuide">
+            <table class="per"><tbody>
+            <tr >
+                    <td><a href="guideApply.html" target="_top" class="my-ui-block borderBottom"><span>申请导游</span></a></td>
+
+                    <td><a href="applyForAffiliation.html" target="_top" class="my-ui-block borderBottom borderLeft borderRight"><span>挂靠景区</span></a></td>
+
+                    <td><a href="GuideOrders.html" target="_top"  class="my-ui-block borderBottom"><span>订单管理</span></a></td>
+            </tr>
+            <tr>
+                    <td><a href="" class="my-ui-block borderBottom "><span>关联导游机</span></a></td>
+                    <td><a href="" class="my-ui-block borderBottom borderLeft borderRight"><span>我的钱包</span></a></td>
+                    <td><a href="SetWorkday.html"  class="borderBottom my-ui-block "><span>个人日程</span></a></td>
+            </tr>
+            <tr>
+                    <td><a href="takeOrder.html" target="_top" class="my-ui-block "><span>抢单</span></a></td>
+                    <td><a href="#"  class="my-ui-block borderLeft borderRight"><span></span></a></td>
+                    <td><a href=" " target=" " class="my-ui-block "><span></span></a></td>
+            </tr>
+            </tbody></table>
+
+<footer data-role="footer" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+            <li><a href="pindan.html" target="_top" id="" class="">拼讲解员</a></li>
+            <li><a href="orderGuide.html" target="_top" id="" class="">预约讲解员</a></li>
+            <li><a href="#" target="_top" id="" class="" >个人中心</a></li>
+            </ul>
+        </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function($){
+    $("#header").height($("#header").width()*0.5);
+       $(".personalHomeHead").width($(".personalHomeHead").height());
+
+      $(window).bind('resize load', function(){
+        $("#header").height($("#header").width()*0.5);
+       $(".personalHomeHead").width($(".personalHomeHead").height());
+      var myorder = $(".myorder").find("a.my-ui-block");
+      myorder.height(myorder.width());
+       var ImGuide = $(".ImGuide").find("a.my-ui-block");
+      ImGuide.height(ImGuide.width());     
+        });
+ 
+    $(".orderFormLink").click(function(event) {
+        URL="orderFormList.html?hide="+$(this).children('span').html();
+        $.mobile.changePage(URL);
+    });
+	var Phone = vistPhone;
+	setperinfo(Phone);
+	$("#signINbtn").click(function(){
+		signIN(Phone);
+	});
+});
+
+//签到
+function signIN(Phone){
+	var URL = HOST+"guideCheckIn.do?phone="+Phone;
+	$.ajax({
+		type:"get",
+		url:URL,
+		async:true,
+		error:function(data){
+			alert("requertError签到失败");
+		},
+		success:function(data){
+			if(data=true)
+			{
+				alert("签到成功");
+			}else{
+				alert("签到失败");
+			}
+		}
+	});
+}
+function setperinfo(Phone){
+	var url = HOST+"/getVisitorInfoWithPhone.do";
+	$.ajax({
+		type:"post",
+		url:url,
+		async:true,
+		data:{phone:Phone},
+		datatype:"JSON",
+		error:function()
+		{
+			alert("显示个人信息Request error!");
+		},
+		success:function(data)
+		{
+			//alert(JSON.stringify(data)!="{}");
+			if(JSON.stringify(data)!="{}"){
+				$("#guideHeadername").html(data.nickName);
+				$(".perhead").attr("src",data.image);
+			//alert("显示个人信息success!");		
+			}
+		}
+	});
+}
+</script>
+<!--<script type="text/javascript" src="js/PersonalInfo.js"></script>-->
+
+</body>
+</html>

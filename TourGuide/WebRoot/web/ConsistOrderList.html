@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>从可拼单列表中进行拼单</title>
+		<link rel="stylesheet" type="text/css" href="css/pindan.css">
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
+        <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+   	    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+   	    <script type="text/javascript" src="js/ConsistOrderList.js"></script>
+	</head>
+	<body>
+		<div>
+			<form action="pindan_submit" id="" method="get" accept-charset="utf-8">                               
+                <label for="visitorCount" class="ui-hidden-accessible">浏览人数</label>
+                <input type="text" id="list_visitorCount" name=""visitorCount class="" placeholder="浏览人数" />
+                <legend>需要为您代购门票吗？</legend>
+                <label for="orderTicketRadio" value ="1">是，请为我代购门票</label>
+                <input type="radio" id="orderTicketRadio" name="pindan_orderTicket" value="1" class="" />
+                <div data-role="collapsible" id="orderTicketPanel" data-collapsed="false" hidden="true">
+                        <label for="fullPriceTicketNum" class="ui-hidden-accessible">全价票</label>
+                        <input type="number" id="fullPriceTicketNum" name="fullPriceTicketNum" value="" placeholder="全价票">
+                        <label for="halfPriceTicketNum" class="ui-hidden-accessible">半价票</label>
+                        <input type="number" id="halfPriceTicketNum" name="halfPriceTicketNum" value="" placeholder="半价票">
+                        <label for="discountTicketNum" class="ui-hidden-accessible">折扣票</label>
+                        <input type="number" id="discountTicketNum" name="discountTicketNum" value="" placeholder="半价票">
+                </div>
+                <label for="notorderTicketRadio" value="0">否，不用了，谢谢</label>
+                <input type="radio" id="notorderTicketRadio" name="pindan_orderTicket" value="0" class="" />
+            </form>
+            <ul data-role="listview">
+                <li data-icon="false">
+                    <a>
+                    <h3>费用信息</h3>
+                    <p>
+                        讲解费：<span class="guideMoney" id="list_pindan_guide_money"></span><br/>
+                        门票：<span class="ticketMoney" id="list_pindan_ticket_money">5*60=300</span><br/>
+                        合计：<span class="aggregateMoney" id="list_pindan_total_money">420</span><br/>
+                    </p>
+                    </a>
+                </li>
+            </ul>
+            <div class="paybtn">
+            <a href="#" class="ui-btn" onclick="list_consistOrder1()">去支付</a>
+            </div>
+		</div>
+		
+		<script type="text/javascript">
+			$("#orderTicketRadio").bind('click', function(event) {
+	        if($("#orderTicketRadio").attr("data-cacheval")=="false")
+	        {
+	            $("#orderTicketPanel").show('200', function() {
+	            });
+	        }else{
+	            $("#orderTicketPanel").hide('200', function() {
+	            });
+	        }
+	    });
+		</script>
+	</body>
+</html>

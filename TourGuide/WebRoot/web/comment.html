@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>发表评论</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/">
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
+    <link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="js/jquery.raty.min.js"></script>
+    <style type="text/css" media="screen">
+    </style>
+</head>
+<body>
+<div data-role="page" data-add-back-btn="true">
+    <div data-role="header"  id="header" class="header">
+    <h1>评论</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+       <div>满意度:<span id="star"></span></div>
+        <div id = "textCount"></div>
+        <textarea name="comment" id="evalueContext" placeholder="玩的怎么样呀？快来说说吧"></textarea>
+        <label for="anonymous">匿名评论</label>
+        <input id="anonymous" name="anonymous" type="checkbox" data-inline="true" value="">
+        <input type="button" id="commentSub" name="" value="提交" >
+    </div>
+    <script type="text/javascript">
+    $(function($){
+         $('#star').raty({ path:'img', score: 0,width:200});
+         $("#evalueContext").keydown(function(){
+            var maxCount = 140;
+        var curLength=$("#evalueContext").val().length;
+        if(curLength>maxCount){
+            var num=$("#evalueContext").val().substr(0,4);
+            $("#evalueContext").val(num);
+            alert("超过字数限制啦!" );
+        }
+        else{
+            $("#textCount").text(maxCount-$("#evalueContext").val().length)
+        }
+    });
+         $("#commentSub").click(function(event) {
+            var star =  $('#star').raty('score');
+            var text = $("#evalueContext").val();
+            var orderId = GetUrlem("orderId");
+            var isanonymous = 0;
+            if($("input:checkbox[name='anonymous']").get(0).checked)
+            {
+                isanonymous = 1;
+            }
+            var postData={
+                "orderID":orderId,//动态获取
+                "evaluateContext":text,
+                "isAnonymous":isanonymous,
+                "star":star
+            };
+            //alert(JSON.stringify(postData));
+            var postUrl = HOST+"/commentByVisitor.do";
+            $.ajax({
+            	type:"post",
+            	url:postUrl,
+            	async:true,
+            	data:postData,
+				datatype:"JSON",
+				error:function()
+				{
+				alert("Error:评论失败！");
+				},
+				success:function(data)
+				{ 
+					alert("评论成功！");
+				}
+            });
+         });
+    });
+    </script>
+</div>
+</body>
+</html>
