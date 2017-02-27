@@ -7,6 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
+    <base href="<%=basePath%>">
     
     <title>My JSP 'VisitorInfo.jsp' starting page</title>
     
@@ -31,10 +32,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<link rel="stylesheet" href="<%=path%>/assets/css/bootstrap.css" />
   	<link rel="stylesheet" href="<%=path%>/assets/css/ace.onpage-help.css" />
 	<link rel="stylesheet" href="<%=path%>/docs/assets/js/themes/sunburst.css" />
+	<link rel="stylesheet" href="<%=path%>/css/dateSelect.css" />
 	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.js"></script>
 	<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath %>/assets/js/bootstrap-paginator.min.js"></script>
-
+	<script type="text/javascript" src="<%=basePath %>/js/echarts.js"></script>
+	<script type="text/javascript" src="<%=basePath %>/js/dateSelect.js"></script>
   </head>
   
  <body>
@@ -47,7 +50,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <div class="admin-content">
     <div class="admin-content-body">
       <div class="am-cf am-padding am-padding-bottom-0">
-        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">游客信息管理</strong> / <small>游客基本信息</small></div>
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">收入管理</strong> / <small>景区收入信息管理</small></div>
       </div>
 
       <hr>
@@ -56,11 +59,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="am-u-sm-12 am-u-md-6">
           
         </div> 
+        <div class="am-u-sm-12 am-u-md-3">
+        
+          <div class="am-input-group am-input-group-sm">
+            <table>
+            	<tr>
+            	<td><input type="text" class="am-form-field" id="date" style="width:150px"></td>
+            	<td>to</td>
+            	<td><input type="text" class="am-form-field" id="date1" style="width:150px"></td>
+            	<td><input type="text" class="am-form-field" id="senicID" style="width:150px" placeholder="景区编号"></td>
+            	</tr>
+            </table>
+            
+          <span class="am-input-group-btn">
+            
+            <button class="am-btn am-btn-default"  id="button1" type="button" onclick="searchOfTime()">景区时间搜索</button>
+          </span>
+          </div>
+        </div>
         
         <div class="am-u-sm-12 am-u-md-3">
           <div class="am-input-group am-input-group-sm">
             
-            <input type="text" id="searchText" class="am-form-field" placeholder="手机号">
+            <input type="text" id="searchText" class="am-form-field" placeholder="景区编号">
           <span class="am-input-group-btn">
             <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="search()">搜索</button>
           </span>
@@ -74,7 +95,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <table  class="am-table am-table-striped am-table-hover table-main" style="border-collapse:separate; border-spacing:5px; " >
               <thead>
               <tr>
-                <th  style="text-align: center; width: 10%;">姓名</th><th  style="text-align: center; width: 10%;">手机号</th><th style="text-align: center; width: 10%;">昵称</th><th style="text-align: center; width: 10%;">性别</th><th style="text-align: center; width: 10%;">操作</th>
+                <th  style="text-align: center; width: 15%;">景区编号</th>
+                <th  style="text-align: center; width: 15%;">景区名称</th>
+                <th style="text-align: center; width: 15%;">时间</th>
+                <th style="text-align: center; width: 15%;">金额</th>
+                <th style="text-align: center; width: 20%;">操作</th>
               </tr>
               </thead>
               <tbody id="tby" >
@@ -90,12 +115,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
       </div>
     </div>
-
-    
   </div>
-
-
-  
 <div class="modal fade" id="SearchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
 			<div class="modal-dialog" >
 				<div class="modal-content">
@@ -104,71 +124,45 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        <span class="blue">X</span>
 	                    </button>
 	                    <h4 class="modal-title" id="myModalLabel" style="text-align:center;">
-							搜索结果
+							景区收入信息
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div id="Feemain" style="width: 600px;height:400px;"></div>
+									
+					</div>
+				</div>
+			</div>
+</div>
+
+  <div class="modal fade" id="lookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+			<div class="modal-dialog" >
+				<div class="modal-content">
+					<div class="model-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                        <span class="blue">X</span>
+	                    </button>
+	                    <h4 class="modal-title" id="myModalLabel" style="text-align:center;">
+							景区平台收入结果
 						</h4>
 					</div>
 					<div class="modal-body">
 					<table style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr><td>姓名：</td>
-						<td><input  type="text" id="search_name" name="search_name" readonly="true" /></td></tr>
-						<tr><td>手机号：</td>
-						<td><input  type="text" id="search_phone" name="search_phone" readonly="true" /></td></tr>
-						<tr><td>昵称:</td>
-						<td><input  type="text"  id="search_nickName" name="search_nickName" readonly="true" /></td></tr>
-						<tr><td>性别:</td>
-						<td><input  type="text"  id="search_sex" name="search_sex" readonly="true" /></td></tr>	
-						
+						<tr ><td >景区编号：</td>
+						<td><input  type="text" id="look_scenicNo" name="look_scenicNo" readonly="true" /></td></tr>
+						<tr><td>景区名称：</td>
+						<td><input  type="text" id="look_scenicName" name="look_scenicName" readonly="true" /></td></tr>
+						<tr><td>时间：</td>
+						<td><input  type="text"  id="look_date" name="look_date"  readonly="true"/></td></tr>												
+						<tr><td>总额：</td>
+						<td><input  type="text"  id="look_money" name="look_money"  readonly="true"/></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true" >确定</button></td></tr>
-					</table>			
+					</table>
+									
 					</div>
 				</div>
 			</div>
 </div>
-
-
-<div class="modal fade" id="forbidmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog" style="width:25%">
-				<div class="modal-content">
-					<div class="model-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-	                        <span class="blue">X</span>
-	                    </button>
-					</div>
-					<div class="modal-body">
-						<table style="border-collapse:separate; border-spacing:10px;">
-						<tr><td>&nbsp;</td></tr>
-						<tr><td style="text-align:center;">确定将该游客加入到黑名单</td></tr>
-						<tr><td>&nbsp;</td></tr>
-						<tr><td  style="text-align:center;"><button class="close" onclick="ForbidVisitorInfo()">确定</button></td><td><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
-						</table>
-					</div>
-				</div>
-			</div>
-</div>
-
-<div class="modal fade" id="relievemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog" style="width:25%">
-				<div class="modal-content">
-					<div class="model-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-	                        <span class="blue">X</span>
-	                    </button>
-					</div>
-					<div class="modal-body">
-						<table style="border-collapse:separate; border-spacing:10px;">
-						<tr><td>&nbsp;</td></tr>
-						<tr><td style="text-align:center;">确定解禁该游客？</td></tr>
-						<tr><td>&nbsp;</td></tr>
-						<tr><td  style="text-align:center;"><button class="close" onclick="RelieveVisitorInfo()">确定</button></td><td><button class="close" data-dismiss="modal" aria-hidden="true">返回</button></td></tr>
-						</table>
-					</div>
-				</div>
-			</div>
-</div>
-
-
-
-
 
 
 <!--[if (gte IE 9)|!(IE)]><!-->
@@ -177,20 +171,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="<%=basePath %>/assets1/js/app.js"></script>
 <script type="text/javascript">
 	var id=1;
-	var VisitorInfo="";
-	var VisitorOtherInfo="";
 	var currentPage=1;
 	var pageRows=5;
-	var forbidIndex;
+	var scenicFeeInfo;
+	var date;
+	var money;
 	$(document).ready(function()
   	{
   		
-  		loadVisitorInfo();
+  		loadScenicFeeInfo();
   	});
-  	function loadVisitorInfo()
+  	function loadScenicFeeInfo()
   	{
   	
-  		var url="<%=basePath%>visitor/GetVisitorInfo.action";
+  		var url="<%=basePath%>scenicfee/GetScenicFee.action";
   		$.ajax(
   		{
   			url:url,
@@ -199,10 +193,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			data:{currentPage:1,pageRows:pageRows},
   			success: function(data)
   					{
-  						
   					    if(data!=null){
-  					    VisitorInfo = data.jsonStr;
-  					    VisitorInfo = JSON.parse(VisitorInfo);
+  					    scenicFeeInfo = data.jsonStr;
+  					   
   					    initTable(data.jsonStr,data.page);
   					    
   					    
@@ -244,7 +237,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									datatype: "json",
 									data:{currentPage:page,pageRows:5},
 									success: function(data) {
-										VisitorInfo = data.jsonStr;
+										scenicFeeInfo = data.jsonStr;
   					   					initTable(data.jsonStr,page);	
 						            }
 						        });
@@ -263,101 +256,143 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		$("#tby").html("");
   		$.each(JSON.parse(jsonStr),function(index,value)
   			{
-  				
+  				var m;
   				var t0="<tr>";
-  				var t1="<td style='text-align: center; width: 10%;'>"+value.name+"</td>";
-              	var t2="<td style='text-align: center; width: 10%;'>"+value.phone+"</td>";
-              	var t3="<td style='text-align: center;width: 10%;'>"+value.nickName+"</td>";
-              	var t4="<td style='text-align: center; width: 10%;'>"+value.sex+"</td>";
-              	var t6="<td align='center'> <div class='am-btn-toolbar'>"+
+  				var t1="<td style='text-align: center; width: 10%;'>"+value.scenicID+"</td>";
+              	var t2="<td style='text-align: center; width: 10%;'>"+value.scenicName+"</td>";
+              	var t3="<td style='text-align: center;width: 10%;'>"+value.date+"</td>";
+              	if(value.totalmoney==null) m=0;
+              	else m=value.totalmoney;
+              	var t4="<td style='text-align: center; width: 10%;'>"+m+"</td>";
+              	var t5="<td align='center'> <div class='am-btn-toolbar'>"+
               	"<div  style='text-align: center;float: none' class='am-btn-group am-btn-group-xs'>"+
-              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='queryVisitor("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>查看</button>"+
-                  "<button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' type='button' onclick='forbidVisitorInfo("+index+")'>"+"<span class='am-icon-trash-o'></span>加黑</button>"+
-                  "</div></div> </td>";		
-                var t7="</tr>";
-               $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t6).append(t7);
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='LookscenicFee("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>查看</button>"+
+                "</div></div> </td>";		
+                var t6="</tr>";
+               $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6);
   			});
   	}
+ 	
  	function search()
  	{
- 		var url = "<%=basePath%>visitor/SearchVisitorInfo.action";
+ 		var url = "<%=basePath%>scenicfee/GetScenicFeeByscenicID.action";
  		var a = $("#searchText").val();
  		$.ajax( {
  			url:url,
- 			type:"post",
+ 			type:"POST",
  			datatype:"json",
- 			data:{phone:a},
+ 			data:{scenicID:a},
  			success:function(data) {
- 				if (data == "[]") {
+ 				var d=data.jsonStr;
+ 				if (d == "[]") {
  					alert("没有搜索到任何信息，请重新搜索!");
 	 			}
 		 		else {
-		 			var b=JSON.parse(data);
-					SearchSuccess(b[0]);
+					SearchSuccess(d);
+					
+		 		};
+ 			}
+ 		});
+ 	
+ 	}
+ 
+ 	function LookscenicFee(index)
+ 	{
+ 		var a=JSON.parse(scenicFeeInfo);
+ 		$("#look_scenicNo").val(a[index].scenicID);
+ 		$("#look_scenicName").val(a[index].scenicName);
+ 		$("#look_date").val(a[index].date);
+ 		$("#look_money").val(a[index].totalmoney);
+ 		$("#lookModal").modal("show");
+ 		
+ 	}
+ 	
+ 	function SearchSuccess(jsonStr)
+ 	{
+ 		var a=JSON.parse(jsonStr);
+ 		var index=0;
+ 		var myChart = echarts.init(document.getElementById('Feemain'));
+ 		var resultdate=[];
+ 		var resultmoney=[];
+ 		for(var i=0;i<a.length;i++)
+ 		{
+ 			resultdate.push(a[i].date);
+ 			resultmoney.push(a[i].totalmoney);
+ 		}
+		var option = {
+            title: {
+        		text: a[index].scenicName+'  景区收入'
+   			 		},
+    		tooltip: {
+        		trigger: 'axis'
+    		},
+    		xAxis:  {
+       	 	type: 'category',
+        	boundaryGap: false,
+        	data: resultdate
+   			 },
+    		yAxis: {
+       		type: 'value',
+        	axisLabel: {
+            formatter: '{value} '
+       	 	}
+    		},
+    		series: [
+       	 	{
+            name:'景区收入',
+            type:'line',
+            data:resultmoney,
+            markPoint: {
+                data: [
+                    {type: 'max', name: '最大值'},
+                    {type: 'min', name: '最小值'}
+                ]
+            }
+            
+        },
+        
+    	]
+		};
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+ 		$("#SearchModal").modal("show");
+ 	}
+ 	
+ 	function searchOfTime()
+ 	{
+ 		var a=$("#date").val();
+ 		var b=$("#date1").val();
+ 		var c=$("#senicID").val();
+ 		var url = "<%=basePath%>scenicfee/GetscenicFeeBydate.action";
+ 		$.ajax( {
+ 			url:url,
+ 			type:"POST",
+ 			datatype:"json",
+ 			data:{date:a,date1:b,scenicID:c},
+ 			success:function(data) {
+ 				var d=data.jsonStr;
+ 				if (d == "[]") {
+ 					alert("没有搜索到任何信息，请重新搜索!");
+	 			}
+		 		else {
+					SearchSuccess(d);
+					
 		 		};
  			}
  		});
  	}
  	
- 	function SearchSuccess(jsonStr) {
- 			alert(jsonStr.sex);
- 			$("#search_name").val(jsonStr.name);
- 			$("#search_phone").val(jsonStr.phone);
- 			$("#search_nickName").val(jsonStr.nickName);
- 			$("#search_sex").val(jsonStr.sex);
- 			$("#SearchModal").modal('show');
- 	}
- 	
- 	function queryVisitor(index)
- 	{	
- 		var a=VisitorInfo[index];	
- 		SearchSuccess(a);
- 	}
  	
  	
- 	function forbidVisitorInfo(index) {
- 		forbidIndex=index;	
- 		$("#forbidmodal").modal('show');
- 	}
- 	
- 	function ForbidVisitorInfo() {
- 		var url = "<%=basePath%>visitor/ForbidVisitorInfo.action";
- 		var phone=VisitorInfo[forbidIndex].phone;
- 		alert(phone);
- 		$.ajax ({
- 			url:url,
- 			type:"post",
- 			datatype:"json",
- 			data:{phone:phone},
- 			success:function(data) {
- 				if (data.confirm) {alert("成功把该游客加入黑名单！");loadVisitorInfo();}
- 				else alert("无法将该游客加入黑名单，请重新试试！");
- 			}
- 		});
- 		$("#forbidmodal").modal('hide');
- 		
- 	}
- 	
- 	
- 	
- 	function RelieveVisitorInfo() {
- 		var url = "<%=basePath%>visitor/RelieveVisitorInfo.action";
- 		var phone=VisitorOtherInfo[forbidIndex].phone;
- 		$.ajax ({
- 			url:url,
- 			type:"post",
- 			datatype:"json",
- 			data:{phone:phone},
- 			success:function(data) {
- 				if (data.confirm) alert("解禁成功！");
- 				else alert("解禁失败！");
- 			}
- 		});
- 		$("#relievemodal").modal('hide');
- 		loadVisitorInfo();
- 	}
  	
 </script>
+<script type="text/javascript">
+		$("#date").dateSelect();
+	</script>
+	<script type="text/javascript">
+		$("#date1").dateSelect();
+	</script>
 	<script src="<%=path%>/assets/js/distpicker.data.js"></script>
 	<script src="<%=path%>/assets/js/distpicker.js"></script>
 	<script src="<%=path%>/assets/js/main.js"></script>

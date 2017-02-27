@@ -264,8 +264,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="edit_chargePerson" name="edit_chargePerson"" /></td></tr>
 						<tr><td>账号:</td>
 						<td><input  type="text"  id="edit_account" name="edit_account"" /></td></tr>
-						<tr><td>密码:</td>
-						<td><input  type="text"  id="edit_password" name="edit_password"" /></td></tr>
 				<tr><td colspan="2" style="text-align:center;"><button  onclick="editScenicInfo()" >修改</button></td></tr>
 						
 					</table>				
@@ -315,8 +313,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><input  type="text"  id="search_chargePerson" name="search_chargePerson"" readonly="true" /></td></tr>
 						<tr><td>账号:</td>
 						<td><input  type="text"  id="search_account" name="search_account"" /></td></tr>
-						<tr><td>密码:</td>
-						<td><input  type="text"  id="search_password" name="search_password"" /></td></tr>
 						<tr><td colspan="2" style="text-align:center;"><button class="close" data-dismiss="modal" aria-hidden="true" >确定</button></td></tr>
 					</table>
 									
@@ -509,7 +505,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			document.getElementById("search_headimg").src=f;
  			$("#search_chargePerson").val(value.chargePerson);
  			$("#search_account").val(value.account);
- 			$("#search_password").val(value.password);
  		
  			$("#SearchModal").modal('show');
  	}
@@ -528,7 +523,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#add_chargePerson").val("");
  		$("#LocationText2").val();
  		$("#add_account").val("");
- 		$("#add_account").val("");
+ 		$("#add_password").val("");
  		$("#addmodal").modal('show');
  	}
  	
@@ -609,7 +604,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		$("#edit_scenicIntro").val(ScenicInfo[index].scenicIntro);
  		$("#edit_chargePerson").val(ScenicInfo[index].chargePerson);
  		$("#edit_account").val(ScenicInfo[index].account);
- 		$("#edit_password").val(ScenicInfo[index].password);
  		var f="<%=path%>"+ScenicInfo[index].scenicImagePath;
   		document.getElementById("edit_headimg").src=f;
  		if(ScenicInfo[index].isHotSpot==1) $("input[name=edit_isHotSpot]:eq(0)").attr("checked",'checked'); 
@@ -643,10 +637,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		else isHotSpot = 0;
  		var chargePerson = $("#edit_chargePerson").val();
  		var account = $("#edit_account").val();
- 		var password = $("#edit_password").val();
  		if (scenicNo != "" && scenicName != "" && totalVisits != "" && openingHours != "" && scenicLevel != ""
  			 && scenicIntro != "" && province != "" && city != "" && scenicLocation != "" && chargePerson != ""
- 			 && account != ""&& password != "") { 			
+ 			 && account != "") { 			
  			 $.ajaxFileUpload({
           			url : "<%=basePath%>scenic/EditImage.action",
            			fileElementId:'editfile',
@@ -660,7 +653,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  						datatype:"json",
  						data:{scenicNo:scenicNo,scenicName:scenicName,totalVisits:totalVisits,openingHours:openingHours,
  							scenicLevel:scenicLevel,scenicIntro:scenicIntro,province:province,city:city,scenicLocation:
- 							scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson,account:account,password:password}, 			
+ 							scenicLocation,isHotSpot:isHotSpot,chargePerson:chargePerson,account:account}, 			
  						success:function(data) {
  							if (data.confirm) {
  							$("#editmodal").modal('hide');

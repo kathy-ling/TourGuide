@@ -136,10 +136,10 @@ public class GuideWorkdayDao {
 	{
 		int k=(currentPage-1)*rows;
 		int j=currentPage*rows;
-		String sql="SELECT t_guideworkday.*,t_guideinfo.name FROM t_guideworkday, t_guideinfo where"
-				+ " t_guideinfo.phone=t_guideworkday.phone "
-				+ "AND t_guideworkday.phone in "
-				+ "(select phone from t_guideotherinfo where disabled=0 and authorized=1)  "
+		String sql="SELECT t_guideworkday.*,t_guideinfo.name,t_guideinfo.phone FROM t_guideworkday, t_guideinfo where"
+				+ " t_guideinfo.id=t_guideworkday.id "
+				+ "AND t_guideworkday.id in "
+				+ "(select id from t_guideotherinfo where disabled=0 and authorized=1)  "
 				+ "LIMIT "+k+" ,"+j+"";
 		List<Map<String , Object>> list= jdbcTemplate.queryForList(sql);
 		

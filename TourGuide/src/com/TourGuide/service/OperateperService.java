@@ -45,8 +45,8 @@ public class OperateperService {
 	 * 添加运营人员
 	 * 2017-1-3 14:17:50
 	 * */
-	public boolean AddOperateperInfo_Service(Operateper operateper) {
-		return operateperDao.AddOperateperInfo_Dao(operateper);
+	public boolean AddOperateperInfo_Service(Operateper operateper, String password) {
+		return operateperDao.AddOperateperInfo_Dao(operateper,password);
 	}
 	
 	
@@ -77,5 +77,16 @@ public class OperateperService {
 	 * */
 	public boolean RelieveOperate_Service(String account) {
 		return operateperDao.RelieveOperate_Dao(account);
+	}
+	
+	/**
+	 * 通过账号修改运营人员密码为手机号后六位
+	 * @param account
+	 * @param phone
+	 * @return
+	 */
+	public int ResetPassword(String account,String phone)
+	{
+		return operateperDao.ResetPassword(account, phone);
 	}
 }

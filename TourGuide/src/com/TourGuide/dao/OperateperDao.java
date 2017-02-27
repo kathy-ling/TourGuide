@@ -1,9 +1,12 @@
 package com.TourGuide.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -37,7 +40,6 @@ public class OperateperDao {
 			operateper.setOperateper_phone((String) list.get(k).get("phone"));
 			operateper.setOperateper_bool((int) list.get(k).get("bool"));
 			operateper.setOperateper_scenic((String)list.get(k).get("scenicSpot"));
-			operateper.setOperateper_password((String) list.get(k).get("password"));
 			listres.add(operateper);
 		}
 		
@@ -71,7 +73,6 @@ public class OperateperDao {
 				operateper.setOperateper_phone(rSet.getString(4));
 				operateper.setOperateper_bool(rSet.getInt(5));
 				operateper.setOperateper_scenic(rSet.getString(6));
-				operateper.setOperateper_password(rSet.getString(7));
 				list.add(operateper);
 			}
 		});
@@ -82,22 +83,37 @@ public class OperateperDao {
 	 * 参数：运营人员信息类
 	 * 2016-12-31 16:33:22
 	 * */
-	public boolean AddOperateperInfo_Dao(Operateper operateper) {
+	public boolean AddOperateperInfo_Dao(Operateper operateper, String password) {
 		String sql = " select count(*) from t_operateper where account = '"
 					+operateper.getOperateper_account()+"'";
-		 
+		String sql1="select count(*) from t_admin where username="+operateper.getOperateper_account();  
 		
-		if (jdbcTemplate.queryForObject(sql, Integer.class) == 0) {
-			sql =  " insert into t_operateper (name,account,role,phone,scenicSpot,password) values (?,?,?,?,?,?) ";
-			jdbcTemplate.update(sql, new Object[]{
-				operateper.getOperateper_name(),
-				operateper.getOperateper_account(),
-				operateper.getOperateper_role(),
-				operateper.getOperateper_phone(),
-				operateper.getOperateper_scenic(),
-				operateper.getOperateper_password()
-			});
-			return true;
+		if ((jdbcTemplate.queryForObject(sql, Integer.class) == 0)&&(jdbcTemplate.queryForObject(sql1, Integer.class) == 0)) {
+			
+			DataSource dataSource=jdbcTemplate.getDataSource();
+			Connection  conn;
+			try {
+				  conn=dataSource.getConnection();
+				  conn.setAutoCommit(false);
+				  sql =  " insert into t_operateper (name,account,role,phone,scenicSpot) values (?,?,?,?,?) ";
+					jdbcTemplate.update(sql, new Object[]{
+						operateper.getOperateper_name(),
+						operateper.getOperateper_account(),
+						operateper.getOperateper_role(),
+						operateper.getOperateper_phone(),
+						operateper.getOperateper_scenic()
+					});
+					
+					sql1="insert into t_admin(role,username,password)  values(?,?,?)";
+					jdbcTemplate.update(sql1, new Object[]{"运营人员",operateper.getOperateper_account(),password});
+					conn.commit();//提交JDBC事务 
+					conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+					return true;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}	
 		}
 		return false;
 	}
@@ -123,11 +139,11 @@ public class OperateperDao {
 	 * 2016-12-31 20:48:22
 	 * */
 	public boolean UpdateOperateperInfo(Operateper operateper) {
-		String sql = "update   t_operateper set name=?,role=?,phone=?,scenicSpot=?,password=?   where account=?";
+		String sql = "update   t_operateper set name=?,role=?,phone=?,scenicSpot=?   where account=?";
 		int i=jdbcTemplate.update(sql, new Object[]{operateper.getOperateper_name()
 				,operateper.getOperateper_role(),
 				operateper.getOperateper_phone(),operateper.getOperateper_scenic(),
-				operateper.getOperateper_password(),operateper.getOperateper_account()});
+				operateper.getOperateper_account()});
 		if (i>0) {
 			return true;
 		} else {
@@ -154,6 +170,18 @@ public class OperateperDao {
 		
 		if (i > 0) return true;
 		return false;
+	}
+	
+	
+	public int ResetPassword(String account,String phone) {
+		
+		int i=phone.length();
+		String password=phone.substring(i-6, i);
+		
+		String sql="UPDATE t_admin set `password`="+password+
+				" WHERE username='"+account+"'";
+		i=jdbcTemplate.update(sql);
+		return i;
 	}
 	
 }

@@ -208,7 +208,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </div>
 
 <div class="modal fade" id="checkmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog" style="width:25%">
+			<div class="modal-dialog" style="width:30%">
 				<div class="modal-content">
 					<div class="model-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">

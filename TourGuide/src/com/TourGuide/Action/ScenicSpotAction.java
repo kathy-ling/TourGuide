@@ -143,10 +143,9 @@ public class ScenicSpotAction {
 			scenicsSpotInfo.setIsHotSpot(isHotSpot);
 			scenicsSpotInfo.setScenicImagePath(fileName);
 			scenicsSpotInfo.setAccount(account);
-			scenicsSpotInfo.setPassword(password);
 			
 			
-			boolean confirm = scenicSpotService.AddScenicInfo_Service(scenicsSpotInfo);
+			boolean confirm = scenicSpotService.AddScenicInfo_Service(scenicsSpotInfo,password);
 			Map<String, Object> map = new HashMap<>();
 			map.put("confirm", confirm);
 			return map;
@@ -188,8 +187,7 @@ public class ScenicSpotAction {
 				@RequestParam(value="city")String city,
 				@RequestParam(value="chargePerson")String chargePerson,
 				@RequestParam(value="scenicIntro")String scenicIntro,
-				@RequestParam(value="account")String account,
-				@RequestParam(value="password")String password) throws IOException {
+				@RequestParam(value="account")String account) throws IOException {
 			
 			
 			ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
@@ -206,7 +204,6 @@ public class ScenicSpotAction {
 			scenicsSpotInfo.setIsHotSpot(isHotSpot);
 			scenicsSpotInfo.setScenicImagePath(fileName);
 			scenicsSpotInfo.setAccount(account);
-			scenicsSpotInfo.setPassword(password);
 			
 			boolean confirm = scenicSpotService.UpdateScenicInfo_Service(scenicsSpotInfo);
 			Map<String, Object> map = new HashMap<>();

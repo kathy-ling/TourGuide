@@ -31,6 +31,18 @@ public class ScenicfeeDao {
 	}
 	
 	/**
+	 * 通过查询订单的金额来计算景区平台的收入
+	 * @return
+	 * 2017-2-20 10:11:25
+	 */
+	public int  insertScenicFee() {
+		
+		
+		return 1;
+	}
+	
+	
+	/**
 	 * 得到景区收入信息数目
 	 * @return
 	 * 2017-1-15 11:17:41

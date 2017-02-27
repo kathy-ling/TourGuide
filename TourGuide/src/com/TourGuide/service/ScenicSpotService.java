@@ -121,8 +121,8 @@ public class ScenicSpotService {
 	 * 添加景区信息
 	 * 2017-1-3 14:44:50
 	 * */
-	public boolean AddScenicInfo_Service(ScenicsSpotInfo scenicsSpotInfo) {
-		return scenicSpotDao.AddScenicInfo_Dao(scenicsSpotInfo);
+	public boolean AddScenicInfo_Service(ScenicsSpotInfo scenicsSpotInfo, String password) {
+		return scenicSpotDao.AddScenicInfo_Dao(scenicsSpotInfo,password);
 	}
 	
 	/*

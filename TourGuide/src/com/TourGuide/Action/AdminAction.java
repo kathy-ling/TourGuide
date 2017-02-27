@@ -40,6 +40,7 @@ public class AdminAction {
 	public String  logincheck() {
 		return "index";
 	}
+	
 	/*
 	 * 登录界面
 	 * 
@@ -64,10 +65,7 @@ public class AdminAction {
 			} else {
 			return new ModelAndView("index","error","用户名或密码错误");
 		}
-		
-
-		
-		
-		
 	}
+	
+	
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.TourGuide.common.CommonResp;
+import com.TourGuide.model.AdminInfo;
+import com.TourGuide.model.GuideFee;
 import com.TourGuide.service.GuideFeeService;
 import com.google.gson.Gson;
 
@@ -45,7 +48,7 @@ public class GuideFeeAction {
 	{
 		
 		CommonResp.SetUtf(resp);
-		List<Map<String, Object>> list=guideFeeService.GetGuideFee(currentPage, pageRows);
+		List<GuideFee> list=guideFeeService.GetGuideFee(currentPage, pageRows);
 		Map< String , Object> map=new HashMap<>();
 		String jsonStr=new Gson().toJson(list).toString();
 		int i=guideFeeService.GetGuideFeeCount();
@@ -71,11 +74,41 @@ public class GuideFeeAction {
 	{
 		
 		CommonResp.SetUtf(resp);
-		List<Map<String, Object>> list=guideFeeService.GetguideFeeByID(guideID);
+		GuideFee list=guideFeeService.GetguideFeeByID(guideID);
 		Map<String,Object> map=new HashMap<>();
 		String jsonStr=new Gson().toJson(list).toString();
 		map.put("jsonStr", jsonStr);
 		return map;
 	}
 
+	@RequestMapping(value="/PunishGuideFee.action",method=RequestMethod.POST)
+	@ResponseBody
+	public Object PunishGuideFee(HttpServletResponse resp,
+			@RequestParam(value="phone")String phone,
+			@RequestParam(value="money")int money,
+			@RequestParam(value="reason")String reason,
+			HttpSession session)
+	{
+		CommonResp.SetUtf(resp);
+		AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
+		String loginphone=accont.getUsername();
+		int i=guideFeeService.PunishGuideFee(phone, money, reason,loginphone);
+		
+		return i;
+	}
+	
+	@RequestMapping(value="/RewardGuideFee.action",method=RequestMethod.POST)
+	@ResponseBody
+	public  Object  RewardGuideFee(HttpServletResponse resp,
+			@RequestParam(value="phone")String phone,
+			@RequestParam(value="money")int money,
+			@RequestParam(value="reason")String reason,
+			HttpSession session)
+	{
+		AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
+		String loginphone=accont.getUsername();
+		CommonResp.SetUtf(resp);
+		int i=guideFeeService.RewardGuideFee(phone, money, reason,loginphone);
+		return i;
+	}
 }
