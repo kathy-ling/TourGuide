@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>拼讲解员</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/pindan.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
+    <link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
+     <link rel="stylesheet" href="css/jtsage-datebox-4.1.0.jqm.min.css">
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+   <script>
+// 	$(document).bind('mobileinit',function() {   
+//  jQuery.mobile.ajaxEnabled = false;   
+//	}); 
+   </script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="js/jtsage-datebox-4.1.0.jqm.min.js"></script>
+    <script type="text/javascript" src="js/jtsage-datebox.i18n.zh-CN.utf8.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/pindan.js"></script>
+</head>
+<body>
+<div data-role="page" data-add-back-btn="true">
+    <div data-role="header"  id="header" data-position="fixed" class="header">
+        <div data-role="navbar">
+           <ul>
+               <li><a id="panel1btn" href="#">可拼订单</a></li>
+               <li><a id="panel2btn" href="#">发起拼单</a></li>
+           </ul>
+       </div>
+    </div>
+    <div data-role="main" >
+        <div id="panel1" class="ui-content" >       	
+	        	<div id="order_list">
+		            <ul data-role="listview" id="pindan_ul_id">
+		               
+		            </ul>
+	          </div>           
+        </div>
+           
+        <div id="panel2" >
+            <form action="pindan_submit" id="" method="get" accept-charset="utf-8">
+                <div class="visitTime">
+                 <label for="visitTime" class="ui-hidden-accessible">日期</label>
+               <input data-role="datebox" id="visitTime" name="date" data-options='{"mode": "flipbox","afterToday": true,"overrideDateFormat": "%Y-%m-%d"}' placeholder="请输入日期">
+
+               <label for="chooseDatetime" class="ui-hidden-accessible">时间</label>
+               <input id="chooseDatetime" name="datetime" type="datetime" data-role="datebox" data-options='{"mode": "timeflipbox","overrideTimeFormat":"24","overrideTimeOutput":"%H:%M","minuteStep":"30"}'  value=""  placeholder="时间">
+               </div>
+               
+                <label for="visitorCount" class="ui-hidden-accessible">浏览人数</label>
+                <input type="number" min="1" max="10" step="1" id="visitorCount" name="visitorCount" class="" placeholder="浏览人数" onpropertychange="()" />
+                <legend>需要为您代购门票吗？</legend>
+                <label for="orderTicketRadio" value ="1">是，请为我代购门票</label>
+                <input type="radio" id="orderTicketRadio" name="pindan_orderTicket" value="1" class="" />
+                <div data-role="collapsible" id="orderTicketPanel" data-collapsed="false" hidden="true">
+                        <label for="fullPriceTicketNum" class="ui-hidden-accessible">全价票</label>
+                        <input type="number" id="fullPriceTicketNum" name="fullPriceTicketNum" value="" placeholder="全价票">
+                        <label for="halfPriceTicketNum" class="ui-hidden-accessible">半价票</label>
+                        <input type="number" id="halfPriceTicketNum" name="halfPriceTicketNum" value="" placeholder="半价票">
+                        <label for="discountTicketNum" class="ui-hidden-accessible">折扣票</label>
+                        <input type="number" id="discountTicketNum" name="discountTicketNum" value="" placeholder="半价票">
+                </div>
+                <label for="notorderTicketRadio" value="0">否，不用了，谢谢</label>
+                <input type="radio" id="notorderTicketRadio" name="pindan_orderTicket" value="0" class="" />
+            </form>
+            <ul data-role="listview" id="ul_fee" data-icon="false">
+                <!--<li >
+                    <a>
+                    <h3>费用信息</h3>
+                    <p>
+                        讲解费：<span class="guideMoney" id="pindan_guide_money">100</span><br/>
+                        门票：<span class="ticketMoney" id="pindan_ticket_money">5*60=300</span><br/>
+                        合计：<span class="aggregateMoney" id="pindan_total_money">400</span><br/>
+                    </p>
+                    </a>
+                </li>-->
+            </ul>
+            <div class="paybtn">
+            <a href="#" class="ui-btn ui-btn-b" data-state="confirm" data-theme="b" id="paySubmit">确定</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+	$("#panel2btn").bind("click", function(event) {
+        $("#panel1").hide(300);
+        $(".visitTime").show();
+        $("#panel2").show(300);
+
+    });
+    $("#panel1btn").bind("click", function(event) {
+        $("#panel2").hide(300);
+        $("#panel1").show(300);
+    });
+    $(".goOrderbtn").click(function(event){
+        $(".visitTime").hide();
+        $("#panel1").hide(300);
+        $("#panel2").show(300);
+    });
+    $("#orderTicketRadio").bind('click', function(event) {
+        $("#orderTicketPanel").toggle('200');
+    });
+    $("#notorderTicketRadio").bind('click', function(event) {
+            $("#orderTicketPanel").hide('200');
+    });
+	
+</script>
+</body>
+</html>
