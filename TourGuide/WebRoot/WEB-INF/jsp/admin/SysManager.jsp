@@ -56,21 +56,12 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
               服务器备份时间
             </div>
             <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
-              <input style="text-align: center;" type="text" value="12小时" class="am-input-sm" readonly="true">
+              <input style="text-align: center;" type="text" value="24小时" class="am-input-sm" readonly="true">
             </div>
             
           </div>
          
 
-          <div class="am-g am-margin-top">
-            <div class="am-u-sm-4 am-u-md-2 am-text-right">
-              服务器位置
-            </div>
-            <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
-              <input type="text" value="<%=basePath%>WEB-INF/DataBase" class="am-input-sm" readonly="true">
-            </div>
-            
-          </div>
           
           
           

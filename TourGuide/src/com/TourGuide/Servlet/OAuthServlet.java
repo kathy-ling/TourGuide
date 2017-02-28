@@ -1,16 +1,11 @@
 package com.TourGuide.Servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Component;
-import com.TourGuide.dao.VisitorDao;
 import com.TourGuide.model.SNSUserInfo;
 import com.TourGuide.model.VisitorInfo;
 import org.springframework.ui.ModelMap;

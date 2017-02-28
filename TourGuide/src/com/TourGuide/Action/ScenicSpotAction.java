@@ -2,7 +2,6 @@ package com.TourGuide.Action;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.aspectj.apache.bcel.generic.RET;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -228,7 +226,6 @@ public class ScenicSpotAction {
 			
 			CommonResp.SetUtf(resp);
 			Map<String , Object> map=new HashMap<>();
-//			String realPath="E:/Project/TourGuide/TourGuide/WebRoot/image/scenics";
 			String realPath=request.getSession().getServletContext().getRealPath("image/scenics");
 			File pathFile = new File(realPath);
 			if (!pathFile.exists()) {
