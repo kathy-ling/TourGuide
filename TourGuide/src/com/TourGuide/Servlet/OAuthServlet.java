@@ -7,19 +7,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
-
 import com.TourGuide.dao.VisitorDao;
 import com.TourGuide.model.SNSUserInfo;
 import com.TourGuide.model.VisitorInfo;
-=======
 import org.springframework.ui.ModelMap;
-
->>>>>>> 1cd26ad85b2f2d9c3f8afc9df813e4e7793fd550
 import com.TourGuide.model.WeixinOauth2Token;
 import com.TourGuide.service.VisitorService;
 import com.TourGuide.weixin.util.Oauth2Util;
@@ -37,13 +31,9 @@ public class OAuthServlet extends HttpServlet{
 	
 	private static final long serialVersionUID = -1847238807216447030L;
 	
-	
-<<<<<<< HEAD
-	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) 
-=======
+
 	public void doGet(HttpServletRequest request, HttpServletResponse response,ModelMap model) 
->>>>>>> 1cd26ad85b2f2d9c3f8afc9df813e4e7793fd550
+
 			throws ServletException, IOException {
 		
 		
@@ -65,18 +55,14 @@ public class OAuthServlet extends HttpServlet{
 			// 用户标识
 			String openId = weixinOauth2Token.getOpenId();
 			// 获取用户信息
-<<<<<<< HEAD
+
 			SNSUserInfo snsUserInfo = SNSUserInfoUtil.getSNSUserInfo(accessToken, openId);
 			
 			
 			VisitorService visitorService = (VisitorService) SpringContextUtil.getBean("visitorService");
 			VisitorInfo visitorInfo=visitorService.getInfobyOpenID(openId);								
-=======
-			SNSUserInfoUtil.snsUserInfo = SNSUserInfoUtil.getSNSUserInfo(accessToken, openId);
-			SNSUserInfoUtil.snsUserInfo.getNickname();
-			SNSUserInfoUtil.snsUserInfo.getSex();
-			model.addAttribute("visitor", SNSUserInfoUtil.snsUserInfo);							
->>>>>>> 1cd26ad85b2f2d9c3f8afc9df813e4e7793fd550
+
+			
 			// 设置要传递的参数
 			request.setAttribute("snsUserInfo", snsUserInfo);
 			
