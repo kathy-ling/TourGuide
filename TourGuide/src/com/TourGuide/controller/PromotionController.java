@@ -14,13 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.TourGuide.Servlet.OAuthServlet;
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.model.Promotion;
-import com.TourGuide.model.VisitorInfo;
 import com.TourGuide.service.PromotionService;
 import com.TourGuide.service.VisitorService;
-import com.TourGuide.weixin.util.SNSUserInfoUtil;
 import com.google.gson.Gson;
 
 @Controller

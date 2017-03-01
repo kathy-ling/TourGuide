@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>个人信息</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/">
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
+    <link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/PersonalInfo.js"></script>
+    <style type="text/css" media="screen">    
+    .perheader{
+        height:30%;
+         }
+    .personalInfoHead{
+        height: 75%;
+        display: block;
+        position: absolute;
+        left: 50%;
+        top:50%;
+        }
+.personalInfoHead img{
+        width:100%;
+        height:100%;
+        margin-left: -50%;
+        margin-top:-50%;
+        border-radius: 50%;
+        border-color: white;
+        border-width: 5px;
+    }
+    tbody{
+        width:100%;
+    }
+    table{
+        width:100%;
+    }
+    </style>
+    
+</head>
+<body>
+<div data-role="page" id="personalInfoPage">
+    <div data-role="header"  id="perheader" data-position="fixed" class="perheader">
+        <div class="personalInfoHead" >
+            <img src="img/angelababy.jpg" id="visithead">
+        </div>
+    </div>
+    <div data-role="main" class="ui-content">
+        <table>
+            <tbody>
+            <form action="personalInfo_submit" method="get" accept-charset="utf-8">
+                <tr>
+                    <td><label for="name">账号：</label></td>
+                    <td><input type="text" id="person_info_tel" name="" value="132134" placeholder=""></td>
+                </tr>
+                <tr>
+                    <td><label for="name">昵称</label></td>
+                    <td><input type="text" id="person_info_nickname" name="" value="Angelababy" placeholder=""></td>
+                </tr>
+                <tr>
+                    <td><label for="name">姓名：</label></td>
+                    <td><input type="text" id="person_info_name" name="" value="Angelababy" placeholder=""></td>
+                </tr>
+                <tr>
+                    <td><legend for="name">性别:</legend></td>
+                    <td><fieldset data-role="controlgroup" data-type="horizontal">
+                    	<input type="text" id="person_info_sex" value="女">
+                        <!--<label for="guideFmale" >女</label>
+                        <input type="radio"  id="guideFmale" name="guideSex" value="fmale"/>
+                        <label for="guideMale" >男</label>
+                        <input type="radio"  id="guideMale" name="guideSex" value="male"/>-->
+                        </fieldset></td>
+                </tr>            
+                <tr> <td colspan="2"><input type="button" class="ui-btn ui-btn-raised clr-warning" name="" value="确认修改"></td></tr>
+
+            </form>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+   $(document).ready(function() {
+        $(".personalInfoHead").width($(".personalInfoHead").height());
+    });
+</script>
+</body>
+</html>

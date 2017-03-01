@@ -18,7 +18,7 @@ public class CommonAction {
 	@RequestMapping(value="/FirstShow.action",method=RequestMethod.GET)
 	public String FirstShow()
 	{
-		return "admin/firsthome";
+		return "admin/other/firsthome";
 	}
 	
 	/*
@@ -27,7 +27,7 @@ public class CommonAction {
 	@RequestMapping(value="/operateUser.action",method=RequestMethod.GET)
 	public String ToOperateUser()
 	{
-		return "admin/operateUser";
+		return "admin/other/operateUser";
 	}
 	
 	/*
@@ -45,7 +45,7 @@ public class CommonAction {
 	@RequestMapping(value="/scenicInfo.action",method=RequestMethod.GET)
 	public String ToScenicInfo()
 	{
-		return "admin/scenicInfo";
+		return "admin/scenic/scenicInfo";
 	}
 	/*
 	 * 跳转游客界面
@@ -53,7 +53,7 @@ public class CommonAction {
 	@RequestMapping(value="/visitor.action",method=RequestMethod.GET)
 	public String ToVisitorInfo()
 	{
-		return "admin/visitorInfo";
+		return "admin/visitor/visitorInfo";
 	}
 	
 	/*
@@ -62,7 +62,7 @@ public class CommonAction {
 	@RequestMapping(value="/guideInfo.action",method=RequestMethod.GET)
 	public String ToGuideInfo()
 	{
-		return "admin/guideInfo";
+		return "admin/guide/guideInfo";
 	}
 	
 	/**
@@ -72,7 +72,7 @@ public class CommonAction {
 	@RequestMapping(value="/guideWorkday.action",method=RequestMethod.GET)
 	public String ToGuideWorkDay()
 	{
-		return "admin/GuideWorkday";
+		return "admin/guide/GuideWorkday";
 	}
 	
 	/**
@@ -82,7 +82,7 @@ public class CommonAction {
 	@RequestMapping(value="/GuideInfoYes.action",method=RequestMethod.GET)
 	public String ToGuideInfoYes()
 	{
-		return "admin/GuideInfoYes";
+		return "admin/guide/GuideInfoYes";
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class CommonAction {
 	@RequestMapping(value="/GuideInfoNo.action",method=RequestMethod.GET)
 	public String ToGuideInfoNo()
 	{
-		return "admin/GuideInfoNo";
+		return "admin/guide/GuideInfoNo";
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class CommonAction {
 	@RequestMapping(value="/ScenicFee.action",method=RequestMethod.GET)
 	public String ToScenicFee()
 	{
-		return "admin/ScenicFee";
+		return "admin/scenic/ScenicFee";
 	}
 	
 	/**
@@ -112,7 +112,7 @@ public class CommonAction {
 	@RequestMapping(value="/GuideFee.action",method=RequestMethod.GET)
 	public String ToGuideFee()
 	{
-		return "admin/GuideFee";
+		return "admin/guide/GuideFee";
 	}
 	
 	/**
@@ -122,7 +122,7 @@ public class CommonAction {
 	@RequestMapping(value="/BookOrderInfo.action",method=RequestMethod.GET)
 	public String ToBookOrderInfo()
 	{
-		return "admin/BookOrderInfo";
+		return "admin/order/BookOrderInfo";
 	}
 	
 	
@@ -133,7 +133,7 @@ public class CommonAction {
 	@RequestMapping(value="/visitorInfoDisabled.action",method=RequestMethod.GET)
 	public String ToVisitorDisabled()
 	{
-		return "admin/visitorInfoDisabled";
+		return "admin/visitor/visitorInfoDisabled";
 	}
 	
 	/**
@@ -143,7 +143,7 @@ public class CommonAction {
 	@RequestMapping(value="/scenicTicket.action",method=RequestMethod.GET)
 	public String ToscenicTicket()
 	{
-		return "admin/scenicTicket";
+		return "admin/scenic/scenicTicket";
 	}
 	
 	/**
@@ -153,19 +153,25 @@ public class CommonAction {
 	@RequestMapping(value="/authority.action",method=RequestMethod.GET)
 	public String ToAuthority()
 	{
-		return "admin/Authority";
+		return "admin/scenic/Authority";
 	}
 	
 	@RequestMapping(value="/RewardOrPunishRecord.action",method=RequestMethod.GET)
 	public String Toregist()
 	{
-		return "admin/RewardOrPunishRecord";
+		return "admin/Record/RewardOrPunishRecord";
 	}
 	
 	
 	@RequestMapping(value="/OperateRecord.action",method=RequestMethod.GET)
 	public String ToOperateRecord()
 	{
-		return "admin/OperateRecord";
+		return "admin/Record/OperateRecord";
+	}
+	
+	@RequestMapping(value="/SysManager.action",method=RequestMethod.GET)
+	public String ToSysManager()
+	{
+		return "admin/other/SysManager";
 	}
 }

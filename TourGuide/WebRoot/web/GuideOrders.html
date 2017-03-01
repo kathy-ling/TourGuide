@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>讲解员的订单</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <link rel="stylesheet" type="text/css" href="css/orderFormList.css">
+	    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
+	    <link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
+	    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+	    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+	    <script type="text/javascript" src="js/GuideOrders.js"></script>
+	<style type="text/css">
+		.mybtn{
+			position: absolute;
+			bottom: 0;
+			right: 4em;
+			
+			color: #FFFFFF;
+			border-radius:1em ;
+			box-shadow: none;
+			font-size: 1em;
+			line-height: 1.3em;
+			height: 1.3em;
+			width: 5em;
+			text-align: center;
+		}
+		.start{
+			background: #4CD964;
+		}
+		.finish{
+			background: #DD524D;
+		}
+		.mybtn:hover{
+			opacity: 0.6;
+		}
+	</style>
+	</head>
+	
+	
+	<body>
+		<div data-role="page">
+			<div data-role="header"  id="header" class="header">
+				<div data-role="navbar">
+					<ul>
+						<li><a class="navList" id="beVisit"  href="#">待讲解</a></li>
+               			<li><a class="navList" id="finish"  href="#">已完成</a></li>
+					</ul>		
+				</div>
+			</div>
+			
+			<div data-role="main" class="ui-content">
+				<ul data-role="listview" id="OrderUl">
+				</ul>
+				<ul data-role="listview" id="finishOrder">
+				</ul>
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+		$(function($){
+			$("#beVisit").click();
+			$("#beVisit").click(function(){
+				$("#finishOrder").hide();
+				$("#OrderUl").show();
+			});
+			$("#finish").click(function(){
+				$("#OrderUl").hide();
+				$("#finishOrder").show();
+			});
+			
+			$(".start").click(function(){
+				alert("click");
+				$(this).removeClass("start");
+				$(this).addClass("finish");
+			});
+		});
+			
+		</script>
+		
+</body>
+</html>

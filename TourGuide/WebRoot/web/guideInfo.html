@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>讲解员详情</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/guideInfo.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
+   	<link rel="stylesheet" type="text/css" href="css/nativedroid2.css"/>
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="js/jquery.raty.min.js"></script>
+	<script type="text/javascript" src="js/nativedroid2.js"></script>
+</head>
+<body>
+<div data-role="page" id="guideinfoPage">
+    <div data-role="header" data-position="fixed" id="header" class="infoheader">
+        <div class="guideInfoBGimg">
+            <img  id="bgimg" src="" ><!--img/angelababy.jpg-->
+        </div>
+        <div class="guideInfoHead">
+        <img src="" id="guide_img">
+        </div>
+    </div>
+    <div data-role="main" class="ui-content">
+        <div class="infocard">
+            <p>
+                姓名：<span class="name" id="guide_info_name"></span><br/>
+                性别：<span class="sex" id="guide_info_sex"></span><br/>
+                年龄：<span class="age" id="guide_age"></span><br/>
+                语种：<span class="language" id="guide_language"></span><br/><br/>
+                导游级别：<span class="starLevel" id="guide_starlevel"></span><br/>
+                接待人次：<span class="" id="guide_Visitors"></span><br/>
+                手机号：<span class="guideId" id="guide_phone"></span><br/>
+                导游费：<span class="" id="guide_fee"></span><br/><br/>
+                <!--隶属单位：<span class="">个人</span><br/>-->
+                个人介绍：<span class="personalDis" id="guide_self_intro"></span>
+            </p>
+        </div>
+        <div>
+        <div class="sideRadius" >
+            <a  data-position-to="window" class="sidebtn" id="bookGuide">立刻预定</a>
+        </div>
+        </div>
+        <div>
+            <ul data-role="listview" id="commentList" data-inset="true" data-icon="false" >
+                <!--<li>
+                <a href="#" >
+                    <p>
+                        <span class="visitorName">游客1**1</span>
+                        <span class="messageDate">(2017--/01/02)</span><br/>
+                        <span class="meassageInfo">
+                            明明能靠脸吃饭，却偏偏要靠才华，导游知识面很广，讲的很仔细。明明能靠脸吃饭，却偏偏要靠才华，导游知识面很广，讲的很仔细。明明能靠脸吃饭，却偏偏要靠才华，导游知识面很广，讲的很仔细。
+                     </span>
+                    </p>
+                </a>
+                </li>-->
+            </ul>
+        </div>
+</div>
+
+<!--<nd2-include data-src="/examples/fragments/panel.left.html"></nd2-include>-->
+ <script type="text/javascript" src="js/nativedroid2.js"></script>  
+ <script type="text/javascript" src="js/GuideInfo.js"></script>
+
+</div> 
+
+
+
+</body>
+</html>

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.TourGuide.common.CommonResp;
 import com.TourGuide.model.AdminInfo;
 import com.TourGuide.service.AdminService;
 
@@ -65,6 +66,18 @@ public class AdminAction {
 			} else {
 			return new ModelAndView("index","error","用户名或密码错误");
 		}
+	}
+	
+	@RequestMapping(value="/UpdatePass.action" ,method=RequestMethod.POST)
+	@ResponseBody
+	public Object UpdatePass(HttpServletResponse resp,
+			String username,String passNew,String passOld) {
+		
+		CommonResp.SetUtf(resp);
+		int i=adminService.UpdatePass(username, passNew, passOld);
+		
+		return i;
+		
 	}
 	
 	
