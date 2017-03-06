@@ -2,15 +2,25 @@ package com.TourGuide.Action;
 
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.TourGuide.model.AdminInfo;
+import com.TourGuide.service.MenuService;
+
 @Controller
 @RequestMapping(value="view")
 @SessionAttributes("adminSession")
 public class CommonAction {
+	
+	@Autowired
+	private MenuService service;
 	
 	/*
 	 * 跳转首页Action
@@ -34,9 +44,19 @@ public class CommonAction {
 	 * 跳转主界面
 	 * */
 	@RequestMapping(value="/index.action",method=RequestMethod.GET)
-	public String ToMain1()
+	public String ToMain(HttpServletRequest request,HttpSession session)
 	{
-		return "admin/main1";
+		AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
+		
+		String role=(String)service.getMenuByrole(accont.getUsername()).get("role");
+		if (role.equals("超级管理员")) {
+			return "admin/main";
+		}else if (role.equals("运营人员")) {
+			return "operate/main";
+		} 
+		else {
+			return "scenicPer/main";
+		}
 	}
 	
 	/*
@@ -144,6 +164,12 @@ public class CommonAction {
 	public String ToscenicTicket()
 	{
 		return "admin/scenic/scenicTicket";
+	}
+	
+	@RequestMapping(value="/scenicTeam.action",method=RequestMethod.GET)
+	public String ToscenicTeam()
+	{
+		return "admin/scenic/scenicTeam";
 	}
 	
 	/**

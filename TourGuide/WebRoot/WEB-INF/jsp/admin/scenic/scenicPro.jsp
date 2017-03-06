@@ -64,7 +64,7 @@ String day3=sdf.format(date3);
 		<div class="admin-content-body">
 			<div class="am-cf am-padding am-padding-bottom-0">
 				<div class="am-fl am-cf">
-					<strong class="am-text-primary am-text-lg">景区拼团价格管理</strong> / <small>景区拼团价格管理</small>
+					<strong class="am-text-primary am-text-lg">景区活动管理</strong> / <small>景区活动管理</small>
 				</div>
 			</div>
 
@@ -94,9 +94,10 @@ String day3=sdf.format(date3);
 								<tr>
 									<th style="text-align: center; width: 10%;">景区编号</th>
 									<th style="text-align: center; width: 10%;">景区名称</th>
-									<th style="text-align: center; width: 10%;"><%=day1 %></th>
-									<th style="text-align: center; width: 10%;"><%=day2 %></th>
-									<th style="text-align: center; width: 10%;"><%=day3 %></th>
+									<th style="text-align: center; width: 10%;">活动链接</th>
+									<th style="text-align: center; width: 10%;">发布时间</th>
+									<th style="text-align: center; width: 10%;">开始时间</th>
+									<th style="text-align: center; width: 10%;">结束时间</th>
 									<th style="text-align: center; width: 10%;">操作</th>
 								</tr>
 							</thead>
@@ -129,7 +130,7 @@ String day3=sdf.format(date3);
 						<span class="blue">X</span>
 					</button>
 					<h4 class="modal-title" id="myModalLabel"
-						style="text-align:center;">景区拼团信息</h4>
+						style="text-align:center;">景区活动信息</h4>
 				</div>
 				<div class="modal-body">
 					<table

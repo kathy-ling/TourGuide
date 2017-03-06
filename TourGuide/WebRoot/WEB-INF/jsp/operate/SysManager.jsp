@@ -30,7 +30,6 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
     	<ul class="am-tabs-nav am-nav am-nav-tabs">
       <li class="am-active"><a href="#tab1">数据备份</a></li>
       <li><a href="#tab2">密码修改</a></li>
-      <li><a href="#tab3">平台净利润设置</a></li>
       
     </ul>
 
@@ -56,13 +55,7 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
             <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
               <input style="text-align: center;" type="text" value="24小时" class="am-input-sm" readonly="true">
             </div>
-            
           </div>
-         
-
-          
-          
-          
         </form>
       </div>
 
@@ -99,67 +92,13 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
 				<div class="am-g am-margin-top" align="center">
             	<button type="button" class="am-btn am-btn-success am-radius "  onclick="updatePass()">保存</button>
           </div>
-          
-
         </form>
       </div>
-
-     <div class="am-tab-panel am-fade" id="tab3">
-        <form class="am-form">
-          <div class="am-g am-margin-top">
-            <div class="am-u-sm-4 am-u-md-2 am-text-right">
-        	平台讲解费百分比
-            </div>
-            <div class="am-u-sm-8 am-u-md-10">
-            <select data-am-selected="{btnSize: 'sm'}" style="width: 100px;">
-              <option value="option1">5%</option>
-              <option value="option2">10%</option>
-              <option value="option3">15%</option>
-            </select>
-          </div>
-          </div>
-					
-          <div class="am-g am-margin-top" >
-            <div class="am-u-sm-4 am-u-md-2 am-text-right" >
-        	平台门票费百分比
-            </div>
-            <div class="am-u-sm-8 am-u-md-10">
-            <select data-am-selected="{btnSize: 'sm'}" style="width: 100px;">
-              <option value="option1">5%</option>
-              <option value="option2">10%</option>
-              <option value="option3">15%</option>
-            </select>
-          </div>
-          </div>
-					<div class="am-g am-margin-top"></div>
-            <div class="am-u-sm-4 am-u-md-2 am-text-right">
-        	
-            </div>
-            <div class="am-u-sm-8 am-u-md-10">
-            
-          </div>
-          <div class="am-g am-margin-top">
-            
-          </div>
-          <div class="am-g am-margin-top">
-            
-          </div>
-          <div class="am-g am-margin-top">
-            
-          </div>
-         <div class="am-g am-margin-top" align="center">
-            	<button type="button" class="am-btn am-btn-success am-radius ">保存</button>
-          </div>
-
-        </form>
-      </div>
-
     </div>
   </div>
 </div>
 
 <script src="<%=basePath %>assets/js/amazeui.min.js"></script>
-<!--<![endif]-->
 <script>
 
 	function updatePass()
@@ -185,12 +124,6 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
 			}
 		});
 	}
-
-
 </script>
-
-
-
-
 </body>
 </html>

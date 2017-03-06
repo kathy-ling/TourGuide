@@ -40,7 +40,6 @@ public class PromotionController {
 		
 		CommonResp.SetUtf(resp);
 		
-		String register = null;
 
 		List<Promotion> list = promotionService.getPromotions();
 		

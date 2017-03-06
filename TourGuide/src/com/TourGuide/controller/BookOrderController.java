@@ -1,21 +1,16 @@
 package com.TourGuide.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
-
-import org.aspectj.apache.bcel.generic.NEW;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -24,9 +19,8 @@ import com.TourGuide.common.MyDateFormat;
 import com.TourGuide.model.ScenicTickets;
 import com.TourGuide.service.BookOrderService;
 import com.TourGuide.service.GuideService;
-import com.TourGuide.service.IntroFeeAndMaxNumService;
 import com.TourGuide.service.ScenicTicketService;
-import com.google.gson.Gson;
+
 
 @Controller
 public class BookOrderController {

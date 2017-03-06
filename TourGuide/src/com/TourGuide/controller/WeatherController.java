@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.TourGuide.common.CommonResp;
-import com.TourGuide.common.getWeatherByCity;
 import com.TourGuide.model.Weather;
 import com.TourGuide.service.WeatherService;
 import com.google.gson.Gson;
