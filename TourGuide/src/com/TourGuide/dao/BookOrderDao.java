@@ -93,7 +93,6 @@ public class BookOrderDao {
 		int ret = 0;	
 		String orderState = "待游览";
 		
-		List<Map<String , Object>> list = null;
 		String sqlString = "insert into t_bookorder (bookOrderID,produceTime,visitTime,"
 				+ "visitorPhone,visitNum,scenicID,purchaseTicket,fullPrice,discoutPrice,halfPrice,totalTicket,"
 				+ "guideFee,totalGuideFee,totalMoney,guidePhone,orderState) "

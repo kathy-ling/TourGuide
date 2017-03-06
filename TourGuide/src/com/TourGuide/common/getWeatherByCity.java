@@ -9,12 +9,11 @@ import java.net.URLConnection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.aspectj.apache.bcel.generic.NEW;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import com.TourGuide.model.Weather;
-import com.google.gson.Gson;
 
 
 /**

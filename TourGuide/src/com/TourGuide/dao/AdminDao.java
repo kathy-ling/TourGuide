@@ -1,5 +1,7 @@
 package com.TourGuide.dao;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -19,6 +21,7 @@ public class AdminDao {
 	 * */
 	public boolean isValid(String username,String password)
 	{
+		
 		String sql="select * from t_admin where username=? and password=?";
 		int i=jdbcTemplate.queryForList(sql,new Object[]{username,password}).size();
 		if (i>0) {
