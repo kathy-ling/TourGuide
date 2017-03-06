@@ -1,12 +1,7 @@
 package com.TourGuide.dao;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> f9319d7243fed6427adc83bff232461f0c0d7d3a
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,7 +17,6 @@ import org.springframework.stereotype.Repository;
 
 import com.TourGuide.model.SNSUserInfo;
 import com.TourGuide.model.VisitorInfo;
-import com.TourGuide.model.VisitorLoginInfo;
 
 @Repository
 public class VisitorDao {
