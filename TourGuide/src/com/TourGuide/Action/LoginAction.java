@@ -29,10 +29,12 @@ import com.TourGuide.service.AdminService;
 
 @Controller
 @SessionAttributes("adminSession")
-public class AdminAction {
+public class LoginAction {
 
 	@Autowired
 	private AdminService adminService;
+	
+	
 	/*
 	 * 登录检验
 	 * 
@@ -53,15 +55,25 @@ public class AdminAction {
 			@RequestParam(value="password")String password,
 			HttpServletRequest request, 
 			HttpSession session, ModelMap model,HttpServletResponse resp) throws IOException {
+			
 			boolean flag=adminService.isValid(username, password);
 			AdminInfo adminInfo=new AdminInfo();
 			adminInfo.setUsername(username);
 			adminInfo.setPassword(password);
+			String role=adminService.getRoleByAccount(username);
 			if (flag==true) {
 			
 			// 添加用户session
 			model.addAttribute("adminSession", adminInfo);
-			resp.sendRedirect("/TourGuide/view/index.action");
+			if (role.equals("超级管理员")) {
+				resp.sendRedirect("/TourGuide/admin/index.action");
+			}else if (role.equals("运营人员")) {
+				resp.sendRedirect("/TourGuide/operate/index.action");
+			} 
+			else {
+				resp.sendRedirect("/TourGuide/scenicPer/index.action");
+			}
+			
 			return null;
 			} else {
 			return new ModelAndView("index","error","用户名或密码错误");
@@ -77,6 +89,18 @@ public class AdminAction {
 		int i=adminService.UpdatePass(username, passNew, passOld);
 		
 		return i;
+		
+	}
+	
+	
+	
+	@RequestMapping(value="/exit.action" ,method=RequestMethod.POST)
+	@ResponseBody
+	public boolean  exitSys(HttpServletResponse resp,HttpServletRequest req) {
+		
+		HttpSession session=req.getSession(false);
+		session.invalidate();
+		return true;
 		
 	}
 	

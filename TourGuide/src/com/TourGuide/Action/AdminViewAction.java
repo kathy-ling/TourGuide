@@ -2,25 +2,32 @@ package com.TourGuide.Action;
 
 
 
+
+
+
+
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.TourGuide.model.AdminInfo;
-import com.TourGuide.service.MenuService;
+
+
 
 @Controller
-@RequestMapping(value="view")
+@RequestMapping(value="admin")
 @SessionAttributes("adminSession")
-public class CommonAction {
+public class AdminViewAction {
 	
-	@Autowired
-	private MenuService service;
+	
 	
 	/*
 	 * 跳转首页Action
@@ -29,6 +36,16 @@ public class CommonAction {
 	public String FirstShow()
 	{
 		return "admin/other/firsthome";
+	}
+	
+	/**
+	 * 跳转主页
+	 * @return
+	 */
+	@RequestMapping(value="/index.action",method=RequestMethod.GET)
+	public String Tomain()
+	{
+		return "admin/main";
 	}
 	
 	/*
@@ -40,24 +57,13 @@ public class CommonAction {
 		return "admin/other/operateUser";
 	}
 	
-	/*
-	 * 跳转主界面
-	 * */
-	@RequestMapping(value="/index.action",method=RequestMethod.GET)
-	public String ToMain(HttpServletRequest request,HttpSession session)
-	{
-		AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
-		
-		String role=(String)service.getMenuByrole(accont.getUsername()).get("role");
-		if (role.equals("超级管理员")) {
-			return "admin/main";
-		}else if (role.equals("运营人员")) {
-			return "operate/main";
-		} 
-		else {
-			return "scenicPer/main";
-		}
-	}
+	/**
+	 * 退出系统
+	 * @param session
+	 * @return
+	 */
+	
+
 	
 	/*
 	 * 跳转景区界面
@@ -135,6 +141,7 @@ public class CommonAction {
 		return "admin/guide/GuideFee";
 	}
 	
+	
 	/**
 	 * 跳转订单信息界面
 	 * @return
@@ -200,4 +207,10 @@ public class CommonAction {
 	{
 		return "admin/other/SysManager";
 	}
+	
+	
+	
+	
+	
+	
 }

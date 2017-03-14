@@ -28,8 +28,7 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
     </div>
       <div class="am-tabs am-margin" data-am-tabs>
     	<ul class="am-tabs-nav am-nav am-nav-tabs">
-      <li class="am-active"><a href="#tab1">数据备份</a></li>
-      <li><a href="#tab2">密码修改</a></li>
+      <li class="am-active"><a href="#tab2">密码修改</a></li>
       
     </ul>
 
@@ -46,18 +45,7 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
 
 
     <div class="am-tabs-bd">
-       <div class="am-tab-panel am-fade am-in am-active" id="tab1" >
-        <form class="am-form">
-        	<div class="am-g am-margin-top">
-            <div class="am-u-sm-4 am-u-md-2 am-text-right">
-              服务器备份时间
-            </div>
-            <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
-              <input style="text-align: center;" type="text" value="24小时" class="am-input-sm" readonly="true">
-            </div>
-          </div>
-        </form>
-      </div>
+      
 
       <div class="am-tab-panel am-fade" id="tab2">
         <form class="am-form">
@@ -92,13 +80,19 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
 				<div class="am-g am-margin-top" align="center">
             	<button type="button" class="am-btn am-btn-success am-radius "  onclick="updatePass()">保存</button>
           </div>
+          
+
         </form>
       </div>
+
+    
+
     </div>
   </div>
 </div>
 
 <script src="<%=basePath %>assets/js/amazeui.min.js"></script>
+<!--<![endif]-->
 <script>
 
 	function updatePass()
@@ -124,6 +118,12 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
 			}
 		});
 	}
+
+
 </script>
+
+
+
+
 </body>
 </html>

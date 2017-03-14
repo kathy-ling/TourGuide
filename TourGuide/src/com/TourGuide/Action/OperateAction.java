@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.TourGuide.common.CommonResp;
+import com.TourGuide.model.AdminInfo;
 import com.TourGuide.model.Operateper;
-import com.TourGuide.service.OperateperService;
+import com.TourGuide.web.Service.OperateperService;
 import com.google.gson.Gson;
 
 /*
@@ -193,6 +194,28 @@ public class OperateAction {
 		int i=operateperService.ResetPassword(account, phone);
 		
 		return i;
+	}
+	
+	
+	@RequestMapping(value="/GetOperateUserByRole.action",method=RequestMethod.POST)
+	@ResponseBody
+	public Object GetOperateInfoByAccount(HttpServletResponse resp,
+			@RequestParam(value="currentPage")int currentPage,
+			@RequestParam(value="pageRows")int pageRows,
+			HttpSession session) throws IOException
+	{
+		
+		CommonResp.SetUtf(resp);
+		
+		AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
+		List<Operateper> list=operateperService.getOperateperByAccount(accont.getUsername(), currentPage, pageRows);
+		Map< String , Object> map=new HashMap<>();
+		String jsonStr=new Gson().toJson(list).toString();
+		int i=operateperService.getOperateByAcount(accont.getUsername());
+		map.put("jsonStr", jsonStr);
+		map.put("page", currentPage);
+		map.put("total", (int)(i%pageRows==0? i/pageRows:i/pageRows + 1));
+		return map;
 	}
 }
 

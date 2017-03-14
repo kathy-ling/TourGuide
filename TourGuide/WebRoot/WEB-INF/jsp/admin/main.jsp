@@ -48,7 +48,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 					href="javascript:;" id="admin-fullscreen"><span
 						class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a>
 				</li>
-				<li class="kuanjie"><a href="#">退出系统</a> </li>
+				<li class="kuanjie"><a href="#" onclick="exit()">退出系统</a> </li>
 			</ul>
 		</div>
 		<div class="am-collapse am-topbar-collapse" id="topbar-collapse">
@@ -168,6 +168,22 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 		//鼠标从.sideMen移走后返回默认状态（默认false）
 		});
 		
+		function exit()
+		{
+			alert("开始进入");
+			var url = "<%=basePath%>exit.action";
+			$.ajax ({
+ 			url:url,
+ 			type:"post",
+ 			datatype:"json",
+ 			success:function(data) {
+ 				if (data) {window.location.href="<%=basePath%>logincheck.action";}
+ 				else alert("退出系统失败");
+ 			}
+ 		});
+		
+		
+		}
 		
 	</script>
 

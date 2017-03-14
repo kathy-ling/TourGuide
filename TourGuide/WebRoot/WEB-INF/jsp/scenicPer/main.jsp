@@ -48,7 +48,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 					href="javascript:;" id="admin-fullscreen"><span
 						class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a>
 				</li>
-				<li class="kuanjie"><a href="#">退出系统</a> </li>
+				<li class="kuanjie"><a href="#" onclick="exit()">退出系统</a> </li>
 			</ul>
 		</div>
 		<div class="am-collapse am-topbar-collapse" id="topbar-collapse">
@@ -73,7 +73,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 					<em></em> <a href="#">运营人员管理</a>
 				</h3>
 				<ul>
-					<li><a href="operateUser.action" target="targetiframe">运营人员信息管理</a></li>
+					<li><a href="operateInfo.action" target="targetiframe">运营人员信息管理</a></li>
 				</ul>
 				<h3 class="am-icon-users">
 					<em></em> <a href="#">讲解员管理</a>
@@ -137,7 +137,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 
 			<div class="admin-biaogelist" style="width: 85%;height:90%">
 				<iframe name="targetiframe" style="width: 100%; height:95% ; "
-					src="FirstShow.action"></iframe>
+					src="operateInfo.action"></iframe>
 			</div>
 
 		</div>
@@ -163,6 +163,12 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 		//鼠标从.sideMen移走后返回默认状态（默认false）
 		});
 		
+		function exit()
+		{
+			$.ajax({});
+		
+		
+		}
 		
 	</script>
 

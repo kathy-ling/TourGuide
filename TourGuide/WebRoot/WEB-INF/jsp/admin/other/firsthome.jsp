@@ -29,7 +29,7 @@
 						<div style="text-align: center;">微信平台关注状态</div>
 
 
-						<div id="Guanzhu" style="width: 60%;height:300px;"></div>
+						<div id="Guanzhu" style="width: 70%;height:300px;"></div>
 						<div>
 							<span class="am-input-group-btn">
 								<button class="am-btn am-btn-default btn-success" id="searchText"
@@ -63,7 +63,7 @@
 			<tr>
 				<td align="center" style=" border:1px"><div >
 						<div style="text-align: center;">订单完成状态</div>
-						<div id="Order" style="width: 60%;height:300px;"></div>
+						<div id="Order" style="width: 70%;height:300px;"></div>
 					</div>
 					<div  style=" border:1px">
 							<span class="am-input-group-btn">
