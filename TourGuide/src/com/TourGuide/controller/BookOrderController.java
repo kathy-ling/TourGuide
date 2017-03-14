@@ -68,9 +68,9 @@ public class BookOrderController {
 			@RequestParam("visitorName") String visitorName,
 			@RequestParam("priceRange") String priceRange,
 			@RequestParam("purchaseTicket") String purchaseTicket,
-			@RequestParam("fullPrice") String fullPrice,
-			@RequestParam("halfPrice") String halfPrice,
-			@RequestParam("discoutPrice") String discoutPrice,
+			@RequestParam("fullPrice") String fullPriceNum,
+			@RequestParam("halfPrice") String halfPriceNum,
+			@RequestParam("discoutPrice") String discoutPriceNum,
 			@RequestParam("otherCommand") String otherCommand
 			) throws IOException{
 		
@@ -78,20 +78,35 @@ public class BookOrderController {
 		
 		String bookOrderID = UUID.randomUUID().toString().replace("-", "");
 		String produceTime = MyDateFormat.form(new Date());
-		
-		//查询该景区的门票信息
-		ScenicTickets scenicTickets = scenicTicketService.geTicketsByScenicNo(scenicID);
-		
+				
 		//计算门票总额
-		int totalTicket = scenicTickets.getHalfPrice() * Integer.parseInt(halfPrice) +
-				scenicTickets.getDiscoutPrice() * Integer.parseInt(discoutPrice) +
-				scenicTickets.getFullPrice() * Integer.parseInt(fullPrice);
-		
+		int totalTicket = 0;
+		//景区门票的价格
+		int halfPrice = 0, fullPrice = 0, discoutPrice = 0; 
+		if(purchaseTicket.equals("0") || purchaseTicket == "0")
+		{
+			halfPriceNum = "0";
+			fullPriceNum = "0";
+			discoutPriceNum = "0";
+		}
+		else {
+			//查询该景区的门票信息
+			ScenicTickets scenicTickets = scenicTicketService.geTicketsByScenicNo(scenicID);
+			halfPrice = scenicTickets.getHalfPrice();
+			fullPrice = scenicTickets.getFullPrice();
+			discoutPrice = scenicTickets.getDiscoutPrice();
+			
+			totalTicket= halfPrice * Integer.parseInt(halfPriceNum) +
+					discoutPrice * Integer.parseInt(discoutPriceNum) +
+					fullPrice * Integer.parseInt(fullPriceNum);
+		}
+			
 		boolean bool = bookOrderService.ReleaseBookOrder(bookOrderID, scenicID, produceTime,
 				visitTime, Integer.parseInt(visitNum), language, guideSex, 
 				visitorPhone, visitorName, Integer.parseInt(priceRange), Integer.parseInt(purchaseTicket), 
 				otherCommand, releaseByVisitor, orderState, totalTicket, 
-				Integer.parseInt(fullPrice), Integer.parseInt(discoutPrice), Integer.parseInt(halfPrice));
+				Integer.parseInt(fullPriceNum), Integer.parseInt(discoutPriceNum), Integer.parseInt(halfPriceNum),
+				fullPrice, halfPrice, discoutPrice);
 		
 		return bool;
 	}
@@ -165,13 +180,14 @@ public class BookOrderController {
 	 */
 	@RequestMapping(value = "/getReleasedOrders.do")
 	@ResponseBody
-	public Object getReleasedOrders(HttpServletResponse resp) throws IOException{
+	public Object getReleasedOrders(HttpServletResponse resp, 
+			@RequestParam("guidePhone") String guidePhone) throws IOException{
 	
 		CommonResp.SetUtf(resp);
 		
 		String timeNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		
-		List<Map<String , Object>> list = bookOrderService.getReleasedOrders(timeNow);
+		List<Map<String , Object>> list = bookOrderService.getReleasedOrders(guidePhone);
 		
 		return list;
 	}

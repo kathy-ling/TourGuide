@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateConvert {
@@ -51,4 +52,55 @@ public class DateConvert {
     	day = (date1.getTime() - date2.getTime()) / (24 * 60 * 60 * 1000);
 		return (int)day;
 	}
+	
+	
+	/**
+	 * 时间字符串加上若干小时
+	 * @param time
+	 * @param hour
+	 * @return
+	 */
+	public static String addHourToTime(String time, int hour){
+		
+		String retTime = null;
+		Date date = null;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			date = dateFormat.parse(time);			
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.HOUR_OF_DAY, hour);
+		
+		retTime = dateFormat.format(calendar.getTime());
+		return retTime;
+	}
+	
+	
+	/**
+	 * 比较两个字符串格式日期的大小
+	 * @param dateFrom  开始日期: yyyy-MM-dd
+	 * @param dateTo  结束日期: yyyy-MM-dd
+	 * @return  true: dateFrom <= dateTo 
+	 */
+	public static Boolean DateCompare(String dateFrom, String dateTo) {
+		Boolean isTrue = false;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		try {
+			java.util.Date df = sdf.parse(dateFrom);
+			java.util.Date dt = sdf.parse(dateTo);
+			if(df.before(dt)) {
+				isTrue = true;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		return isTrue;
+	}
+	
 }

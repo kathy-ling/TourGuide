@@ -13,11 +13,11 @@
 	<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.js"></script>
 	<script type="text/javascript" src="js/jquery.cookie.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>  
    <script type="text/javascript" src="js/nativedroid2.js"></script>
-    <!--<script type="text/javascript" src="js/searchResult.js"></script>-->
 </head>
-<body>
+<body>	
+
 	<div data-role="page" >
      <header data-role="header" id="header" class="">
            <input type="search" class="search" name="search" placeholder="秦始皇兵马俑">
@@ -25,11 +25,7 @@
     <div data-role="main" >
         <div class="slider"><!--id="imageSlider" -->
           <ul class="items" id="index_ul_id">
-            <!--<li><a href="" target="_top" id="slider_a1"><img src="img/1.jpg" alt="这里是测试标题一" id="slider_id1"></a></li>-->
-            <!--<li><a href="#" ><img src="img/2.jpg" alt="这里是测试标题二" ></a></li>
-            <li><a href="#" ><img src="img/3.jpg" alt="这里是测试标题三"></a></li>
-            <li><a href="#" ><img src="img/4.jpg" alt="这里是测试标题四"></a></li>
-            <li><a href="#" ><img src="img/5.jpg" alt="这里是测试标题五"></a></li>-->
+            
           </ul>
         </div> 
         <div>
@@ -37,32 +33,21 @@
             	<a class="rightLink" href="#moreSpotPage" target="_top">更多</a>
             </p>
             <ul class="my-imglist" id="index_scenic_ul_id">
-                <!--<li>
-                <div class="imglist-box">
-                <a href="scenicSpot.html" id="" class="">
-                    <img src="img/1.jpg">
-                </a>
-                </div>
-                </li>-->
-                <!--<li>
-                <div class="imglist-box">
-                <a href="scenicSpot.html" target="_top" id="" >
-                    <img src="img/1.jpg">
-                    <p class="imgbar">
-                        兵马俑，即秦始皇兵马俑，亦简称秦兵马俑或秦俑，位于今陕西省西安市临潼区秦始皇陵以东1.5千米处的兵马俑坑内。
-                    </p>
-                </a>
-                </div>
-                </li>-->
+                
             </ul>
         </div>
+        
+          <div>
+        	<p id="location" ></p>
+        </div> 
+        
     </div>
     <footer data-role="footer" data-position="fixed">
         <div data-role="navbar">
             <ul>
-            <li><a href="pindan.html" target="_top" id="" class="">拼讲解员</a></li>
-            <li><a href="orderGuide.html" target="_top" id="" class="">预约讲解员</a></li>
-            <li><a href="personalHome.html" target="_top" id="" class="" ">个人中心</a></li>
+            <li><a href="pindan.html" target="_top" id="" class="" data-icon = "home">拼讲解员</a></li>
+            <li><a href="orderGuide.html" target="_top" id="" class="" data-icon = "home">预约讲解员</a></li>
+            <li><a href="personalHome.html" target="_top" id="" class="" data-icon = "user">个人中心</a></li>
             </ul>
         </div>
     </footer>
@@ -97,17 +82,7 @@
 </header>
 <div data-role="main" class="ui-content">
         <ul class="my-imglist" id="more_ul">
-            <!--<li>
-                <div class="imglist-box" id="relate_div">
-                <a href="#" id="" class="">
-                    <img src="img/1.jpg" id="relate_img">
-                    <p class="imgbar">
-                        <span class="imgbar-left-title">兵马俑</span>
-                        <span class="imgbar-right-title">22000人想去</span>
-                    </p>
-                </a>
-                </div>
-            </li>-->
+           
     </ul>
 </div>
 </div>
@@ -132,17 +107,7 @@
         	
         </p>
         <ul class="my-imglist" id="search_ul">
-            <!--<li>
-                <div class="imglist-box">
-                <a href="#" id="" class="">
-                    <img src="img/1.jpg">
-                    <p class="imgbar">
-                        <span class="imgbar-left-title">兵马俑</span>
-                        <span class="imgbar-right-title">22000人想去</span>
-                  </p>
-                </a>
-                </div>
-            </li>-->
+            
         </ul>
     </div>
 </div>

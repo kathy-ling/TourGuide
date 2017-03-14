@@ -1,10 +1,18 @@
 package com.TourGuide.dao;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,19 +52,27 @@ public class BookOrderDao {
 	public boolean ReleaseBookOrder(String bookOrderID, String scenicID, String produceTime,String visitTime, 
 			int visitNum, String language, String guideSex, String visitorPhone,String visitorName, 
 			int priceRange, int purchaseTicket, String otherCommand, int releaseByVisitor, String orderState,
-			int totalTicket, int fullPrice, int discoutPrice, int halfPrice){
+			int totalTicket, int fullPriceNum, int discoutPriceNum, int halfPriceNum,
+			int fullPrice, int discoutPrice, int halfPrice){
 		
 		boolean bool = false;
+		//购买门票的总数
+		int totalTicketNum = fullPriceNum + discoutPriceNum + halfPriceNum;
+		//订单对游客是否可见（删除订单只是设置订单的可见性）
+		int visitorVisible = 1;
+		int guideVisible = 1;
 		
 		String sqlString = "insert into t_bookorder (bookOrderID,scenicID,produceTime,"
 				+ "visitTime,visitNum,language,guideSex,visitorPhone,visitorName,"
 				+ "priceRange,purchaseTicket,otherCommand,releaseByVisitor,orderState,"
-				+ "totalTicket,fullPrice,discoutPrice,halfPrice) values "
-				+ "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "totalTicket,totalTicketNum,fullPriceNum,discoutPriceNum,halfPriceNum,fullPrice,"
+				+ "discoutPrice,halfPrice,visitorVisible,guideVisible) values "
+				+ "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlString, new Object[]{bookOrderID, scenicID, 
 				produceTime, visitTime,visitNum, language, guideSex, visitorPhone, 
 				visitorName, priceRange, purchaseTicket, otherCommand, releaseByVisitor, orderState,
-				totalTicket, fullPrice, discoutPrice, halfPrice});
+				totalTicket,totalTicketNum, fullPriceNum,discoutPriceNum,halfPriceNum,
+				fullPrice, discoutPrice, halfPrice,visitorVisible,guideVisible});
 		
 		if(i == 1){
 			bool = true;
@@ -119,20 +135,45 @@ public class BookOrderDao {
 	
 	
 	/**
-	 * 讲解员查看游客发布的预约订单（简要信息）
+	 * 讲解员查看游客发布的预约订单的简要信息，过滤掉导游不可接单的订单
+	 * 筛选条件：游客的参观时间、是否是游客发布的
 	 * @param timeNow  当前的时间
 	 * @return 订单号、景区名称、参观时间、人数、讲解员性别、讲解语言、可接受价位
+	 * 
+	 * 待解决：根据导游所属的景区进行筛选订单
 	 */
-	public List<Map<String , Object>> getReleasedOrders(String timeNow){		
+	public List<Map<String , Object>> getReleasedOrders(String guidePhone){		
 		
-		String sql = "select t_bookorder.visitTime,t_bookorder.visitNum,t_bookorder.guideSex,"
-				+ "t_bookorder.`language`,t_bookorder.bookOrderID,t_bookorder.priceRange,"
-				+ "t_scenicspotinfo.scenicName from t_bookorder,t_scenicspotinfo "
-				+ "where t_bookorder.visitTime > '"+timeNow +"' and t_bookorder.releaseByVisitor=1"
-				+ " and t_bookorder.scenicID=t_scenicspotinfo.scenicNo";
-		List<Map<String , Object>> list = jdbcTemplate.queryForList(sql);
-		
-		return list;
+		GuideDao guideDao = new GuideDao();
+		List<Map<String , Object>> list = new ArrayList<>(); 		
+ 		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getReleasedOrders(?)");
+			cst.setString(1, guidePhone);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				Map<String , Object> map = new HashMap<String, Object>();
+				String visitTime = rst.getString(1);
+				int visitHour = rst.getInt(8);
+				map.put("visitTime", visitTime);
+				map.put("visitNum", rst.getInt(2));
+				map.put("guideSex", rst.getString(3));
+				map.put("language", rst.getString(4));
+				map.put("bookOrderID", rst.getString(5));
+				map.put("priceRange", rst.getInt(6));
+				map.put("scenicName", rst.getString(7));
+				map.put("maxVisitHour", visitHour);
+				
+				list.add(map);
+				}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+ 		return list;
 	}
 	
 	
@@ -145,22 +186,49 @@ public class BookOrderDao {
 	 */
 	public List<Map<String , Object>> getDetailedReleasedOrders(String orderID){
 		
-		String sqlString = "select t_bookorder.visitorPhone,t_bookorder.otherCommand,"
-				+ "t_bookorder.purchaseTicket,t_bookorder.fullPrice,t_bookorder.discoutPrice,"
-				+ "t_bookorder.halfPrice,t_bookorder.visitTime,t_bookorder.visitNum,t_bookorder.guideSex,"
-				+ "t_bookorder.totalTicket,t_bookorder.visitorName,t_bookorder.`language`,"
-				+ "t_bookorder.bookOrderID,t_bookorder.priceRange,t_scenicspotinfo.scenicName "
-				+ "from t_bookorder,t_scenicspotinfo where t_bookorder.bookOrderID='"+orderID+"' "
-				+ "and  t_bookorder.scenicID=t_scenicspotinfo.scenicNo";
-		
-		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlString);
-		
-		return list;
+		List<Map<String , Object>> list = new ArrayList<>(); 		
+ 		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getDetailedReleasedOrders(?)");
+			cst.setString(1, orderID);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				Map<String , Object> map = new HashMap<String, Object>();
+				map.put("visitorPhone", rst.getString(1));
+				map.put("otherCommand", rst.getString(2));
+				map.put("purchaseTicket", rst.getInt(3));
+				map.put("fullPrice", rst.getInt(4));
+				map.put("discoutPrice", rst.getInt(5));
+				map.put("halfPrice", rst.getInt(6));
+				map.put("fullPriceNum", rst.getInt(7));
+				map.put("discoutPriceNum", rst.getInt(8));
+				map.put("halfPriceNum", rst.getInt(9));
+				map.put("visitTime", rst.getString(10));
+				map.put("visitNum", rst.getInt(11));
+				map.put("guideSex", rst.getString(12));
+				map.put("totalTicket", rst.getInt(13));
+				map.put("visitorName", rst.getString(14));
+				map.put("language", rst.getString(15));
+				map.put("bookOrderID", rst.getString(16));
+				map.put("priceRange", rst.getInt(17));
+				map.put("scenicName", rst.getString(18));
+				
+				list.add(map);
+			}			
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+ 		return list;
 	}
 	
 	
 	/**
 	 * 讲解员接单
+	 * 在列表中显示的均是导游可接单的。接单后，将订单的信息存入guideBeOrdered表中。
 	 * @param orderID  订单编号
 	 * @param guidePhone   讲解员手机号
 	 * @return
@@ -168,18 +236,30 @@ public class BookOrderDao {
 	public boolean takeReleasedOrderByGuide(String orderID, String guidePhone){
 		
 		boolean bool = false;
-		String orderState = "待游览";
-		
-		String sqlSelect = "select visitTime,priceRange,totalTicket "
-				+ "from t_bookorder where bookOrderID='"+orderID+"'";
-		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlSelect);
-		
-		Timestamp timestamp = (Timestamp)list.get(0).get("visitTime");
-		String visitTime = DateConvert.timeStamp2DateTime(timestamp);
-		String[] visitDate = visitTime.split(" ");
-		int price = (int)list.get(0).get("priceRange");
-		int totalTicket = (int)list.get(0).get("totalTicket");
-		int totalMony = totalTicket + price;
+		String orderState = "待付款";				
+ 		String visitTime = null;
+ 		int price = 0;
+ 		int totalTicket = 0;
+ 		int totalMony = 0;
+ 		int maxVisitHour = 0;
+ 		
+ 		DataSource dataSource =jdbcTemplate.getDataSource();	
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call takeReleasedOrderByGuide(?)");
+			cst.setString(1, orderID);
+			ResultSet rst=cst.executeQuery();
+			while (rst.next()){
+				visitTime = rst.getString(1);
+				price = rst.getInt(2);
+				totalTicket = rst.getInt(3);
+				totalMony = totalTicket + price;
+				maxVisitHour = rst.getInt(4);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
 		
 		//更新该订单的相关信息：订单状态、讲解费、订单总额、讲解员手机号、releaseByVisitor
 		String sqlUpdate = "update t_bookorder set orderState='"+orderState+"',guideFee="+price+","
@@ -187,10 +267,13 @@ public class BookOrderDao {
 				+ "guidePhone='"+guidePhone+"' where bookOrderID='"+orderID+"'";
 		int i = jdbcTemplate.update(sqlUpdate);
 		
-		String selectDay = SelectDay.getSelectDay(visitDate[0]);
-		//更新讲解员的状态为被预约
-		String sqlUpdateState ="update t_guideworkday set "+selectDay+"=2 where phone='"+guidePhone+"'";
-		int j = jdbcTemplate.update(sqlUpdateState);
+		String sqlInsert = "insert into t_guideBeOrdered "
+				+ "(orderId,guidePhone,visitTime,timeFrom,timeTo) "
+				+ "values (?,?,?,?,?)";
+		String timeFrom = DateConvert.addHourToTime(visitTime, -maxVisitHour);
+		String timeTo = DateConvert.addHourToTime(visitTime, maxVisitHour);
+		int j = jdbcTemplate.update(sqlInsert, new Object[]{orderID, guidePhone, visitTime,
+				timeFrom, timeTo});
 		
 		if(i !=0 && j!= 0){
 			bool = true;

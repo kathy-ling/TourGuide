@@ -36,6 +36,15 @@ public class ScenicSpotService {
 	
 	
 	/**
+	 * 显示数据库内的所有景点信息,并按景区等级降序排列
+	 * @return 景区图片、编号、名称
+	 */
+	public List<Map<String , Object>> getAllScenics(){
+		return scenicSpotDao.getAllScenics();
+	}
+	
+	
+	/**
  	 * 根据景区编号，查看景区的详细信息
  	 * @param scenicNo  景区编号
  	 * @return 景区详细信息

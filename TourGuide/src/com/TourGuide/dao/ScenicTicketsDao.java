@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,10 +35,26 @@ public class ScenicTicketsDao {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ScenicTickets geTicketsByScenicNo(String scenicNo){
 		
-		ScenicTickets scenicTickets = new ScenicTickets();
-		
-		String sqlString = "select * from t_scenicTickets where scenicNo='"+scenicNo+"'";
-		scenicTickets = jdbcTemplate.queryForObject(sqlString, new BeanPropertyRowMapper(ScenicTickets.class));
+		ScenicTickets scenicTickets = new ScenicTickets();	
+		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call geTicketsByScenicNo(?)");
+			cst.setString(1, scenicNo);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				scenicTickets.setScenicNo(rst.getString(1));
+				scenicTickets.setHalfPrice(rst.getInt(2));
+				scenicTickets.setFullPrice(rst.getInt(3));
+				scenicTickets.setDiscoutPrice(rst.getInt(4));
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return scenicTickets;
 	}

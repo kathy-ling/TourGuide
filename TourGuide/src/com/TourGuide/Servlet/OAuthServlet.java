@@ -33,7 +33,7 @@ public class OAuthServlet extends HttpServlet{
 	private static final long serialVersionUID = -1847238807216447030L;
 	
 
-	public void doGet(HttpServletRequest request, HttpServletResponse response,ModelMap model) 
+	public void doGet(HttpServletRequest request, HttpServletResponse response) 
 
 			throws ServletException, IOException {
 		
@@ -79,8 +79,15 @@ public class OAuthServlet extends HttpServlet{
 //				+"</script></body></html>");
 //				w.close();
 			}
-		}
-					
+		}					
+	}
+	
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(req, resp);
 	}
 
 }
