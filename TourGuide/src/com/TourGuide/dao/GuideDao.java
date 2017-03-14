@@ -1,5 +1,7 @@
 package com.TourGuide.dao;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -8,6 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -79,7 +83,6 @@ public class GuideDao {
 	
 	/**
 	 * 查询最受欢迎的讲解员,暂定显示10个
-	 * 查询条件：级别、历史带团人数、是否认证、是否禁用（先按级别排序，再按带团人数排序）
 	 * @return  讲解员的基本信息及级别
 	 * phone,image,name,sex,age,language,selfIntro,guideLevel
 	 */
@@ -87,11 +90,31 @@ public class GuideDao {
 		
 		int popularNum = 10;
 		
-		String sqlString = "select t_guideinfo.*,t_guideotherinfo.guideLevel from t_guideinfo,t_guideotherinfo "
-				+ "where t_guideinfo.phone=t_guideotherinfo.phone and t_guideotherinfo.phone in "
-				+ "(select phone from t_guideotherinfo where disabled=0 and authorized=1 "
-				+ "order by historyNum,guideLevel desc) limit ?";
-		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlString, new Object[]{popularNum});
+		List<Map<String , Object>> list = new ArrayList<>(); 		
+ 		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getPopularGuides(?)");
+			cst.setInt(1, popularNum);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				Map<String , Object> map = new HashMap<String, Object>();
+				map.put("phone", rst.getString(2));
+				map.put("image", rst.getString(3));
+				map.put("name", rst.getString(4));
+				map.put("sex", rst.getString(5));
+				map.put("age", rst.getInt(6));
+				map.put("language", rst.getString(7));
+				map.put("selfIntro", rst.getString(8));
+				map.put("guideLevel", rst.getString(9));
+				list.add(map);
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
 		
 		return list;
 	}
@@ -99,22 +122,21 @@ public class GuideDao {
 	
 	
 	/**
-	 * 查询可被预约的讲解员
-	 * 查询条件：讲解员的工作时间、单次最大带团人数、所属景区、是否认证、是否禁用、级别
-	 * @param visitDate  游客的参观日期
+	 * 查询可被预约的讲解员,查看推荐
+	 * 查询条件：级别、所属景区、讲解员的工作时间、单次最大带团人数
+	 * @param visitTime  游客的参观日期
 	 * @param visitNum  参观的人数
 	 * @param scenicID  景区编号
 	 * @return 可被预约的讲解员的基本信息（按星级排序）
 	 * phone,image,name,sex,age,language,selfIntro,guideLevel
 	 */
-	public List<Map<String, Object>> getAvailableGuides(String visitDate, 
+	public List<Map<String, Object>> getAvailableGuides(String visitTime, 
 			int visitNum, String scenicID){
 		
-		
-		Date date1=new Date();
-    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(date1);
+    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    	String[] visitDate = visitTime.split(" ");
     	//计算参观日期与今日之间相隔的天数
-    	int day = DateConvert.getDaysBetweenDate(visitDate, dayNow);
+    	int day = DateConvert.getDaysBetweenDate(visitDate[1], dayNow);
     	
 		String selectDay = null;
 		switch (day) {
@@ -260,21 +282,112 @@ public class GuideDao {
 	 * 根据手机号，查询导游的详细信息
 	 * @param phone 手机号
 	 * @return  导游的详细信息
-	 * phone,image,name,sex,age,language,selfIntro,historyNum,guideFee,guideLevel
+	 * phone,image,name,sex,age,language,selfIntro,historyNum,historyTimes,guideFee,guideLevel
 	 */
 	public List<Map<String, Object>> getDetailGuideInfoByPhone(String phone){
 		
-		List<Map<String , Object>> listResult = new ArrayList<>(); 
+		List<Map<String , Object>> list = new ArrayList<>(); 		
+ 		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getDetailGuideInfoByPhone(?)");
+			cst.setString(1, phone);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				Map<String , Object> map = new HashMap<String, Object>();
+				map.put("phone", rst.getString(2));
+				map.put("image", rst.getString(3));
+				map.put("name", rst.getString(4));
+				map.put("sex", rst.getString(5));
+				map.put("age", rst.getInt(6));
+				map.put("language", rst.getString(7));
+				map.put("selfIntro", rst.getString(8));
+				map.put("guideLevel", rst.getString(9));
+				map.put("historyNum", rst.getString(10));
+				map.put("historyTimes", rst.getString(11));
+				map.put("guideFee", rst.getInt(12));
+				list.add(map);
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
 		
-		String sqlString = "select t_guideinfo.*,t_guideotherinfo.guideLevel,"
-				+ "t_guideotherinfo.historyNum,t_guideotherinfo.guideFee from "
-				+ "t_guideinfo,t_guideotherinfo where t_guideinfo.phone=t_guideotherinfo.phone "
-				+ "and t_guideinfo.phone='"+phone+"'";
-		
-		listResult = jdbcTemplate.queryForList(sqlString);
-		
-		return listResult;
+		return list;
 	}
+	
+	/**
+	 * 如果 "参观时间-参观时长 < time < 参观时间+参观时长",则time讲解员忙碌，不可再接单
+	 * @param timeNow 当前时间
+	 * @param visitTime  游客的参观时间
+	 * @param visitHour  该景区的参观时长
+	 * @return true-可接单，false-不可接单
+	 */
+//	public boolean canTakeOrders(String timeNow, String visitTime, int visitHour){
+//		
+//		boolean bool = true;
+//		
+//		//参观时间-参观时长
+//		String timeFrom = DateConvert.addHourToTime(visitTime, -visitHour);
+//		//参观时间+参观时长
+//		String timeTo = DateConvert.addHourToTime(visitTime, visitHour);
+//		
+//		if(DateConvert.DateCompare(timeFrom, timeNow) || 
+//				DateConvert.DateCompare(timeNow, timeTo)){
+//			//讲解员忙碌，不可再接单
+//			bool = false;
+//		}
+//		return bool;
+//	}
+//	
+//	/**
+//	 * 讲解员当前时间是否忙碌
+//	 * 如果 "参观时间-参观时长 < time < 参观时间+参观时长",则time讲解员忙碌，不可再接单
+//	 * @param guidePhone  导游手机号
+//	 * @param visitHour 景区的参观时长
+//	 * @return
+//	 */
+//	public int isBusyTime(String guidePhone, int visitHour){
+//		
+//		int ret = 0;
+//		String timeNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+//		
+//		List<String> list = new ArrayList<>(); 		
+// 		DataSource dataSource =jdbcTemplate.getDataSource();
+//		 
+//		try {
+//			Connection conn = dataSource.getConnection();
+//			CallableStatement cst=conn.prepareCall("call getReleasedOrders(?,?)");
+//			cst.setString(1, guidePhone);
+//			cst.setString(2, timeNow);
+//			ResultSet rst=cst.executeQuery();
+//			
+//			while (rst.next()) {
+//				list.add(rst.getString(1));
+//			}			
+//			conn.close();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		//如果 "参观时间-参观时长 < time < 参观时间+参观时长",则time讲解员忙碌，不可再接单
+//		for(int i=0; i<list.size(); i++){
+//			//参观时间-参观时长
+//			String timeFrom = DateConvert.addHourToTime(list.get(i), -visitHour);
+//			//参观时间+参观时长
+//			String timeTo = DateConvert.addHourToTime(list.get(i), visitHour);
+//			
+//			if(DateConvert.DateCompare(timeFrom, timeNow) || 
+//					DateConvert.DateCompare(timeNow, timeTo)){
+//				//讲解员忙碌，不可再接单
+//				ret = 1;
+//			}
+//		}
+//		
+//		return ret;
+//	} 
 	
 
 	

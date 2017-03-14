@@ -79,15 +79,26 @@ public class OAuthServlet extends HttpServlet{
 //				+"</script></body></html>");
 //				w.close();
 			}
+<<<<<<< HEAD
 		}
 					
 	}
 	
+=======
+		}					
+	}
+	
+	
+>>>>>>> 523e2af17d73f013ffabee77f2cc394c9cb16e7a
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+<<<<<<< HEAD
 		doPost(req, resp);
+=======
+		doGet(req, resp);
+>>>>>>> 523e2af17d73f013ffabee77f2cc394c9cb16e7a
 	}
 
 }

@@ -30,6 +30,7 @@ public class ScenicSpotController {
 	public ScenicTicketService scenicTicketService;
 	
 	/**
+	 * 推荐景点
 	 * 根据用户的位置（省份），获取对应省份的热门景点
 	 * @param resp
 	 * @param province  用户当前所在的省份
@@ -48,27 +49,24 @@ public class ScenicSpotController {
 		writer.flush();
 	}
 	
-	
-	
+		
 	/**
-	 * 根据用户的当前所在的省份，获取该省份的所有景点
+	 * 当用户点击【更多】时的响应
+	 * 显示数据库内的所有景点信息,并按景区等级降序排列
 	 * @param resp
-	 * @param province  用户当前所在的省份
+	 * @return
 	 * @throws IOException
-	 * @return 景区图片、编号、名称
 	 */
-	@RequestMapping(value = "/getAllScenicByLocation.do")
+	@RequestMapping(value="getAllScenics.do")
 	@ResponseBody
-	public Object getAllScenicByLocation(HttpServletResponse resp,
-			@RequestParam("province") String province) throws IOException{
+	public Object getAllScenicByLocation(HttpServletResponse resp) throws IOException{
 		
 		CommonResp.SetUtf(resp);
 		
-		List<Map<String , Object>> list = scenicSpotService.getAllScenicByLocation(province);
+		List<Map<String , Object>> list = scenicSpotService.getAllScenics();
 		
 		return list;
 	}
-	
 	
 	
 	/**
@@ -93,8 +91,8 @@ public class ScenicSpotController {
 	
 	
 	/**
-	 * 根据景区的名称进行搜索。
-	 * @param scenicName  景区的名称
+	 * 根据景区的名称进行搜索，搜索对应景区的详细信息。
+	 * @param scenicName  景区的名称，景区名必须和数据库的一致（客户端完成）
 	 * @return
 	 */
 	@RequestMapping(value = "/getScenicByName.do")
@@ -194,4 +192,26 @@ public class ScenicSpotController {
 		
 		return listResult;
 	}
+	
+	
+	/**
+	 * 暂时作废
+	 * 
+	 * 根据用户的当前所在的省份，获取该省份的所有景点
+	 * @param resp
+	 * @param province  用户当前所在的省份
+	 * @throws IOException
+	 * @return 景区图片、编号、名称
+	 */
+//	@RequestMapping(value = "/getAllScenicByLocation.do")
+//	@ResponseBody
+//	public Object getAllScenicByLocation(HttpServletResponse resp,
+//			@RequestParam("province") String province) throws IOException{
+//		
+//		CommonResp.SetUtf(resp);
+//		
+//		List<Map<String , Object>> list = scenicSpotService.getAllScenicByLocation(province);
+//		
+//		return list;
+//	}
 }

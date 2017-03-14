@@ -78,7 +78,7 @@ public class EvaluateDao {
 		
 		List<Map<String, Object>> list = new ArrayList<>();
 		
-		String sqlString = "select evaluateTime,evaluateContext,nickName,star "
+		String sqlString = "select evaluateTime,evaluateContext,nickName "
 				+ "from t_evaluate where guidePhone='"+guidePhone+"'";
 		list = jdbcTemplate.queryForList(sqlString);
 		

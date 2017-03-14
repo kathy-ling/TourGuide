@@ -1,4 +1,4 @@
-package com.TourGuide.service;
+package com.TourGuide.weixin.util;
 
 import java.util.Date;
 import java.util.Map;
@@ -6,12 +6,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.TourGuide.message.response.TextMessage;
-import com.TourGuide.weixin.util.MessageUtil;
-import com.TourGuide.weixin.util.Oauth2Util;
+import com.TourGuide.model.LocationWeixin;
 
 
 
 public class weixinCoreService {
+	
+	public static LocationWeixin locationWeixin = new LocationWeixin();
 
 	/**
 	 * 处理微信发来的请求
@@ -86,14 +87,15 @@ public class weixinCoreService {
 				}
 				// 上报地理位置
 				else if (eventType.equals(MessageUtil.EVENT_TYPE_LOCATION)) {
+					
+//					locationWeixin = 
 					//纬度
 					String latitude = requestMap.get("Latitude");
 					//经度
 					String longitude = requestMap.get("Longitude");
 					//精度
 					String precision = requestMap.get("Precision");
-					
-//					respContent = "纬度：" + latitude + "经度" + longitude;
+										
 				}
 				// 自定义菜单
 				else if (eventType.equals(MessageUtil.EVENT_TYPE_CLICK)) {

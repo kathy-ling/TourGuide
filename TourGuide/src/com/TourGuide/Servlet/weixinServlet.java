@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.TourGuide.service.weixinCoreService;
 import com.TourGuide.weixin.util.SignUtil;
+import com.TourGuide.weixin.util.weixinCoreService;
 
 
 public class weixinServlet extends HttpServlet {

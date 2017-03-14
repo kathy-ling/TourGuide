@@ -39,12 +39,14 @@ public class BookOrderService {
 	public boolean ReleaseBookOrder(String bookOrderID, String scenicID, String produceTime,String visitTime, 
 			int visitNum, String language, String guideSex, String visitorPhone,String visitorName, 
 			int priceRange, int purchaseTicket, String otherCommand, int releaseByVisitor, String orderState,
-			int totalTicket, int fullPrice, int discoutPrice, int halfPrice){
+			int totalTicket, int fullPriceNum, int discoutPriceNum, int halfPriceNum, 
+			int fullPrice, int discoutPrice, int halfPrice){
 		
 		return bookOrderDao.ReleaseBookOrder(bookOrderID, scenicID, produceTime, 
 				visitTime, visitNum, language, guideSex, visitorPhone, visitorName, 
 				priceRange, purchaseTicket, otherCommand, releaseByVisitor, orderState,
-				totalTicket, fullPrice, discoutPrice, halfPrice);
+				totalTicket, fullPriceNum, discoutPriceNum, halfPriceNum, 
+				fullPrice, discoutPrice, halfPrice);
 	}
 	
 	
@@ -83,8 +85,8 @@ public class BookOrderService {
 	 * @param timeNow  当前的时间
 	 * @return 订单号、景区名称、参观时间、人数、讲解员性别、讲解语言、可接受价位
 	 */
-	public List<Map<String , Object>> getReleasedOrders(String timeNow){
-		return bookOrderDao.getReleasedOrders(timeNow);
+	public List<Map<String , Object>> getReleasedOrders(String guidePhone){
+		return bookOrderDao.getReleasedOrders(guidePhone);
 	}
 	
 	
