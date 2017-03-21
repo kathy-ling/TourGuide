@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.TourGuide.model.AdminInfo;
+
 @Repository
 public class SystemInterceptor implements HandlerInterceptor {
 
@@ -30,6 +32,8 @@ public class SystemInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 			Object handler) throws Exception {
+		
+		
 		
 		request.setCharacterEncoding("UTF-8");
 		String[] notFilter = new String[] {
@@ -53,8 +57,7 @@ public class SystemInterceptor implements HandlerInterceptor {
 		if (doFilter) {
 			
 			// 从session中获取登录者的实体
-			Object  objAdmin = request.getSession().getAttribute("adminSession");
-			 
+			Object  objAdmin =  request.getSession().getAttribute("adminSession");
 			if (null == objAdmin) {
 
 				// 未登录

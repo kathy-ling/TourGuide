@@ -54,5 +54,13 @@ public class AdminDao {
 			return j;
 		
 	}
+	
+	
+	public String  getRoleByAccount(String Account) {
+		
+		String sql="SELECT t_admin.role FROM t_admin WHERE t_admin.username=?";
+		String role=jdbcTemplate.queryForObject(sql, new Object[]{Account},String.class);
+		return role;
+	}
 
 }

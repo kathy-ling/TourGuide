@@ -1,12 +1,12 @@
-package com.TourGuide.service;
+package com.TourGuide.web.Service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.TourGuide.dao.OperateperDao;
 import com.TourGuide.model.Operateper;
+import com.TourGuide.web.Dao.OperateperDao;
 
 @Service
 public class OperateperService {
@@ -88,5 +88,18 @@ public class OperateperService {
 	public int ResetPassword(String account,String phone)
 	{
 		return operateperDao.ResetPassword(account, phone);
+	}
+	
+	
+	public List<Operateper> getOperateperByAccount(String account,int i,int j)
+	{
+		return operateperDao.getOperateperByAccount(account, i, j);
+	}
+	
+	
+	
+	public int getOperateByAcount(String account) 
+	{
+		return operateperDao.getOperateByAcount(account);
 	}
 }

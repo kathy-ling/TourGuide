@@ -108,21 +108,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 
 	<script type="text/javascript">
 		
-  		 <%-- var url="<%=basePath%>Menu/getMenu.action";
-  		$.ajax({
- 			url:url,
- 			type:"post",
- 			async:false,
- 			datatype:"json",
- 			success:function(data)
- 			{
- 				
- 				$("#welcomeRole").append('欢迎'+data.role+','+data.account);
- 				$("#menu1").append(data.menuHtml);
- 				
- 			}
- 		
- 		});  --%>
+  		 
 			jQuery(".sideMenu").slide({
 				titCell:"h3", //鼠标触发对象
 				targetCell:"ul", //与titCell一一对应，第n个titCell控制第n个targetCell的显示隐藏

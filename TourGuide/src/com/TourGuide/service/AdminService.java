@@ -19,6 +19,12 @@ public class AdminService {
 	{
 		return adminDao.isValid(username, password);
 	}
+	
+	public String  getRoleByAccount(String Account) 
+	{
+		return adminDao.getRoleByAccount(Account);
+	}
+	
 	/**
 	 * 修改密码
 	 * @param username

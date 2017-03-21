@@ -1,6 +1,8 @@
-package com.TourGuide.dao;
+package com.TourGuide.web.Dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +67,7 @@ public class OperateperDao {
 
 			@Override
 			public void processRow(java.sql.ResultSet rSet) throws SQLException {
-				// TODO Auto-generated method stub
+				
 				Operateper operateper = new Operateper();
 				operateper.setOperateper_name(rSet.getString(1));
 				operateper.setOperateper_account(rSet.getString(2));
@@ -103,14 +105,13 @@ public class OperateperDao {
 						operateper.getOperateper_phone(),
 						operateper.getOperateper_scenic()
 					});
-					
 					sql1="insert into t_admin(role,username,password)  values(?,?,?)";
 					jdbcTemplate.update(sql1, new Object[]{"运营人员",operateper.getOperateper_account(),password});
 					conn.commit();//提交JDBC事务 
 					conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
 					return true;
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 				return false;
 			}	
@@ -182,6 +183,68 @@ public class OperateperDao {
 				" WHERE username='"+account+"'";
 		i=jdbcTemplate.update(sql);
 		return i;
+	}
+	
+	/**
+	 * 通过后台账号来获取所属景区的运营人员
+	 * @param account
+	 * @param i
+	 * @param j
+	 * @return
+	 */
+	public List<Operateper> getOperateperByAccount(String account,int i,int j)
+	{
+		int k=(i-1)*j;
+		List<Operateper> list=new ArrayList<>();
+		DataSource dataSource=jdbcTemplate.getDataSource();
+		try {
+			Connection conn=dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getOperateByAccount(?,?,?)");
+			cst.setInt(1, k);
+			cst.setInt(2, j);
+			cst.setString(3, account);
+			ResultSet rst=cst.executeQuery();
+			while (rst.next()) {
+				
+				Operateper operateper=new Operateper();
+				operateper.setOperateper_name(rst.getString(1));
+				operateper.setOperateper_account(rst.getString(2));
+				operateper.setOperateper_role(rst.getString(3));
+				operateper.setOperateper_phone(rst.getString(4));
+				operateper.setOperateper_bool(rst.getInt(5));
+				operateper.setOperateper_scenic(rst.getString(6));
+				list.add(operateper);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		return list;
+		
+	}
+	
+	public int getOperateByAcount(String account) {
+		
+		int i=0;
+		DataSource dataSource=jdbcTemplate.getDataSource();
+		try {
+			Connection conn=dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getOperbyAcount(?,?)");
+			cst.registerOutParameter(1, java.sql.Types.INTEGER);
+			cst.setString(2, account);
+			cst.execute();
+			i=cst.getInt(1);
+			conn.close();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		return i;
+		
+		
 	}
 	
 }

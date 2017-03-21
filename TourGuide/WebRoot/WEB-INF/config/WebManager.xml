@@ -21,10 +21,12 @@
 	<context:component-scan base-package="com.TourGuide.Action" />
 	<context:component-scan base-package="com.TourGuide.dao" />
 	<context:component-scan base-package="com.TourGuide.service" />
-	<context:component-scan base-package="com.TourGuide.task" />
+	<context:component-scan base-package="com.TourGuide.web.Service" />
+	<context:component-scan base-package="com.TourGuide.web.Dao" />
+	
 	<bean id="DataSource" class="com.TourGuide.common.XBasicDataSource"
 		p:driverClassName="com.mysql.jdbc.Driver" p:url="jdbc:mysql://202.200.119.158:3306/tourguide"
-		p:username="root" p:password="root123" destroy-method="close" />
+		p:username="root" p:password="root123" destroy-method="close"  p:validationQuery="SELECT 1" p:testOnBorrow="true" />
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
 		p:dataSource-ref="DataSource"   />
 	<bean id="transiactionManager"
@@ -60,5 +62,4 @@
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 	p:viewClass="org.springframework.web.servlet.view.JstlView" p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"
 	/>
-
 </beans>
