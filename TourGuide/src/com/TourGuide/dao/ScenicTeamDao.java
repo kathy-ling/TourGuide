@@ -2,6 +2,7 @@ package com.TourGuide.dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,33 +39,37 @@ public class ScenicTeamDao {
 		DataSource dataSource = jdbcTemplate.getDataSource();
 		try {
 			Connection conn = dataSource.getConnection();
-			CallableStatement cst = conn.prepareCall("call p_getScenicTeam(?,?)");
-			cst.setInt(1, k);
-			cst.setInt(2, j);
-			ResultSet rst = cst.executeQuery();
+			PreparedStatement pst = conn.prepareStatement("call p_getScenicTeam(?,?)");
+			//CallableStatement cst = conn.prepareCall("call p_getScenicTeam(?,?)");
+			//cst.setInt(1, k);
+			//cst.setInt(2, j);
+			//ResultSet rst = cst.executeQuery(); 
+			pst.setInt(1, k);
+			pst.setInt(2, j);
+			ResultSet rst = pst.executeQuery(); 
 			while (rst.next()) {
-				
-				if (l%3==0) {
+				if (l%4==0) {
 					scenicTeam=new ScenicTeam();
 					scenicTeam.setScenicID(rst.getString(1));
 					scenicTeam.setScenicName(rst.getString(2));
 					scenicTeam.setDay1_fee(rst.getInt(4));
 					scenicTeam.setDay1_maxNum(rst.getInt(5));
-				}else if (l%3==1) {
+				}else if (l%4==1) {
 					scenicTeam.setDay2_fee(rst.getInt(4));
 					scenicTeam.setDay2_maxNum(rst.getInt(5));
-				}else if(l%3==2) {
+				}else if(l%4==2) {
 					scenicTeam.setDay3_fee(rst.getInt(4));
-					scenicTeam.setDay3_maxNum(rst.getInt(5));
+					scenicTeam.setDay3_maxNum(rst.getInt(5));				
+				}else if(l%4==3) {
+					scenicTeam.setDay4_fee(rst.getInt(4));
+					scenicTeam.setDay4_maxNum(rst.getInt(5));
 					list.add(scenicTeam);				}
 				l++;
 			}
 			conn.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return list;
 	}
 	
@@ -85,18 +90,21 @@ public class ScenicTeamDao {
 			ResultSet rst = cst.executeQuery();
 			while (rst.next()) {
 				
-				if (l%3==0) {
+				if (l%4==0) {
 					scenicTeam=new ScenicTeam();
 					scenicTeam.setScenicID(rst.getString(1));
 					scenicTeam.setScenicName(rst.getString(2));
 					scenicTeam.setDay1_fee(rst.getInt(4));
 					scenicTeam.setDay1_maxNum(rst.getInt(5));
-				}else if (l%3==1) {
+				}else if (l%4==1) {
 					scenicTeam.setDay2_fee(rst.getInt(4));
 					scenicTeam.setDay2_maxNum(rst.getInt(5));
-				}else if(l%3==2) {
+				}else if(l%4==2) {
 					scenicTeam.setDay3_fee(rst.getInt(4));
-					scenicTeam.setDay3_maxNum(rst.getInt(5));
+					scenicTeam.setDay3_maxNum(rst.getInt(5));				
+				}else if(l%4==3) {
+					scenicTeam.setDay4_fee(rst.getInt(4));
+					scenicTeam.setDay4_maxNum(rst.getInt(5));
 					list.add(scenicTeam);				}
 				l++;
 			}
@@ -109,7 +117,14 @@ public class ScenicTeamDao {
 		return list;
 	}
 	
-	
+	/**
+	 * 根据景区编号更新景区信息
+	 * @param scenicNo
+	 * @param fee
+	 * @param maxNum
+	 * @param date
+	 * @return
+	 */
 	public int UpdateScenicTeam(String scenicNo,int fee,int maxNum,String date) {
 		
 		String sql="update  t_introfeeandmaxnum set fee=?,maxNum=?  "
@@ -118,4 +133,32 @@ public class ScenicTeamDao {
 		
 		return i;
 	}
+	
+	/**
+	 * 通过账号得到景区编号
+	 * @param account
+	 * @return
+	 */
+	public String  getScenicNoByAccount(String account)
+	{
+		String sql="SELECT t_scenicspotinfo.scenicNo "
+				+ " FROM t_scenicspotinfo WHERE t_scenicspotinfo.account=?";
+		return jdbcTemplate.queryForObject(sql, new Object[]{account},String.class);
+	}
+	
+	/**
+	 * 通过账号得到景区名称
+	 * @param account
+	 * @return
+	 * 2017-3-16 21:34:34
+	 */
+	public String  getScenicNameByAccount(String account)
+	{
+		String sql="SELECT t_scenicspotinfo.scenicName "
+				+ " FROM t_scenicspotinfo WHERE t_scenicspotinfo.account=?";
+		return jdbcTemplate.queryForObject(sql, new Object[]{account},String.class);
+	}
+	
+	
+	
 }

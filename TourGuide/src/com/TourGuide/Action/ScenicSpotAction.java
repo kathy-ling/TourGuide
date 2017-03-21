@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,8 +20,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.TourGuide.common.CommonResp;
+import com.TourGuide.model.AdminInfo;
+import com.TourGuide.model.ScenicTeam;
 import com.TourGuide.model.ScenicsSpotInfo;
 import com.TourGuide.service.ScenicSpotService;
+import com.TourGuide.service.ScenicTeamService;
 import com.google.gson.Gson;
 /*
  * 景区信息的Controller
@@ -33,6 +37,9 @@ public class ScenicSpotAction {
 
 		@Autowired
 		private ScenicSpotService scenicSpotService;
+		
+		@Autowired
+		private ScenicTeamService scenicTeamService;
 		private String fileName; 
 		/*
 		 * 通过当前页面与页面容量数目获取景区信息数目
@@ -65,8 +72,16 @@ public class ScenicSpotAction {
 		@RequestMapping(value="/SearchScenicInfo.action",method=RequestMethod.POST)
 		@ResponseBody
 		public Object SearchScenicInfoByName(HttpServletResponse resp,
-				@RequestParam(value="sql")String sqlStr) throws IOException {
+				@RequestParam(value="sql")String sqlStr,HttpSession session) throws IOException {
+			
+			
 			CommonResp.SetUtf(resp);
+			
+			AdminInfo adminInfo=(AdminInfo) session.getAttribute("adminSession");
+			if (sqlStr.equals("a")) {
+				sqlStr=scenicTeamService.getScenicNameByAccount(adminInfo.getUsername());
+			}
+			
 			ScenicsSpotInfo list = scenicSpotService.SearchScenicInfoByName_Service(sqlStr);
 			String jsonStr = new Gson().toJson(list).toString();
 			Map<String , Object> map=new HashMap<>();

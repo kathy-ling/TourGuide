@@ -18,6 +18,23 @@ public class ScenicTeamService {
 	@Autowired
 	private ScenicSpotDao scenicSpotDao;
 	
+	
+	/**
+	 * 通过账号得到景区编号
+	 * @param account
+	 * @return
+	 */
+	public String  getScenicNoByAccount(String account)
+	{
+		return scenicTeamDao.getScenicNoByAccount(account);
+	}
+	
+	
+	public String  getScenicNameByAccount(String account)
+	{
+		return scenicTeamDao.getScenicNameByAccount(account);
+	}
+	
 	public List<ScenicTeam> getScenicTeam(int i, int j)
 	{
 		return scenicTeamDao.getScenicTeam(i, j);

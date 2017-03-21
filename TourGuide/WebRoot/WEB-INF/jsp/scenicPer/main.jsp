@@ -110,9 +110,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 					<em></em> <a href="#">景区管理</a>
 				</h3>
 				<ul>
-					<li><a href="scenicInfo.action" target="targetiframe">景区信息管理</a></li>
-					<li><a href="scenicTicket.action" target="targetiframe">景区门票管理</a></li>
-					<li><a href="scenicTeam.action" target="targetiframe">景区拼团信息管理</a></li>
+					<li><a href="scenicInfo.action" target="targetiframe">景区信息设置</a></li>
 				</ul>
 				<h3 class="am-icon-money">
 					<em></em> <a href="#">收入管理</a>
@@ -165,7 +163,17 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 		
 		function exit()
 		{
-			$.ajax({});
+			
+			var url = "<%=basePath%>exit.action";
+			$.ajax ({
+ 			url:url,
+ 			type:"post",
+ 			datatype:"json",
+ 			success:function(data) {
+ 				if (data) {window.location.href="<%=basePath%>logincheck.action";}
+ 				else alert("退出系统失败");
+ 			}
+ 		});
 		
 		
 		}

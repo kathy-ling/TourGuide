@@ -5,14 +5,19 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.TourGuide.model.AdminInfo;
+import com.TourGuide.service.AdminService;
 
 @Repository
 public class SystemInterceptor implements HandlerInterceptor {
+	
+	@Autowired
+	private AdminService adminService;
 
 	@Override
 	public void afterCompletion(HttpServletRequest arg0,
@@ -57,8 +62,10 @@ public class SystemInterceptor implements HandlerInterceptor {
 		if (doFilter) {
 			
 			// 从session中获取登录者的实体
-			Object  objAdmin =  request.getSession().getAttribute("adminSession");
-			if (null == objAdmin) {
+			Object obj=request.getSession().getAttribute("adminSession");
+			AdminInfo  objAdmin =  (AdminInfo)request.getSession().getAttribute("adminSession");
+			
+			if ((obj==null)||(!adminService.isValid(objAdmin.getUsername(), objAdmin.getPassword()))) {
 
 				// 未登录
 				response.setCharacterEncoding("UTF-8");

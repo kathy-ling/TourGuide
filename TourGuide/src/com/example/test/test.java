@@ -28,7 +28,7 @@ public class test {
 //		ca.setTime(date);
 //		ca.add(Calendar.HOUR_OF_DAY, -3);
 //		String time = sdf.format(ca.getTime());
-		System.out.println(DateConvert.addHourToTime("2012-07-25 21:00:00.0", 3));
+		System.out.println(Oauth2Util.getOauth2Url());
 	}
 	
 	/**

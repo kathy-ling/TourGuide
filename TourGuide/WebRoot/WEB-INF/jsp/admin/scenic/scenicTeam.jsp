@@ -14,6 +14,9 @@ String day2=sdf.format(date2);
 calendar.add(Calendar.DAY_OF_YEAR, 1);
 Date date3 = calendar.getTime();
 String day3=sdf.format(date3);
+calendar.add(Calendar.DAY_OF_YEAR, 1);
+Date date4 = calendar.getTime();
+String day4=sdf.format(date4);
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -97,6 +100,7 @@ String day3=sdf.format(date3);
 									<th style="text-align: center; width: 10%;"><%=day1 %></th>
 									<th style="text-align: center; width: 10%;"><%=day2 %></th>
 									<th style="text-align: center; width: 10%;"><%=day3 %></th>
+									<th style="text-align: center; width: 10%;"><%=day4 %></th>
 									<th style="text-align: center; width: 10%;">操作</th>
 								</tr>
 							</thead>
@@ -150,6 +154,7 @@ String day3=sdf.format(date3);
 									<option value="1"><%=day1 %></option>
 									<option value="2"><%=day2 %></option>
 									<option value="3"><%=day3 %></option>
+									<option value="4"><%=day4 %></option>
 								</select>
 							</td>
 						</tr>
@@ -204,6 +209,7 @@ String day3=sdf.format(date3);
 									<option value="1"><%=day1 %></option>
 									<option value="2"><%=day2 %></option>
 									<option value="3"><%=day3 %></option>
+									<option value="4"><%=day4 %></option>
 								</select>
 							</td>
 						</tr>
@@ -219,7 +225,7 @@ String day3=sdf.format(date3);
 						</tr>
 						<tr>
 							<td colspan="2" style="text-align:center;"><button
-									class="close" data-dismiss="modal" aria-hidden="true" onclick="SaveScenicTicket('<%=day1%>','<%=day2%>','<%=day3%>')">保存</button></td>
+									class="close" data-dismiss="modal" aria-hidden="true" onclick="SaveScenicTicket('<%=day1%>','<%=day2%>','<%=day3%>','<%=day4%>')">保存</button></td>
 						</tr>
 					</table>
 				</div>
@@ -256,7 +262,7 @@ String day3=sdf.format(date3);
   			data:{currentPage:1,pageRows:pageRows},
   			success: function(data)
   					{
-  						
+  						alert(data.jsonStr);
   					    if(data!=null){
   					    scenicTeam = data.jsonStr;
   					    scenicTeam = JSON.parse(scenicTeam);
@@ -327,13 +333,14 @@ String day3=sdf.format(date3);
               	var t3="<td style='text-align: center;width: 10%;'>"+"价格："+value.day1_fee+"，人数："+value.day1_maxNum+"</td>";
               	var t4="<td style='text-align: center; width: 10%;'>"+"价格："+value.day2_fee+" ，人数："+value.day2_maxNum+"</td>";
               	var t5="<td style='text-align: center; width: 10%;'>"+"价格："+value.day3_fee+" ，人数："+value.day3_maxNum+"</td>";
-              	var t6="<td align='center'> <div class='am-btn-toolbar'>"+
+              	var t6="<td style='text-align: center; width: 10%;'>"+"价格："+value.day4_fee+" ，人数："+value.day4_maxNum+"</td>";
+              	var t7="<td align='center'> <div class='am-btn-toolbar'>"+
               	"<div  style='text-align: center;float: none' class='am-btn-group am-btn-group-xs'>"+
               	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='queryTicket("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>查看</button>"+
               	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='editTicket("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"
                   +"</div></div> </td>";		
-                var t7="</tr>";
-               $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7);
+                var t8="</tr>";
+               $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8);
   			});
   	}
  	function search()
@@ -393,7 +400,7 @@ String day3=sdf.format(date3);
  		$("#EditModal").modal('show');
  	}
  	
- 	function SaveScenicTicket(l,m,n)
+ 	function SaveScenicTicket(l,m,n,k)
  	{
  		
  		var url="<%=basePath%>scenicTeam/UpdateScenicTeam.action";
@@ -407,9 +414,12 @@ String day3=sdf.format(date3);
  		}else if($("#select1").val()==2)
  		{
  			date=m;
- 		}else 
+ 		}else if($("#select1").val()==3)
  		{
  			date=n;
+ 		}else
+ 		{
+ 			date=k;
  		}
  		
  		
@@ -438,7 +448,6 @@ String day3=sdf.format(date3);
  		
  		if(i==1)
  		{
- 			
  			$("#search_money").val(scenciTeam1.day1_fee);
  			$("#search_maxNum").val(scenciTeam1.day1_maxNum);
  		}
@@ -451,11 +460,16 @@ String day3=sdf.format(date3);
  		{
  			$("#search_money").val(scenciTeam1.day3_fee);
  			$("#search_maxNum").val(scenciTeam1.day3_maxNum);
+ 		}else if(i==4)
+ 		{
+ 			$("#search_money").val(scenciTeam1.day4_fee);
+ 			$("#search_maxNum").val(scenciTeam1.day4_maxNum);
  		}
  	}
  	
  	function selectchange1(i)
  	{
+ 		
  		if(i==1)
  		{
  			
@@ -471,6 +485,11 @@ String day3=sdf.format(date3);
  		{
  			$("#edit_money").val(scenciTeam1.day3_fee);
  			$("#edit_maxNum").val(scenciTeam1.day3_maxNum);
+ 		}
+ 		else if(i==4)
+ 		{
+ 			$("#edit_money").val(scenciTeam1.day4_fee);
+ 			$("#edit_maxNum").val(scenciTeam1.day4_maxNum);
  		}
  		
  	}

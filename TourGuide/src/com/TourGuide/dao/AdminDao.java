@@ -3,6 +3,7 @@ package com.TourGuide.dao;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -59,7 +60,13 @@ public class AdminDao {
 	public String  getRoleByAccount(String Account) {
 		
 		String sql="SELECT t_admin.role FROM t_admin WHERE t_admin.username=?";
-		String role=jdbcTemplate.queryForObject(sql, new Object[]{Account},String.class);
+		String role="aa";
+		try {
+			role = jdbcTemplate.queryForObject(sql, new Object[]{Account},String.class);
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			role="aa";
+		}
 		return role;
 	}
 
