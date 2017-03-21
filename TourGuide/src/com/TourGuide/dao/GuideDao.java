@@ -109,6 +109,7 @@ public class GuideDao {
 				map.put("language", rst.getString(7));
 				map.put("selfIntro", rst.getString(8));
 				map.put("guideLevel", rst.getString(9));
+				map.put("historyTimes", rst.getInt(10));
 				list.add(map);
 			}							
 			conn.close();
@@ -123,7 +124,7 @@ public class GuideDao {
 	
 	/**
 	 * 查询可被预约的讲解员,查看推荐
-	 * 查询条件：级别、所属景区、讲解员的工作时间、单次最大带团人数
+	 * 查询条件：级别、所属景区、讲解员是否请假、单次最大带团人数
 	 * @param visitTime  游客的参观日期
 	 * @param visitNum  参观的人数
 	 * @param scenicID  景区编号
@@ -135,8 +136,9 @@ public class GuideDao {
 		
     	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
     	String[] visitDate = visitTime.split(" ");
+
     	//计算参观日期与今日之间相隔的天数
-    	int day = DateConvert.getDaysBetweenDate(visitDate[1], dayNow);
+    	int day = DateConvert.getDaysBetweenDate(visitDate[0], dayNow);
     	
 		String selectDay = null;
 		switch (day) {
@@ -157,63 +159,61 @@ public class GuideDao {
 			break;
 		}
 		
+		List<Map<String , Object>> listResult = new ArrayList<>(); 
 		List<Map<String , Object>> list = null;
-		String sqlString = "select t_guideinfo.*,t_guideotherinfo.guideLevel from t_guideinfo,t_guideotherinfo "
-				+ "where t_guideinfo.phone=t_guideotherinfo.phone and t_guideotherinfo.phone in "
-				+ "(select phone from t_guideotherinfo where disabled=0 and authorized=1 and "
-				+ "singleMax > '"+visitNum+"' and scenicBelong='"+scenicID+"' and t_guideotherinfo.phone in "
-				+ "(select phone from t_guideworkday where "+selectDay+"=1)"
-				+ "order by guideLevel desc) ";
+		String sqlString = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
+				+ "t_guideotherinfo.guideLevel from t_guideinfo,t_guideotherinfo "
+				+ "where t_guideinfo.id = t_guideotherinfo.id and singleMax > '"+visitNum+"' "
+				+ "and scenicBelong = '"+scenicID+"' and guideLevel >= 5 and t_guideotherinfo.id in "
+				+ "(select id from t_guideworkday where "+selectDay+"=1)"
+				+ "ORDER BY guideLevel desc,historyTimes desc";
 		list = jdbcTemplate.queryForList(sqlString);
-		return list;
+		
+		for(int i=0; i<list.size(); i++){
+			listResult.add(list.get(i));
+		}
+		
+		//去除时间冲突的讲解员信息
+		for(int i=0; i<list.size(); i++){
+			String phone = (String)list.get(i).get("phone");
+			boolean bool = isTimeConflict(phone, visitTime);
+			if(bool == true){
+				listResult.remove(list.get(i));
+			}
+		}
+
+		return listResult;
 	}
 
 
-	
 	/**
-	 * 该导游在visitDate这天，是否被预约了
-	 * @param guidePhone  导游的手机号
-	 * @param visitDate  日期
-	 * @return 1-被预约了    0-未被预约
+	 * 判断该讲解员已经被预约了的时间(被预约了的时间要大于当前时间)与time是否冲突
+	 * 若有冲突，则返回数据；否则，查询结果为空
+	 * @param guidePhone  讲解员的手机号
+	 * @param visitTime  游客的预约参观时间
+	 * @return
 	 */
-	public int WhetherBooked(String guidePhone, String visitDate){
+	public boolean isTimeConflict(String guidePhone, String visitTime){
 		
-		int booked = 0;
-		Date date1=new Date();
-    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(date1);
-    	//计算参观日期与今日之间相隔的天数
-    	int day = DateConvert.getDaysBetweenDate(visitDate, dayNow);
-    	
-		String selectDay = null;
+		boolean bool = false;
 		
-		switch (day) {
-		
-		case 0:
-			selectDay = "one";
-			break;
-		case 1:
-			selectDay = "two";			
-			break;
-		case 2:
-			selectDay = "three";
-			break;
-		case 3:
-			selectDay = "four";
-			break;
-		default:
-			break;
-		}
-		
-		//查看该讲解员改天是否被预约了，2-被预约
-		String sqlString = "select * from t_guideworkday where phone='"+guidePhone+"' and "+selectDay+"=2";
-		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlString);
-		
-		//被预约了
-		if(list.size() != 0){
-			booked = 1;
-		}
-		
-		return booked;
+		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call isTimeConflict(?,?)");
+			cst.setString(1, guidePhone);
+			cst.setString(2, visitTime);
+			ResultSet rst=cst.executeQuery();
+			while (rst.next()) {
+				bool = true;
+			}
+			
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 	
+		return bool;
 	}
 	
 	
@@ -317,6 +317,53 @@ public class GuideDao {
 		
 		return list;
 	}
+	
+	/**
+	 * 该导游在visitDate这天，是否被预约了
+	 * @param guidePhone  导游的手机号
+	 * @param visitDate  日期
+	 * @return 1-被预约了    0-未被预约
+	 */
+//	public int WhetherBooked(String guidePhone, String visitDate){
+//		
+//		int booked = 0;
+//		Date date1=new Date();
+//    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(date1);
+//    	//计算参观日期与今日之间相隔的天数
+//    	int day = DateConvert.getDaysBetweenDate(visitDate, dayNow);
+//    	
+//		String selectDay = null;
+//		
+//		switch (day) {
+//		
+//		case 0:
+//			selectDay = "one";
+//			break;
+//		case 1:
+//			selectDay = "two";			
+//			break;
+//		case 2:
+//			selectDay = "three";
+//			break;
+//		case 3:
+//			selectDay = "four";
+//			break;
+//		default:
+//			break;
+//		}
+//		
+//		//查看该讲解员改天是否被预约了，2-被预约
+//		String sqlString = "select * from t_guideworkday where phone='"+guidePhone+"' and "+selectDay+"=2";
+//		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlString);
+//		
+//		//被预约了
+//		if(list.size() != 0){
+//			booked = 1;
+//		}
+//		
+//		return booked;
+//	}
+	
 	
 	/**
 	 * 如果 "参观时间-参观时长 < time < 参观时间+参观时长",则time讲解员忙碌，不可再接单

@@ -100,9 +100,9 @@ public class GuideService {
 	 * @param visitDate  日期
 	 * @return 1-被预约了    0-未被预约
 	 */
-	public int WhetherBooked(String guidePhone, String visitDate){
-		return guideDao.WhetherBooked(guidePhone, visitDate);
-	}
+//	public int WhetherBooked(String guidePhone, String visitDate){
+//		return guideDao.WhetherBooked(guidePhone, visitDate);
+//	}
 	
 	
 

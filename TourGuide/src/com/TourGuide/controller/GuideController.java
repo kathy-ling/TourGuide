@@ -84,7 +84,7 @@ public class GuideController {
 	
 	
 	/**
-	 * 查询可被预约的讲解员
+	 * 查询可被预约的讲解员（时间冲突的讲解员已被过滤）
 	 * @param resp
 	 * @param scenicName   景区名称（景区名称必须存在于数据库中）
 	 * @param visitTime 游客的参观时间
@@ -103,15 +103,12 @@ public class GuideController {
 		
 		List<Map<String , Object>> listResult = new ArrayList<>();
 		
-		String[] date = visitTime.toString().split(" ");
-		String visitDate = date[0];
-		
 		//根据scenicName，查找相应的景区信息
 		ScenicsSpotInfo scenicsSpotInfo = scenicSpotService.SearchScenicInfoByName_Service(scenicName);
 		String scenicID = scenicsSpotInfo.getScenicNo();
 		
 		if(scenicID != null){
-			listResult = guideService.getAvailableGuides(visitDate, Integer.parseInt(visitNum), scenicID);
+			listResult = guideService.getAvailableGuides(visitTime, Integer.parseInt(visitNum), scenicID);
 		}
 		
 		return listResult;  //若返回值为空，则景区名称有误或者没有符合条件的讲解员
@@ -148,15 +145,12 @@ public class GuideController {
 		
 		List<Map<String , Object>> listResult = new ArrayList<>();
 		
-		String[] date = visitTime.toString().split(" ");
-		String visitDate = date[0];
-		
 		//根据scenicName，查找相应的景区信息
 		ScenicsSpotInfo scenicsSpotInfo = scenicSpotService.SearchScenicInfoByName_Service(scenicName);
 		String scenicID = scenicsSpotInfo.getScenicNo();
 		
 		if(scenicID != null){
-			listResult = guideService.getAvailableGuidesWithSelector(visitDate, Integer.parseInt(visitNum),
+			listResult = guideService.getAvailableGuidesWithSelector(visitTime, Integer.parseInt(visitNum),
 					scenicID, sex, age, language, level);
 		}
 		
@@ -173,23 +167,23 @@ public class GuideController {
 	 * @return   1-被预约了    0-未被预约
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/WhetherBooked.do")
-	@ResponseBody
-	public Object WhetherBooked(HttpServletResponse resp,
-			@RequestParam("guidePhone") String guidePhone, 
-			@RequestParam("visitTime") String visitTime) throws IOException{
-		
-		CommonResp.SetUtf(resp);
-		
-		int booked = 0;
-		
-		String[] date = visitTime.toString().split(" ");
-		String visitDate = date[0];
-		
-		booked = guideService.WhetherBooked(guidePhone, visitDate);
-		
-		return booked;
-	}
+//	@RequestMapping(value = "/WhetherBooked.do")
+//	@ResponseBody
+//	public Object WhetherBooked(HttpServletResponse resp,
+//			@RequestParam("guidePhone") String guidePhone, 
+//			@RequestParam("visitTime") String visitTime) throws IOException{
+//		
+//		CommonResp.SetUtf(resp);
+//		
+//		int booked = 0;
+//		
+//		String[] date = visitTime.toString().split(" ");
+//		String visitDate = date[0];
+//		
+//		booked = guideService.WhetherBooked(guidePhone, visitDate);
+//		
+//		return booked;
+//	}
 	
 	
 	/**

@@ -52,17 +52,17 @@ function setGuideInfo(phone){
 				$("#guide_fee").html(item.guideFee+"元");
 				$("#guide_self_intro").html(item.selfIntro);
 				$("#guide_phone").html(item.phone);
-				if(item.language == 0)
+				if(item.language == "0")
 				{
-					$("#guide_language").html("汉语");
+					$("#guide_language").html("中文");
 				}
-				if(item.language == 1)
+				if(item.language == "1")
 				{
-					$("#guide_language").html("英语");
+					$("#guide_language").html("英文");
 				}
-				if(item.language == 2)
+				if(item.language == "2")
 				{
-					$("#guide_language").html("汉语 英语");
+					$("#guide_language").html("中文 英文");
 				}
 			});
 		}

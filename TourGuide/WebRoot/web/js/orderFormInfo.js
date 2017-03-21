@@ -38,7 +38,7 @@ function setData(){
 			}
 		});
 	}
-function setTickData(data){
+/*function setTickData(data){
 	var url = HOST+"/geTicketsByScenicNo.do";
 	$.ajax({
 		type:"post",
@@ -70,7 +70,7 @@ function setTickData(data){
 			$("#MoneyInfo").prepend(ticm);
 		}
 });
-}
+}*/
 function setNormalData(data){
 		$(".orderTime").html(data.produceTime);
 		$(".vistTime").html(data.visitTime);

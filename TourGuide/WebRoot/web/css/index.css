@@ -1,6 +1,7 @@
 body{
 	background-color: white;
 }
+
 .my-title{
 	position: relative;
 	background-color: white;
@@ -81,3 +82,4 @@ body{
 	position: absolute;
 	right: 10px;
 }
+

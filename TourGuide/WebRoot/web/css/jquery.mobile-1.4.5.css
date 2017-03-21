@@ -23,6 +23,12 @@ p.errorTip{
 	color: #ACACB4;
 	text-align: center;
 }
+.searchBox
+{
+	background-image:url(../img/searchImg.jpg);
+	background-repeat:no-repeat;
+	padding-left: 50px;
+}
 
 /* SVG icons */
 .ui-icon-action:after {

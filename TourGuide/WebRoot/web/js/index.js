@@ -1,5 +1,6 @@
 
 var province;
+
 $(function($) {
 
 	$(document).bind("mobileinit", function() {
@@ -142,7 +143,7 @@ function showError(error) {
 function showPosition(position) {
 	var x = position.coords.latitude; //纬度 
 	var y = position.coords.longitude; //经度 
-	alert('纬度:' + x + ',经度:' + y);
+//	alert('纬度:' + x + ',经度:' + y);
 
 	//配置Baidu Geocoding API 
 	var url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b"
@@ -188,7 +189,7 @@ function setAddress(json) {
 	position.value = province + "," + city + "," + district;
 	position.style.color = 'black';
 	
-	alert(province);
+//	alert(province);
 	//从服务端获取推荐景点信息(获取当前省份的热门景点)
 	getScenicByProvince();
 }
@@ -253,7 +254,7 @@ function getPromotion()
 
 				var ImgList = document.createElement("img");
 				ImgList.setAttribute("src", item.promotionImage);
-				ImgList.setAttribute("alt", "首页活动图片");
+				ImgList.setAttribute("alt", item.promotionTitle);
 				AList.appendChild(ImgList);
 			});
 			$(".slider").yxMobileSlider({
@@ -277,9 +278,8 @@ function freshList(data, UlList) {
 		LiList.appendChild(DivList);
 
 		var AList = document.createElement("a");
+//		AList.href = "scenicSpot.html?" + "scenicNo=" + item.scenicName;
 		AList.href = "scenicSpot.html?" + "scenicNo=" + item.scenicNo;
-
-		//AList.target = "_top";
 
 		DivList.appendChild(AList);
 
@@ -317,3 +317,4 @@ function LoginOrPersonal()
 	}
 
 }
+

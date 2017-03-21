@@ -116,6 +116,7 @@ public class Oauth2Util {
 			e.printStackTrace();
 		}
 		
+		System.out.println("urlEncodeUTF8:source" + source);
 		return result;
 	}
 	
@@ -134,6 +135,7 @@ public class Oauth2Util {
 		
 		// 授权回调地址（OAuthServlet的访问地址）
 		String redirectUrl = urlEncodeUTF8("http://1f656026j8.imwork.net/TourGuide/oauthServlet");
+//		String redirectUrl = urlEncodeUTF8("http://112.74.48.15/TourGuide/oauthServlet");
 		
 		// 应用授权作用域。scope等于"snsapi_base"时，不弹出授权页面，直接跳转。
 		// scope等于"snsapi_userinfo"时，弹出授权页面，可以通过OpenID获取用户信息。

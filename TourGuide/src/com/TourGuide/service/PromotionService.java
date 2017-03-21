@@ -1,6 +1,7 @@
 package com.TourGuide.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class PromotionService {
 	/*
 	 * 获取首页的活动信息
 	 */
-	public List<Promotion> getPromotions(){
+	public List<Map<String, Object>> getPromotions(){
 		return promotionDao.getPromotions();
 	}
 

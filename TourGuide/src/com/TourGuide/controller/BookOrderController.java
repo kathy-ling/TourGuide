@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.common.MyDateFormat;
 import com.TourGuide.model.ScenicTickets;
+import com.TourGuide.model.ScenicsSpotInfo;
 import com.TourGuide.service.BookOrderService;
 import com.TourGuide.service.GuideService;
+import com.TourGuide.service.ScenicSpotService;
 import com.TourGuide.service.ScenicTicketService;
 
 
@@ -59,7 +62,7 @@ public class BookOrderController {
 	@RequestMapping(value = "/releaseBookOrder.do")
 	@ResponseBody
 	public Object releaseBookOrder(HttpServletResponse resp,
-			@RequestParam("scenicID") String scenicID, 
+			@RequestParam("scenicName") String scenicName, 
 			@RequestParam("visitTime") String visitTime, 
 			@RequestParam("visitNum") String visitNum,
 			@RequestParam("language") String language,
@@ -78,6 +81,10 @@ public class BookOrderController {
 		
 		String bookOrderID = UUID.randomUUID().toString().replace("-", "");
 		String produceTime = MyDateFormat.form(new Date());
+		
+		ScenicSpotService scenicSpotService = new ScenicSpotService();
+		ScenicsSpotInfo scenicsSpotInfo = scenicSpotService.SearchScenicInfoByName_Service(scenicName);
+		String scenicID = scenicsSpotInfo.getScenicNo();
 				
 		//计算门票总额
 		int totalTicket = 0;

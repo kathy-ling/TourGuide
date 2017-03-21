@@ -26,6 +26,23 @@
 @import url(//fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic);
 @import url(//fonts.googleapis.com/css?family=Roboto:400,300,500,400italic,700,900);
 
+#searchBox
+{
+	background-image:url(../img/searchImg1.jpg);
+	background-repeat: no-repeat;
+	padding-left: 40px;
+	padding-bottom: 0px;
+}
+.navbar0
+{
+	height: 40px;
+	line-height: 40px;
+}
+.price
+{
+	color: red;
+}
+
 body {
 	-webkit-transition: opacity 0.4s;
 	-moz-transition: opacity 0.4s;

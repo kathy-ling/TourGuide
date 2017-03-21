@@ -20,7 +20,7 @@
 
 	<div data-role="page" >
      <header data-role="header" id="header" class="">
-           <input type="search" class="search" name="search" placeholder="秦始皇兵马俑">
+           <input type="search" class="search" name="search" placeholder="秦始皇兵马俑" id="searchBox">
     </header>
     <div data-role="main" >
         <div class="slider"><!--id="imageSlider" -->
@@ -45,9 +45,9 @@
     <footer data-role="footer" data-position="fixed">
         <div data-role="navbar">
             <ul>
-            <li><a href="pindan.html" target="_top" id="" class="" data-icon = "home">拼讲解员</a></li>
-            <li><a href="orderGuide.html" target="_top" id="" class="" data-icon = "home">预约讲解员</a></li>
-            <li><a href="personalHome.html" target="_top" id="" class="" data-icon = "user">个人中心</a></li>
+            <li><a href="pindan.html" target="_top" id="" class="navbar0" >拼讲解员</a></li>
+            <li><a href="orderGuide.html" target="_top" id="" class="navbar0" >预约讲解员</a></li>
+            <li><a href="personalHome.html" target="_top" id="" class="navbar0" >个人中心</a></li>
             </ul>
         </div>
     </footer>
@@ -58,10 +58,10 @@
          <form action="search_submit" method="get" accept-charset="utf-8">
          <a href="#" class="backbtn" data-role="button" data-rel="back">后退</a>
          	 <div class="searchDiv">
-             <label for="search" class="ui-hidden-accessible">搜索</label>
-             <input type="search" id="mySearchInput"  name="search"  placeholder="秦始皇兵马俑" >
+             <label for="search" class="ui-hidden-accessible">搜索</label>         
+             <input type="search" id="mySearchInput" name="search" placeholder="秦始皇兵马俑" class="searchBox">          
  			</div>
-           <input class="searchbtn ui-btn" type="button" data-inline="true" id="searchSubmit" name="submit" value="搜索">
+           <input class="searchbtn ui-btn ui-icon-search ui-btn-icon-left" type="button" data-inline="true" id="searchSubmit" name="submit" value="搜索">
         </form>
     </div>
     <div data-role="main" class="ui-content">

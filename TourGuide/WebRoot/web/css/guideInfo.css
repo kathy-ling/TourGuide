@@ -20,16 +20,16 @@
     height: 50%;
     display: block;
     position: absolute;
-    left: 50%;
-    bottom:-25%;
+    left: 0;
+    padding-left:50%;
+    margin-left: -12.5%;
+    top:25%;
 }
 .guideInfoHead img{
         width:100%;
         height:100%;
-        margin-left: -50%;
         border-radius: 50%;
-        border-color: white;
-        border-width: 5px;
+        border:2px solid white;
     }
 .sideRadius{
 	width: 4em;

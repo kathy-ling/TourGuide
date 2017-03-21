@@ -46,6 +46,7 @@ function setscenicInfo(ScenicNo){
 				
 				$("#orderGuideBtn").attr("href","orderGuide.html?scenicNo="+ScenicNo+"&sname="+item.scenicName);
 				$("#pinGuideBtn").attr("href","pindan.html?scenicNo="+ScenicNo+"&sname="+item.scenicName);
+				alert("scenicNo="+ScenicNo+"sname="+item.scenicName);
 			});
 			
 		}
@@ -53,7 +54,7 @@ function setscenicInfo(ScenicNo){
 }
 	
 	//从服务器端获取票价
-function setTickMoney(ScenicNo){
+/*function setTickMoney(ScenicNo){
 	var url1 = HOST+"/geTicketsByScenicNo.do"
 	$.ajax({
 		type:"post",
@@ -74,7 +75,7 @@ function setTickMoney(ScenicNo){
 			sessionStorage.discoutPrice=data.discoutPrice;
 		}
 	});
-}
+}*/
 	
 	//从服务器端获取今日天气
 function setweather(City){

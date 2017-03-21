@@ -41,18 +41,10 @@ public class PromotionController {
 		CommonResp.SetUtf(resp);
 		
 
-		List<Promotion> list = promotionService.getPromotions();
-		
-		List<Map<String, Object>> listresult = new ArrayList<Map<String, Object>>();
-		for(int i=0; i<list.size(); i++){
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("promotionImage", list.get(i).getPromotionImage());
-			map.put("promotionLinks", list.get(i).getPromotionLinks());
-			listresult.add(map);
-		}
+		List<Map<String, Object>> list = promotionService.getPromotions();
 		
 		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(listresult));
+		writer.write(new Gson().toJson(list));
 		writer.flush();		
 	}
 }
