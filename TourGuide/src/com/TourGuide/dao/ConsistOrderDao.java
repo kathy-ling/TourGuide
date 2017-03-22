@@ -1,14 +1,31 @@
 package com.TourGuide.dao;
 
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 
+
+
+
+
+
+
+
+
+
+import javax.sql.DataSource;
+
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,6 +33,7 @@ import org.springframework.stereotype.Repository;
 import com.TourGuide.common.DateConvert;
 import com.TourGuide.common.MyDateFormat;
 import com.TourGuide.model.ConsistOrder;
+import com.TourGuide.model.ConsistResult;
 
 @Repository
 public class ConsistOrderDao {
@@ -27,7 +45,7 @@ public class ConsistOrderDao {
 	
 	
 	/**
-	 * 
+	 * 将游客自己发布的拼单订单存入数据库
 	 * @param consistOrderID  拼单编号
 	 * @param orderID  
 	 * @param scenicID  景区编号
@@ -44,7 +62,7 @@ public class ConsistOrderDao {
 	 */
 	public boolean ReleaseConsistOrder(String consistOrderID, String orderID, String scenicID,
 			String produceTime, String visitTime, int visitNum, String visitorPhone, 
-			String orderState, int isConsisted, int maxNum, int totalFee, int fee){
+			String contact, String orderState, int isConsisted, int maxNum, int totalFee, int fee){
 		
 		boolean bool = false;
 		
@@ -54,17 +72,19 @@ public class ConsistOrderDao {
 				maxNum, visitTime, scenicID});
 		
 		String sqlString = "insert into t_consistOrder (consistOrderID,orderID,scenicID,produceTime,"
-				+ "visitTime,visitNum,visitorPhone,orderState,isConsisted,maxNum,totalGuideFee,guideFee)"
-				+ "values (?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "visitTime,visitNum,visitorPhone,contact,orderState,"
+				+ "isConsisted,maxNum,totalGuideFee,guideFee)"
+				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlString, new Object[]{consistOrderID, orderID, scenicID, 
-				produceTime, visitTime, visitNum, visitorPhone, 
+				produceTime, visitTime, visitNum, visitorPhone,contact,
 				orderState, isConsisted,maxNum, totalFee, fee});
 		
 		/**
 		 * 假设付款成功
 		 */
 		String payTime = MyDateFormat.form(new Date());
-		String sqlUpdate = "update t_consistOrder set hadPay=1,payTime='"+payTime+"'";
+		String sqlUpdate = "update t_consistOrder set hadPay=1,payTime='"+payTime+"' "
+				+ "where consistOrderID='"+consistOrderID+"'";
 		int k = jdbcTemplate.update(sqlUpdate);
 		
 		if(i!=0 && j!=0 && k!=0){
@@ -92,25 +112,23 @@ public class ConsistOrderDao {
 	 * @param maxNum
 	 */
 	public boolean consistWithconsistOrderID(String orderID, String consistOrderID, String scenicID, 
-			String produceTime, String visitTime, int visitNum, String visitorPhone, int totalMoney,
-			int currentNum, int purchaseTicket, String orderState, int isConsisted, int maxNum, 
-			int fullPrice, int discoutPrice, int halfPrice, int totalFee, int totalTicket, int fee){
+			String produceTime, String visitTime, int visitNum, String visitorPhone, String contact,
+			int currentNum, String orderState, int isConsisted, int maxNum, int totalFee, int fee){
 		
 		boolean bool = false;
 		
 		//将拼单信息插入拼单表
 		String sqlString = "insert into t_consistOrder (orderID,consistOrderID,scenicID,produceTime,"
-				+ "visitTime,visitNum,visitorPhone,totalMoney,purchaseTicket,orderState,isConsisted,maxNum,"
-				+ "fullPrice,discoutPrice,halfPrice,totalGuideFee,totalTicket,guideFee) "
-				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "visitTime,visitNum,visitorPhone,contact,orderState,isConsisted,maxNum,"
+				+ "totalGuideFee,guideFee) "
+				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlString, new Object[]{orderID, consistOrderID, scenicID, 
-				produceTime, visitTime, visitNum, visitorPhone, 
-				totalMoney, purchaseTicket, orderState, isConsisted,maxNum,fullPrice,
-				discoutPrice, halfPrice, totalFee, totalTicket, fee});
+				produceTime, visitTime, visitNum, visitorPhone, contact,
+				orderState, isConsisted,maxNum,totalFee, fee});
 		
-		//更新拼单状态，已拼单
-		String sqlString1 = "update t_consistorder set isConsisted=1 where orderID=?";
-		int j = jdbcTemplate.update(sqlString1, new Object[]{orderID});
+//		//更新拼单状态，已拼单
+//		String sqlString1 = "update t_consistorder set isConsisted=1 where orderID=?";
+//		int j = jdbcTemplate.update(sqlString1, new Object[]{orderID});
 		
 		//更新拼单结果，当前人数
 		String sqlString2 = "update t_consistresult set "
@@ -118,7 +136,7 @@ public class ConsistOrderDao {
 		int k = jdbcTemplate.update(sqlString2, new Object[]{currentNum, maxNum,
 				visitTime, scenicID, orderID});
 
-		if(i != 0 && j != 0 && k!=0){
+		if(i != 0 && k!=0){
 			bool = true;
 		}
 		return bool;
@@ -128,31 +146,82 @@ public class ConsistOrderDao {
 	
 	
 	/**
-	 * 查询当前可拼单的订单
+	 * 查询数据库中的当前可拼单的订单
 	 * @param scenicID  景区编号
 	 * @param date   当前的时间
 	 */
-	public List<ConsistOrder> getAvailableConsistOrder(String scenicID, String date){
+	public List<Map<String , Object>> getAllAvailableConsistOrder(){
 		
-		List<ConsistOrder> listResult = new ArrayList<>();
-		
-		//在拼单结果中根据人数和参观时间进行筛选
-		String sqlSearch = "select orderID,visitTime,visitNum,maxNum from t_consistresult"
-				+ " where visitNum < maxNum and scenicID='"+scenicID+"' and visitTime>'"+date+"'";
-		List<Map<String , Object>> list=jdbcTemplate.queryForList(sqlSearch);
-		
-		
-		for (int i = 0; i <list.size(); i++){
-			ConsistOrder order = new ConsistOrder();
-			Timestamp timestamp = (Timestamp) list.get(i).get("visitTime");
-			String dateTime = DateConvert.timeStamp2DateTime(timestamp);
-			order.setVisitTime(dateTime);
-			order.setOrderID((String)list.get(i).get("orderID"));
-			order.setVisitNum((int)list.get(i).get("visitNum"));
-			order.setMaxNum((int)list.get(i).get("maxNum"));			
-			listResult.add(order);
-		}
+		List<Map<String , Object>> list = new ArrayList<>(); 			 		
+ 		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getAvailableConsistOrder()");
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				Map<String , Object> map = new HashMap<String, Object>();
 				
+				int currentNum = rst.getInt(3);
+				int maxNum = rst.getInt(4);
+				//还可以拼单的人数
+				int num = maxNum - currentNum;
+				map.put("orderID", rst.getString(1));
+				map.put("visitTime", rst.getString(2));
+				map.put("currentNum", currentNum);
+				map.put("num", num);
+				map.put("scenicID", rst.getString(5));
+				map.put("scenicName", rst.getString(6));
+				list.add(map);
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+				
+		return list;
+	}
+	
+	
+	/**
+	 * 根据条件，筛选可拼单的订单
+	 * @param scenicName   景区名称
+	 * @param date  日期
+	 * @param visitNum  参观人数
+	 * @return
+	 */
+	public List<Map<String , Object>> getConsistOrderWithSelector(String scenicName, 
+			String date, int visitNum){
+		
+		List<Map<String , Object>> listResult = new ArrayList<>(); 		
+		List<Map<String , Object>> list = getAllAvailableConsistOrder();
+		
+		for(int i=0; i<list.size(); i++){
+			listResult.add(list.get(i));
+		}
+		
+		for(int i=0; i<list.size(); i++){
+			
+			String lname = (String) list.get(i).get("scenicName");
+			String ldate = (String) list.get(i).get("visitTime");
+			int num = (Integer) list.get(i).get("num");
+
+			
+			if(!scenicName.equals("null") && !scenicName.equals(lname)){
+				listResult.remove(list.get(i));
+			}
+			
+			if(visitNum == -1 || visitNum > num){
+				listResult.remove(list.get(i));
+			}
+			
+			//true: dateFrom <= dateTo
+			if(!date.equals("null") && DateConvert.dateCompare(ldate, date)){
+				listResult.remove(list.get(i));
+			}
+		}
+		
 		return listResult;
 	}
 
@@ -182,16 +251,33 @@ public class ConsistOrderDao {
 	
 	
 	/**
-	 * 根据订单编号，查询每个拼单结果的详细信息
+	 * 根据订单编号，查询每个拼单结果的详细信息,t_consistresult
 	 * @param OrderID  订单编号
 	 * @return 订单编号、参观时间、当前人数、最大人数、景区编号
 	 */
-	public List<Map<String , Object>> getDetailConsistResult(String OrderID){
+	public ConsistResult getDetailConsistResult(String OrderID){
 		
-		String sqlSearch = "select * from t_consistresult where orderID='"+OrderID+"'";
+		ConsistResult consistResult = new ConsistResult(); 			 		
+ 		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getDetailConsistResult(?)");
+			cst.setString(1, OrderID);
+			ResultSet rst=cst.executeQuery();
 		
-		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlSearch);
+			while (rst.next()) {
+				consistResult.setOrderID(rst.getString(1));
+				consistResult.setMaxNum(rst.getInt(2));
+				consistResult.setVisitTime(rst.getString(3));
+				consistResult.setScenicID(rst.getString(4));
+				consistResult.setVisitNum(rst.getInt(5));
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 	
 		
-		return list;
+		return consistResult;
 	}
 }

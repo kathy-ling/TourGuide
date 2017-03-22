@@ -143,7 +143,7 @@ function showError(error) {
 function showPosition(position) {
 	var x = position.coords.latitude; //纬度 
 	var y = position.coords.longitude; //经度 
-//	alert('纬度:' + x + ',经度:' + y);
+	alert('纬度:' + x + ',经度:' + y);
 
 	//配置Baidu Geocoding API 
 	var url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b"
@@ -228,7 +228,6 @@ function getScenicByProvince()
 
 function getPromotion()
 {
-	alert
 	var url = HOST + "/getPromotions.do";
 	$.ajax({
 		url : url,
@@ -295,9 +294,7 @@ function freshList(data, UlList) {
 }
 
 function LoginOrPersonal()
-
 {
-
 	var AllCookies = document.cookie;
 	alert(AllCookies);
 	if (AllCookies != "")
@@ -311,9 +308,7 @@ function LoginOrPersonal()
 	else
 
 	{
-
 		window.location.href = "TourLogin.html";
-
 	}
 
 }

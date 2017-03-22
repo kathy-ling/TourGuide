@@ -48,13 +48,14 @@ public class BookOrderDao {
 	 * @param halfPrice  若代购门票，购买半价票的人数
 	 * @param discoutPrice 若代购门票，购买折扣票的人数
 	 * @param fullPrice  若代购门票，购买全价票的人数
+	 * @param contact  该订单发布时游客填写的联系人
 	 * @return 发布订单是否成功，成功：1  失败：0
 	 */
 	public boolean ReleaseBookOrder(String bookOrderID, String scenicID, String produceTime,String visitTime, 
 			int visitNum, String language, String guideSex, String visitorPhone,String visitorName, 
 			int priceRange, int purchaseTicket, String otherCommand, int releaseByVisitor, String orderState,
 			int totalTicket, int fullPriceNum, int discoutPriceNum, int halfPriceNum,
-			int fullPrice, int discoutPrice, int halfPrice){
+			int fullPrice, int discoutPrice, int halfPrice, String contact){
 		
 		boolean bool = false;
 		//购买门票的总数
@@ -67,13 +68,13 @@ public class BookOrderDao {
 				+ "visitTime,visitNum,language,guideSex,visitorPhone,visitorName,"
 				+ "priceRange,purchaseTicket,otherCommand,releaseByVisitor,orderState,"
 				+ "totalTicket,totalTicketNum,fullPriceNum,discoutPriceNum,halfPriceNum,fullPrice,"
-				+ "discoutPrice,halfPrice,visitorVisible,guideVisible) values "
-				+ "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "discoutPrice,halfPrice,visitorVisible,guideVisible,contact) values "
+				+ "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlString, new Object[]{bookOrderID, scenicID, 
 				produceTime, visitTime,visitNum, language, guideSex, visitorPhone, 
 				visitorName, priceRange, purchaseTicket, otherCommand, releaseByVisitor, orderState,
 				totalTicket,totalTicketNum, fullPriceNum,discoutPriceNum,halfPriceNum,
-				fullPrice, discoutPrice, halfPrice,visitorVisible,guideVisible});
+				fullPrice, discoutPrice, halfPrice,visitorVisible,guideVisible,contact});
 		
 		if(i == 1){
 			bool = true;

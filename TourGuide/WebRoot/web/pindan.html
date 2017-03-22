@@ -25,6 +25,14 @@
 			lang:'zh',
 			dateFormat: 'yy-mm-dd'
 		});
+		
+		$("#visitTime1").mobiscroll().date({
+			theme:'android-ics light',
+			minDate:min,
+			maxDate:max,			            
+			lang:'zh',
+			dateFormat: 'yy-mm-dd'
+		});
 	});
     </script> 
     <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
@@ -44,8 +52,18 @@
        </div>
     </div>
     <div data-role="main" >
-        <div id="panel1" class="ui-content" >       	
-	        	<div id="order_list">
+        <div id="panel1" class="ui-content" >
+        		<div id="nameSelector">
+							<label for="chooseDatetime" class="ui-hidden-accessible">景区名称</label>
+							<select id="chooseScenicName1" name="scenicName" onchange="chooseOrder()">
+								<option value="" selected="selected">请选择景区</option>
+							</select>
+							</div>
+							<label for="orderDate" class="ui-hidden-accessible">日期</label>
+							<input data-role="datebox" id="visitTime1" name="date" placeholder="请输入日期" onchange="chooseOrder()" >
+							<label for="chooseVisitNum" class="ui-hidden-accessible" ">人数</label>
+							<input type="text" id="chooseVisitNum" name="VisitNum" value="" placeholder="人数" onblur="chooseOrder()">
+	        			<div id="order_list">
 		            <ul data-role="listview" id="pindan_ul_id">
 		               
 		            </ul>
@@ -54,9 +72,16 @@
            
         <div id="panel2" >
             <form action="pindan_submit" id="" method="get" accept-charset="utf-8">
+            	
+            	<div id="nameSelector">
+					<label for="chooseDatetime" class="ui-hidden-accessible">景区名称</label>
+						<select id="chooseScenicName" name="scenicName" >
+							<option value="" selected="selected">请选择景区</option>
+						</select>
+				</div>
                 <div class="visitTime">
-                 <label for="visitTime" class="ui-hidden-accessible">日期</label>
-               <input data-role="datebox" id="visitTime" name="date" placeholder="请输入日期">
+                <label for="visitTime" class="ui-hidden-accessible">日期</label>
+               <input data-role="datebox" id="visitTime" name="date" placeholder="请输入日期" onchange="getFee()" >
 
                <label for="chooseDatetime" class="ui-hidden-accessible">时间</label>
                <!--<input id="chooseDatetime" name="datetime" type="datetime" data-role="datebox" data-options='{"mode": "timeflipbox","overrideTimeFormat":"24","overrideTimeOutput":"%H:%M","minuteStep":"30"}'  value=""  placeholder="时间">-->
@@ -86,8 +111,8 @@
                 </div>
                
                 <label for="visitorCount" class="ui-hidden-accessible">浏览人数</label>
-                <input type="number" min="1" max="10" step="1" id="visitorCount" name="visitorCount" class="" placeholder="浏览人数" onpropertychange="()" />
-                <legend>需要为您代购门票吗？</legend>
+                <input type="number" min="1" max="10" step="1" id="visitorCount" name="visitorCount" class="" placeholder="浏览人数"  />
+                <!--<legend>需要为您代购门票吗？</legend>
                 <label for="orderTicketRadio" value ="1">是，请为我代购门票</label>
                 <input type="radio" id="orderTicketRadio" name="pindan_orderTicket" value="1" class="" />
                 <div data-role="collapsible" id="orderTicketPanel" data-collapsed="false" hidden="true">
@@ -99,7 +124,9 @@
                         <input type="number" id="discountTicketNum" name="discountTicketNum" value="" placeholder="半价票">
                 </div>
                 <label for="notorderTicketRadio" value="0">否，不用了，谢谢</label>
-                <input type="radio" id="notorderTicketRadio" name="pindan_orderTicket" value="0" class="" />
+                <input type="radio" id="notorderTicketRadio" name="pindan_orderTicket" value="0" class="" />-->
+                <label for="visitorCount" class="ui-hidden-accessible">联系方式</label>
+                <input type="text"  id="visitorPhone" name="visitorPhone"  placeholder="游览人联系方式"  />
             </form>
             <ul data-role="listview" id="ul_fee" data-icon="false">
                 <!--<li >

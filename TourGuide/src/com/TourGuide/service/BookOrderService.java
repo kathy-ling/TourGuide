@@ -40,13 +40,13 @@ public class BookOrderService {
 			int visitNum, String language, String guideSex, String visitorPhone,String visitorName, 
 			int priceRange, int purchaseTicket, String otherCommand, int releaseByVisitor, String orderState,
 			int totalTicket, int fullPriceNum, int discoutPriceNum, int halfPriceNum, 
-			int fullPrice, int discoutPrice, int halfPrice){
+			int fullPrice, int discoutPrice, int halfPrice,String contact){
 		
 		return bookOrderDao.ReleaseBookOrder(bookOrderID, scenicID, produceTime, 
 				visitTime, visitNum, language, guideSex, visitorPhone, visitorName, 
 				priceRange, purchaseTicket, otherCommand, releaseByVisitor, orderState,
 				totalTicket, fullPriceNum, discoutPriceNum, halfPriceNum, 
-				fullPrice, discoutPrice, halfPrice);
+				fullPrice, discoutPrice, halfPrice, contact);
 	}
 	
 	

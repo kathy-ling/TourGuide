@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.TourGuide.dao.ConsistOrderDao;
 import com.TourGuide.model.ConsistOrder;
+import com.TourGuide.model.ConsistResult;
 
 @Service
 public class ConsistOrderService {
@@ -34,10 +35,10 @@ public class ConsistOrderService {
 	 */
 	public boolean ReleaseConsistOrder(String consistOrderID, String orderID, String scenicID,
 			String produceTime, String visitTime, int visitNum, String visitorPhone, 
-			String orderState, int isConsisted, int maxNum, int totalFee, int fee){
+			String contact,String orderState, int isConsisted, int maxNum, int totalFee, int fee){
 		
 		return consistOrderDao.ReleaseConsistOrder(consistOrderID, orderID, scenicID,
-				produceTime, visitTime, visitNum, visitorPhone, orderState, 
+				produceTime, visitTime, visitNum, visitorPhone, contact,orderState, 
 				isConsisted, maxNum, totalFee, fee);
 	}
 	
@@ -48,8 +49,21 @@ public class ConsistOrderService {
 	 * @param scenicID  景区编号
 	 * @param date   当前的时间
 	 */
-	public List<ConsistOrder> getAvailableConsistOrder(String scenicID, String date){
-		return consistOrderDao.getAvailableConsistOrder(scenicID, date);
+	public List<Map<String , Object>> getAllAvailableConsistOrder(){
+		return consistOrderDao.getAllAvailableConsistOrder();
+	}
+	
+	
+	/**
+	 * 根据条件，筛选可拼单的订单
+	 * @param scenicName   景区名称
+	 * @param date  日期
+	 * @param visitNum  参观人数
+	 * @return
+	 */
+	public List<Map<String , Object>> getConsistOrderWithSelector(String scenicName, 
+			String date, int visitNum){
+		return consistOrderDao.getConsistOrderWithSelector(scenicName, date, visitNum);
 	}
 	
 	
@@ -68,15 +82,13 @@ public class ConsistOrderService {
 	 * @param isConsisted   是否被拼单
 	 * @param maxNum
 	 */
-	public boolean consistWithconsistOrderID(String orderID, String consistOrderID, String scenicID,
-			String produceTime, String visitTime, int visitNum, String visitorPhone, int totalMoney, 
-			int currentNum, int purchaseTicket, String orderState, int isConsisted, int maxNum,
-			int fullPrice, int discoutPrice, int halfPrice, int totalFee, int totalTicket, int fee){
+	public boolean consistWithconsistOrderID(String orderID, String consistOrderID, String scenicID, 
+			String produceTime, String visitTime, int visitNum, String visitorPhone, String contact,
+			int currentNum, String orderState, int isConsisted, int maxNum, int totalFee, int fee){
 		
 		return consistOrderDao.consistWithconsistOrderID(orderID, consistOrderID, scenicID, 
-				produceTime, visitTime, visitNum, visitorPhone, totalMoney, currentNum,
-				purchaseTicket, orderState, isConsisted, maxNum, fullPrice,
-				discoutPrice, halfPrice, totalFee, totalTicket, fee);
+				produceTime, visitTime, visitNum, visitorPhone, contact, currentNum, 
+				orderState, isConsisted, maxNum, totalFee, fee);
 	}
 	
 	
@@ -95,7 +107,7 @@ public class ConsistOrderService {
 	 * @param OrderID  订单编号
 	 * @return 订单编号、参观时间、当前人数、最大人数、景区编号
 	 */
-	public List<Map<String , Object>> getDetailConsistResult(String OrderID){
+	public ConsistResult getDetailConsistResult(String OrderID){
 		return consistOrderDao.getDetailConsistResult(OrderID);
 	}
 
