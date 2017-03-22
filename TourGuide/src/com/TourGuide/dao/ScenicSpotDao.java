@@ -150,7 +150,7 @@ public class ScenicSpotDao {
 	 * @param scenicName  景区的名称，景区名必须和数据库的一致（客户端完成）
 	 * @return
 	 */
-	public List<Map<String , Object>> getScenicByName(String scenicName){
+	public List<Map<String, Object>> getScenicByName(String scenicName){
 		
 		List<Map<String , Object>> list = new ArrayList<>();
  		

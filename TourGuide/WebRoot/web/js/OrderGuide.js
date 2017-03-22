@@ -83,20 +83,23 @@ function checkOrderForm() {
 	var HalfPrice = 0;
 	var DiscoutPrice = 0;
 	var FullPrice = 0;
-	var PurchaseTicket = $("input[name='orderTicket']:checked").val();
-	if (PurchaseTicket != null) {
-		if (PurchaseTicket)// 购票
-		{
-			FullPrice = $("#fullPriceTicketNum").val();
-			HalfPrice = $("#halfPriceTicketNum").val();
-			DiscoutPrice = $("#discountTicketNum").val();
-		}
-	} else {
-		alert("请选择是否代购门票！");
-		return false;
-	}
+	var PurchaseTicket = 2;
+//	var PurchaseTicket = $("input[name='orderTicket']:checked").val();
+//	if (PurchaseTicket != null) {
+//		if (PurchaseTicket)// 购票
+//		{
+//			FullPrice = $("#fullPriceTicketNum").val();
+//			HalfPrice = $("#halfPriceTicketNum").val();
+//			DiscoutPrice = $("#discountTicketNum").val();
+//		}
+//	} else {
+//		alert("请选择是否代购门票！");
+//		return false;
+//	}
+	var scenicName = $('#chooseScenicName1 option:selected').val();
+
 	var data = {
-		scenicID : sessionStorage.scenicNo,
+		scenicName : scenicName,
 		otherCommand : $("#otherRequest").val(),
 		visitNum : $("#visitorCount").val(),
 		priceRange : $("#orderM").val(),
@@ -110,6 +113,9 @@ function checkOrderForm() {
 		fullPrice : FullPrice,
 		visitTime : $("#orderDate").val() + " " + $("#orderDatetime").val()
 	};
+	alert(data.scenicName);
+	alert(data.visitTime);
+	alert(data.visitorPhone);
 	if (!$("#orderDate").val()) {
 		alert("请选择日期!");
 		return false;
@@ -388,6 +394,11 @@ function addlist(data) {
 		var AList = document.createElement("a");
 		AList.href = "guideInfo.html?" + "phone=" + n.phone+"&visitNum="+visitNum+"&visitDate="
 		+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;
+<<<<<<< HEAD
+=======
+		AList.setAttribute("data-ajax", false);
+
+>>>>>>> c692d1ac8b314e0919b2751f928bc00ff701365e
 		// AList.setAttribute("href","guideInfo.html");
 		// AList.target = "_top";
 		// AList.setAttribute("rel","external");
@@ -421,10 +432,16 @@ function addlist(data) {
 		SpanListLevel.className = "starLevel";
 		SpanListLevel.innerHTML = "等级：" + n.guideLevel + "<br/>";
 
-		PList.appendChild(SpanListName)
-		PList.appendChild(SpanListSex)
-		PList.appendChild(SpanListAge)
+		// 添加语言
+//		var SpanListLanguage = document.createElement("span");
+//		SpanListLevel.className = "starLevel";
+//		SpanListLevel.innerHTML = "讲解语言：" + n.language + "<br/>";
+		
+		PList.appendChild(SpanListName);
+		PList.appendChild(SpanListSex);
+		PList.appendChild(SpanListAge);
 		PList.appendChild(SpanListLevel);
+//		PList.appendChild(SpanListLanguage);
 		// 添加立即预约链接
 		var A1List = document.createElement("a");
 		// A1List.href = "?phone="+n.phone+"#orderTicketPop";

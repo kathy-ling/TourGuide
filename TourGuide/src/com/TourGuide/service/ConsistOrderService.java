@@ -15,30 +15,30 @@ public class ConsistOrderService {
 	@Autowired
 	public ConsistOrderDao consistOrderDao;
 	
+	
 	/**
-	 * 将游客自己发布的拼单订单存入数据库
-	 * @param consistOrderID 拼单编号
+	 * 
+	 * @param consistOrderID  拼单编号
+	 * @param orderID  
 	 * @param scenicID  景区编号
 	 * @param produceTime  订单生产时间
 	 * @param visitTime 游客参观的时间
 	 * @param visitNum  参观的人数
 	 * @param visitorPhone  游客的手机号
-	 * @param totalMoney  该拼单的总金额
-	 * @param purchaseTicket   是否代购门票
-	 * @param orderState  拼单状态
+	 * @param orderState  订单状态
 	 * @param isConsisted  是否已经拼单
-	 * @param maxNum 最大可拼单人数
-	 * @return  发布拼单是否成功，成功：1  失败：0
+	 * @param maxNum  最大可拼单人数
+	 * @param totalFee  讲解费总额
+	 * @param fee 每个人的讲解费
+	 * @return
 	 */
 	public boolean ReleaseConsistOrder(String consistOrderID, String orderID, String scenicID,
 			String produceTime, String visitTime, int visitNum, String visitorPhone, 
-			int totalMoney, int purchaseTicket, String orderState, int isConsisted, int maxNum,
-			int fullPrice, int discoutPrice, int halfPrice, int totalFee, int totalTicket, int fee){
+			String orderState, int isConsisted, int maxNum, int totalFee, int fee){
 		
-		return consistOrderDao.ReleaseConsistOrder(consistOrderID, orderID, scenicID, 
-				produceTime, visitTime, visitNum, visitorPhone, 
-				totalMoney, purchaseTicket, orderState, isConsisted, maxNum, fullPrice,
-				discoutPrice, halfPrice, totalFee, totalTicket, fee);
+		return consistOrderDao.ReleaseConsistOrder(consistOrderID, orderID, scenicID,
+				produceTime, visitTime, visitNum, visitorPhone, orderState, 
+				isConsisted, maxNum, totalFee, fee);
 	}
 	
 	

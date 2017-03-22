@@ -32,6 +32,9 @@ public class BookOrderController {
 	private BookOrderService bookOrderService;
 	
 	@Autowired
+	private ScenicSpotService scenicSpotService;
+	
+	@Autowired
 	private ScenicTicketService scenicTicketService;
 	
 	@Autowired
@@ -82,9 +85,8 @@ public class BookOrderController {
 		String bookOrderID = UUID.randomUUID().toString().replace("-", "");
 		String produceTime = MyDateFormat.form(new Date());
 		
-		ScenicSpotService scenicSpotService = new ScenicSpotService();
-		ScenicsSpotInfo scenicsSpotInfo = scenicSpotService.SearchScenicInfoByName_Service(scenicName);
-		String scenicID = scenicsSpotInfo.getScenicNo();
+		List<Map<String, Object>> scenicSpotInfo = scenicSpotService.getScenicByName(scenicName);
+		String scenicID = (String) scenicSpotInfo.get(0).get("scenicNo");
 				
 		//计算门票总额
 		int totalTicket = 0;
@@ -123,56 +125,51 @@ public class BookOrderController {
 	/**
 	 * 选定导游后，进行预约
 	 * @param resp
-	 * @param scenicID  景区编号
+	 * @param scenicName  景区名称
 	 * @param visitTime 参观时间
 	 * @param visitNum   参观人数
 	 * @param guidePhone   导游手机号
+	 * @param guideFee   导游的讲解费
 	 * @param visitorPhone  游客手机号
-	 * @param purchaseTicket  是否代购门票
-	 * @param halfPrice  若代购门票，购买半价票的人数
-	 * @param discoutPrice 若代购门票，购买折扣票的人数
-	 * @param fullPrice  若代购门票，购买全价票的人数
 	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/BookOrderWithGuide.do")
 	@ResponseBody
 	public Object BookOrderWithGuide(HttpServletResponse resp,
-			@RequestParam("scenicID") String scenicID, 
+			@RequestParam("scenicName") String scenicName, 
 			@RequestParam("visitTime") String visitTime, 
 			@RequestParam("visitNum") String visitNum,
 			@RequestParam("guidePhone") String guidePhone,
-			@RequestParam("visitorPhone") String visitorPhone,
-			@RequestParam("purchaseTicket") String purchaseTicket,
-			@RequestParam("fullPrice") String fullPrice,
-			@RequestParam("halfPrice") String halfPrice,
-			@RequestParam("discoutPrice") String discoutPrice) throws IOException{
-		//http://10.50.63.83:8080/TourGuide/BookOrderWithGuide.do?scenicID=19743&visitTime=2017-1-17 14:00&visitNum=6
-		//&guidePhone=13823456789&visitorPhone=18191762572&purchaseTicket=0&fullPrice=0&halfPrice=0&discoutPrice=0
+			@RequestParam("guideFee") String guideFee,
+			@RequestParam("visitorPhone") String visitorPhone
+			) throws IOException{
+		//http://10.50.63.83:8080/TourGuide/BookOrderWithGuide.do?scenicName=秦始皇兵马俑&visitTime=2017-3-23 14:00&visitNum=6&guidePhone=13823456789&guideFee=300&visitorPhone=18191762572
 		CommonResp.SetUtf(resp);
 		
 		String orderID = UUID.randomUUID().toString().replace("-", "");
 		String produceTime = MyDateFormat.form(new Date());
 		
+		List<Map<String, Object>> scenicSpotInfo = scenicSpotService.getScenicByName(scenicName);
+		String scenicID = (String) scenicSpotInfo.get(0).get("scenicNo");
+		
 		//查询该景区的门票信息
-		ScenicTickets scenicTickets = scenicTicketService.geTicketsByScenicNo(scenicID);
+//		ScenicTickets scenicTickets = scenicTicketService.geTicketsByScenicNo(scenicID);
 		
-		//计算门票总额
-		int totalTicket = scenicTickets.getHalfPrice() * Integer.parseInt(halfPrice) +
-				scenicTickets.getDiscoutPrice() * Integer.parseInt(discoutPrice) +
-				scenicTickets.getFullPrice() * Integer.parseInt(fullPrice);
+//		//计算门票总额
+//		int totalTicket = scenicTickets.getHalfPrice() * Integer.parseInt(halfPrice) +
+//				scenicTickets.getDiscoutPrice() * Integer.parseInt(discoutPrice) +
+//				scenicTickets.getFullPrice() * Integer.parseInt(fullPrice);
 		
-		//得到该讲解员的讲解费
-		List<Map<String , Object>> guideInfo = guideService.getDetailGuideInfoByPhone(guidePhone);
-		int guideFee = (int)guideInfo.get(0).get("guideFee");
-		
-		int totalMoney = totalTicket + guideFee;
+//		//得到该讲解员的讲解费
+//		List<Map<String , Object>> guideInfo = guideService.getDetailGuideInfoByPhone(guidePhone);
+//		int guideFee = (int)guideInfo.get(0).get("guideFee");
+//		
+//		int totalMoney = totalTicket + guideFee;
 		
 		int ret = bookOrderService.BookOrderWithGuide(orderID, produceTime, guidePhone, 
 				visitorPhone, visitTime, scenicID, Integer.parseInt(visitNum),
-				Integer.parseInt(purchaseTicket), Integer.parseInt(fullPrice), 
-				Integer.parseInt(discoutPrice), Integer.parseInt(halfPrice), 
-				totalTicket, guideFee, guideFee, totalMoney);
+				Integer.parseInt(guideFee));
 		
 		return ret;
 	}

@@ -23,16 +23,13 @@ import com.TourGuide.weixin.util.SpringContextUtil;
  */
 
 public class OAuthServlet extends HttpServlet{
-
 	
 	private static final long serialVersionUID = -1847238807216447030L;
 	
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) 
 
-			throws ServletException, IOException {
-		
-		
+			throws ServletException, IOException {		
 		
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
@@ -40,7 +37,7 @@ public class OAuthServlet extends HttpServlet{
 		// 用户同意授权后，能获取到code
 		// 如果code等于"authdeny"，表示用户不同意授权，则直接跳转到目标页面。
 		String code = request.getParameter("code");
-		System.out.println("code :" + code);
+		System.out.println("code from oauthServlet:" + code);
 		
 		// 用户同意授权
 		if (!"authdeny".equals(code)) {
@@ -51,13 +48,10 @@ public class OAuthServlet extends HttpServlet{
 			// 用户标识
 			String openId = weixinOauth2Token.getOpenId();
 			// 获取用户信息
-
-			SNSUserInfo snsUserInfo = SNSUserInfoUtil.getSNSUserInfo(accessToken, openId);
-			
+			SNSUserInfo snsUserInfo = SNSUserInfoUtil.getSNSUserInfo(accessToken, openId);			
 			
 			VisitorService visitorService = (VisitorService) SpringContextUtil.getBean("visitorService");
 			VisitorInfo visitorInfo=visitorService.getInfobyOpenID(openId);								
-
 			
 			// 设置要传递的参数
 			request.setAttribute("snsUserInfo", snsUserInfo);
@@ -83,10 +77,9 @@ public class OAuthServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
-//		doPost(req, resp);
 
+		// TODO Auto-generated method stub
 		doGet(req, resp);
 	}
-
 }
+

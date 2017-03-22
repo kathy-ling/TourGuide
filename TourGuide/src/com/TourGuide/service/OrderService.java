@@ -23,22 +23,9 @@ public class OrderService {
 	 * @param phone  用户手机号
 	 * @return 订单编号、参观时间、参观人数、景区名称、图片（暂时不用）、订单状态、总金额
 	 */
-	public List<Map<String, String>> getAllOrders(String phone){
+	public List<Map<String , Object>> getAllOrders(String phone){
 		return orderDao.getAllOrders(phone);
 	}
-	
-	
-	/**
-	 * 根据用户的手机号，查询特定订单状态的订单
-	 * 订单状态：待接单、待付款、待游览、待评价
-	 * @param phone  手机号
-	 * @param orderState   订单状态
-	 * @return
-	 */
-	public List<Map<String, String>> getOrdersWithState(String phone, String orderState){
-		return orderDao.getOrdersWithState(phone, orderState);
-	}
-	
 	
 	
 	/**
@@ -47,11 +34,21 @@ public class OrderService {
 	 * @param orderState   订单状态
 	 * @return
 	 */
-	public List<Map<String, Object>> getDetailOrderInfo(String orderID, String orderState){
-		return orderDao.getDetailOrderInfo(orderID, orderState);
+	public List<Map<String, Object>> getDetailOrderInfo(String orderID){
+		return orderDao.getDetailOrderInfo(orderID);
 	}
 	
-	
+//	
+//	/**
+//	 * 根据用户的手机号，查询特定订单状态的订单
+//	 * 订单状态：待接单、待付款、待游览、待评价
+//	 * @param phone  手机号
+//	 * @param orderState   订单状态
+//	 * @return
+//	 */
+//	public List<Map<String, String>> getOrdersWithState(String phone, String orderState){
+//		return orderDao.getOrdersWithState(phone, orderState);
+//	}
 	
 
 }

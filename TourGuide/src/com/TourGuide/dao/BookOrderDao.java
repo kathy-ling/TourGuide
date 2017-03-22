@@ -19,6 +19,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.TourGuide.common.DateConvert;
+import com.TourGuide.common.MyDateFormat;
 import com.TourGuide.common.SelectDay;
 
 @Repository
@@ -102,30 +103,54 @@ public class BookOrderDao {
 	 * @return
 	 */
 	public int BookOrderWithGuide(String orderID, String produceTime, String guidePhone, 
-			String visitorPhone, String visitTime, String scenicID, int visitNum, 
-			int purchaseTicket, int fullPrice, int discoutPrice, int halfPrice, int totalTicket,
-			int guideFee, int totalGuideFee, int totalMoney){
+			String visitorPhone, String visitTime, String scenicID, int visitNum, int guideFee){
 		
 		int ret = 0;	
-		String orderState = "待游览";
+		String orderState = "待付款";
 		
 		String sqlString = "insert into t_bookorder (bookOrderID,produceTime,visitTime,"
-				+ "visitorPhone,visitNum,scenicID,purchaseTicket,fullPrice,discoutPrice,halfPrice,totalTicket,"
-				+ "guideFee,totalGuideFee,totalMoney,guidePhone,orderState) "
-				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "visitorPhone,visitNum,scenicID,guideFee,guidePhone,orderState) "
+				+ "values (?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlString, new Object[]{orderID,produceTime,visitTime,
-				visitorPhone,visitNum, scenicID, purchaseTicket, fullPrice, discoutPrice, halfPrice, totalTicket,
-				guideFee, totalGuideFee, totalMoney, guidePhone, orderState});
+				visitorPhone,visitNum, scenicID, guideFee,  guidePhone, orderState});
 		
-    	String[] visitDate = visitTime.split(" ");		
-		//计算参观日期与当前日期的间隔，并得到数据库的字段名称
-    	String selectDay = SelectDay.getSelectDay(visitDate[0]);
+//    	String[] visitDate = visitTime.split(" ");		
+//		//计算参观日期与当前日期的间隔，并得到数据库的字段名称
+//    	String selectDay = SelectDay.getSelectDay(visitDate[0]);
+//		
+//		//修改该导游的状态为被预约，2——被预约
+//		String sqlString2 = "update t_guideworkday set "+selectDay+"=2 where phone='"+guidePhone+"'";
+//		int j = jdbcTemplate.update(sqlString2);
 		
-		//修改该导游的状态为被预约，2——被预约
-		String sqlString2 = "update t_guideworkday set "+selectDay+"=2 where phone='"+guidePhone+"'";
-		int j = jdbcTemplate.update(sqlString2);
+		String payTime = MyDateFormat.form(new Date());
+		String sqlUpdate = "update t_bookorder set orderState='待游览',hadPay=1,payTime='"+payTime+"'";
+		int j = jdbcTemplate.update(sqlUpdate);
 		
-		if(i != 0 && j != 0){
+		DataSource dataSource =jdbcTemplate.getDataSource();
+		int hour = 0;
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getMaxHourbyScenicID(?)");
+			cst.setString(1, scenicID);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				hour = Integer.parseInt(rst.getString(1));
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+		
+		String sqlInsert = "insert into t_guideBeOrdered "
+				+ "(orderId,guidePhone,visitTime,timeFrom,timeTo) "
+				+ "values (?,?,?,?,?)";
+		String timeFrom = DateConvert.addHourToTime(visitTime+":00", -hour);
+		String timeTo = DateConvert.addHourToTime(visitTime+":00", hour);
+		int k = jdbcTemplate.update(sqlInsert, new Object[]{orderID, guidePhone, visitTime,
+				timeFrom, timeTo});
+		
+		if(i != 0 && j!=0 && k!=0){
 			ret = 1;
 		}
 				

@@ -63,18 +63,19 @@ function setGuideInfo(phone){
 				$("#guide_fee").html(item.guideFee+"元");
 				$("#guide_self_intro").html(item.selfIntro);
 				$("#guide_phone").html(item.phone);
-				if(item.language == "0")
-				{
-					$("#guide_language").html("中文");
-				}
-				if(item.language == "1")
-				{
-					$("#guide_language").html("英文");
-				}
-				if(item.language == "2")
-				{
-					$("#guide_language").html("中文 英文");
-				}
+				$("#guide_language").html(item.language);
+//				if(item.language == "0")
+//				{
+//					$("#guide_language").html("中文");
+//				}
+//				if(item.language == "1")
+//				{
+//					$("#guide_language").html("英文");
+//				}
+//				if(item.language == "2")
+//				{
+//					$("#guide_language").html("中文 英文");
+//				}
 			});
 		}
 	});

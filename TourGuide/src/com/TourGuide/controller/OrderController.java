@@ -30,7 +30,7 @@ public class OrderController {
 	 * @param resp
 	 * @param visitorPhone  用户手机号
 	 * @throws IOException
-	 * 订单编号、参观时间、参观人数、景区名称、图片（暂时不用）、订单状态、总金额
+	 * 订单编号、参观时间、参观人数、景区名称、订单状态、总金额
 	 */
 	@RequestMapping(value = "/getAllOrders.do")
 	public void getAllOrders(HttpServletResponse resp,
@@ -39,7 +39,7 @@ public class OrderController {
 		resp.setHeader("Access-Control-Allow-Origin","*");
 		CommonResp.SetUtf(resp);
 		
-		List<Map<String, String>> listResult =orderService.getAllOrders(visitorPhone);
+		List<Map<String , Object>> listResult =orderService.getAllOrders(visitorPhone);
 		
 		PrintWriter writer = resp.getWriter();
 		writer.write(new Gson().toJson(listResult));
@@ -47,6 +47,26 @@ public class OrderController {
 	}
 	
 	
+	/**
+	 * 根据订单编号，查看订单的详细信息
+	 * @param resp
+	 * @param orderID  订单编号
+	 * @param orderState  订单状态
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getDetailOrderInfo.do")
+	@ResponseBody
+	public Object getDetailOrderInfo(HttpServletResponse resp,
+			@RequestParam("orderID") String orderID) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String, Object>> listResult = new ArrayList<>();
+		listResult = orderService.getDetailOrderInfo(orderID);
+		
+		return listResult;
+	}
 	
 	/**
 	 * 根据订单的状态，查看用户相应的订单
@@ -57,42 +77,18 @@ public class OrderController {
 	 * @throws IOException
 	 * 订单编号、参观时间、参观人数、景区名称、图片（暂时不用）、订单状态、总金额
 	 */
-	@RequestMapping(value = "/getOrdersWithState.do")
-	public void getOrdersWithState(HttpServletResponse resp,
-			@RequestParam("visitorPhone") String visitorPhone,
-			@RequestParam("orderState") String orderState) throws IOException{
-		
-		CommonResp.SetUtf(resp);
-		
-		List<Map<String, String>> listResult =orderService.getOrdersWithState(visitorPhone, orderState);
-		
-		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(listResult));
-		writer.flush();
-	}
-	
-	
-	
-	
-	/**
-	 * 根据订单编号、状态，查看订单的详细信息
-	 * @param resp
-	 * @param orderID  订单编号
-	 * @param orderState  订单状态
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping(value = "/getDetailOrderInfo.do")
-	@ResponseBody
-	public Object getDetailOrderInfo(HttpServletResponse resp,
-			@RequestParam("orderID") String orderID,
-			@RequestParam("orderState") String orderState) throws IOException{
-		
-		CommonResp.SetUtf(resp);
-		
-		List<Map<String, Object>> listResult = new ArrayList<>();
-		listResult = orderService.getDetailOrderInfo(orderID, orderState);
-		
-		return listResult;
-	}
+//	@RequestMapping(value = "/getOrdersWithState.do")
+//	public void getOrdersWithState(HttpServletResponse resp,
+//			@RequestParam("visitorPhone") String visitorPhone,
+//			@RequestParam("orderState") String orderState) throws IOException{
+//		
+//		CommonResp.SetUtf(resp);
+//		
+//		List<Map<String, String>> listResult =orderService.getOrdersWithState(visitorPhone, orderState);
+//		
+//		PrintWriter writer = resp.getWriter();
+//		writer.write(new Gson().toJson(listResult));
+//		writer.flush();
+//	}
+
 }

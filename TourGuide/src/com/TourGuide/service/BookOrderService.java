@@ -70,13 +70,9 @@ public class BookOrderService {
 	 * @return
 	 */
 	public int BookOrderWithGuide(String orderID, String produceTime, String guidePhone, 
-			String visitorPhone, String visitTime, String scenicID, int visitNum, 
-			int purchaseTicket, int fullPrice, int discoutPrice, int halfPrice, int totalTicket,
-			int guideFee, int totalGuideFee, int totalMoney){
-		
-		return bookOrderDao.BookOrderWithGuide(orderID, produceTime, guidePhone, visitorPhone, 
-				visitTime, scenicID, visitNum, purchaseTicket, fullPrice, discoutPrice, 
-				halfPrice, totalTicket, guideFee, totalGuideFee, totalMoney);
+			String visitorPhone, String visitTime, String scenicID, int visitNum, int guideFee){
+		return bookOrderDao.BookOrderWithGuide(orderID, produceTime, 
+				guidePhone, visitorPhone, visitTime, scenicID, visitNum, guideFee);
 	}
 	
 	
