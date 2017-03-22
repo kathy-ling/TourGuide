@@ -127,8 +127,13 @@ function putOrder() {
 	var guidephone = GetUrlem("phone");
 	var postData = {
 		'scenicName': scenicName,
+<<<<<<< HEAD
+		'visitTime': visitNum,
+		'visitNum': visitDate+" "+visitTime,
+=======
 		'visitTime': visitDate+" "+visitTime,
 		'visitNum': visitNum,
+>>>>>>> c692d1ac8b314e0919b2751f928bc00ff701365e
 		'visitorPhone': vistPhone,
 		'guidePhone': guidephone,
 		'guideFee': guideFee1
@@ -148,7 +153,10 @@ function putOrder() {
 		success: function(data) {
 			if(data == 1) {
 				alert("支付订单成功！");
+<<<<<<< HEAD
+=======
 				window.location.href = "orderFormList.html";
+>>>>>>> c692d1ac8b314e0919b2751f928bc00ff701365e
 			} else {
 				alert("支付订单失败！");
 			}

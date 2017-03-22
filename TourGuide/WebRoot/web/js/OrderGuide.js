@@ -397,8 +397,11 @@ function addlist(data) {
 		var AList = document.createElement("a");
 		AList.href = "guideInfo.html?" + "phone=" + n.phone+"&visitNum="+visitNum+"&visitDate="
 		+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;
+<<<<<<< HEAD
+=======
 		AList.setAttribute("data-ajax", false);
 
+>>>>>>> c692d1ac8b314e0919b2751f928bc00ff701365e
 		// AList.setAttribute("href","guideInfo.html");
 		// AList.target = "_top";
 		// AList.setAttribute("rel","external");
