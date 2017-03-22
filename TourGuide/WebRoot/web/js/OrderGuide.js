@@ -1,10 +1,10 @@
 
 var sname;
+var Phone = vistPhone;
 $('#OrderguidePage').bind('pagecreate', function(event, ui) {
 	var ScenicNo = GetUrlem("scenicNo");
 	sname = GetUrlem("sname");
 	
-	alert("scenicNo="+ScenicNo+"&sname="+sname);
 	
 	if (ScenicNo != null) {
 		sessionStorage.scenicNo = ScenicNo;
@@ -24,6 +24,52 @@ $('#OrderguidePage').bind('pagecreate', function(event, ui) {
 		checkOrderForm();// 检查表单正确后，调用提交方法
 	});
 });
+
+function getAvailableGuides1()
+{
+	
+	var date1= $("#chooseDate").val();
+	var time1=$("#orderDatetime123").val();
+	var scenicName = $('#chooseScenicName option:selected').val();
+	var visitTime =  date1 + " " + time1;
+	var visitNum = $("#chooseVisitNum").val();
+	
+	if (scenicName=="") {
+		alert("请选择景区，再进行筛选");
+		return;
+	}
+	
+	if (date1=="") {
+		alert("请选择游览日期，再进行筛选");
+		return;
+	}
+	if (time1=="") {
+		alert("请选择游览时间，再进行筛选");
+		return;
+	}
+	
+	if (visitNum=="") {
+		alert("请选择人数");
+		return;
+	}
+	
+	var Url = HOST + "/getAvailableGuides.do";
+	$.ajax({
+		type : "post",
+		url : Url,
+		async : true,
+		data : {scenicName:scenicName,visitTime:visitTime,visitNum:visitNum},
+		datatype : "JSON",
+		error : function() {
+			alert("筛选失败，请重新进行选择");
+		},
+		success : function(data) {
+			addlist(data);
+		}
+	});
+	
+}
+
 function myrefresh() {
 
 	$(".DirectOrderBtn").bind("click", function() {
@@ -146,7 +192,7 @@ function addOption(a) {
 
 // 从服务器获取讲解员
 window.onload = function() {
-	alert(sname);
+	
 	if(sname != undefined){
 //		alert("into hidden");
 //		$("#nameSelector").hide();
@@ -214,7 +260,7 @@ function getAvailableGuides() {
 				// $.cookie("scenicFullName",item.scenicName);
 				var dataGuide = {
 					"scenicName" : item.scenicName,
-					"visitTime" : visitTime,
+					"visitTime" : visitTime1,
 					"visitNum" : visitNum
 				};
 				var url = HOST + "/getAvailableGuides.do";
@@ -240,33 +286,61 @@ function getAvailableGuides() {
 function selectAvailableGuides() {
 	var sex; // 转换性别
 	var issex = $("input:radio[name='sex']:checked").val();
-	if (issex == undefined) {
+	var date1= $("#chooseDate").val();
+	var time1=$("#orderDatetime123").val();
+	var scenicName = $('#chooseScenicName option:selected').val();
+	var visitTime =  date1 + " " + time1;
+	var visitNum = $("#chooseVisitNum").val();
+	var starlevel = $("#starleve").val();
+	var age; // 转换年龄
+	var isage = $("input:radio[name='age']:checked").val();
+	var language; // 转换语种
+	var islanguage = $("input:radio[name='language']:checked").val();
+	
+	
+	
+	if (issex == undefined){
 		sex = "null";
 	} else {
 		sex = issex;
 	}
 
-	var age; // 转换年龄
-	var isage = $("input:radio[name='age']:checked").val();
+
 	if (isage == undefined) {
 		age = "null";
 	} else {
 		age = isage;
 	}
 
-	var language; // 转换语种
-	var islanguage = $("input:radio[name='language']:checked").val();
 	if (islanguage == undefined) {
 		language = "null";
 	} else {
 		language = islanguage;
 	}
-
-	var scenicName = $('#chooseScenicName option:selected').val();
-	var visitTime =  $("#chooseDate").val() + " " + $("#orderDatetime123").val()
-	var visitNum = $("#chooseVisitNum").val();
-	var starlevel = $("#starleve").val();
-
+	if (scenicName=="") {
+		alert("请选择景区，再进行筛选");
+		return;
+	}
+	
+	if (date1=="") {
+		alert("请选择游览日期，再进行筛选");
+		return;
+	}
+	if (time1=="") {
+		alert("请选择游览时间，再进行筛选");
+		return;
+	}
+	
+	if (visitNum=="") {
+		alert("请选择人数");
+		return;
+	}
+	
+	
+	
+	
+	
+	
 	var data = {
 		"scenicName" : scenicName,
 		"visitTime" : visitTime,
@@ -300,6 +374,10 @@ function selectAvailableGuides() {
 
 // 更新管理员列表
 function addlist(data) {
+	var visitDate =  $("#chooseDate").val();
+	var visitTime=$("#orderDatetime123").val();
+	var visitNum = $("#chooseVisitNum").val();
+	var scenicName = $('#chooseScenicName option:selected').val();
 	$("#order_guide_ul").empty();
 	$.each(data, function(i, n) {
 		// 动态显示最受欢迎的讲解员
@@ -308,7 +386,8 @@ function addlist(data) {
 		UlList.appendChild(LiListInfo);
 
 		var AList = document.createElement("a");
-		AList.href = "guideInfo.html?" + "phone=" + n.phone;
+		AList.href = "guideInfo.html?" + "phone=" + n.phone+"&visitNum="+visitNum+"&visitDate="
+		+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;
 		// AList.setAttribute("href","guideInfo.html");
 		// AList.target = "_top";
 		// AList.setAttribute("rel","external");

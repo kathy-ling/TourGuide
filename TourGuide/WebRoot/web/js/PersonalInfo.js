@@ -48,6 +48,7 @@ function ISsignIN(Phone){
 }
 
 function setperinfo(Phone){
+	alert(Phone);
 	var url = HOST+"/getVisitorInfoWithPhone.do";
 	$.ajax({
 		type:"post",

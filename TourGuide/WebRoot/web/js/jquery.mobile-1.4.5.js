@@ -8,7 +8,7 @@
 * http://jquery.org/license
 *
 */
-window["HOST"]="http://112.74.48.15/TourGuide";//服务器IP地址
+window["HOST"]="http://localhost:8080/TourGuide";//服务器IP地址
 function GetUrlem(name)
 {
      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");

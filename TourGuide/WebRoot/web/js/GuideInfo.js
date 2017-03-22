@@ -1,15 +1,26 @@
+
+var visitDate;
+var visitTime;
+var visitNum;
+var  phone;
+var scenicName;
 $('#guideinfoPage').bind('pageshow',function(event, ui){
 	
 	$(".guideInfoHead").width($(".guideInfoHead").height());
         $(window).bind("resize load",function(){
         	$(".guideInfoHead").width($(".guideInfoHead").height());
         });
-	var phone = GetUrlem("phone");
+	phone = GetUrlem("phone");
+	visitDate=GetUrlem("visitDate");
+	visitTime=GetUrlem("visitTime");
+	visitNum=GetUrlem("visitNum");
+	scenicName=GetUrlem("scenicName");
 	$("#DirectorderTicketSub").attr("phone",phone);
+	/*
 	$("#bookGuide").click(function(){
 		//alert("123");
 		$.mobile.changePage("./orderGuide.html#orderTicketPop", "pop", false, false);
-	});
+	});*/
 //	$("#bookGuide").click(function(){
 //		bookGuide(phone);
 //	});
@@ -101,7 +112,9 @@ var Url = HOST+"/getComments.do";
 }
 
 //点击立即预定
-function bookGuide(guidephone)
+function bookGuide()
 {
-	$("#DirectorderTicketSub").attr("phone",guidephone);
+	
+	window.location.href="orderFormPage.html?"+ "phone=" + phone+"&visitNum="+visitNum+"&visitDate="
+	+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;
 }

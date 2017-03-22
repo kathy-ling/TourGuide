@@ -96,7 +96,7 @@
 							</tr>
 							<tr>
 								<td></td>
-								<td><input type="button" data-mini="true" id="selectAvailableGuides" value="确定"></td>
+								<td><input type="button" data-rel="close" data-mini="true" id="selectAvailableGuides" value="确定"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -116,14 +116,14 @@
 						<div class="ui-field-contain">
 							<div id="nameSelector">
 							<label for="chooseDatetime" class="ui-hidden-accessible">景区名称</label>
-							<select id="chooseScenicName" name="scenicName">
-							<option value="" selected="selected">请选择景区</option>							
+							<select id="chooseScenicName" name="scenicName" >
+								<option value="" selected="selected">请选择景区</option>
 							</select>
 							</div>
 							<label for="orderDate" class="ui-hidden-accessible">日期</label>
-							<input type="text" id="chooseDate" data-role="datebox" placeholder="请输入日期">
+							<input type="text" id="chooseDate" data-role="datebox" placeholder="请输入日期" >
 							<label for="orderDatetime" class="ui-hidden-accessible">时间</label>
-							<select id="orderDatetime123" name="datetime" value="" placeholder="时间">
+							<select id="orderDatetime123" name="datetime" value="" placeholder="时间" >
 								<option>8:00</option>
 								<option>8:30</option>
 								<option>9:00</option>
@@ -146,8 +146,8 @@
 								<option>17:30</option>
 								<option>18:00</option>
 							</select>
-							<label for="chooseVisitNum" class="ui-hidden-accessible">人数</label>
-							<input type="text" id="chooseVisitNum" name="VisitNum" value="" placeholder="人数">
+							<label for="chooseVisitNum" class="ui-hidden-accessible" ">人数</label>
+							<input type="text" id="chooseVisitNum" name="VisitNum" value="" placeholder="人数" onblur="getAvailableGuides1()">
 							<a href="#myPanel" class="ui-btn ui-btn-inline">筛选</a>
 							<!--<button id="getAvailableGuides" class="ui-btn ui-btn-inline">查看推荐</button>-->
 						</div>
@@ -164,9 +164,8 @@
 						<div id="nameSelector1">
 							<label for="chooseDatetime" class="ui-hidden-accessible">景区名称</label>
 							<select id="chooseScenicName1" name="scenicName">
-							<option value="" selected="selected">请选择景区</option>							
+								<option value="" selected="selected">请选择景区</option>
 							</select>
-							
 						</div>
 							<label for="orderDate" class="ui-hidden-accessible">日期</label>
 							<input type="text" id="orderDate" data-role="datebox" placeholder="请输入日期">
