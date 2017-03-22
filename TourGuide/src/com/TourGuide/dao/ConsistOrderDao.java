@@ -3,8 +3,10 @@ package com.TourGuide.dao;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.TourGuide.common.DateConvert;
+import com.TourGuide.common.MyDateFormat;
 import com.TourGuide.model.ConsistOrder;
 
 @Repository
@@ -24,24 +27,24 @@ public class ConsistOrderDao {
 	
 	
 	/**
-	 * 将游客自己发布的拼单订单存入数据库
-	 * @param consistOrderID 拼单编号
+	 * 
+	 * @param consistOrderID  拼单编号
+	 * @param orderID  
 	 * @param scenicID  景区编号
 	 * @param produceTime  订单生产时间
 	 * @param visitTime 游客参观的时间
 	 * @param visitNum  参观的人数
 	 * @param visitorPhone  游客的手机号
-	 * @param totalMoney  该拼单的总金额
-	 * @param purchaseTicket   是否代购门票
-	 * @param orderState  拼单状态
+	 * @param orderState  订单状态
 	 * @param isConsisted  是否已经拼单
-	 * @param maxNum 最大可拼单人数
-	 * @return  发布拼单是否成功，成功：1  失败：0
+	 * @param maxNum  最大可拼单人数
+	 * @param totalFee  讲解费总额
+	 * @param fee 每个人的讲解费
+	 * @return
 	 */
 	public boolean ReleaseConsistOrder(String consistOrderID, String orderID, String scenicID,
 			String produceTime, String visitTime, int visitNum, String visitorPhone, 
-			int totalMoney, int purchaseTicket, String orderState, int isConsisted, int maxNum,
-			int fullPrice, int discoutPrice, int halfPrice, int totalFee, int totalTicket, int fee){
+			String orderState, int isConsisted, int maxNum, int totalFee, int fee){
 		
 		boolean bool = false;
 		
@@ -51,15 +54,20 @@ public class ConsistOrderDao {
 				maxNum, visitTime, scenicID});
 		
 		String sqlString = "insert into t_consistOrder (consistOrderID,orderID,scenicID,produceTime,"
-				+ "visitTime,visitNum,visitorPhone,totalMoney,purchaseTicket,orderState,isConsisted,maxNum,"
-				+ "fullPrice,discoutPrice,halfPrice,totalGuideFee,totalTicket,guideFee) "
-				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "visitTime,visitNum,visitorPhone,orderState,isConsisted,maxNum,totalGuideFee,guideFee)"
+				+ "values (?,?,?,?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlString, new Object[]{consistOrderID, orderID, scenicID, 
 				produceTime, visitTime, visitNum, visitorPhone, 
-				totalMoney, purchaseTicket, orderState, isConsisted,maxNum, fullPrice,
-				discoutPrice, halfPrice, totalFee, totalTicket, fee});
+				orderState, isConsisted,maxNum, totalFee, fee});
 		
-		if(i == 1 && j == 1){
+		/**
+		 * 假设付款成功
+		 */
+		String payTime = MyDateFormat.form(new Date());
+		String sqlUpdate = "update t_consistOrder set hadPay=1,payTime='"+payTime+"'";
+		int k = jdbcTemplate.update(sqlUpdate);
+		
+		if(i!=0 && j!=0 && k!=0){
 			bool = true;
 		}
 		return bool;
