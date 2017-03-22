@@ -27,7 +27,7 @@ public class PromotionInfoDao {
 	public List<PromotionInfo> getPromotionInfoBypage(int i,int j) {
 		
 		DataSource dataSource=jdbcTemplate.getDataSource();
-		
+		return null;
 	}
 	
 	

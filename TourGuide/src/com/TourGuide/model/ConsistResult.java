@@ -9,7 +9,6 @@ package com.TourGuide.model;
 public class ConsistResult {
 
 	private String orderID; //订单编号
-//	private int currentNum; //当前的总人数
 	private int visitNum; //当前的总人数
 	private int maxNum;  //最大可拼单人数
 	private String visitTime; //参观时间

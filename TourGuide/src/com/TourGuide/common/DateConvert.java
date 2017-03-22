@@ -81,8 +81,8 @@ public class DateConvert {
 	
 	/**
 	 * 比较两个字符串格式日期的大小
-	 * @param dateFrom  开始日期: yyyy-MM-dd
-	 * @param dateTo  结束日期: yyyy-MM-dd
+	 * @param dateFrom  开始日期: yyyy-MM-dd HH:mm:ss
+	 * @param dateTo  结束日期: yyyy-MM-dd HH:mm:ss
 	 * @return  true: dateFrom <= dateTo 
 	 */
 	public static Boolean DateCompare(String dateFrom, String dateTo) {
@@ -103,4 +103,28 @@ public class DateConvert {
 		return isTrue;
 	}
 	
+	
+	/**
+	 * 比较两个字符串格式日期的大小
+	 * @param dateFrom  开始日期: yyyy-MM-dd
+	 * @param dateTo  结束日期: yyyy-MM-dd
+	 * @return  true: dateFrom <= dateTo 
+	 */
+	public static Boolean dateCompare(String dateFrom, String dateTo) {
+		Boolean isTrue = false;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		try {
+			java.util.Date df = sdf.parse(dateFrom);
+			java.util.Date dt = sdf.parse(dateTo);
+			if(df.before(dt)) {
+				isTrue = true;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		return isTrue;
+	}
 }

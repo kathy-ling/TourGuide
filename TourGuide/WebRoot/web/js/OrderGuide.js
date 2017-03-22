@@ -104,14 +104,17 @@ function checkOrderForm() {
 		visitNum : $("#visitorCount").val(),
 		priceRange : $("#orderM").val(),
 		guideSex : $("input[name='guideSex']:checked").val(),
-		visitorPhone : $("#visitorPhone").val(),
+		//vistPhone全局变量，游客的手机号
+		visitorPhone : vistPhone, 
 		visitorName : $("#visitorName").val(),
 		language : $("#guideLanguage option:selected").val(),
 		purchaseTicket : PurchaseTicket,
 		halfPrice : HalfPrice,
 		discoutPrice : DiscoutPrice,
 		fullPrice : FullPrice,
-		visitTime : $("#orderDate").val() + " " + $("#orderDatetime").val()
+		visitTime : $("#orderDate").val() + " " + $("#orderDatetime").val(),
+		//contact,游客在发布订单界面填写的联系电话
+		contact : $("#visitorPhone").val()
 	};
 	alert(data.scenicName);
 	alert(data.visitTime);
@@ -150,7 +153,7 @@ function releaseOrder(formdata) {
 		type : "post",
 		url : Url,
 		async : true,
-		data : formdata,
+		data : formd ata,
 		datatype : "JSON",
 		error : function() {
 			alert("发布订单Request error!");

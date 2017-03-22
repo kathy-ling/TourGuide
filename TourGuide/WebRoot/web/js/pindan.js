@@ -5,24 +5,63 @@ $(function($){
 	$("#panel2").hide();
 	$("#orderTicketPanel").hide();
 	getconsistOrder();
-	
-	$("#panel2").find("input").bind("focus click",function(){
-		$("#ul_fee").empty();
-		$("#paySubmit").attr("data-state","confirm");
-		$("#paySubmit").html("确定");
-	});
+	addAllScenics();
 	
 	$("#paySubmit").click(function(){
-		if($(this).attr("data-state")=="confirm"){
-			setFeeform();
-			$(this).attr("data-state","gopay");
-			$(this).html("去支付");
-		}else if($(this).attr("data-state")=="gopay"){
-			consistOrder();
+		var scenicName = $("#chooseScenicName").val();
+		var visitdate=$("#visitTime").val();
+		var visitTime=$("#chooseDatetime").val();
+		var visitorPhone=$("#visitorPhone").val();
+		var visitNum=$("#visitorCount").val();
+		if (scenicName=="") {
+			alert("请选择景区，再进行确认");
+			return;
 		}
+		
+		if (visitdate=="") {
+			alert("请选择日期，再进行确认");
+			return;
+		}
+		
+		if (visitNum=="") {
+			alert("请填写游览人数，再进行确认");
+			return;
+		}
+		if (visitorPhone=="") {
+			alert("请填写游览人的联系方式，再进行确认");
+			return;
+		}
+		
+		
+		
+		window.location.href= "consistOrder.html?" + "visitorPhone=" + visitorPhone+"&visitNum="+visitNum+"&visitDate="
+		+visitdate+"&visitTime="+visitTime+"&scenicName="+scenicName;
 	});
 });
-function setFeeform(){
+
+function getFee()
+{
+	var scenicName = $("#chooseScenicName").val();
+	var date1=$("#visitTime").val();
+	var url = HOST+"/getIntroFee.do";
+	var fee;
+	$.ajax({
+		type:"get",
+		url:url,
+		async:true,
+		data:{scenicName:scenicName,date:date1},
+		success:function(data)
+		{
+			var ul_feetext ="<li><a><h3>费用信息</h3><p>个人讲解费："+data+"元<br>";
+			var ticketPrice = 0;
+			
+			$("#ul_fee").append(ul_feetext);
+			$("#ul_fee").listview("refresh");
+		},
+	});
+	$("#fee").innerHTML=fee;
+}
+/*function setFeeform(){
 	var url1 = HOST+"/getIntroFee.do";
 	$.ajax({
 		type:"post",
@@ -82,31 +121,162 @@ function setFeeform(){
 			$("#ul_fee").listview("refresh");
 		}
 	});
+}*/
+
+
+function addAllScenics() {
+	var url = HOST + "/getAllScenics.do";
+	$.ajax({
+		type : "post",
+		url : url,
+		async : true,
+		datatype : "JSON",
+		success : function(data) {
+			addSelect(data);
+		}
+	});
+
 }
+
+function addSelect(a) {
+	$.each(a, function(index, value) {
+		addOption(value.scenicName);
+	});
+
+}
+
+function addOption(a) {
+
+	// 根据id查找对象，
+	var obj = document.getElementById('chooseScenicName');
+	var obj1 = document.getElementById('chooseScenicName1');
+	// 这个只能在IE中有效
+	obj.options.add(new Option(a, a));
+	obj1.options.add(new Option(a, a)); 
+}
+
+
+
+function chooseOrder()
+{
+	var date1= $("#visitTime1").val();
+	var scenicName = $('#chooseScenicName1 option:selected').val();
+	var visitNum = $("#chooseVisitNum").val();
+	
+	if (date1=="") {
+		date1="null";
+	}
+	
+	if (scenicName=="") {
+		scenicName="null";
+	}
+	
+	
+	if (visitNum=="") {
+		visitNum="-1";
+	}
+	
+	
+	var url = HOST + "/getConsistOrderWithSelector.do";
+	$.ajax({
+		type : "post",
+		url : url,
+		async : true,
+		data:{scenicName:scenicName,visitDate:date1,visitNum:visitNum},
+		datatype : "JSON",
+		success : function(data) {
+			UpdateConsistOrder(data)
+		}
+	});
+	
+}
+
+
+function UpdateConsistOrder(data)
+{
+	
+	$.each(data, function(i,n){
+				
+				/*var OrderList = document.getElementById("panel1");							
+			    var OrderListInfo = document.createElement("div");
+				OrderListInfo.id = "order_list1";	
+				OrderList.appendChild(OrderListInfo);
+												
+			   //$("#order_list1").insertBefore(document.getElementById("order_list"));
+								
+				var UlListInfo = document.createElement("ul");
+				UlListInfo.id = "pindan_ul_id";
+				$("ul").attr("data-role","listview");
+				$("ul").listview();
+				OrderListInfo.appendChild(UlListInfo);*/
+				
+				var UlList = document.getElementById("pindan_ul_id");
+				var LiListInfo = document.createElement("li");
+				LiListInfo.id = "pindan_li_id";
+				UlList.appendChild(LiListInfo);
+				
+				//添加订单号
+				var SpanOrderIdInfo = document.createElement("span");
+				SpanOrderIdInfo.id = "consis_orderID";
+				SpanOrderIdInfo.className = "orderFormId";
+				SpanOrderIdInfo.innerHTML = "订单号：" + n.orderID + "<br/>";
+				
+				//添加景区名称
+				var SpanscenicNameInfo = document.createElement("span");
+				SpanVisitTimeInfo.id = "consis_scenicName";
+				SpanVisitTimeInfo.className = "scenicName";
+				SpanVisitTimeInfo.innerHTML = "景区名称：" + n.scenicName+ "<br/>";
+				//添加浏览时间
+				var SpanVisitTimeInfo = document.createElement("span");
+				SpanVisitTimeInfo.id = "consis_visitTime";
+				SpanVisitTimeInfo.className = "vistTime";
+				SpanVisitTimeInfo.innerHTML = "浏览时间：" + n.visitTime+ "<br/>";
+				
+				//添加已有人数
+				var SpanVisitNumInfo = document.createElement("span");
+				SpanVisitNumInfo.id = "consis_visitNum";
+				SpanVisitNumInfo.innerHTML = "已有人数：" + n.currentNum+ "<br/>";
+				
+				//添加可拼单人数
+				var SpanConsisNumInfo = document.createElement("span");
+				SpanConsisNumInfo.id = "consis_minus";
+				var MaxNum = n.maxNum;
+				var NowNum = n.visitNum;
+				var Number = MaxNum - NowNum;
+				SpanConsisNumInfo.innerHTML = "可拼单人数：" + n.num+ "<br/>";
+				
+				//添加按钮
+				var DivConsisBtn = document.createElement("div");
+				DivConsisBtn.className = "goOrder";
+				var ConsisBtn = document.createElement("button");
+				ConsisBtn.id = "goOrder";
+				ConsisBtn.className = "goOrderbtn ui-btn ui-btn-inline";
+				ConsisBtn.innerHTML = "去拼单";
+				ConsisBtn.onclick = function()
+				{window.location.href = "ConsistOrderList.html?"+"OrderID="+n.orderID;};
+				DivConsisBtn.appendChild(ConsisBtn);
+				
+				LiListInfo.appendChild(SpanOrderIdInfo)
+				.appendChild(SpanscenicNameInfo)
+				.appendChild(SpanVisitTimeInfo)
+				.appendChild(SpanVisitNumInfo)
+				.appendChild(SpanConsisNumInfo)
+				.appendChild(DivConsisBtn);
+			});	
+}
+
+/*
 function textchange()
 {
 	alert("進入");
 	 getFee();
 	
-}
+}*/
 
-function getFee()
-{
-	var a=$("#date").val();
-	var url = HOST+"/getIntroFee.do";
-	var fee;
-	$.ajax({
-		type:"get",
-		url:url,
-		async:true,
-		data:{scenicID:scenicNo,date:a},
-		success:function(data)
-		{
-			fee=data;
-		},
-	});
-	$("#fee").innerHTML=fee;
-}
+
+
+
+
 
 function consistOrder()
 {
@@ -157,12 +327,11 @@ function consistOrder()
 function getconsistOrder()
 {
 	
-	var url = HOST+"/getAvailableConsistOrder.do";
+	var url = HOST+"/getAllAvailableConsistOrder.do";
 	$.ajax({
 		type:"post",
 		url:url,
 		async:true,
-		data:{scenicID:scenicNo},
 		datatype:"JSON",
 		error:function()
 		{
@@ -174,74 +343,18 @@ function getconsistOrder()
 			$("#panel1").append("<p class='errorTip'>(* ￣︿￣)该景点暂时没有可拼订单，发个订单试试吧<p>");
 			}
 			//动态加载div布局
-			$.each(data, function(i,n){
-				
-				/*var OrderList = document.getElementById("panel1");							
-			    var OrderListInfo = document.createElement("div");
-				OrderListInfo.id = "order_list1";	
-				OrderList.appendChild(OrderListInfo);
-												
-			   //$("#order_list1").insertBefore(document.getElementById("order_list"));
-								
-				var UlListInfo = document.createElement("ul");
-				UlListInfo.id = "pindan_ul_id";
-				$("ul").attr("data-role","listview");
-				$("ul").listview();
-				OrderListInfo.appendChild(UlListInfo);*/
-				
-				var UlList = document.getElementById("pindan_ul_id");
-				var LiListInfo = document.createElement("li");
-				LiListInfo.id = "pindan_li_id";
-				UlList.appendChild(LiListInfo);
-				
-				//添加订单号
-				var SpanOrderIdInfo = document.createElement("span");
-				SpanOrderIdInfo.id = "consis_orderID";
-				SpanOrderIdInfo.className = "orderFormId";
-				SpanOrderIdInfo.innerHTML = "订单号：" + n.orderID + "<br/>";
-				
-				//添加浏览时间
-				var SpanVisitTimeInfo = document.createElement("span");
-				SpanVisitTimeInfo.id = "consis_visitTime";
-				SpanVisitTimeInfo.className = "vistTime";
-				SpanVisitTimeInfo.innerHTML = "浏览时间：" + n.visitTime+ "<br/>";
-				
-				//添加已有人数
-				var SpanVisitNumInfo = document.createElement("span");
-				SpanVisitNumInfo.id = "consis_visitNum";
-				SpanVisitNumInfo.innerHTML = "已有人数：" + n.visitNum+ "<br/>";
-				
-				//添加可拼单人数
-				var SpanConsisNumInfo = document.createElement("span");
-				SpanConsisNumInfo.id = "consis_minus";
-				var MaxNum = n.maxNum;
-				var NowNum = n.visitNum;
-				var Number = MaxNum - NowNum;
-				SpanConsisNumInfo.innerHTML = "可拼单人数：" + Number+ "<br/>";
-				
-				//添加按钮
-				var DivConsisBtn = document.createElement("div");
-				DivConsisBtn.className = "goOrder";
-				var ConsisBtn = document.createElement("button");
-				ConsisBtn.id = "goOrder";
-				ConsisBtn.className = "goOrderbtn ui-btn ui-btn-inline";
-				ConsisBtn.innerHTML = "去拼单";
-				ConsisBtn.onclick = function()
-				{window.location.href = "ConsistOrderList.html?"+"OrderID="+n.orderID;};
-				DivConsisBtn.appendChild(ConsisBtn);
-				
-				LiListInfo.appendChild(SpanOrderIdInfo)
-				.appendChild(SpanVisitTimeInfo)
-				.appendChild(SpanVisitNumInfo)
-				.appendChild(SpanConsisNumInfo)
-				.appendChild(DivConsisBtn);
-			});				
+				UpdateConsistOrder(data);
 				$("#pindan_ul_id").listview('refresh');
 			}
 		});
 }
 
+
+
 function goOrder()
 {
 	window.location.href = "ConsistOrderList.html";
 }
+
+
+

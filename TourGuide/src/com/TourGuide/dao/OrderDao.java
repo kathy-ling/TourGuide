@@ -80,9 +80,8 @@ public class OrderDao {
 	
 	
 	/**
-	 * 根据订单编号，查询订单的详细信息
+	 * 根据订单编号，查询订单的详细信息,包括拼单表和预约表
 	 * @param orderID  订单编号
-	 * @param orderState   订单状态
 	 * @return
 	 */
 	public List<Map<String, Object>> getDetailOrderInfo(String orderID){

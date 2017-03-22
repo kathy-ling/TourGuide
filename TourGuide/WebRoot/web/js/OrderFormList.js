@@ -11,8 +11,7 @@ $("#orderFormListPage").bind('pageshow',function(event, ui){
  function orderinfo(obj){
   		var state = obj.find("span.viewState").html();
   		var orderId = obj.find("span.orderFormId").find("span").html();
-//  		window.location = "orderFormInfo.html?state="+state+"&orderId="+orderId;
-  		window.location = "orderFormInfo.html?orderId="+orderId;
+  		window.location = "orderFormInfo.html?state="+state+"&orderId="+orderId;
   }
  
  function goComment(obj){

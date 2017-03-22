@@ -77,7 +77,8 @@ public class BookOrderController {
 			@RequestParam("fullPrice") String fullPriceNum,
 			@RequestParam("halfPrice") String halfPriceNum,
 			@RequestParam("discoutPrice") String discoutPriceNum,
-			@RequestParam("otherCommand") String otherCommand
+			@RequestParam("otherCommand") String otherCommand,
+			@RequestParam("contact") String contact
 			) throws IOException{
 		
 		CommonResp.SetUtf(resp);
@@ -115,7 +116,7 @@ public class BookOrderController {
 				visitorPhone, visitorName, Integer.parseInt(priceRange), Integer.parseInt(purchaseTicket), 
 				otherCommand, releaseByVisitor, orderState, totalTicket, 
 				Integer.parseInt(fullPriceNum), Integer.parseInt(discoutPriceNum), Integer.parseInt(halfPriceNum),
-				fullPrice, halfPrice, discoutPrice);
+				fullPrice, halfPrice, discoutPrice,contact);
 		
 		return bool;
 	}
