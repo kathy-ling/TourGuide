@@ -94,6 +94,8 @@ String day3=sdf.format(date3);
 								<tr>
 									<th style="text-align: center; width: 10%;">景区编号</th>
 									<th style="text-align: center; width: 10%;">景区名称</th>
+									<th style="text-align: center; width: 10%;">活动编号</th>
+									<th style="text-align: center; width: 10%;">活动标题</th>
 									<th style="text-align: center; width: 10%;">活动链接</th>
 									<th style="text-align: center; width: 10%;">发布时间</th>
 									<th style="text-align: center; width: 10%;">开始时间</th>
@@ -102,133 +104,16 @@ String day3=sdf.format(date3);
 								</tr>
 							</thead>
 							<tbody id="tby">
-
 							</tbody>
 						</table>
 						<div style=" margin-bottom:10%; margin-left:40%;">
 							<ul id="paginator"></ul>
 						</div>
-
 					</form>
 				</div>
-
-			</div>
-		</div>
-
-
-	</div>
-
-
-
-	<div class="modal fade" id="SearchModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="model-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">
-						<span class="blue">X</span>
-					</button>
-					<h4 class="modal-title" id="myModalLabel"
-						style="text-align:center;">景区活动信息</h4>
-				</div>
-				<div class="modal-body">
-					<table
-						style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr>
-							<td>景区编号：</td>
-							<td><input type="text" id="search_scenicID"
-								name="search_scenicID" readonly="true" /></td>
-						</tr>
-						<tr>
-							<td>景区名称：</td>
-							<td><input type="text" id="search_name" name="search_name"
-								readonly="true" /></td>
-						</tr>
-						<tr>
-							<td>拼团时间:</td>
-							<td><select id="select" onchange="selectchange(this.value)" >
-									<option value="1"><%=day1 %></option>
-									<option value="2"><%=day2 %></option>
-									<option value="3"><%=day3 %></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>拼团价格:</td>
-							<td><input type="text" id="search_money" name="search_full"
-								readonly="true" /></td>
-						</tr>
-						<tr>
-							<td>人数:</td>
-							<td><input type="text" id="search_maxNum"
-								name="search_discount" readonly="true" /></td>
-						</tr>
-						<tr>
-							<td colspan="2" style="text-align:center;"><button
-									class="close" data-dismiss="modal" aria-hidden="true">确定</button></td>
-						</tr>
-					</table>
-				</div>
 			</div>
 		</div>
 	</div>
-
-	<div class="modal fade" id="EditModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="model-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">
-						<span class="blue">X</span>
-					</button>
-					<h4 class="modal-title" id="myModalLabel"
-						style="text-align:center;">编辑景区拼团信息</h4>
-				</div>
-				<div class="modal-body">
-					<table
-						style="border-collapse:separate; border-spacing:10px; margin:auto;">
-						<tr>
-							<td>景区编号：</td>
-							<td><input type="text" id="edit_scenicID"
-								name="edit_scenicID" readonly="true" /></td>
-						</tr>
-						<tr>
-							<td>景区名称：</td>
-							<td><input type="text" id="edit_name" name="edit_name"
-								readonly="true" /></td>
-						</tr>
-						<tr>
-							<td>拼团时间:</td>
-							<td><select id="select1" onchange="selectchange1(this.value)" >
-									<option value="1"><%=day1 %></option>
-									<option value="2"><%=day2 %></option>
-									<option value="3"><%=day3 %></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>拼团价格:</td>
-							<td><input type="text" id="edit_money" name="edit_full"
-								 /></td>
-						</tr>
-						<tr>
-							<td>人数:</td>
-							<td><input type="text" id="edit_maxNum"
-								name="search_discount" /></td>
-						</tr>
-						<tr>
-							<td colspan="2" style="text-align:center;"><button
-									class="close" data-dismiss="modal" aria-hidden="true" onclick="SaveScenicTicket('<%=day1%>','<%=day2%>','<%=day3%>')">保存</button></td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
 	<!--[if (gte IE 9)|!(IE)]><!-->
 	<!--<![endif]-->
 	<script src="<%=basePath %>/assets1/js/amazeui.min.js"></script>

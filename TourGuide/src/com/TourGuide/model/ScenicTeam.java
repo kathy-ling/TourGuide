@@ -12,6 +12,8 @@ public class ScenicTeam {
 	private int day2_maxNum;
 	private int day3_fee;
 	private int day3_maxNum;
+	private int day4_fee;
+	private int day4_maxNum;
 	public String getScenicID() {
 		return scenicID;
 	}
@@ -59,6 +61,18 @@ public class ScenicTeam {
 	}
 	public void setDay3_maxNum(int day3_maxNum) {
 		this.day3_maxNum = day3_maxNum;
+	}
+	public int getDay4_maxNum() {
+		return day4_maxNum;
+	}
+	public void setDay4_maxNum(int day4_maxNum) {
+		this.day4_maxNum = day4_maxNum;
+	}
+	public int getDay4_fee() {
+		return day4_fee;
+	}
+	public void setDay4_fee(int day4_fee) {
+		this.day4_fee = day4_fee;
 	}
 	
 	

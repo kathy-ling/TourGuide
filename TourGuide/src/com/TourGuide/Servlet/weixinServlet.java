@@ -1,5 +1,6 @@
 package com.TourGuide.Servlet;
 
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -32,7 +33,6 @@ public class weixinServlet extends HttpServlet {
 		// 请求校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
 		if (SignUtil.checkSignature(signature, timestamp, nonce)) {
 			out.print(echostr);
-			System.out.println("weixinServlet" + echostr);
 		}
 		out.close();
 		out = null;
@@ -61,3 +61,4 @@ public class weixinServlet extends HttpServlet {
 		out = null;
 	}
 }
+

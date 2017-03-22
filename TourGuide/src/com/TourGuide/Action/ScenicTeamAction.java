@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.TourGuide.common.CommonResp;
+import com.TourGuide.model.AdminInfo;
 import com.TourGuide.model.ScenicTeam;
 import com.TourGuide.service.ScenicTeamService;
 import com.google.gson.Gson;
@@ -54,7 +56,13 @@ public class ScenicTeamAction {
 	@RequestMapping(value="getscenicTeamByscenicNo.action",produces = "text/html;charset=UTF-8",method=RequestMethod.POST)
 	@ResponseBody
 	public  Object getscenicTeamByscenicNo(HttpServletResponse resp,
-			@RequestParam(value="scenicNo")String scenicNo ) {
+			@RequestParam(value="scenicNo")String scenicNo,HttpSession session ) {
+		
+		
+		AdminInfo adminInfo=(AdminInfo) session.getAttribute("adminSession");
+		if (scenicNo.equals("a")) {
+			scenicNo=scenicTeamService.getScenicNoByAccount(adminInfo.getUsername());
+		}
 		
 		CommonResp.SetUtf(resp);
 		List<ScenicTeam> list=scenicTeamService.getScenicTeamByscenicNo(scenicNo);
@@ -65,6 +73,16 @@ public class ScenicTeamAction {
 	}
 	
 	
+	
+	
+	/**
+	 * 更新景区拼团信息
+	 * @param scenicNo
+	 * @param fee
+	 * @param maxNum
+	 * @param date
+	 * @return
+	 */
 	@RequestMapping(value="UpdateScenicTeam.action",method=RequestMethod.POST)
 	@ResponseBody
 	public Object UpdateScenicTeam(@RequestParam(value="scenicNo")String scenicNo,
@@ -75,4 +93,6 @@ public class ScenicTeamAction {
 		return scenicTeamService.UpdateScenicTeam(scenicNo, fee, maxNum,date);
 		
 	}
+	
+	
 }

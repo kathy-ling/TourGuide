@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.TourGuide.common.CommonResp;
+import com.TourGuide.model.AdminInfo;
 import com.TourGuide.model.ScenicTickets;
+import com.TourGuide.service.ScenicTeamService;
 import com.TourGuide.service.ScenicTicketService;
 import com.google.gson.Gson;
 
@@ -27,6 +30,9 @@ public class ScenicTicketAction {
 
 	@Autowired
 	private ScenicTicketService scenicTicketService;
+	
+	@Autowired
+	private ScenicTeamService scenicTeamService;
 	
 	/**
 	 * 分页得到景区门票价格信息
@@ -42,7 +48,11 @@ public class ScenicTicketAction {
 			@RequestParam(value="currentPage")int currentPage,
 			@RequestParam(value="pageRows")int pageRows ) {
 		
+		
+		
 		CommonResp.SetUtf(resp);
+		
+		
 		Map< String , Object> map=new HashMap<>();
 		List<Map<String , Object>> list=scenicTicketService.getScenicTicketByPage(currentPage, pageRows);
 		
@@ -98,11 +108,15 @@ public class ScenicTicketAction {
 	@RequestMapping(value="getScenicTicketByscenicID.action",produces = "text/html;charset=UTF-8",method=RequestMethod.POST)
 	@ResponseBody
 	public Object getScenicTicketByscenicID(HttpServletResponse resp,
-			@RequestParam(value="scenicID")String scenicID) {
+			@RequestParam(value="scenicID")String scenicID,HttpSession session) {
 		
 		
 		CommonResp.SetUtf(resp);
 			
+		AdminInfo adminInfo=(AdminInfo) session.getAttribute("adminSession");
+		if (scenicID.equals("a")) {
+			scenicID=scenicTeamService.getScenicNoByAccount(adminInfo.getUsername());
+		}
 		List<Map<String , Object>> list=scenicTicketService.getTicketByscenicN(scenicID);
 		String jsonStr=new Gson().toJson(list).toString();
 		

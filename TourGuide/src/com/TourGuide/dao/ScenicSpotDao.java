@@ -372,8 +372,6 @@ public class ScenicSpotDao {
 			
 			@Override
 			public void processRow(java.sql.ResultSet rSet) throws SQLException {
-				
-				
 				scenicsSpotInfo.setScenicNo(rSet.getString(1));
 				scenicsSpotInfo.setScenicImagePath(rSet.getString(2));
 				scenicsSpotInfo.setScenicName(rSet.getString(3));

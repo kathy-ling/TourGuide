@@ -170,7 +170,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 		
 		function exit()
 		{
-			alert("开始进入");
+			
 			var url = "<%=basePath%>exit.action";
 			$.ajax ({
  			url:url,

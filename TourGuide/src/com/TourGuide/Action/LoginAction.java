@@ -70,8 +70,10 @@ public class LoginAction {
 			}else if (role.equals("运营人员")) {
 				resp.sendRedirect("/TourGuide/operate/index.action");
 			} 
-			else {
+			else if(role.equals("景区管理员")) {
 				resp.sendRedirect("/TourGuide/scenicPer/index.action");
+			}else {
+				return new ModelAndView("index","error","用户名或密码错误");
 			}
 			
 			return null;
@@ -96,10 +98,15 @@ public class LoginAction {
 	
 	@RequestMapping(value="/exit.action" ,method=RequestMethod.POST)
 	@ResponseBody
-	public boolean  exitSys(HttpServletResponse resp,HttpServletRequest req) {
+	public boolean  exitSys(HttpServletResponse resp,HttpServletRequest req,
+			HttpSession session, ModelMap model) {
 		
-		HttpSession session=req.getSession(false);
-		session.invalidate();
+		
+		session.removeAttribute("adminSession");
+		AdminInfo adminInfo=new AdminInfo();
+		adminInfo.setUsername("123456789123");
+		adminInfo.setPassword("123456786");
+		model.addAttribute("adminSession", adminInfo);
 		return true;
 		
 	}

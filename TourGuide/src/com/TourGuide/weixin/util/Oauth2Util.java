@@ -39,7 +39,7 @@ public class Oauth2Util {
 				+ "&code=CODE&grant_type=authorization_code";
 		
 		requestUrl = requestUrl.replace("CODE", code);
-		
+		System.out.println(requestUrl);
 		//获取网页授权凭证
 		JSONObject jsonObject = TokenUtil.getTokenJsonObject(requestUrl, "GET", null);
 		
@@ -116,7 +116,6 @@ public class Oauth2Util {
 			e.printStackTrace();
 		}
 		
-		System.out.println("urlEncodeUTF8:source" + source);
 		return result;
 	}
 	
@@ -134,17 +133,17 @@ public class Oauth2Util {
 				+ "scope=SCOPE&state=STATE#wechat_redirect";
 		
 		// 授权回调地址（OAuthServlet的访问地址）
-		String redirectUrl = urlEncodeUTF8("http://1f656026j8.imwork.net/TourGuide/oauthServlet");
-//		String redirectUrl = urlEncodeUTF8("http://112.74.48.15/TourGuide/oauthServlet");
+		String redirectUrI = urlEncodeUTF8("http://www.douzizuibang.site/TourGuide/oauthServlet");
 		
 		// 应用授权作用域。scope等于"snsapi_base"时，不弹出授权页面，直接跳转。
 		// scope等于"snsapi_userinfo"时，弹出授权页面，可以通过OpenID获取用户信息。
 		String scope = "snsapi_userinfo";
 		
 		Oauth2Url = Oauth2Url.replace("APPID", appid);
-		Oauth2Url = Oauth2Url.replace("REDIRECT_URI", redirectUrl);
+		Oauth2Url = Oauth2Url.replace("REDIRECT_URI", redirectUrI);
 		Oauth2Url = Oauth2Url.replace("SCOPE", scope);
 		
 		return Oauth2Url;
 	}
 }
+

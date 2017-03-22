@@ -24,7 +24,7 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
 <div >
     <div class="listbiaoti am-cf">
       <ul class="am-icon-skyatlas"> 系统设置</ul>
-      <dl class="am-icon-home" style="float: right;">当前位置： 首页 > <a href="#">系统设置</a></dl>
+      <dl class="am-icon-home" style="float: right;">当前位置： 首页 ><a href="#">系统设置</a></dl>
     </div>
       <div class="am-tabs am-margin" data-am-tabs>
     	<ul class="am-tabs-nav am-nav am-nav-tabs">
@@ -33,19 +33,6 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
       <li><a href="#tab3">平台净利润设置</a></li>
       
     </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
     <div class="am-tabs-bd">
        <div class="am-tab-panel am-fade am-in am-active" id="tab1" >
         <form class="am-form">
@@ -56,13 +43,7 @@ AdminInfo username=(AdminInfo)session.getAttribute("adminSession");
             <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
               <input style="text-align: center;" type="text" value="24小时" class="am-input-sm" readonly="true">
             </div>
-            
           </div>
-         
-
-          
-          
-          
         </form>
       </div>
 

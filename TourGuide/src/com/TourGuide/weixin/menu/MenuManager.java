@@ -14,10 +14,9 @@ public class MenuManager {
 	private static Menu createMyMenu(){
 		
 		ViewButton btn1 = new ViewButton();
-		btn1.setName("主1");
+		btn1.setName("主页");
 		btn1.setType("view");
 		btn1.setUrl(Oauth2Util.getOauth2Url().toString());
-//		btn1.setUrl("http://112.74.48.15/TourGuide/web/index.html");
 		
 		ClickButton btn2 = new ClickButton();
 		btn2.setName("待定1");
@@ -40,7 +39,7 @@ public class MenuManager {
 		btn5.setKey("weizhi");
 		
 		ComplexButton Btn1 = new ComplexButton();
-		Btn1.setName("抓狂");
+		Btn1.setName("待定");
 		Btn1.setSub_button(new Button[]{btn2, btn3, btn4});
 		
 		Menu menu = new Menu();

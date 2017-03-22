@@ -30,5 +30,17 @@ public class ScenicPerViewAction {
 	{
 		return "scenicPer/other/operateUser";
 	}
+	
+	
+	
+	/**
+	 * 跳转到运营人员管理界面
+	 * @return
+	 */
+	@RequestMapping(value="/scenicInfo.action",method=RequestMethod.GET)
+	public String ToscenicInfo()
+	{
+		return "scenicPer/scenic/scenicInfo";
+	}
 
 }
