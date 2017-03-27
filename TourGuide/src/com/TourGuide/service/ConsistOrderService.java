@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.TourGuide.dao.ConsistOrderDao;
-import com.TourGuide.model.ConsistOrder;
 import com.TourGuide.model.ConsistResult;
 
 @Service
