@@ -46,7 +46,7 @@ function setscenicInfo(ScenicNo){
 				
 				$("#orderGuideBtn").attr("href","orderGuide.html?scenicNo="+ScenicNo+"&sname="+item.scenicName);
 				$("#pinGuideBtn").attr("href","pindan.html?scenicNo="+ScenicNo+"&sname="+item.scenicName);
-				alert("scenicNo="+ScenicNo+"sname="+item.scenicName);
+				
 			});
 			
 		}

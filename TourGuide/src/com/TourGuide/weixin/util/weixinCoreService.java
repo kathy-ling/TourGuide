@@ -75,8 +75,8 @@ public class weixinCoreService {
 				String eventType = requestMap.get("Event");
 				// 关注
 				if (eventType.equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
-//					respContent = "谢谢您的关注！\n" + Oauth2Util.getOauth2Url();
-					respContent = "谢谢您的关注！\n"+toUserName ;
+					respContent = "谢谢您的关注！\n" + Oauth2Util.getOauth2Url();
+//					respContent = "谢谢您的关注！\n"+toUserName ;
 				}
 				// 取消关注
 				else if (eventType.equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {

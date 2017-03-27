@@ -116,6 +116,7 @@ public class ConsistOrderDao {
 			int currentNum, String orderState, int isConsisted, int maxNum, int totalFee, int fee){
 		
 		boolean bool = false;
+		String payTime = MyDateFormat.form(new Date());;
 		
 		//将拼单信息插入拼单表
 		String sqlString = "insert into t_consistOrder (orderID,consistOrderID,scenicID,produceTime,"
@@ -126,17 +127,21 @@ public class ConsistOrderDao {
 				produceTime, visitTime, visitNum, visitorPhone, contact,
 				orderState, isConsisted,maxNum,totalFee, fee});
 		
-//		//更新拼单状态，已拼单
-//		String sqlString1 = "update t_consistorder set isConsisted=1 where orderID=?";
-//		int j = jdbcTemplate.update(sqlString1, new Object[]{orderID});
+		//更新拼单状态，已拼单
+		String sqlString1 = "update t_consistorder set isConsisted=1 where orderID=?";
+		int j = jdbcTemplate.update(sqlString1, new Object[]{orderID});
 		
 		//更新拼单结果，当前人数
 		String sqlString2 = "update t_consistresult set "
 				+ "visitNum=?,maxNum=?,visitTime=?,scenicID=? where orderID=?";
 		int k = jdbcTemplate.update(sqlString2, new Object[]{currentNum, maxNum,
 				visitTime, scenicID, orderID});
-
-		if(i != 0 && k!=0){
+		
+		String sqlUpdate = "update t_consistorder set payTime='"+payTime+"',hadPay=1 "
+				+ "where orderID='"+orderID+"' ";
+		int h = jdbcTemplate.update(sqlUpdate);
+		
+		if(i != 0 && j!=0 && k!=0 && h!=0){
 			bool = true;
 		}
 		return bool;
@@ -173,6 +178,7 @@ public class ConsistOrderDao {
 				map.put("num", num);
 				map.put("scenicID", rst.getString(5));
 				map.put("scenicName", rst.getString(6));
+				map.put("guideFee", rst.getInt(7));
 				list.add(map);
 			}							
 			conn.close();
@@ -194,6 +200,7 @@ public class ConsistOrderDao {
 	public List<Map<String , Object>> getConsistOrderWithSelector(String scenicName, 
 			String date, int visitNum){
 		
+		int def = -1;
 		List<Map<String , Object>> listResult = new ArrayList<>(); 		
 		List<Map<String , Object>> list = getAllAvailableConsistOrder();
 		
@@ -212,7 +219,7 @@ public class ConsistOrderDao {
 				listResult.remove(list.get(i));
 			}
 			
-			if(visitNum == -1 || visitNum > num){
+			if((visitNum != def) && (visitNum > num)){
 				listResult.remove(list.get(i));
 			}
 			

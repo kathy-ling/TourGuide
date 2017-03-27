@@ -33,7 +33,9 @@ public class test {
 //
 //		System.out.println(Oauth2Util.getOauth2Url());
 		
-		System.out.println(DateConvert.dateCompare("2012-7-25", "2017-03-22"));
+//		System.out.println(DateConvert.dateCompare("2012-7-25", "2017-03-22"));
+		
+		System.out.println(DateConvert.DateCompare("2017-03-24 06:00:00", ""));
 
 	}
 	

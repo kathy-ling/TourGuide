@@ -2,7 +2,6 @@
 
 $('#confirmOrderPage').bind('pageshow', function(event, ui) {
 
-	alert("aa")
 	setOrderInfo(); //设置预约信息
 	getFee();
 //	$("#gopay").bind("click", function() {
@@ -107,7 +106,7 @@ function getFee()
 }
 
 function putOrder() {
-	alert("into put order");
+	
 	var visitDate = GetUrlem("visitDate");
 	var visitTime = GetUrlem("visitTime");
 	var visitNum = GetUrlem("visitNum");
@@ -122,8 +121,7 @@ function putOrder() {
 		'visitorPhone': vistPhone,
 		'contact':visitorPhone
 	};
-	alert(scenicName+visitDate+visitTime+visitTime+visitorPhone);
-	//alert(JSON.stringify(postData));
+	
 	$.ajax({
 		type: "post",
 		url: url,

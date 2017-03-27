@@ -2,7 +2,7 @@ window.onload = function(){
 	
 	//获取导游手机号
 	var phone = GetUrlem("phone");
-	alert(phone);
+//	alert(phone);
 	//根据导游手机号获取导游级别
 	var url0 = HOST+"/getDetailGuideInfoByPhone.do";
 	$.ajax({
@@ -16,12 +16,9 @@ window.onload = function(){
 			alert("导游级别request error!");
 		},
 		success:function(data)
-		{
-			alert("导游级别request success!");
+		{			
 			var guideLevel = data[0].guideLevel;
-			alert("导游级别为："+ guideLevel);
-			if(guideLevel > 5)
-			{
+			
 				//查看游客发布的预约订单（简要信息）,即可接单订单
 	            var url = HOST+"/getReleasedOrders.do";
 
@@ -100,11 +97,6 @@ window.onload = function(){
 						});			
 					}	
 				});
-			}
-			else
-			{
-				alert("您的级别不够，不能进行接单！");
-			}
 		}
 	});	
 }

@@ -6,7 +6,6 @@ $(function($){
 	$("#orderTicketPanel").hide();
 	getconsistOrder();
 	addAllScenics();
-	
 	$("#paySubmit").click(function(){
 		var scenicName = $("#chooseScenicName").val();
 		var visitdate=$("#visitTime").val();
@@ -52,6 +51,8 @@ function getFee()
 		data:{scenicName:scenicName,date:date1},
 		success:function(data)
 		{
+			$("#ul_fee").empty();
+			
 			var ul_feetext ="<li><a><h3>费用信息</h3><p>个人讲解费："+data+"元<br>";
 			var ticketPrice = 0;
 			
@@ -170,13 +171,9 @@ function chooseOrder()
 	if (scenicName=="") {
 		scenicName="null";
 	}
-	
-	
 	if (visitNum=="") {
 		visitNum="-1";
 	}
-	
-	
 	var url = HOST + "/getConsistOrderWithSelector.do";
 	$.ajax({
 		type : "post",
@@ -185,7 +182,15 @@ function chooseOrder()
 		data:{scenicName:scenicName,visitDate:date1,visitNum:visitNum},
 		datatype : "JSON",
 		success : function(data) {
-			UpdateConsistOrder(data)
+			if(data.length==0){
+				$("#pindan_ul_id").empty();
+			}else
+			{
+				$("#pindan_ul_id").empty();
+				UpdateConsistOrder(data);
+			}
+			
+			$("#pindan_ul_id").listview('refresh');
 		}
 	});
 	
@@ -194,11 +199,17 @@ function chooseOrder()
 
 function UpdateConsistOrder(data)
 {
-	
 	$.each(data, function(i,n){
+			$("#pindan_ul_id").empty();
+			var htmlString="<li><a href='ConsistOrderList.html?date="+n.visitTime+"&PerNum="+n.num+"&Fee="+n.guideFee+"&OrderID="+n.orderID
+			+"'><span>订单编号:"+n.orderID+"</span><br/><span>景区名称："
+			+n.scenicName+"</span><br/><span>游览时间："+n.visitTime+"</span><br/><span>已有人数："+n.currentNum+
+			"</span><br/><span>可拼人数："+n.num+"</span><br/></a></li>";
 				
-				/*var OrderList = document.getElementById("panel1");							
-			    var OrderListInfo = document.createElement("div");
+			$("#pindan_ul_id").html(htmlString);
+				
+			/*var OrderList = document.getElementById("panel1");							
+			   var OrderListInfo = document.createElement("div");
 				OrderListInfo.id = "order_list1";	
 				OrderList.appendChild(OrderListInfo);
 												
@@ -210,9 +221,10 @@ function UpdateConsistOrder(data)
 				$("ul").listview();
 				OrderListInfo.appendChild(UlListInfo);*/
 				
-				var UlList = document.getElementById("pindan_ul_id");
+				/*var UlList = document.getElementById("pindan_ul_id");
 				var LiListInfo = document.createElement("li");
 				LiListInfo.id = "pindan_li_id";
+				alert(LiListInfo.id);
 				UlList.appendChild(LiListInfo);
 				
 				//添加订单号
@@ -228,18 +240,18 @@ function UpdateConsistOrder(data)
 				SpanVisitTimeInfo.innerHTML = "景区名称：" + n.scenicName+ "<br/>";
 				//添加浏览时间
 				var SpanVisitTimeInfo = document.createElement("span");
-				SpanVisitTimeInfo.id = "consis_visitTime";
+				SpanVisitTimeInfo.id = "consis_visitTime1";
 				SpanVisitTimeInfo.className = "vistTime";
 				SpanVisitTimeInfo.innerHTML = "浏览时间：" + n.visitTime+ "<br/>";
 				
 				//添加已有人数
 				var SpanVisitNumInfo = document.createElement("span");
-				SpanVisitNumInfo.id = "consis_visitNum";
+				SpanVisitNumInfo.id = "consis_visitNum1";
 				SpanVisitNumInfo.innerHTML = "已有人数：" + n.currentNum+ "<br/>";
 				
 				//添加可拼单人数
 				var SpanConsisNumInfo = document.createElement("span");
-				SpanConsisNumInfo.id = "consis_minus";
+				SpanConsisNumInfo.id = "consis_minus1";
 				var MaxNum = n.maxNum;
 				var NowNum = n.visitNum;
 				var Number = MaxNum - NowNum;
@@ -261,7 +273,7 @@ function UpdateConsistOrder(data)
 				.appendChild(SpanVisitTimeInfo)
 				.appendChild(SpanVisitNumInfo)
 				.appendChild(SpanConsisNumInfo)
-				.appendChild(DivConsisBtn);
+				.appendChild(DivConsisBtn);*/
 			});	
 }
 
@@ -340,9 +352,10 @@ function getconsistOrder()
 		success:function(data)
 		{		//JSON.stringify(data)=="[]"
 			if(data.length==0){
-			$("#panel1").append("<p class='errorTip'>(* ￣︿￣)该景点暂时没有可拼订单，发个订单试试吧<p>");
+				$("#pindan_ul_id").empty();
 			}
 			//动态加载div布局
+				$("#pindan_ul_id").empty();
 				UpdateConsistOrder(data);
 				$("#pindan_ul_id").listview('refresh');
 			}

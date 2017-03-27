@@ -195,10 +195,8 @@ public class ConsistOrderController {
 	 * @param orderID  订单编号
 	 * @param visitNum  拼单的参观人数
 	 * @param visitorPhone  游客的手机
-	 * @param purchaseTicket  是否代购门票
-	 * @param halfPrice  若代购门票，购买半价票的人数
-	 * @param discoutPrice 若代购门票，购买折扣票的人数
-	 * @param fullPrice  若代购门票，购买全价票的人数
+	 * @param contact  游客在订单中填写的联系人手机号
+	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/consistWithconsistOrderID.do")
@@ -213,7 +211,7 @@ public class ConsistOrderController {
 //			@RequestParam("discoutPrice") String discoutPrice,
 //			@RequestParam("fullPrice") String fullPrice
 			) throws IOException{
-		
+		//orderID=2ac019d156e4402e9dcdeaa59cc636c9&visitNum=2&visitorPhone=18191762572&contact=13698742569
 		CommonResp.SetUtf(resp);
 		
 		String consistOrderID = UUID.randomUUID().toString().replace("-", "");
