@@ -124,7 +124,7 @@ public class GuideDao {
 	
 	/**
 	 * 查询可被预约的讲解员,查看推荐
-	 * 查询条件：级别、所属景区、讲解员是否请假、单次最大带团人数
+	 * 查询条件：级别、所属景区、讲解员是否请假、单次最大带团人数、去除时间冲突的讲解员信息
 	 * @param visitTime  游客的参观日期
 	 * @param visitNum  参观的人数
 	 * @param scenicID  景区编号
@@ -162,7 +162,7 @@ public class GuideDao {
 		List<Map<String , Object>> listResult = new ArrayList<>(); 
 		List<Map<String , Object>> list = null;
 		String sqlString = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
-				+ "t_guideotherinfo.guideLevel from t_guideinfo,t_guideotherinfo "
+				+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes from t_guideinfo,t_guideotherinfo "
 				+ "where t_guideinfo.id = t_guideotherinfo.id and singleMax > '"+visitNum+"' "
 				+ "and scenicBelong = '"+scenicID+"' and guideLevel >= 5 and t_guideotherinfo.id in "
 				+ "(select id from t_guideworkday where "+selectDay+"=1)"
@@ -308,6 +308,7 @@ public class GuideDao {
 				map.put("historyNum", rst.getString(10));
 				map.put("historyTimes", rst.getString(11));
 				map.put("guideFee", rst.getInt(12));
+				map.put("scenicBelong", rst.getString(13));
 				list.add(map);
 			}							
 			conn.close();

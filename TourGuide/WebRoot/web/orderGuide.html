@@ -6,10 +6,12 @@
 		<title>预约讲解员</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link rel="stylesheet" href="css/jquery.mobile-1.4.5.css">
+		<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">   
 		<link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
 		<link rel="stylesheet" href="css/jtsage-datebox-4.1.0.jqm.min.css">
 		<link rel="stylesheet" type="text/css" href="css/GuideInfo.css">
 		<link rel="stylesheet" type="text/css" href="css/mobiscroll.custom-2.5.0.min.css">
+		
 		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
 		<script type="text/javascript" src="js/jquery.raty.min.js"></script>
@@ -48,8 +50,19 @@
 
 
 	<body>
+		
 
 		<div data-role="page" id="OrderguidePage">
+			<footer data-role="footer" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+            <li><a href="index.html" target="_top" id="" class="navbar0" >首页</a></li>
+            <li><a href="pindan.html" target="_top" id="" class="navbar0" >拼讲解员</a></li>
+            <li><a href="orderGuide.html" target="_top" id="" class="navbar0" >预约讲解员</a></li>
+            <li><a href="personalHome.html" target="_top" id="" class="navbar0" >个人中心</a></li>
+            </ul>
+        </div>
+        </footer>
 			<div data-role="panel" data-display="overlay" id="myPanel">
 				<h2>筛选条件</h2>
 				<form action="" method="">
@@ -203,7 +216,7 @@
 										<td> <label for="guideLanguage">讲解语言：</label></td>
 										<td>
 											<select id="guideLanguage" data-mini="true" name="guideLanguage">
-												<option value="中文">中文</option>
+												<option value="中文"  selected="selected">中文</option>
 												<option value="英文">英文</option>
 												<option value="其他">其他</option>
 											</select>
@@ -217,7 +230,7 @@
 										<td>
 											<fieldset data-role="controlgroup" data-type="horizontal">
 												<label for="guideFmale">女</label>
-												<input type="radio" data-mini="true" id="guideFmale" name="guideSex" value="女" />
+												<input type="radio" data-mini="true" id="guideFmale" name="guideSex" value="女" checked/>
 												<label for="guideMale">男</label>
 												<input type="radio" data-mini="true" id="guideMale" name="guideSex" value="男" />
 											</fieldset>
@@ -225,9 +238,9 @@
 									</tr>
 								</tbody>
 							</table>
-							<legend>需要为您代购门票吗？</legend>
-							<label for="orderTicketRadio">是，请为我代购门票</label>
-							<input type="radio" id="orderTicketRadio" class="orderTicketRadio" name="orderTicket" value="1" class="" />
+							<!-- <legend>需要为您代购门票吗？</legend>
+							<label for="orderTicketRadio">是，请为我代购门票</label> -->
+							<!-- <input type="radio" id="orderTicketRadio" class="orderTicketRadio" name="orderTicket" value="1" class="" />
 							<div data-role="collapsible" class="orderTicketPanel" data-collapsed="false" hidden="true">
 								<label for="fullPriceTicketNum" class="ui-hidden-accessible">全价票</label>
 								<input type="number" id="fullPriceTicketNum" name="fullPriceTicketNum" placeholder="全价票">
@@ -236,8 +249,8 @@
 								<label for="discountTicketNum" class="ui-hidden-accessible">折扣票</label>
 								<input type="number" id="discountTicketNum" name="discountTicketNum" placeholder="折扣票">
 							</div>
-							<label for="notorderTicketRadio" value="0">否，不用了，谢谢</label>
-							<input type="radio" id="notorderTicketRadio" class="notorderTicketRadio" name="orderTicket" value="0" class="" />
+							<label for="notorderTicketRadio" value="0">否，不用了，谢谢</label> -->
+							<!-- <input type="radio" id="notorderTicketRadio" class="notorderTicketRadio" name="orderTicket" value="0" class="" /> -->
 							</fieldset>
 							<input id="orderM" type="number" placeholder="预期价格" />
 							<label for="visitorPhone" class="ui-hidden-accessible">联系电话</label>
@@ -317,6 +330,18 @@
 				});
 			</script>
 		</div>
+		
+	
+		
 	</body>
-
+<footer data-role="footer" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+            <li><a href="index.html" target="_top" id="" class="navbar0" >首页</a></li>
+            <li><a href="pindan.html" target="_top" id="" class="navbar0" >拼讲解员</a></li>
+            <li><a href="orderGuide.html" target="_top" id="" class="navbar0" >预约讲解员</a></li>
+            <li><a href="personalHome.html" target="_top" id="" class="navbar0" >个人中心</a></li>
+            </ul>
+        </div>
+   </footer>	
 </html>

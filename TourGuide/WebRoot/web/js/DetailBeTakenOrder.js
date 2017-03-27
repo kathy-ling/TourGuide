@@ -7,6 +7,7 @@ window.onload = function(){
 	if(fin!=null){
 		$("#takeOrder").remove();
 		}
+	
 var url = HOST+"/getDetailedReleasedOrders.do";
 //var OrderID = GetUrlem("Orderid");
 $.ajax({
@@ -27,29 +28,28 @@ $.ajax({
 			$("#scenicName").html(n.scenicName);
 			$("#visitTime").html(n.visitTime);
 			$("#visitNum").html(n.visitNum);
-			$("#totalTicket").html(n.totalTicket);
 			$("#language").html(getLanguage(n.language));
 			$("#sex").html(n.guideSex);
 			$("#price").html(n.priceRange);
 			$("#visitorName").html(n.visitorName);
 			$("#visitorPhone").html(n.visitorPhone);
 			$("#otherCommand").html(n.otherCommand);
-			if(n.totalTicket!=0){
-				var ticm = "<h3>代购门票</h3>";
-				if(n.fullPrice!=0){
-					ticm +="<p>全价票："+n.fullPrice+"张<br>";
-				}
-				if(n.halfPrice!=0){
-					ticm += "半价票："+n.halfPrice+"张<br>";
-				}
-				if(n.discoutPrice!=0){
-					ticm +="折扣票："+n.discoutPrice+"张<br>";
-				}
-				ticm += "总额："+n.totalTicket+"元</p>";
-				$("#ticket").html(ticm);
-			}else{
-				$("#ticket").hide();
-			}
+//			if(n.totalTicket!=0){
+//				var ticm = "<h3>代购门票</h3>";
+//				if(n.fullPrice!=0){
+//					ticm +="<p>全价票："+n.fullPrice+"张<br>";
+//				}
+//				if(n.halfPrice!=0){
+//					ticm += "半价票："+n.halfPrice+"张<br>";
+//				}
+//				if(n.discoutPrice!=0){
+//					ticm +="折扣票："+n.discoutPrice+"张<br>";
+//				}
+//				ticm += "总额："+n.totalTicket+"元</p>";
+//				$("#ticket").html(ticm);
+//			}else{
+//				$("#ticket").hide();
+//			}
 		});
 	}
 
@@ -72,9 +72,9 @@ function takeorder(){
 		},
 		success:function(data)
 		{
-			alert(data);
 			if(data == true){
 				alert("抢单成功！");
+				window.location.href="GuideOrders.html";
 			}else{
 				alert("抢单失败！");
 			}			

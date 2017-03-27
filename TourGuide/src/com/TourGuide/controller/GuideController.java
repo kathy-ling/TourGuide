@@ -140,7 +140,7 @@ public class GuideController {
 			@RequestParam("age") String age,
 			@RequestParam("language") String language,
 			@RequestParam("level") String level) throws IOException{
-		
+		//scenicName=秦始皇兵马俑&visitTime=2017-3-23 16:00&visitNum=15&sex=null&age=null&language=null&level=null
 		CommonResp.SetUtf(resp);
 		
 		List<Map<String , Object>> listResult = new ArrayList<>();

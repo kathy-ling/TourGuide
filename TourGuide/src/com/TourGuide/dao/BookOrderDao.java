@@ -123,7 +123,8 @@ public class BookOrderDao {
 //		int j = jdbcTemplate.update(sqlString2);
 		
 		String payTime = MyDateFormat.form(new Date());
-		String sqlUpdate = "update t_bookorder set orderState='待游览',hadPay=1,payTime='"+payTime+"'";
+		String sqlUpdate = "update t_bookorder set orderState='待游览',hadPay=1,payTime='"+payTime+"' "
+				+ "where bookOrderID='"+orderID+"'";
 		int j = jdbcTemplate.update(sqlUpdate);
 		
 		DataSource dataSource =jdbcTemplate.getDataSource();
@@ -167,39 +168,96 @@ public class BookOrderDao {
 	 * 
 	 * 待解决：根据导游所属的景区进行筛选订单
 	 */
-	public List<Map<String , Object>> getReleasedOrders(String guidePhone){		
+	public List<Map<String , Object>> getReleasedOrders(String guidePhone){
 		
-		GuideDao guideDao = new GuideDao();
-		List<Map<String , Object>> list = new ArrayList<>(); 		
- 		DataSource dataSource =jdbcTemplate.getDataSource();
-		 
-		try {
-			Connection conn = dataSource.getConnection();
-			CallableStatement cst=conn.prepareCall("call getReleasedOrders(?)");
-			cst.setString(1, guidePhone);
-			ResultSet rst=cst.executeQuery();
+		String now = MyDateFormat.form(new Date());
+		String scenicNo = null;
+		List<Map<String , Object>> list = new ArrayList<>();
+		List<Map<String , Object>> listTime = new ArrayList<>();
+		List<Map<String , Object>> listOrder = new ArrayList<>();
+		
+		//查询该讲解员所属的景区
+		String sqlscenicNo = "select t_guideotherinfo.scenicBelong "
+				+ "from t_guideotherinfo,t_guideinfo WHERE t_guideinfo.phone = '"+guidePhone+"' "
+				+ "and t_guideotherinfo.id = t_guideinfo.id and t_guideotherinfo.guideLevel >=5";
+		list = jdbcTemplate.queryForList(sqlscenicNo);
+		
+		if(list.size() != 0){
+			scenicNo = (String) list.get(0).get("scenicBelong");
+		}
+		
+		//查询该讲解员已经被预约了的时间,查询结果可能为空
+		String sqlTime = "SELECT timeFrom,timeTo FROM t_guidebeordered WHERE guidePhone = '"+guidePhone+"'"
+				+ "and visitTime>'"+now+"'";
+		
+		//查询t_bookorder中，景区编号为scenicNo，游客发布的，且参观时间大于当前时间的订单
+		String sqlOrder = "SELECT t_bookorder.visitTime,t_bookorder.visitNum,t_bookorder.guideSex,"
+				+ "t_bookorder.`language`,t_bookorder.bookOrderID,t_bookorder.priceRange,"
+				+ "t_bookorder.scenicID,t_scenicspotinfo.scenicName from t_bookorder,t_scenicspotinfo"
+				+ " WHERE visitTime>'"+now+"' and t_bookorder.releaseByVisitor=1 and "
+				+ "t_bookorder.scenicID='"+scenicNo+"' and t_bookorder.scenicID=t_scenicspotinfo.scenicNo";
+
+		//若没有查到景区编号，则讲解员等级不够
+		if(scenicNo != null){
+			listTime = jdbcTemplate.queryForList(sqlTime);			
+			listOrder = jdbcTemplate.queryForList(sqlOrder);
 			
-			while (rst.next()) {
-				Map<String , Object> map = new HashMap<String, Object>();
-				String visitTime = rst.getString(1);
-				int visitHour = rst.getInt(8);
-				map.put("visitTime", visitTime);
-				map.put("visitNum", rst.getInt(2));
-				map.put("guideSex", rst.getString(3));
-				map.put("language", rst.getString(4));
-				map.put("bookOrderID", rst.getString(5));
-				map.put("priceRange", rst.getInt(6));
-				map.put("scenicName", rst.getString(7));
-				map.put("maxVisitHour", visitHour);
-				
-				list.add(map);
-				}							
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 		
- 		return list;
+			//若listTime为空，即该讲解员没有被预约，则直接返回listOrder，不用进行筛选
+			if(listTime.size() != 0){
+				for(int i=0; i<listTime.size(); i++){
+					Timestamp timestamp = (Timestamp) listTime.get(i).get("timeFrom");
+					String timeFrom = MyDateFormat.form(timestamp);
+					Timestamp timestamp1 = (Timestamp)listTime.get(i).get("timeTo");
+					String timeTo = MyDateFormat.form(timestamp1); 
+					
+					for(int j=0; j<listOrder.size(); j++){
+						Timestamp timestamp2 = (Timestamp) listOrder.get(j).get("visitTime");
+						String visitTime = MyDateFormat.form(timestamp2); 
+						
+						if(DateConvert.DateCompare(timeFrom, visitTime) && 
+								DateConvert.DateCompare(visitTime, timeTo)){
+							//讲解员忙碌，不可再接单
+							listOrder.remove(j);
+						}
+					}
+				}
+			}
+		}
+		
+		return listOrder;
 	}
+//	public List<Map<String , Object>> getReleasedOrders(String guidePhone){		
+//		
+//		List<Map<String , Object>> list = new ArrayList<>(); 		
+// 		DataSource dataSource =jdbcTemplate.getDataSource();
+//		 
+//		try {
+//			Connection conn = dataSource.getConnection();
+//			CallableStatement cst=conn.prepareCall("call getReleasedOrders(?)");
+//			cst.setString(1, guidePhone);
+//			ResultSet rst=cst.executeQuery();
+//			
+//			while (rst.next()) {
+//				Map<String , Object> map = new HashMap<String, Object>();
+//				String visitTime = rst.getString(1);
+//				int visitHour = rst.getInt(8);
+//				map.put("visitTime", visitTime);
+//				map.put("visitNum", rst.getInt(2));
+//				map.put("guideSex", rst.getString(3));
+//				map.put("language", rst.getString(4));
+//				map.put("bookOrderID", rst.getString(5));
+//				map.put("priceRange", rst.getInt(6));
+//				map.put("scenicName", rst.getString(7));
+//				map.put("maxVisitHour", visitHour);
+//				
+//				list.add(map);
+//				}							
+//			conn.close();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} 		
+// 		return list;
+//	}
 	
 	
 	
@@ -267,6 +325,7 @@ public class BookOrderDao {
  		int totalTicket = 0;
  		int totalMony = 0;
  		int maxVisitHour = 0;
+ 		String time = MyDateFormat.form(new Date());
  		
  		DataSource dataSource =jdbcTemplate.getDataSource();	
 		try {
@@ -289,7 +348,7 @@ public class BookOrderDao {
 		//更新该订单的相关信息：订单状态、讲解费、订单总额、讲解员手机号、releaseByVisitor
 		String sqlUpdate = "update t_bookorder set orderState='"+orderState+"',guideFee="+price+","
 				+ "totalGuideFee="+price+",totalMoney="+totalMony+",releaseByVisitor=0,"
-				+ "guidePhone='"+guidePhone+"' where bookOrderID='"+orderID+"'";
+				+ "guidePhone='"+guidePhone+"',takeOrderTime='"+time+"' where bookOrderID='"+orderID+"'";
 		int i = jdbcTemplate.update(sqlUpdate);
 		
 		String sqlInsert = "insert into t_guideBeOrdered "

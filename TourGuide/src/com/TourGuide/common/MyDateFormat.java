@@ -16,5 +16,13 @@ public class MyDateFormat {
 		String dateString = dateFormat.format(date);
 		return dateString;
 	}
+	
+	
+	public static String form1(Date date){
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String dateString = dateFormat.format(date);
+		return dateString;
+	}
 
 }

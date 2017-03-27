@@ -4,7 +4,8 @@ var Phone = vistPhone;
 $('#OrderguidePage').bind('pagecreate', function(event, ui) {
 	var ScenicNo = GetUrlem("scenicNo");
 	sname = GetUrlem("sname");
-	
+	addAllScenics();
+	addPopularGuides();
 	
 	if (ScenicNo != null) {
 		sessionStorage.scenicNo = ScenicNo;
@@ -116,9 +117,7 @@ function checkOrderForm() {
 		//contact,游客在发布订单界面填写的联系电话
 		contact : $("#visitorPhone").val()
 	};
-	alert(data.scenicName);
-	alert(data.visitTime);
-	alert(data.visitorPhone);
+
 	if (!$("#orderDate").val()) {
 		alert("请选择日期!");
 		return false;
@@ -153,7 +152,7 @@ function releaseOrder(formdata) {
 		type : "post",
 		url : Url,
 		async : true,
-		data : formd ata,
+		data : formdata,
 		datatype : "JSON",
 		error : function() {
 			alert("发布订单Request error!");
@@ -161,6 +160,7 @@ function releaseOrder(formdata) {
 		success : function(data) {
 			if (data == true) {
 				alert("发布订单成功！");
+				window.location.href="orderFormList.html";
 			} else {
 				alert("发布订单失败");
 			}
@@ -264,7 +264,7 @@ function getAvailableGuides() {
 			$.each(data, function(i, item) {
 				var scenicNo = item.scenicNo;
 				sessionStorage.scenicNo = scenicNo;
-				alert(item.scenicName);
+//				alert(item.scenicName);
 				sessionStorage.directScenicName = item.scenicName;
 				// $.cookie("scenicFullName",item.scenicName);
 				var dataGuide = {
@@ -345,11 +345,7 @@ function selectAvailableGuides() {
 		return;
 	}
 	
-	
-	
-	
-	
-	
+
 	var data = {
 		"scenicName" : scenicName,
 		"visitTime" : visitTime,
@@ -397,11 +393,9 @@ function addlist(data) {
 		var AList = document.createElement("a");
 		AList.href = "guideInfo.html?" + "phone=" + n.phone+"&visitNum="+visitNum+"&visitDate="
 		+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;
-<<<<<<< HEAD
-=======
+
 		AList.setAttribute("data-ajax", false);
 
->>>>>>> c692d1ac8b314e0919b2751f928bc00ff701365e
 		// AList.setAttribute("href","guideInfo.html");
 		// AList.target = "_top";
 		// AList.setAttribute("rel","external");
