@@ -1,6 +1,10 @@
 package com.TourGuide.web.Dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -26,7 +30,25 @@ public class PromotionInfoDao {
 	 */
 	public List<PromotionInfo> getPromotionInfoBypage(int i,int j) {
 		
+		
+		int k=(i-1)*j;
+		List<PromotionInfo> list=new ArrayList<>();
 		DataSource dataSource=jdbcTemplate.getDataSource();
+		try {
+			Connection conn=dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getPromotion(?,?)");
+			cst.setInt(1, k);
+			cst.setInt(2, j);
+			ResultSet rst=cst.executeQuery();
+			while (rst.next()) {
+				PromotionInfo promotionInfo=new PromotionInfo();
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 	
