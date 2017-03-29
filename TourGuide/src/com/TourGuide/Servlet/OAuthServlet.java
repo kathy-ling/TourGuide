@@ -37,7 +37,6 @@ public class OAuthServlet extends HttpServlet{
 		// 用户同意授权后，能获取到code
 		// 如果code等于"authdeny"，表示用户不同意授权，则直接跳转到目标页面。
 		String code = request.getParameter("code");
-		System.out.println("code from oauthServlet:" + code);
 		
 		// 用户同意授权
 		if (!"authdeny".equals(code)) {
@@ -47,6 +46,7 @@ public class OAuthServlet extends HttpServlet{
 			String accessToken = weixinOauth2Token.getAccessToken();
 			// 用户标识
 			String openId = weixinOauth2Token.getOpenId();
+			System.out.println("openId:" + openId);
 			// 获取用户信息
 			SNSUserInfo snsUserInfo = SNSUserInfoUtil.getSNSUserInfo(accessToken, openId);			
 			

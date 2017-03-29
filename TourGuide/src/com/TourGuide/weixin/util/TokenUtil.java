@@ -14,8 +14,10 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
+import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
+import com.TourGuide.model.JsapiTicket;
 import com.TourGuide.model.Token;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -130,5 +132,45 @@ public class TokenUtil {
 		
 		return token;
 	}
+	
+	
+	/** 
+     * 获取jsapi_ticket
+     *  
+     * @param appid 凭证 
+     * @param appsecret 密钥 
+     * @return 
+     */ 
+    public static JsapiTicket getJsapiTicket(String accessToken) { 
+    	
+    	//获取公众号jsapi_ticket的链接
+    	String jsapi_ticket_url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?"
+    			+ "access_token=ACCESS_TOKEN&type=jsapi";
+    	
+    	//ticket分享值
+    	JsapiTicket jsapiticket = null; 
+    	
+    	if(accessToken != null){
+    		 String requestUrl = jsapi_ticket_url.replace("ACCESS_TOKEN", accessToken); 
+    		 JSONObject jsonObject = getTokenJsonObject(requestUrl, "GET", null); 
+    		 // 如果请求成功 
+    		 if (null != jsonObject) { 
+    			 try { 
+    				 jsapiticket = new JsapiTicket(); 
+    				 jsapiticket.setTicket(jsonObject.getString("ticket")); 
+    				 jsapiticket.setExpiresIn(jsonObject.getInt("expires_in")); 
+    			 } catch (JSONException e) { 
+    				 jsapiticket = null; 
+    				 // 获取ticket失败 
+    				System.out.printf("获取ticket失败 errcode:{} errmsg:{}", 
+    						jsonObject.getInt("errcode"), jsonObject.getString("errmsg")); 
+    			 } 
+    	     } 
+    	}else{
+    		System.out.println("*****token为空 获取ticket失败******");
+    	}
+       
+        return jsapiticket; 
+    } 
 
 }

@@ -47,7 +47,7 @@ public class FastOrderService {
 	 * @param num  游客的订单中的参观人数
 	 * @return
 	 */
-	public boolean takeFastOrder(String consistOrderID, String orderID, String guidePhone, int num){
+	public int takeFastOrder(String consistOrderID, String orderID, String guidePhone, int num){
 		return fastOrderDao.takeFastOrder(consistOrderID, orderID, guidePhone, num);
 	}
 

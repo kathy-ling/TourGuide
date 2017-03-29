@@ -9,7 +9,9 @@
 		<link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
 		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+		<script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
 		<script type="text/javascript" src="js/orderFormInfo.js"></script>
+		<script type="text/javascript" src="js/myQRCode.js"></script>
 		<style type="text/css">
 			#liimg {
 				width: 5em;
@@ -43,6 +45,9 @@
 
 			</div>
 			<div data-role="main" class="ui-content">
+				<div id="qrcode">
+					<h1>生成二维码</h1>
+				</div>
 				<ul data-role="listview" id="infolist">
 					<li data-inset="true">
 						<p><span class="viewState">待游览</span> 费用合计：
@@ -64,12 +69,9 @@
 							<span class="totalMoney"></span>
 						</p>
 					</li>
-					<!--<li id="MoneyInfo">
-                	
-                </li>-->
+
 					<li>
 						<p>
-							<!--人数：<span class="vistorNum"></span><br/>  -->
 
 							<li id="takeOrderTime1">
 								下单时间:<span class="takeOrderTime1"></span>
@@ -80,22 +82,10 @@
 							<li id="finishTime1">
 								结束时间:<span class="finishTime1"></span>
 							</li>
-							<!--下单时间：<span id="takeOrderTime1"></span><br/>
-                        付款时间：<span id="payTime1"></span><br/>
-                        结束时间：<span id="finishTime1"></span><br/>-->
 						</p>
 					</li>
 					<p>
 						<li id="guideInfo">
-							<!--<img class="guideHead" src="">
-                    <p>
-                        讲解员：<span class="name"></span><br/>
-                        性别：<span class="sex"></span><br/>
-                        年龄：<span class="age"></span><br/>
-                        语种：<span class="language"></span><br/>
-                        联系方式：<span class="tel"></span>
-                        <button type="" data-inline="ture">一键拨号</button>
-                    </p>-->
 						</li>
 					</p>
 				</ul>

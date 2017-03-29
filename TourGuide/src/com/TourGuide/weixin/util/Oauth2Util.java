@@ -39,7 +39,7 @@ public class Oauth2Util {
 				+ "&code=CODE&grant_type=authorization_code";
 		
 		requestUrl = requestUrl.replace("CODE", code);
-		System.out.println(requestUrl);
+		
 		//获取网页授权凭证
 		JSONObject jsonObject = TokenUtil.getTokenJsonObject(requestUrl, "GET", null);
 		

@@ -5,10 +5,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ import com.TourGuide.service.FastOrderService;
 import com.TourGuide.service.IntroFeeAndMaxNumService;
 import com.TourGuide.service.OrderService;
 import com.TourGuide.service.ScenicSpotService;
+import com.TourGuide.weixin.util.JsSignUtil;
+
 
 @Controller
 public class FastOrderController {
@@ -114,9 +118,12 @@ public class FastOrderController {
 		List<Map<String, Object>> listResult = orderService.getDetailOrderInfo(consistOrderID);
 		int visitNum = (int) listResult.get(0).get("visitNum");
 		
-		boolean bool = fastOrderService.takeFastOrder(consistOrderID, orderID, guidePhone, visitNum);
+		 int ret= fastOrderService.takeFastOrder(consistOrderID, orderID, guidePhone, visitNum);
 		
-		return bool;
+		return ret;
 	}
+	
+	
+	 
 
 }

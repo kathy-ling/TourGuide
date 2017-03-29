@@ -1,5 +1,6 @@
 package com.TourGuide.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,9 @@ public class FastOrderDao {
 	
 	@Autowired
 	IntroFeeAndMaxNumDao introFeeAndMaxNumDao;
+	
+	@Autowired
+	ScenicSpotDao scenicSpotDao;
 	
 	/**
 	 * 游客发起快捷拼团
@@ -69,28 +73,47 @@ public class FastOrderDao {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		String orderID = UUID.randomUUID().toString().replace("-", "");
+		int visitNum = 0;
 		
 		//由讲解员手机号获取其所在的景区
 		List<Map<String, Object>> list = guideInfoDao.getDetailGuideInfoByPhone(guidePhone);
 		String scenicNo = (String) list.get(0).get("scenicBelong");
+		String scenicName = (String) scenicSpotDao.getSomeScenicInfoByscenicID(scenicNo).get(0).get("scenicName");
 		
 		//查询该天该景区的拼单人数和讲解费		
 		IntroFeeAndMaxNum introFeeAndMaxNum = 
 				introFeeAndMaxNumDao.getIntroFeeAndMaxNum(MyDateFormat.form1(new Date()), scenicNo);
 		int maxNum = introFeeAndMaxNum.getMaxNum();
 		int guideFee = introFeeAndMaxNum.getFee();
-						
-		String sqlString = "insert into t_consistresult (orderID,maxNum,"
-				+ "scenicID,guideFee,guidePhone) values (?,?,?,?,?)";
-		int i = jdbcTemplate.update(sqlString, new Object[]{orderID, 
-				maxNum, scenicNo, guideFee,guidePhone});
 		
-		if(i != 0){
-			map.put("orderID", orderID);
-			map.put("maxNum", maxNum);
-			map.put("guideFee", guideFee);
+		//finishScan: 0-导游未完成快捷拼单  1-快捷拼单完成  2-不是快捷拼单
+		String sqlSelect = "select orderID,visitNum from t_consistresult where "
+				+ "guidePhone='"+guidePhone+"' and finishScan=0";
+		List<Map<String, Object>> listOrder = jdbcTemplate.queryForList(sqlSelect);
+		
+		//查看讲解员是否有未完成的快捷拼单，若有，返回该拼单的订单号
+		if(listOrder.size() != 0){
+			orderID = (String) listOrder.get(0).get("orderID");
+			visitNum = (int) listOrder.get(0).get("visitNum");
+		}else {
+			String sqlString = "insert into t_consistresult (orderID,maxNum,"
+					+ "scenicID,guideFee,guidePhone) values (?,?,?,?,?)";
+			int i = jdbcTemplate.update(sqlString, new Object[]{orderID, 
+					maxNum, scenicNo, guideFee,guidePhone});
+			
+			String sql = "select visitNum from t_consistresult where orderID='"+orderID+"'";
+			List<Map<String, Object>> listNum = jdbcTemplate.queryForList(sqlSelect);
+			if(listNum.size() != 0){
+				visitNum = (int) listNum.get(0).get("visitNum");
+			}			
 		}
-		
+								
+		map.put("orderID", orderID);
+		map.put("maxNum", maxNum);
+		map.put("guideFee", guideFee);
+		map.put("scenicName", scenicName);
+		map.put("visitNum", visitNum);
+				
 		return map;
 	}
 	
@@ -102,30 +125,38 @@ public class FastOrderDao {
 	 * @param orderID   讲解员的订单编号
 	 * @param guidePhone  讲解员的手机号
 	 * @param num  游客的订单中的参观人数
-	 * @return
+	 * @return 0 接单失败  1-接单成功  -1-已经被接单
 	 */
-	public boolean takeFastOrder(String consistOrderID, String orderID, String guidePhone, int num){
+	public int takeFastOrder(String consistOrderID, String orderID, String guidePhone, int num){
 		
-		boolean bool = false;
+		int ret = 0;
 		
 		String time = MyDateFormat.form(new Date());
 		String orderState = "待游览";
 		int isConsisted = 1;
 		
+		//beScanned标志，使游客的拼单只能被导游扫描一次;1-已被扫描 ，0-未被扫描
 		String sqlUpdate = "update t_consistOrder set orderID='"+orderID+"',"
 				+ "takeOrderTime='"+time+"',guidePhone='"+guidePhone+"',"
 				+ "orderState='"+orderState+"',isConsisted='"+isConsisted+"'"
-				+ "where consistOrderID='"+consistOrderID+"'";
+				+ "where consistOrderID='"+consistOrderID+"' and beScanned=0";
 		int i = jdbcTemplate.update(sqlUpdate);
 		
-		String sql = "update t_consistresult set visitNum=visitNum+"+num+" where orderID='"+orderID+"'";
-		int j = jdbcTemplate.update(sql);
+		String date = MyDateFormat.form1(new Date());
+		String sqlString = "update t_consistOrder set beScanned=1"
+				+ " where consistOrderID='"+consistOrderID+"'";
+		int j = jdbcTemplate.update(sqlString);
 		
-		if(i!=0 && j!= 0){
-			bool = true;
+		String sql = "update t_consistresult set visitNum=visitNum+"+num+" where orderID='"+orderID+"'";
+		int k = jdbcTemplate.update(sql);
+		
+		if(i!=0 && j!= 0 && k!=0){
+			ret = 1;
+		}else if(i!=0){
+			ret = -1;
 		}
 		
-		return bool;
+		return ret;
 		
 	}
 }

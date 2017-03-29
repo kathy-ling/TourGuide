@@ -1,16 +1,17 @@
+var payTime;
+var num;
+var totalFee;
+var name;
+
 
 $(function($){
 	setData();
 });
 function setData(){
-	//var state = GetUrlem("state");
 	var orderId = GetUrlem("orderId");
 	$(".orderFormId").html(orderId);
-	//$(".viewState").html(state);
 	var postdata = {
 		"orderID":orderId
-		//"orderID":"3fc7bd106bc3418d91f2c7f26cf590a2"
-		//"orderState":state
 	};
 		$.ajax({
 			type:"post",
@@ -24,7 +25,6 @@ function setData(){
 			},
 			success:function(data)
 			{ 
-				alert(JSON.stringify(data));
 				if(JSON.stringify(data)!="[]"){
 				setNormalData(data[0]);
 				setSenicData(data[0]);
@@ -49,6 +49,7 @@ function setData(){
 				if(data[0].payTime!=undefined)
 				{
 					$(".payTime1").html(data[0].payTime);
+					payTime = data[0].payTime;
 				}else
 				{
 					$("#payTime1").hide();
@@ -108,9 +109,10 @@ function setNormalData(data){
 		$(".viewState").html(data.orderState);
 		$(".totalMoney1").html(data.money);
 		
+		num = data.visitNum;
+		totalFee = data.money;
 }
 	function setSenicData(data){
-		alert("into setSenicData");
 			/*scenicUrl = HOST+"/getSomeScenicInfoByscenicID.do?scenicID="+scenicID;
 			$.get(scenicUrl,function(data,status){
 				if(status){
@@ -121,6 +123,7 @@ function setNormalData(data){
 				}
 			});*/
 			$("#scenicNameId").html(data.scenicName);
+			name = data.scenicName;
 			//$(".scenicImg").attr("src",HOST+data[0].imagePath);
 			//$(".scenicImg").attr("src","http://202.200.119.253/cache/7/04/imwork.net/ae58f81f5dfcd6be50e7846c9d33b175/bingmayong.jpg");
 		}
@@ -138,3 +141,7 @@ function setNormalData(data){
 		});
 		
 	}
+
+var id = GetUrlem("orderId");
+
+jQuery('#qrcode').qrcode(utf16to8(id+"  " + payTime + "   "+num + "   " + totalFee+"  "+name));

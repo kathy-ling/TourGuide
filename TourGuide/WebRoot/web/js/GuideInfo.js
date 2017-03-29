@@ -115,7 +115,9 @@ var Url = HOST+"/getComments.do";
 //点击立即预定
 function bookGuide()
 {
-	
-	window.location.href="orderFormPage.html?"+ "phone=" + phone+"&visitNum="+visitNum+"&visitDate="
+	alert(visitDate+visitNum+visitTime+vistPhone);
+	/*window.location.href="orderFormPage.html?"+ "phone=" + phone+"&visitNum="+visitNum+"&visitDate="
+	+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;*/
+	window.location.href="confirmOrderInfo.html?"+ "phone=" + phone+"&visitNum="+visitNum+"&visitDate="
 	+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;
 }
