@@ -1,19 +1,7 @@
-<%@ page language="java"
-	import="java.util.*,java.text.SimpleDateFormat,java.util.Date,java.util.Calendar"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-Calendar calendar = Calendar.getInstance();
-SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-Date date1 = calendar.getTime();
-String day1=sdf.format(date1);
-calendar.add(Calendar.DAY_OF_YEAR, 1);
-Date date2 = calendar.getTime();
-String day2=sdf.format(date2);
-calendar.add(Calendar.DAY_OF_YEAR, 1);
-Date date3 = calendar.getTime();
-String day3=sdf.format(date3);
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -46,19 +34,17 @@ String day3=sdf.format(date3);
 <link rel="stylesheet" href="<%=basePath %>/assets1/css/admin.css">
 <link rel="stylesheet" href="<%=path%>/assets/css/bootstrap.css" />
 <link rel="stylesheet" href="<%=path%>/assets/css/ace.onpage-help.css" />
-<link rel="stylesheet" href="<%=path%>/docs/assets/js/themes/sunburst.css" />
+<link rel="stylesheet"
+	href="<%=path%>/docs/assets/js/themes/sunburst.css" />
 <script type="text/javascript" src="<%=basePath %>/assets/js/jquery.js"></script>
-<script type="text/javascript" src="<%=basePath %>/assets/js/jquery.min.js"></script>
-<script type="text/javascript" src="<%=basePath %>/assets/js/bootstrap-paginator.min.js"></script>
+<script type="text/javascript"
+	src="<%=basePath %>/assets/js/jquery.min.js"></script>
+<script type="text/javascript"
+	src="<%=basePath %>/assets/js/bootstrap-paginator.min.js"></script>
 
 </head>
 
 <body>
-
-
-
-
-
 	<!-- content start -->
 	<div class="admin-content">
 		<div class="admin-content-body">
@@ -79,7 +65,9 @@ String day3=sdf.format(date3);
 						<input type="text" id="searchText" class="am-form-field"
 							placeholder="景区编号"> <span class="am-input-group-btn">
 							<button class="am-btn am-btn-default" id="searchText"
-								type="button" onclick="search()">搜索</button>
+								type="button" onclick="loadscenicProByscenicNo()">搜索</button>
+							<button class="am-btn am-btn-default btn-warning" id="searchText"
+								type="button" onclick="loadscenicPro()">全部记录</button>
 						</span>
 					</div>
 				</div>
@@ -92,15 +80,14 @@ String day3=sdf.format(date3);
 							style="border-collapse:separate; border-spacing:5px; ">
 							<thead>
 								<tr>
-									<th style="text-align: center; width: 10%;">景区编号</th>
+									<th style="text-align: center; width: 5%;">景区编号</th>
 									<th style="text-align: center; width: 10%;">景区名称</th>
-									<th style="text-align: center; width: 10%;">活动编号</th>
 									<th style="text-align: center; width: 10%;">活动标题</th>
 									<th style="text-align: center; width: 10%;">活动链接</th>
 									<th style="text-align: center; width: 10%;">发布时间</th>
-									<th style="text-align: center; width: 10%;">开始时间</th>
-									<th style="text-align: center; width: 10%;">结束时间</th>
-									<th style="text-align: center; width: 10%;">操作</th>
+									<th style="text-align: center; width: 10%;">首页展示</th>
+									<th style="text-align: center; width: 10%;">通过美工</th>
+									<th style="text-align: center; width: 20%;">操作</th>
 								</tr>
 							</thead>
 							<tbody id="tby">
@@ -112,6 +99,87 @@ String day3=sdf.format(date3);
 					</form>
 				</div>
 			</div>
+
+			<div class="modal fade" id="querymodal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="model-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">
+								<span class="blue">X</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"
+								style="text-align:center;">景区活动信息详情</h4>
+						</div>
+						<div class="modal-body">
+							<table
+								style="border-collapse:separate; border-spacing:10px; margin:auto;">
+								<tr>
+									<td>活动图片：</td>
+									<td><img style="width: 100px;height: 100px"
+										id="query_headimg" name="edit_headimg" src="" /></td>
+								</tr>
+								<tr>
+									<td>景区编号：</td>
+									<td><input type="text" id="query_scenicNo"
+										name="query_scenicNo" readonly="true" /></td>
+								</tr>
+								<tr>
+									<td>景区名称：</td>
+									<td><input type="text" id="query_scenicName"
+										name="query_scenicName" readonly="true" /></td>
+								</tr>
+								<tr>
+									<td>景区标题：</td>
+									<td><input type="text" id="query_proTitle"
+										name="query_proTitle" readonly="true" /></td>
+								</tr>
+								<tr>
+									<td>活动链接:</td>
+									<td><input type="text" id="query_proLink"
+										name="query_proLink" readonly="true" /></td>
+								</tr>
+								<tr>
+									<td>活动发布时间:</td>
+									<td><input type="text" id="query_proRealse"
+										name="query_proRealse" readonly="true" /></td>
+								</tr>
+								<tr>
+									<td>活动开始时间：</td>
+									<td><input type="text" id="query_proStart"
+										name="query_proStart" readonly="true" /></td>
+								</tr>
+								<tr>
+									<td>活动结束时间：</td>
+									<td><input type="text" id="query_proEnd"
+										name="query_proEnd" readonly="true" /></td>
+								</tr>
+								<tr>
+									<td>活动内容：</td>
+									<td><textarea rows="3" cols="22" id="query_proText"
+											name="query_proText" readonly="true"></textarea></td>
+								</tr>
+								<tr>
+									<td>首页是否展示:</td>
+									<td><input type="text" id="query_proMain"
+										name="query_proMain" readonly="true" /></td>
+								</tr>
+								<tr>
+									<td>是否经过美工:</td>
+									<td><input type="text" id="query_proAdmin"
+										name="query_proAdmin" readonly="true" /></td>
+								</tr>
+								<tr>
+									<td colspan="2" style="text-align:center;"><button
+											class="close" data-dismiss="modal" aria-hidden="true">确定</button></td>
+								</tr>
+
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<!--[if (gte IE 9)|!(IE)]><!-->
@@ -120,20 +188,19 @@ String day3=sdf.format(date3);
 	<script src="<%=basePath %>/assets1/js/app.js"></script>
 	<script type="text/javascript">
 	var id=1;
-	var scenicTeam;
-	var scenciTeam1;
+	var scenicPro;
 	var currentPage=1;
 	var pageRows=5;
 	var queryindex;
 	$(document).ready(function()
   	{
   		
-  		loadscenicTeam();
+  		loadscenicPro();
   	});
-  	function loadscenicTeam()
+  	function loadscenicPro()
   	{
   	
-  		var url="<%=basePath%>scenicTeam/getscenicTeam.action";
+  		var url="<%=basePath%>PromotionInfo/getPromotionInfo.action";
   		$.ajax(
   		{
   			url:url,
@@ -144,8 +211,8 @@ String day3=sdf.format(date3);
   					{
   						
   					    if(data!=null){
-  					    scenicTeam = data.jsonStr;
-  					    scenicTeam = JSON.parse(scenicTeam);
+  					    scenicPro = data.jsonStr;
+  					    scenicPro = JSON.parse(scenicPro);
   					    initTable(data.jsonStr,data.page);
   					    
   					    
@@ -187,8 +254,8 @@ String day3=sdf.format(date3);
 									datatype: "json",
 									data:{currentPage:page,pageRows:5},
 									success: function(data) {
-										scenicTeam = data.jsonStr;
-  					    				scenicTeam = JSON.parse(scenicTeam);
+										scenicPro = data.jsonStr;
+  					    				scenicPro = JSON.parse(scenicPro);
   					    				initTable(data.jsonStr,data.page);	
 						            }
 						        });
@@ -207,160 +274,161 @@ String day3=sdf.format(date3);
   		$("#tby").html("");
   		$.each(JSON.parse(jsonStr),function(index,value)
   			{
+  				var a; 
   				var t0="<tr>";
-  				var t1="<td style='text-align: center; width: 10%;'>"+value.scenicID+"</td>";
+  				var t1="<td style='text-align: center; width: 10%;'>"+value.scenicNo+"</td>";
               	var t2="<td style='text-align: center; width: 10%;'>"+value.scenicName+"</td>";
-              	var t3="<td style='text-align: center;width: 10%;'>"+"价格："+value.day1_fee+"，人数："+value.day1_maxNum+"</td>";
-              	var t4="<td style='text-align: center; width: 10%;'>"+"价格："+value.day2_fee+" ，人数："+value.day2_maxNum+"</td>";
-              	var t5="<td style='text-align: center; width: 10%;'>"+"价格："+value.day3_fee+" ，人数："+value.day3_maxNum+"</td>";
-              	var t6="<td align='center'> <div class='am-btn-toolbar'>"+
+              	var t3="<td style='text-align: center;width: 10%;'>"+value.proTitle+"</td>";
+              	var t4="<td style='text-align: center; width: 10%;'>"+value.proLink+"</td>";
+              	var t5="<td style='text-align: center; width: 10%;'>"+value.ProProduceTime+"</td>";
+              	if(value.isMainShow=='是')
+              	{
+              		a='取消首页展示';
+              		
+              	}else
+              	{
+              		a='首页展示';
+              	}
+              	
+              	var t6="<td style='text-align: center; width: 10%;'>"+value.isMainShow+"</td>";
+              	
+              	var t7="<td style='text-align: center; width: 10%;'>"+value.isAdmin+"</td>";
+              	var t8;
+              	if(value.isAdmin=='是')
+              	{
+              		t8="<td align='center'> <div class='am-btn-toolbar'>"+
               	"<div  style='text-align: center;float: none' class='am-btn-group am-btn-group-xs'>"+
-              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='queryTicket("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>查看</button>"+
-              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='editTicket("+index+")'>"+"<span class='am-icon-pencil-square-o'></span>编辑</button>"
-                  +"</div></div> </td>";		
-                var t7="</tr>";
-               $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7);
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='queryPro("+index+")'>查看</button>"+
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='PromainShow("+index+")'>"+a+"</button>"
+                  +"</div></div> </td>";
+              	}else
+              	{
+              		t8="<td align='center'> <div class='am-btn-toolbar'>"+
+              	"<div  style='text-align: center;float: none' class='am-btn-group am-btn-group-xs'>"+
+              	"<button  class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='queryPro("+index+")'>查看</button>"+
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='PromainShow("+index+")'>"+a+"</button>"+
+                  "<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='editTicket("+index+")'>"+'美工'+"</button>"
+                  +"</div></div> </td>";
+              	}
+              			
+                var t9="</tr>";
+               $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8).append(t9);
   			});
   	}
- 	function search()
+  	
+  	
+  	function loadscenicProByscenicNo()
+  	{
+  		var scenicNo=$("#searchText").val();
+  		var url="<%=basePath%>PromotionInfo/getPromotionInfoByscenicNo.action";
+  		$.ajax(
+  		{
+  			url:url,
+  			type:"post",
+  			datatype: "json",
+  			data:{currentPage:1,pageRows:pageRows,scenicNo:scenicNo},
+  			success: function(data)
+  					{
+  					    if(data!=null){
+  					    scenicPro = data.jsonStr;
+  					    scenicPro = JSON.parse(scenicPro);
+  					    initTable(data.jsonStr,data.page);
+  					    
+  					    
+  					       // 获取currentPage 请求页面
+						var currentPage = data.page;
+						// 获取totalPages 总页面
+						var totalPages = data.total;
+						// 获取numberofPages 显示的页面
+						var numberofPages = totalPages > 10 ? 10 : totalPages;
+						
+						var options = {
+							bootstrapMajorVersion: 3,
+		                    currentPage: currentPage,       // 当前页
+		                    totalPages: totalPages,      	// 总页数
+		                    numberofPages: numberofPages,   // 显示的页数
+		                    itemTexts: function (type, page, current) {
+		                        switch (type) {
+		                            case "first":
+		                                return "首页";
+		                                break;
+		                            case "prev":
+		                                return "上一页";
+		                                break;
+		                            case "next":
+		                                return "下一页";
+		                                break;
+		                            case "last":
+		                                return "末页";
+		                                break;
+		                            case "page":
+		                                return page;
+		                                break;
+		                        }
+		                    },
+		                    onPageClicked: function (event, originalEvent, type, page) {
+		                        $.ajax({
+									url: url,
+									type: "post",
+									datatype: "json",
+									data:{currentPage:1,pageRows:pageRows,scenicNo:scenicNo},
+									success: function(data) {
+										scenicPro = data.jsonStr;
+  					    				scenicPro = JSON.parse(scenicPro);
+  					    				initTable(data.jsonStr,data.page);	
+						            }
+						        });
+						     }  					
+						};					
+						$("#paginator").bootstrapPaginator(options);
+  					    }
+  					},
+  				
+  		});
+  		
+  	}
+  	
+  	
+  	function queryPro(index)
+  	{
+  		var a=scenicPro[index];
+  		var f="<%=basePath%>"+a.proImage;
+  		alert(f);
+  		document.getElementById("query_headimg").src=f;
+  		$("#query_headimg").src=f;
+  		$("#query_scenicNo").val(a.scenicNo);
+  		$("#query_scenicName").val(a.scenicName);
+  		$("#query_proTitle").val(a.proTitle);
+  		$("#query_proLink").val(a.proLink);
+  		$("#query_proRealse").val(a.ProProduceTime);
+  		$("#query_proStart").val(a.proStartTime);
+  		$("#query_proEnd").val(a.ProEndTime);
+  		$("#query_proText").val(a.ProContext);
+  		$("#query_proMain").val(a.isMainShow);
+  		$("#query_proAdmin").val(a.isAdmin);
+  		$("#querymodal").modal('show');
+  	}
+ 	
+ 	
+ 	function PromainShow(index)
  	{
- 		var url = "<%=basePath%>scenicTeam/getscenicTeamByscenicNo.action";
- 		var a = $("#searchText").val();
- 		$.ajax( {
- 			url:url,
- 			type:"post",
- 			datatype:"json",
- 			data:{scenicNo:a,},
- 			success:function(data) {
- 				
- 				if (data == "[]") {
- 					alert("没有搜索到任何信息，请重新搜索!");
-	 			}else {
-		 			var b=JSON.parse(data);
-					SearchSuccess(b[0]);
-		 		};
- 			}
- 		});
+ 		var url="<%=basePath%>PromotionInfo/UpdateMainShow.action";
+ 		var a=scenicPro[index];
+ 		$.ajax({
+		type: "post",
+		url: url,
+		data: {
+			mainShow:a.isMainShow,proID:a.proID
+		},
+		error: function() {
+			alert('操作失败');
+		},
+		success: function(data) {
+			if(data==1){alert('操作成功');loadscenicPro();}
+			else{alert('操作失败');loadscenicPro();}
+		}
+	});
  	}
- 	
- 	function queryTicket(index)
- 	{
- 		QuerySuccess(scenicTeam[index]);
- 	}
- 	
- 	
- 	function QuerySuccess(jsonStr) {
- 			$("#select").val(1);
- 			scenciTeam1=jsonStr;
- 			$("#search_scenicID").val(jsonStr.scenicID);
- 			$("#search_name").val(jsonStr.scenicName);
- 			$("#search_money").val(jsonStr.day1_fee);
- 			$("#search_maxNum").val(jsonStr.day1_maxNum);
- 			$("#SearchModal").modal('show');
- 	}
- 	
- 	function SearchSuccess(jsonStr) {
- 			scenciTeam1=jsonStr;
- 			$("#search_scenicID").val(jsonStr.scenicID);
- 			$("#search_name").val(jsonStr.scenicName);
- 			$("#search_money").val(jsonStr.day1_fee);
- 			$("#search_maxNum").val(jsonStr.day1_maxNum);
- 			$("#SearchModal").modal('show');
- 	}
- 	
- 	function editTicket(index)
- 	{
- 		scenciTeam1=scenicTeam[index];
- 		$("#select1").val(1);
- 		$("#edit_scenicID").val(scenicTeam[index].scenicID);
- 		$("#edit_name").val(scenicTeam[index].scenicName);
- 		$("#edit_money").val(scenicTeam[index].day1_fee);
- 		$("#edit_maxNum").val(scenicTeam[index].day1_maxNum);
- 		$("#EditModal").modal('show');
- 	}
- 	
- 	function SaveScenicTicket(l,m,n)
- 	{
- 		
- 		var url="<%=basePath%>scenicTeam/UpdateScenicTeam.action";
- 		var scenicNo=$("#edit_scenicID").val();
- 		var fee=$("#edit_money").val();
- 		var maxNum=$("#edit_maxNum").val();
- 		var date;
- 		if($("#select1").val()==1)
- 		{
- 			date=l;
- 		}else if($("#select1").val()==2)
- 		{
- 			date=m;
- 		}else 
- 		{
- 			date=n;
- 		}
- 		
- 		
- 		$.ajax( {
- 						url:url,
- 						type:"POST",
- 						datatype:"json",
- 						data:{scenicNo:scenicNo,fee:fee,maxNum:maxNum,date:date}, 			
- 						success:function(data) {
- 							
- 							if (data==1) {
- 							$("#editmodal").modal('hide');
- 							alert("保存成功！");
- 							loadscenicTeam();
- 							}
- 							else{alert("修改失败，请重新确认修改");
- 							$("#editmodal").modal('hide');
- 							}
- 						}
- 						});
- 		
- 	}
- 	
- 	function selectchange(i)
- 	{
- 		
- 		if(i==1)
- 		{
- 			
- 			$("#search_money").val(scenciTeam1.day1_fee);
- 			$("#search_maxNum").val(scenciTeam1.day1_maxNum);
- 		}
- 		else if(i==2)
- 		{
- 			$("#search_money").val(scenciTeam1.day2_fee);
- 			$("#search_maxNum").val(scenciTeam1.day2_maxNum);
- 		}
- 		else if(i==3)
- 		{
- 			$("#search_money").val(scenciTeam1.day3_fee);
- 			$("#search_maxNum").val(scenciTeam1.day3_maxNum);
- 		}
- 	}
- 	
- 	function selectchange1(i)
- 	{
- 		if(i==1)
- 		{
- 			
- 			$("#edit_money").val(scenciTeam1.day1_fee);
- 			$("#edit_maxNum").val(scenciTeam1.day1_maxNum);
- 		}
- 		else if(i==2)
- 		{
- 			$("#edit_money").val(scenciTeam1.day2_fee);
- 			$("#edit_maxNum").val(scenciTeam1.day2_maxNum);
- 		}
- 		else if(i==3)
- 		{
- 			$("#edit_money").val(scenciTeam1.day3_fee);
- 			$("#edit_maxNum").val(scenciTeam1.day3_maxNum);
- 		}
- 		
- 	}
- 	
  	
 </script>
 	<script src="<%=basePath%>assets/js/amazeui.min.js"></script>
@@ -368,7 +436,8 @@ String day3=sdf.format(date3);
 	<script src="<%=path%>/assets/js/distpicker.js"></script>
 	<script src="<%=path%>/assets/js/main.js"></script>
 	<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='<%=path%>/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
+			if('ontouchstart' in document.documentElement) document.write("<script src='<%=path%>/assets/js/jquery.mobile.custom.js'>"
+							+ "<"+"/script>");
 	</script>
 	<script src="<%=path%>/assets/js/bootstrap.js"></script>
 	<!-- page specific plugin scripts -->
