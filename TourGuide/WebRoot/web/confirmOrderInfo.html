@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>确认预约信息</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link rel="stylesheet" href="css/jquery.mobile-1.4.5.css">
 		<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">   
 		<link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
@@ -37,13 +38,18 @@
 				<p style="text-align: center;">确认预约信息</p>
 		</div>
 		<div class="ui-field-contain">
+			<label id="scenicName0" style="text-align: center;">景区名称</label>
 			<select name="scenicName" id="orderChooseScenicName">
 				<option value="" selected="selected">请选择景区</option>
 			</select>
 			<label for="orderDate" class="ui-hidden-accessible">日期</label>
-							<input type="text" id="orderChooseDate" data-role="datebox" placeholder="请输入日期" >
-							<label for="orderDatetime1" class="ui-hidden-accessible">时间</label>
+							<!--<input type="text" id="orderChooseDate" data-role="datebox" placeholder="请输入日期" >-->
+							<select id="orderChooseDate" placeholder="日期">
+								<option value="" selected="selected">请选择日期</option>
+							</select>	
+							<label for="orderDatetime1" class="ui-hidden-accessible" id="orderChooseTime0">时间</label>
 							<select id="orderChooseTime" name="datetime" value="" placeholder="时间" >
+								<option selected="selected">请选择时间</option>
 								<option value="8:00">8:00</option>
 								<option value="8:30">8:30</option>
 								<option value="9:00">9:00</option>

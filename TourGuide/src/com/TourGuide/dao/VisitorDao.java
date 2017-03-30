@@ -36,15 +36,14 @@ public class VisitorDao {
 		public boolean recordWeixinInfo(SNSUserInfo snsUserInfo){
 			
 			boolean bool = false;
-			String TEST = "test";
 			
 			String select = "select * from t_visitor where openID='"+snsUserInfo.getOpenId()+"'";
 			List<Map<String , Object>> list = jdbcTemplate.queryForList(select);
 			
 			if(list.size() == 0){
-				String insert = "insert into t_visitor (nickName,sex,name,phone,image,openID) "
+				String insert = "insert into t_visitor (nickName,sex,phone,image,openID) "
 						+ "values ('"+snsUserInfo.getNickname()+"','"+snsUserInfo.getSex()+"',"
-						+ "'"+TEST+"','"+snsUserInfo.getOpenId()+"','"+snsUserInfo.getHeadImgUrl()+"',"
+						+ "'"+snsUserInfo.getOpenId()+"','"+snsUserInfo.getHeadImgUrl()+"',"
 						+ "'"+snsUserInfo.getOpenId()+"')";
 				int i = jdbcTemplate.update(insert);
 				

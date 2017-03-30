@@ -11,18 +11,30 @@
 
 //window["HOST"]="http://localhost:8080/TourGuide";//服务器IP地址
 
-window["HOST"]="http://1f656026j8.imwork.net/TourGuide";//服务器IP地址
-window["vistPhone"] = getPhone();
-function getPhone(){
-	 var phone = getSession(sessionStorage.vistPhone);
-	 if(phone!=null){
-		 return phone;
+window["HOST"]="http://cps.xaut.edu.cn/TourGuide";
+//window["HOST"]="http://1f656026j8.imwork.net/TourGuide";//服务器IP地址
+//window["vistPhone"] = getPhone();
+window["openId"] = getOpenId();
+function getOpenId(){
+	 var id = getSession(sessionStorage.openId);
+	 if(id!=null){
+		 return id;
 	 }else{
-		 phone = GetUrlem("phone");
-		sessionStorage.vistPhone  = phone;
-		return phone;
+		 id = GetUrlem("openId");
+		sessionStorage.openId  = id;
+		return id;
 	 }
 }
+//function getPhone(){
+//	 var phone = getSession(sessionStorage.vistPhone);
+//	 if(phone!=null){
+//		 return phone;
+//	 }else{
+//		 phone = GetUrlem("phone");
+//		sessionStorage.vistPhone  = phone;
+//		return phone;
+//	 }
+//}
 
 function GetUrlem(name)
 {

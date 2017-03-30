@@ -23,7 +23,7 @@
 		<script type="text/javascript" src="js/jquery.cookie.js"></script>
 		
 		<script type="text/javascript">
-			$(function() {
+			/*$(function() {
 				$('input:jqmData(role="datebox")').mobiscroll().date();
 				var now = new Date();
 				var max = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 3);
@@ -44,7 +44,7 @@
 					dateFormat: 'yy-mm-dd'
 				});
 				
-			});
+			});*/
 		</script>
 	</head>
 
@@ -105,7 +105,7 @@
 							</tr>
 							<tr>
 								<td><label for="starlevel">星级:</label></td>
-								<td><input id="starleve" type="range" name="starleve" value="1" min="1" max="7"></td>
+								<td><input id="starleve" type="range" name="starleve" value="0" min="0" max="7"></td>
 							</tr>
 							<tr>
 								<td></td>
@@ -134,7 +134,10 @@
 							</select>
 							</div>
 							<label for="orderDate" class="ui-hidden-accessible">日期</label>
-							<input type="text" id="chooseDate" data-role="datebox" placeholder="请输入日期" >
+							<!--<input type="text" id="chooseDate" data-role="datebox" placeholder="请输入日期" >-->
+							<select id="chooseDate" placeholder="日期">
+								<option value="" selected="selected">请选择日期</option>
+							</select>
 							<label for="orderDatetime" class="ui-hidden-accessible">时间</label>
 							<select id="orderDatetime123" name="datetime" value="" placeholder="时间" >
 								<option>8:00</option>
@@ -181,7 +184,11 @@
 							</select>
 						</div>
 							<label for="orderDate" class="ui-hidden-accessible">日期</label>
-							<input type="text" id="orderDate" data-role="datebox" placeholder="请输入日期">
+							<!--<input type="text" id="orderDate" data-role="datebox" placeholder="请输入日期">-->
+							<select id="orderDate" placeholder="日期">
+								<option value="" selected="selected">请选择日期</option>
+							</select>
+							
 							<label for="orderDatetime" class="ui-hidden-accessible">时间</label>
 							<select id="orderDatetime" name="datetime" value="" placeholder="时间">
 								<option>8:00</option>

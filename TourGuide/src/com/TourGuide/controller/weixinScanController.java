@@ -27,7 +27,13 @@ public class weixinScanController {
 	 @ResponseBody
 	 public Object weixinScan( HttpServletRequest request,
 			 HttpServletResponse response) throws Exception {
+<<<<<<< HEAD
 		CommonResp.SetUtf(response);
+=======
+
+		CommonResp.SetUtf(response);
+		
+>>>>>>> 8153f72fcb4d7b4aebd3bea0f8ab9f221e799bcf
 		 String weburl = request.getParameter("url"); 
 
 	     Map<String, String> resMap = new HashMap<String, String>();

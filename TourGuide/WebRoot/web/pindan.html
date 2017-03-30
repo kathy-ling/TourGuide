@@ -72,7 +72,11 @@
 							</select>
 							</div>
 							<label for="orderDate" class="ui-hidden-accessible">日期</label>
-							<input data-role="datebox" id="visitTime1" name="date" placeholder="请输入日期" onchange="chooseOrder()" >
+							<!--<input data-role="datebox" id="visitTime1" name="date" placeholder="请输入日期" onchange="chooseOrder()" >-->
+							<select id="visitTime1" placeholder="日期">
+								<option value="" selected="selected">请选择日期</option>
+							</select>
+	
 							<label for="chooseVisitNum" class="ui-hidden-accessible" ">人数</label>
 							<input type="text" id="chooseVisitNum" name="VisitNum" value="" placeholder="人数" onblur="chooseOrder()">
 	        			<div id="order_list">
@@ -100,7 +104,10 @@
 				</div>
                 <div class="visitTime">
                 <label for="visitTime" class="ui-hidden-accessible">日期</label>
-               <input data-role="datebox" id="visitTime" name="date" placeholder="请输入日期" onchange="getFee()" >
+               <!--<input data-role="datebox" id="visitTime" name="date" placeholder="请输入日期" onchange="getFee()" >-->
+               	<select id="visitTime" placeholder="日期">
+					<option value="" selected="selected">请选择日期</option>
+				</select>
 
                <label for="chooseDatetime" class="ui-hidden-accessible">时间</label>
                <!--<input id="chooseDatetime" name="datetime" type="datetime" data-role="datebox" data-options='{"mode": "timeflipbox","overrideTimeFormat":"24","overrideTimeOutput":"%H:%M","minuteStep":"30"}'  value=""  placeholder="时间">-->

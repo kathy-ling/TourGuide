@@ -6,6 +6,7 @@ $('#OrderguidePage').bind('pagecreate', function(event, ui) {
 	sname = GetUrlem("sname");
 	addAllScenics();
 	addPopularGuides();
+	addDate(); //动态添加日期
 	
 	if (ScenicNo != null) {
 		sessionStorage.scenicNo = ScenicNo;
@@ -13,6 +14,8 @@ $('#OrderguidePage').bind('pagecreate', function(event, ui) {
 	if (sname != null) {
 		$("#chooseScenicName").val(sname);
 	}
+	//若等级为0，则传空值
+	
 	$("#selectAvailableGuides").click(function() {
 		selectAvailableGuides();
 	});
@@ -25,7 +28,31 @@ $('#OrderguidePage').bind('pagecreate', function(event, ui) {
 		checkOrderForm();// 检查表单正确后，调用提交方法
 	});
 });
-
+function addDate()
+{
+	var now = new Date();
+	var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
+	var tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate()+2);
+	var dayAfterTomo = new Date(now.getFullYear(), now.getMonth(), now.getDate()+3);
+	var today0 = today.toISOString();
+	var today1 = today0.substring(0,10);
+	var tomorrow0 = tomorrow.toISOString();
+	var tomorrow1 = tomorrow0.substring(0,10);
+    var SdayAfterTomo0 = dayAfterTomo.toISOString();
+    var dayAfterTomo1 = SdayAfterTomo0.substring(0,10);
+	
+	//根据id获取select对象
+	var dateSelect = document.getElementById("chooseDate");
+	var dateSelect1 = document.getElementById("orderDate");
+	//dateSelect.append("<option value='"+dayAfterTomo0+"'>"+dayAfterTomo0+"</option>");
+	dateSelect.options.add(new Option(today1,today1));
+	dateSelect.options.add(new Option(tomorrow1,tomorrow1));
+	dateSelect.options.add(new Option(dayAfterTomo1,dayAfterTomo1));
+	
+	dateSelect1.options.add(new Option(today1,today1));
+	dateSelect1.options.add(new Option(tomorrow1,tomorrow1));
+	dateSelect1.options.add(new Option(dayAfterTomo1,dayAfterTomo1));
+}
 function getAvailableGuides1()
 {
 	
@@ -305,24 +332,32 @@ function selectAvailableGuides() {
 	var isage = $("input:radio[name='age']:checked").val();
 	var language; // 转换语种
 	var islanguage = $("input:radio[name='language']:checked").val();
-	
-	
-	
+		
+	if(starlevel == 0)
+	{
+		starlevel == "null";
+	}
 	if (issex == undefined){
-		sex = "null";
+		alert("请选择性别，再进行筛选！");
+		return;
+		//sex = "null";
 	} else {
 		sex = issex;
 	}
 
 
 	if (isage == undefined) {
-		age = "null";
+		alert("请选择年龄，再进行筛选！");
+		return;
+		//age = "null";
 	} else {
 		age = isage;
 	}
 
 	if (islanguage == undefined) {
-		language = "null";
+		alert("请选择语言，再进行筛选！");
+		return;
+		//language = "null";
 	} else {
 		language = islanguage;
 	}
@@ -444,7 +479,7 @@ function addlist(data) {
 		// A1List.href = "?phone="+n.phone+"#orderTicketPop";
 		// A1List.setAttribute("data-transition","pop");
 		A1List.setAttribute("Phone", n.phone);
-		A1List.setAttribute("class", "DirectOrderBtn");
+		//A1List.setAttribute("class", "DirectOrderBtn");
 		A1List.setAttribute("data-position-to", "window");
 		LiListInfo.appendChild(A1List);
 	});

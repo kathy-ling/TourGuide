@@ -1,4 +1,4 @@
-
+alert(openId);
 var province;
 
 $(function($) {
@@ -227,7 +227,7 @@ window.onload = function() {
 
 function getScenicByProvince()
 {
-	
+	alert(province);
 	var url1 = HOST + "/getScenicByLocation.do";
 	$.ajax({
 		type : "post",

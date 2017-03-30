@@ -11,19 +11,55 @@ alert(visitNum);
 alert(visitTime);
 alert(scenicName);
 
+addDate(); //动态添加日期
+
 //显示所有景点名称
 addAllScenics();
+
+//判断景点名称是否为空
+if(!scenicName)
+{
+	$("#scenicName0").hide();
+}else{
+	$("#scenicName").hide();
+	$("#scenicName0").val(scenicName);
+}
+//判断时间是否为空
+if(!visitTime)
+{
+	$("#orderChooseTime0").hide();
+}else{
+	$("#orderChooseTime").hide();
+	$("#orderChooseTime0").val(visitTime);
+}
 
 //设置预约信息
 $("#orderChooseVisitNum").attr("value",visitNum);
 $("#orderChooseDate").attr("value",visitDate);
-//$("#orderChooseTime option[value = '9:00']").attr("selected","selected");
-//$("#orderChooseTime").find("option[text='10:00']").attr("selected",true);
-$("#orderChooseTime").val(visitTime);
-//$("#orderChooseScenicName").val(scenicName);
-$("#orderChooseTime").find("option[text=scenicName]").attr("selected",true);
+
 });
 
+function addDate()
+{
+	var now = new Date();
+	var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
+	var tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate()+2);
+	var dayAfterTomo = new Date(now.getFullYear(), now.getMonth(), now.getDate()+3);
+	var today0 = today.toISOString();
+	var today1 = today0.substring(0,10);
+	var tomorrow0 = tomorrow.toISOString();
+	var tomorrow1 = tomorrow0.substring(0,10);
+    var SdayAfterTomo0 = dayAfterTomo.toISOString();
+    var dayAfterTomo1 = SdayAfterTomo0.substring(0,10);
+	
+	//根据id获取select对象
+	var dateSelect = document.getElementById("orderChooseDate");
+	//dateSelect.append("<option value='"+dayAfterTomo0+"'>"+dayAfterTomo0+"</option>");
+	dateSelect.options.add(new Option(today1,today1));
+	dateSelect.options.add(new Option(tomorrow1,tomorrow1));
+	dateSelect.options.add(new Option(dayAfterTomo1,dayAfterTomo1));
+	
+}
 
 //使信息不为空
 function confirmOrder()
