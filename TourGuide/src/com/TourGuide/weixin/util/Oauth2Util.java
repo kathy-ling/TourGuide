@@ -133,7 +133,8 @@ public class Oauth2Util {
 				+ "scope=SCOPE&state=STATE#wechat_redirect";
 		
 		// 授权回调地址（OAuthServlet的访问地址）
-		String redirectUrI = urlEncodeUTF8("http://1f656026j8.imwork.net/TourGuide/oauthServlet");
+//		String redirectUrI = urlEncodeUTF8("http://1f656026j8.imwork.net/TourGuide/oauthServlet");
+		String redirectUrI = urlEncodeUTF8("http://cps.xaut.edu.cn/TourGuide/oauthServlet");		
 		
 		// 应用授权作用域。scope等于"snsapi_base"时，不弹出授权页面，直接跳转。
 		// scope等于"snsapi_userinfo"时，弹出授权页面，可以通过OpenID获取用户信息。

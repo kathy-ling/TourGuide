@@ -102,7 +102,7 @@ public class FastOrderDao {
 					maxNum, scenicNo, guideFee,guidePhone});
 			
 			String sql = "select visitNum from t_consistresult where orderID='"+orderID+"'";
-			List<Map<String, Object>> listNum = jdbcTemplate.queryForList(sqlSelect);
+			List<Map<String, Object>> listNum = jdbcTemplate.queryForList(sql);
 			if(listNum.size() != 0){
 				visitNum = (int) listNum.get(0).get("visitNum");
 			}			

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.TourGuide.common.CommonResp;
 import com.TourGuide.weixin.util.JsSignUtil;
 
 @Controller
@@ -27,6 +28,8 @@ public class weixinScanController {
 	 public Object weixinScan( HttpServletRequest request,
 			 HttpServletResponse response) throws Exception {
 
+		CommonResp.SetUtf(response);
+		
 		 String weburl = request.getParameter("url"); 
 
 	     Map<String, String> resMap = new HashMap<String, String>();
