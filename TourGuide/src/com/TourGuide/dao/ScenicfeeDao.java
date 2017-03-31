@@ -30,16 +30,7 @@ public class ScenicfeeDao {
 		return jdbcTemplate.queryForList(sql);
 	}
 	
-	/**
-	 * 通过查询订单的金额来计算景区平台的收入
-	 * @return
-	 * 2017-2-20 10:11:25
-	 */
-	public int  insertScenicFee() {
-		
-		
-		return 1;
-	}
+	
 	
 	
 	/**
