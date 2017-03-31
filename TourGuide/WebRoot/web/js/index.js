@@ -1,4 +1,4 @@
-alert(openId);
+
 var province;
 
 $(function($) {
@@ -227,7 +227,7 @@ window.onload = function() {
 
 function getScenicByProvince()
 {
-	alert(province);
+//	alert(province);
 	var url1 = HOST + "/getScenicByLocation.do";
 	$.ajax({
 		type : "post",
@@ -336,4 +336,38 @@ function LoginOrPersonal()
 	}
 
 }
+
+function isRegist()
+{
+	//根据openId判断是否注册
+    var openId = GetUrlem("openId");
+    alert(openId);
+    //从服务器端根据openId返回数据
+    var Url = HOST+"/getInfobyOpenID.do";
+    $.ajax({
+		type:"post",
+		url:Url,
+		async:true,
+		data:{"openId":openId},
+		datatype:"JSON",
+		error:function()
+		{
+			alert("根据openId返回数据Request error!");
+		},
+		success:function(data)
+		{
+			alert("根据openId返回数据Request success!");
+			alert(data.phone);
+			if(data.phone==undefined)
+			{
+				alert("您还未注册，请注册！");
+				window.location.href = "register.html";
+			}
+			else{
+				window.location.href = "personalHome.html?"+"phone="+data.phone;
+			}
+		}
+	});
+}
+
 

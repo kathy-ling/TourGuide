@@ -36,7 +36,7 @@
 							<a href="orderGuide.html" target="_top" id="" class="navbar0">预约讲解员</a>
 						</li>
 						<li>
-							<a href="personalHome.html" target="_top" id="" class="navbar0">个人中心</a>
+							<a href="personalHome.html" target="_top" id="" class="navbar0" onclick="isRegist()">个人中心</a>
 						</li>
 					</ul>
 				</div>
@@ -46,12 +46,12 @@
 			</div>
 			<div data-role="main" class="ui-content">
 				<div id="qrcode">
-					<h1>生成二维码</h1>
+					
 				</div>
 				<ul data-role="listview" id="infolist">
 					<li data-inset="true">
 						<p><span class="viewState">待游览</span> 费用合计：
-							<span class="totalMoney1">￥315</span>
+							<span class="totalMoney1"></span>
 							<!--<span class="">已支付</span>-->
 						</p>
 					</li>
@@ -89,7 +89,15 @@
 						</li>
 					</p>
 				</ul>
-				<button type="">取消订单</button>
+				<div>
+					<div align="center" data-role="footer" class="ui-content">
+						<a href="#" class="ui-btn ui-icon-delete ui-btn-icon-right ui-btn-b ui-corner-all" ">取消订单</a>
+						<a onclick="produce()" class="ui-btn ui-icon-delete ui-btn-icon-right ui-btn-b ui-corner-all" ">生成二维码</a>
+					</div>
+					
+					
+				</div>
+				
 			</div>
 		</div>
 	</body>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>二维码扫描</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="css/jquery.mobile-1.4.5.css">
+		<script src="js/jquery-1.11.3.min.js"></script>
+		<script src="js/jquery.mobile-1.4.5.min.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script src="js/QRcodeScan.js"></script>
+	</head>
+
+	<body>
+		<div data-role="header">
+			<p style="text-align: center;">二维码扫描</p>
+		</div>
+
+		<div data-role="main" class="ui-content">
+
+			<div data-role="popup" id="myPopupDialog">
+				<div data-role="header">
+					<h1>订单确认</h1>
+				</div>
+
+				<div data-role="main" class="ui-content">
+					<h2>游客订单信息</h2>
+					<div>
+						<table align="center">
+							<tr>
+								<td>
+									<div>景区名称：</div>
+								</td>
+								<td>
+									<div id="scenicName"></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div>参团人数：</div>
+								</td>
+								<td>
+									<div id="maxnum"></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div>个人讲解费：</div>
+								</td>
+								<td>
+									<div id="fee"></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div>讲解费总计：</div>
+								</td>
+								<td>
+									<div id="Totalfee"></div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+				<div data-role="footer" id="pageone">
+					<div align="center" data-role="main" class="ui-content">
+						<a href="#" class="ui-btn ui-icon-star ui-btn-icon-right ui-btn-b ui-corner-all" onclick="ProduceOrder()">加入</a>
+					</div>
+				</div>
+			</div>
+			<table align="center">
+				<tr>
+					<td>
+						<div>景区名称：</div>
+					</td>
+					<td>
+						<div id="scenicName"></div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div>订单编号：</div>
+					</td>
+					<td>
+						<div id="orderID"></div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div>拼团最大人数：</div>
+					</td>
+					<td>
+						<div id="maxnum"></div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div>拼团已有人数：</div>
+					</td>
+					<td>
+						<div id="nowNum"></div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div>个人讲解费：</div>
+					</td>
+					<td>
+						<div id="fee"></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div data-role="footer" id="pageone">
+			<div align="center" data-role="main" class="ui-content">
+				<a onclick="ScanResult()" class="ui-btn ui-icon-video ui-btn-icon-right ui-btn-b ui-corner-all">扫码</a>
+			</div>
+		</div>
+	</body>
+
+</html>

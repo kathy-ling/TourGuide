@@ -14,7 +14,7 @@ public class MenuManager {
 	private static Menu createMyMenu(){
 		
 		ViewButton btn1 = new ViewButton();
-		btn1.setName("主页");
+		btn1.setName("主页-cps");
 		btn1.setType("view");
 		btn1.setUrl(Oauth2Util.getOauth2Url().toString());
 		

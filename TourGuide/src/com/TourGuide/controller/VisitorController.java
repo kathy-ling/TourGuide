@@ -73,4 +73,24 @@ public class VisitorController {
 		writer.write(new Gson().toJson(visitorInfo));
 		writer.flush();
 	}
+	
+	
+	/**
+	 * 通过用户的openID，查看用户的信息
+	 * @param resp
+	 * @param openId  
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getInfobyOpenID.do")
+	public void getInfobyOpenID(HttpServletResponse resp,
+			@RequestParam("openId") String openId) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		VisitorInfo visitorInfo = visitorService.getInfobyOpenID(openId);
+		
+		PrintWriter writer = resp.getWriter();
+		writer.write(new Gson().toJson(visitorInfo));
+		writer.flush();
+	}
 }

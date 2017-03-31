@@ -95,7 +95,6 @@ public class FastOrderController {
 	 * 讲解员接单（快捷拼单）
 	 * @param resp
 	 * @param consistOrderID 游客的订单编号
-	 * @param orderID  讲解员的订单编号
 	 * @param guidePhone   讲解员手机号
 	 * @return
 	 * @throws IOException
@@ -104,7 +103,6 @@ public class FastOrderController {
 	@ResponseBody
 	public Object takeFastOrder(HttpServletResponse resp,
 			@RequestParam("consistOrderID") String consistOrderID,
-			@RequestParam("orderID") String orderID,
 			@RequestParam("guidePhone") String guidePhone) throws IOException{
 		
 		CommonResp.SetUtf(resp);
@@ -112,7 +110,7 @@ public class FastOrderController {
 		List<Map<String, Object>> listResult = orderService.getDetailOrderInfo(consistOrderID);
 		int visitNum = (int) listResult.get(0).get("visitNum");
 		
-		 int ret= fastOrderService.takeFastOrder(consistOrderID, orderID, guidePhone, visitNum);
+		 int ret= fastOrderService.takeFastOrder(consistOrderID, guidePhone, visitNum);
 		
 		return ret;
 	}

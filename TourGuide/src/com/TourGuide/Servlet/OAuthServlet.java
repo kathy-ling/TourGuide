@@ -55,7 +55,7 @@ public class OAuthServlet extends HttpServlet{
 			
 			boolean bool = visitorService.recordWeixinInfo(snsUserInfo);
 			
-			response.sendRedirect("/TourGuide/web/index.html?openId"+openId);
+			response.sendRedirect("/TourGuide/web/index.html?openId="+openId);
 			
 //			// 设置要传递的参数
 //			request.setAttribute("snsUserInfo", snsUserInfo);

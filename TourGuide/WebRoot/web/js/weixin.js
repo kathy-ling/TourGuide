@@ -11,6 +11,12 @@
 
 
 var url = window.location.href;  
+<<<<<<< HEAD
+=======
+
+alert("url" + url);
+
+>>>>>>> 2ea9b35025229f2520c9824b302c87770d8be55a
 var url11 = HOST + "/weixinScan.do";
     //ajax注入权限验证  
     $.ajax({  
@@ -39,7 +45,7 @@ var url11 = HOST + "/weixinScan.do";
 //			$("#jsapi_ticket").html(jsapi_ticket);
             
             wx.config({  
-                debug: false, //开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。  
+                debug: true, //开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。  
                 appId: appId, //必填，公众号的唯一标识  
                 timestamp: timestamp, // 必填，生成签名的时间戳  
                 nonceStr: noncestr, //必填，生成签名的随机串  
