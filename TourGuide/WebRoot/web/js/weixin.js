@@ -11,7 +11,7 @@
 
 
 var url = window.location.href;  
-var url11 = HOST + "/tiaoma.do";
+var url11 = HOST + "/weixinScan.do";
     //ajax注入权限验证  
     $.ajax({  
         url:url11,  

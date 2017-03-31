@@ -23,6 +23,7 @@ public class PromotionInfo {
 	private String  isMainShow;
 	private String  isAdmin;
 	private String ProContext;
+	private String htmlPath;
 	public String getScenicNo() {
 		return scenicNo;
 	}
@@ -94,6 +95,12 @@ public class PromotionInfo {
 	}
 	public void setProID(String proID) {
 		this.proID = proID;
+	}
+	public String getHtmlPath() {
+		return htmlPath;
+	}
+	public void setHtmlPath(String htmlPath) {
+		this.htmlPath = htmlPath;
 	}
 	
 	

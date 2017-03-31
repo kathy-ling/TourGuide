@@ -2,6 +2,8 @@ package com.TourGuide.Action;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.model.AdminInfo;
-import com.TourGuide.service.ScenicSpotService;
 import com.TourGuide.service.ScenicTeamService;
 import com.TourGuide.web.Service.PromotionInfoService;
 import com.TourGuide.web.model.PromotionInfo;
@@ -38,6 +39,8 @@ public class PromotionInfoAction {
 	@Autowired
 	private ScenicTeamService scenicTeamService;
 	
+	
+	private String filename; 
 	/**
 	 * 分页得到所有景区活动信息
 	 * @param resp
@@ -87,7 +90,7 @@ public class PromotionInfoAction {
 		String jsonStr=new Gson().toJson(list).toString();
 		int i=promotionInfoService.getProByscenicNoCount(scenicNo);
 		map.put("jsonStr", jsonStr);
-		map.put("page", currentPage);
+		map.put("page",    currentPage);
 		map.put("total", (int)(i%pageRows==0? i/pageRows:i/pageRows + 1));
 		return map;
 	}
@@ -134,14 +137,15 @@ public class PromotionInfoAction {
 		System.out.println("文件大小:"+file.getSize());
 		System.out.println(".................................................");
 		
+		
 		String scenicImage=file.getOriginalFilename();
-		String[] strs=scenicImage.split(".");
-		scenicImage=promotionInfoService.getBookOrderID()+"."+strs[strs.length];
-		System.out.println(scenicImage);
+		String[] strs=scenicImage.split("\\.");
+		scenicImage=promotionInfoService.getBookOrderID()+"."+strs[strs.length-1];
+		filename="/image/promotions/"+scenicImage;
 			//将文件copy上传到服务器
 		try {
-			System.out.println(realPath + "/" + file.getOriginalFilename());
-			File fileImageFile=new File(realPath + "/" + file.getOriginalFilename());
+			System.out.println(realPath + "/" + scenicImage);
+			File fileImageFile=new File(realPath + "/" + scenicImage);
 			file.transferTo(fileImageFile);
 			System.out.println("图片上传成功");
 			map.put("json", "true");
@@ -152,5 +156,71 @@ public class PromotionInfoAction {
 		}	
 		return  map;
 	}  
+	
+	
+	
+	/**
+	 * 增加活动信息
+	 * @param resp
+	 * @param request
+	 * @param session
+	 * @param proTitle
+	 * @param proStart
+	 * @param proEnd
+	 * @param proContext
+	 * @return
+	 * @throws IOException
+	 * 2017-3-30 21:46:41
+	 */
+	@RequestMapping(value="/AddProInfo.action",method=RequestMethod.POST)
+	@ResponseBody
+	public Object AddScenicInfo(HttpServletResponse resp,HttpServletRequest request,
+			HttpSession session,
+			@RequestParam(value="proTitle")String proTitle,@RequestParam(value="proStart")String proStart,
+			@RequestParam(value="proEnd")String proEnd,
+			@RequestParam(value="proText")String proContext,
+			@RequestParam(value="scenicName")String scenicName
+			) throws IOException {
+		
+		CommonResp.SetUtf(resp);
+		
+		
+		String proID=promotionInfoService.getPromotionID();
+		String ProrealPath=request.getSession().getServletContext().getRealPath("WEB-INF/HtmlPath/SourceHtml")+"/"+proID+".html";
+		String HtmlrealPath=request.getSession().getServletContext().getRealPath("WEB-INF/HtmlPath/MyHtml.html");
+		
+		String basePath = request.getScheme() + "://"+ request.getServerName() + ":" + 
+							request.getServerPort()+  request.getContextPath() + "/";
+		AdminInfo adminInfo=(AdminInfo) session.getAttribute("adminSession");
+		String scenicNo=scenicTeamService.getScenicNoByAccount(adminInfo.getUsername());
+		
+		
+		Date date=new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		PromotionInfo promotionInfo=new PromotionInfo();
+		
+		promotionInfo.setProID(proID);
+		promotionInfo.setProTitle(proTitle);
+		promotionInfo.setProImage(filename);
+		promotionInfo.setProLink("正在美工");
+		promotionInfo.setProStartTime(proStart);
+		promotionInfo.setProEndTime(proEnd);
+		promotionInfo.setProProduceTime(formatter.format(date));
+		promotionInfo.setScenicNo(scenicNo);
+		promotionInfo.setScenicName(scenicName);
+		promotionInfo.setIsMainShow("0");
+		promotionInfo.setIsAdmin("0");
+		promotionInfo.setProContext(proContext);
+		promotionInfo.setHtmlPath(ProrealPath);
+		int confirm=0;
+		boolean a=promotionInfoService.JspToHtmlFile(basePath, HtmlrealPath, ProrealPath, promotionInfo);
+		
+		if (a) {
+			confirm=promotionInfoService.InsetProInfo(promotionInfo);
+		} 
+		Map<String, Object> map = new HashMap<>();
+		map.put("confirm", confirm);
+		return map;
+	}
 
 }

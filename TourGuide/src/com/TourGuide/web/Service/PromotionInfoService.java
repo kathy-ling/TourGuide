@@ -46,5 +46,23 @@ public class PromotionInfoService {
 	{
 		return promotionInfoDao.getBookOrderID();
 	}
+	
+	
+	public String getPromotionID() 
+	{
+		return promotionInfoDao.getPromotionID();
+	}
+	
+	public int InsetProInfo(PromotionInfo promotionInfo) 
+	{
+		return promotionInfoDao.InsetProInfo(promotionInfo);
+	}
+	
+	
+	public  boolean JspToHtmlFile(String url,String filePath, String HtmlFile,
+			PromotionInfo list) 
+	{
+		return promotionInfoDao.JspToHtmlFile(url, filePath, HtmlFile, list);
+	}
 
 }

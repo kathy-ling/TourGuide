@@ -54,6 +54,7 @@
 <link rel="stylesheet" href="<%=basePath%>css/dateSelect.css" />
 <script type="text/javascript" src="<%=path%>/assets/js/jquery.js"></script>
 <script type="text/javascript" src="<%=path%>/assets/js/bootstrap-paginator.min.js"></script>
+<script type="text/javascript" src="<%=basePath %>/assets/js/ajaxfileupload.js"></script>
 </head>
 
 <body>
@@ -406,76 +407,83 @@
 				</div>
 			</div>
 		</div>
-		</div>
-		<div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="model-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-hidden="true">
-							<span class="blue">X</span>
-						</button>
-						<h4 class="modal-title" id="myModalLabel"
-							style="text-align:center;">发布景区活动信息</h4>
-					</div>
-					<div class="modal-body">
-						<table
-							style="border-collapse:separate; border-spacing:10px; margin:auto;">
-							<tr>
-								<td>活动图片上传：</td>
-								<td>
-									<table>
-										<tr>
-											<td><input type="file" id="file" name="file"
-												style="width:200px"><td>
-										</tr>
-							</table></td></tr>
-								<tr>
-									<td>活动标题：</td>
-									<td><input type="text" id="add_proTitle"
-									name="add_proTitle" /></td>
-								</tr>
-								<tr>
-									<td>活动开始时间：</td>
-									<td><input type="text" id="add_proStart"
-									name="add_proStart" /></td>
-								</tr>
-								<tr>
-									<td>活动结束时间：</td>
-									<td><input type="text" id="add_proEnd" name="add_proEnd" /></td>
-								</tr>
-								<tr>
-									<td>活动内容：</td>
-									<td><textarea rows="15" cols="22" id="add_proText"
-										name="add_proText"></textarea></td>
-								</tr>
+	</div>
+	<div class="modal fade" id="addmodal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="model-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">
+						<span class="blue">X</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel"
+						style="text-align:center;">发布景区活动信息</h4>
+				</div>
+				<div class="modal-body">
+					<table
+						style="border-collapse:separate; border-spacing:10px; margin:auto;">
 						<tr>
-								<td colspan="2" style="text-align:center;">
-						<input type="button" onclick="AddProInfo()" value="确定增加" />
-						</td>
-							</tr>
-						
+							<td>活动图片上传：</td>
+							<td>
+								<table>
+									<tr>
+										<td><input type="file" id="file" name="file"
+											style="width:200px">
+										<td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>活动标题：</td>
+							<td><input type="text" id="add_proTitle" name="add_proTitle" /></td>
+						</tr>
+						<tr>
+							<td>活动开始时间：</td>
+							<td><input type="text" id="add_proStart" name="add_proStart" /></td>
+						</tr>
+						<tr>
+							<td>活动结束时间：</td>
+							<td><input type="text" id="add_proEnd" name="add_proEnd" /></td>
+						</tr>
+						<tr>
+							<td>活动内容：</td>
+							<td><textarea rows="15" cols="22" id="add_proText"
+									name="add_proText"></textarea></td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align:center;"><input
+								type="button" onclick="AddProInfo()" value="确定增加" /></td>
+						</tr>
+
 					</table>
-					
-									
-					</div>
+
+
 				</div>
 			</div>
-</div>
- <!--[if (gte IE 9)|!(IE)]><!-->
+		</div>
+	</div>
+	<!--[if (gte IE 9)|!(IE)]><!-->
 	<!--<![endif]-->
 	<script src="<%=path%>/assets1/js/amazeui.min.js"></script>
 	<script src="<%=path%>/assets1/js/app.js"></script>
 	<script type="text/javascript">
 	var scenicPro;
-	var currentPage=1;
 	var pageRows=5;
+	var scenicName;
 		$(document).ready(function() {
+			loadALL();
+		});
+		
+		function loadALL()
+		{
 			loadScenicConSist();
 			loadScenicinfo();
 			loadScenicTicket();
 			loadscenicProByscenicNo();
-		});
+		
+		}
 		
 		
 		function ShowAddModal()
@@ -486,7 +494,52 @@
 		
 		function AddProInfo()
 		{
-			
+			var proTitle=$("#add_proTitle").val();
+			var proStart=$("#add_proStart").val();
+			var proEnd=$("#add_proEnd").val();
+			var proText=$("#add_proText").val();
+			var url = "<%=basePath%>PromotionInfo/AddProInfo.action";
+ 			if (proTitle != "" && proStart != "" && proEnd != "" && proText != "" ) {
+ 			$.ajaxFileUpload({
+          			url : "<%=basePath%>PromotionInfo/UploadProImage.action",
+           			fileElementId:'file',
+          			dataType : "json",
+           			success: function(data){
+           			if(data.json=="true")
+           			{
+           				$.ajax( {
+ 							url:url,
+ 							type:"POST",
+ 							datatype:"json",
+ 							data:{proTitle:proTitle,proStart:proStart,
+									proEnd:proEnd,proText:proText,scenicName:scenicName},
+ 							success:function(data) {
+ 							if (data.confirm==1) {
+ 									$("#addmodal").modal('hide');
+ 									alert("添加成功！");
+ 									loadALL();
+ 							}
+ 							else {
+ 								alert('活动申请失败，请重新申请');
+ 							}
+ 							loadALL();
+ 							}
+ 							});
+           			}else
+           			{
+           				alert("景区活动图片上传失败");
+           			}
+          	 },
+           	error: function(data)
+           	{
+           		
+              	alert("景区活动图片上传异常");
+           	}
+        });
+ 			
+ 	}else{
+ 		alert("信息不能为空，请重新填写活动信息！");
+ 	}
 		}
 		
 		
@@ -532,7 +585,6 @@
  			datatype:"json",
  			data:{scenicNo:"a"},
  			success:function(data) {
- 			alert(data);
 		 			var b=JSON.parse(data);
 		 			$("#day1_fee").val(b[0].day1_fee);
 		 			$("#day1_num").val(b[0].day1_maxNum);
@@ -574,7 +626,7 @@
   		$("#tby").html("");
   		$.each(JSON.parse(jsonStr),function(index,value)
   			{
-  				var a; 
+  				scenicName=value.scenicName;
   				var t0="<tr>";
   				var t1="<td style='text-align: center; width: 10%;'>"+value.scenicNo+"</td>";
               	var t2="<td style='text-align: center; width: 10%;'>"+value.scenicName+"</td>";
@@ -613,6 +665,8 @@
   					    scenicPro = data.jsonStr;
   					    scenicPro = JSON.parse(scenicPro);
   					    initTable(data.jsonStr,data.page);
+  					    
+  					    
   					       // 获取currentPage 请求页面
 						var currentPage = data.page;
 						// 获取totalPages 总页面
@@ -649,7 +703,7 @@
 									url: url,
 									type: "post",
 									datatype: "json",
-									data:{currentPage:1,pageRows:pageRows,scenicNo:scenicNo},
+									data:{currentPage:page,pageRows:pageRows,scenicNo:"aaa"},
 									success: function(data) {
 										scenicPro = data.jsonStr;
   					    				scenicPro = JSON.parse(scenicPro);
@@ -670,7 +724,6 @@
   	{
   		var a=scenicPro[index];
   		var f="<%=basePath%>" + a.proImage;
-			alert(f);
 			document.getElementById("query_headimg").src = f;
 			$("#query_headimg").src = f;
 			$("#query_scenicNo").val(a.scenicNo);
@@ -687,9 +740,9 @@
 		}
 	</script>
 	<script src="<%=path%>/assets/js/bootstrap.js"></script>
-  	
-  	<script type="text/javascript" src="<%=basePath %>js/dateSelect.js"></script>
-  	<script type="text/javascript">
+
+	<script type="text/javascript" src="<%=basePath %>js/dateSelect.js"></script>
+	<script type="text/javascript">
 		$("#add_proStart").dateSelect();
 		$("#add_proEnd").dateSelect();
 	</script>

@@ -189,7 +189,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
 	var id=1;
 	var scenicPro;
-	var currentPage=1;
 	var pageRows=5;
 	var queryindex;
 	$(document).ready(function()
@@ -371,7 +370,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									url: url,
 									type: "post",
 									datatype: "json",
-									data:{currentPage:1,pageRows:pageRows,scenicNo:scenicNo},
+									data:{currentPage:page,pageRows:pageRows,scenicNo:scenicNo},
 									success: function(data) {
 										scenicPro = data.jsonStr;
   					    				scenicPro = JSON.parse(scenicPro);

@@ -84,14 +84,6 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 					<li><a href="guideWorkday.action" target="targetiframe">讲解员日程管理</a></li>
 				</ul>
 
-				<h3 class="am-icon-users">
-					<em></em> <a href="#">游客管理</a>
-				</h3>
-				<ul>
-					<li><a href="visitor.action" target="targetiframe">游客信息管理</a></li>
-					<li><a href="visitorInfoDisabled.action" target="targetiframe">游客黑名单管理</a></li>
-				</ul>
-
 				<h3 class="am-icon-cart-plus">
 					<em></em> <a href="#"> 订单管理</a>
 				</h3>
