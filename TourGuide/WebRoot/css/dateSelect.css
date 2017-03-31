@@ -1,3 +1,5 @@
+
+
 ul,li
 {	
 	margin:0;
@@ -17,7 +19,7 @@ ul,li
 	font-family:"寰蒋闆呴粦";
 	font-size:12px;
 	position:absolute;
-	z-index:999;
+	z-index:999999;
 	display:none;
 	background: #fff;
 }

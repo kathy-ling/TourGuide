@@ -51,10 +51,9 @@
 <link rel="stylesheet" href="<%=path%>/assets/css/bootstrap.css" />
 <link rel="stylesheet" href="<%=basePath%>assets/css/amazeui.min.css" />
 <link rel="stylesheet" href="<%=basePath%>assets/css/admin.css">
+<link rel="stylesheet" href="<%=basePath%>css/dateSelect.css" />
 <script type="text/javascript" src="<%=path%>/assets/js/jquery.js"></script>
-<script type="text/javascript"
-	src="<%=path%>/assets/js/bootstrap-paginator.min.js"></script>
-
+<script type="text/javascript" src="<%=path%>/assets/js/bootstrap-paginator.min.js"></script>
 </head>
 
 <body>
@@ -288,15 +287,16 @@
 					</div>
 
 					<div class="am-tab-panel am-fade" id="tab8">
-					<div class="am-u-sm-12 am-u-md-3">
-          <div class="am-input-group am-input-group-sm">
-            
-            
-          <span class="am-input-group-btn">
-            <button class="am-btn am-btn-default"  id="searchText" type="button" onclick="search()">+发布景区活动</button>
-          </span>
-          </div>
-        </div>
+						<div class="am-u-sm-12 am-u-md-3">
+							<div class="am-input-group am-input-group-sm">
+
+
+								<span class="am-input-group-btn">
+									<button class="am-btn am-btn-default" id="searchText"
+										type="button" onclick="ShowAddModal()">+发布景区活动</button>
+								</span>
+							</div>
+						</div>
 						<form class="am-form">
 							<table
 								class="am-table am-table-striped am-table-hover table-main"
@@ -306,10 +306,11 @@
 										<th style="text-align: center; width: 10%;">景区编号</th>
 										<th style="text-align: center; width: 10%;">景区名称</th>
 										<th style="text-align: center; width: 10%;">活动标题</th>
-										<th style="text-align: center; width: 10%;">活动发布时间</th>
-										<th style="text-align: center; width: 10%;">活动开始时间</th>
-										<th style="text-align: center; width: 10%;">活动结束时间</th>
-										<th style="text-align: center; width: 10%;">操作</th>
+										<th style="text-align: center; width: 10%;">活动链接</th>
+										<th style="text-align: center; width: 10%;">发布时间</th>
+										<th style="text-align: center; width: 10%;">首页展示</th>
+										<th style="text-align: center; width: 10%;">通过美工</th>
+										<th style="text-align: center; width: 20%;">操作</th>
 									</tr>
 								</thead>
 								<tbody id="tby">
@@ -326,18 +327,167 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="querymodal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="model-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">
+						<span class="blue">X</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel"
+						style="text-align:center;">景区活动信息详情</h4>
+				</div>
+				<div class="modal-body">
+					<table
+						style="border-collapse:separate; border-spacing:10px; margin:auto;">
+						<tr>
+							<td>活动图片：</td>
+							<td><img style="width: 100px;height: 100px"
+								id="query_headimg" name="edit_headimg" src="" /></td>
+						</tr>
+						<tr>
+							<td>景区编号：</td>
+							<td><input type="text" id="query_scenicNo"
+								name="query_scenicNo" readonly="true" /></td>
+						</tr>
+						<tr>
+							<td>景区名称：</td>
+							<td><input type="text" id="query_scenicName"
+								name="query_scenicName" readonly="true" /></td>
+						</tr>
+						<tr>
+							<td>景区标题：</td>
+							<td><input type="text" id="query_proTitle"
+								name="query_proTitle" readonly="true" /></td>
+						</tr>
+						<tr>
+							<td>活动链接:</td>
+							<td><input type="text" id="query_proLink"
+								name="query_proLink" readonly="true" /></td>
+						</tr>
+						<tr>
+							<td>活动发布时间:</td>
+							<td><input type="text" id="query_proRealse"
+								name="query_proRealse" readonly="true" /></td>
+						</tr>
+						<tr>
+							<td>活动开始时间：</td>
+							<td><input type="text" id="query_proStart"
+								name="query_proStart" readonly="true" /></td>
+						</tr>
+						<tr>
+							<td>活动结束时间：</td>
+							<td><input type="text" id="query_proEnd" name="query_proEnd"
+								readonly="true" /></td>
+						</tr>
+						<tr>
+							<td>活动内容：</td>
+							<td><textarea rows="3" cols="22" id="query_proText"
+									name="query_proText" readonly="true"></textarea></td>
+						</tr>
+						<tr>
+							<td>首页是否展示:</td>
+							<td><input type="text" id="query_proMain"
+								name="query_proMain" readonly="true" /></td>
+						</tr>
+						<tr>
+							<td>是否经过美工:</td>
+							<td><input type="text" id="query_proAdmin"
+								name="query_proAdmin" readonly="true" /></td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align:center;"><button
+									class="close" data-dismiss="modal" aria-hidden="true">确定</button></td>
+						</tr>
 
-
-	<!--[if (gte IE 9)|!(IE)]><!-->
+					</table>
+				</div>
+			</div>
+		</div>
+		</div>
+		<div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="model-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">
+							<span class="blue">X</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel"
+							style="text-align:center;">发布景区活动信息</h4>
+					</div>
+					<div class="modal-body">
+						<table
+							style="border-collapse:separate; border-spacing:10px; margin:auto;">
+							<tr>
+								<td>活动图片上传：</td>
+								<td>
+									<table>
+										<tr>
+											<td><input type="file" id="file" name="file"
+												style="width:200px"><td>
+										</tr>
+							</table></td></tr>
+								<tr>
+									<td>活动标题：</td>
+									<td><input type="text" id="add_proTitle"
+									name="add_proTitle" /></td>
+								</tr>
+								<tr>
+									<td>活动开始时间：</td>
+									<td><input type="text" id="add_proStart"
+									name="add_proStart" /></td>
+								</tr>
+								<tr>
+									<td>活动结束时间：</td>
+									<td><input type="text" id="add_proEnd" name="add_proEnd" /></td>
+								</tr>
+								<tr>
+									<td>活动内容：</td>
+									<td><textarea rows="15" cols="22" id="add_proText"
+										name="add_proText"></textarea></td>
+								</tr>
+						<tr>
+								<td colspan="2" style="text-align:center;">
+						<input type="button" onclick="AddProInfo()" value="确定增加" />
+						</td>
+							</tr>
+						
+					</table>
+					
+									
+					</div>
+				</div>
+			</div>
+</div>
+ <!--[if (gte IE 9)|!(IE)]><!-->
 	<!--<![endif]-->
 	<script src="<%=path%>/assets1/js/amazeui.min.js"></script>
 	<script src="<%=path%>/assets1/js/app.js"></script>
 	<script type="text/javascript">
+	var scenicPro;
+	var currentPage=1;
+	var pageRows=5;
 		$(document).ready(function() {
 			loadScenicConSist();
 			loadScenicinfo();
 			loadScenicTicket();
+			loadscenicProByscenicNo();
 		});
+		
+		
+		function ShowAddModal()
+		{
+		$("#addmodal").modal('show');
+		}
+		
+		
+		function AddProInfo()
+		{
+			
+		}
 		
 		
 		function loadScenicTicket()
@@ -362,7 +512,7 @@
 		function loadScenicinfo()
 		{
 			var url = "<%=basePath%>scenic/SearchScenicInfo.action";
- 		$.ajax( {
+ 			$.ajax( {
  			url:url,
  			type:"POST",
  			datatype:"json",
@@ -370,8 +520,6 @@
  			success:function(data) {
  					var d=data.jsonStr;
 					SearchSuccess(d);
-					
-		 		
  			}
  		});
 		}
@@ -418,8 +566,132 @@
  		
  		
  	}
+ 	
+ 	
+ 	
+ 	function initTable(jsonStr,currentPage)
+  	{
+  		$("#tby").html("");
+  		$.each(JSON.parse(jsonStr),function(index,value)
+  			{
+  				var a; 
+  				var t0="<tr>";
+  				var t1="<td style='text-align: center; width: 10%;'>"+value.scenicNo+"</td>";
+              	var t2="<td style='text-align: center; width: 10%;'>"+value.scenicName+"</td>";
+              	var t3="<td style='text-align: center;width: 10%;'>"+value.proTitle+"</td>";
+              	var t4="<td style='text-align: center; width: 10%;'>"+value.proLink+"</td>";
+              	var t5="<td style='text-align: center; width: 10%;'>"+value.ProProduceTime+"</td>";
+              	
+              	var t6="<td style='text-align: center; width: 10%;'>"+value.isMainShow+"</td>";
+              	
+              	var t7="<td style='text-align: center; width: 10%;'>"+value.isAdmin+"</td>";
+       
+              	var	t8="<td align='center'> <div class='am-btn-toolbar'>"+
+              	"<div  style='text-align: center;float: none' class='am-btn-group am-btn-group-xs'>"+
+              	"<button class='am-btn am-btn-default am-btn-xs am-text-secondary' type='button' onclick='queryPro("+index+")'>查看</button>"
+                  +"</div></div> </td>";
+              		
+                var t9="</tr>";
+               $("#tby").append(t0).append(t1).append(t2).append(t3).append(t4).append(t5).append(t6).append(t7).append(t8).append(t9);
+  			});
+  	}
+  	
+  	
+  	function loadscenicProByscenicNo()
+  	{
+  		
+  		var url="<%=basePath%>PromotionInfo/getPromotionInfoByscenicNo.action";
+  		$.ajax(
+  		{
+  			url:url,
+  			type:"post",
+  			datatype: "json",
+  			data:{currentPage:1,pageRows:pageRows,scenicNo:"aaa"},
+  			success: function(data)
+  					{
+  					    if(data!=null){
+  					    scenicPro = data.jsonStr;
+  					    scenicPro = JSON.parse(scenicPro);
+  					    initTable(data.jsonStr,data.page);
+  					       // 获取currentPage 请求页面
+						var currentPage = data.page;
+						// 获取totalPages 总页面
+						var totalPages = data.total;
+						// 获取numberofPages 显示的页面
+						var numberofPages = totalPages > 10 ? 10 : totalPages;
+						
+						var options = {
+							bootstrapMajorVersion: 3,
+		                    currentPage: currentPage,       // 当前页
+		                    totalPages: totalPages,      	// 总页数
+		                    numberofPages: numberofPages,   // 显示的页数
+		                    itemTexts: function (type, page, current) {
+		                        switch (type) {
+		                            case "first":
+		                                return "首页";
+		                                break;
+		                            case "prev":
+		                                return "上一页";
+		                                break;
+		                            case "next":
+		                                return "下一页";
+		                                break;
+		                            case "last":
+		                                return "末页";
+		                                break;
+		                            case "page":
+		                                return page;
+		                                break;
+		                        }
+		                    },
+		                    onPageClicked: function (event, originalEvent, type, page) {
+		                        $.ajax({
+									url: url,
+									type: "post",
+									datatype: "json",
+									data:{currentPage:1,pageRows:pageRows,scenicNo:scenicNo},
+									success: function(data) {
+										scenicPro = data.jsonStr;
+  					    				scenicPro = JSON.parse(scenicPro);
+  					    				initTable(data.jsonStr,data.page);	
+						            }
+						        });
+						     }  					
+						};					
+						$("#paginator").bootstrapPaginator(options);
+  					    }
+  					},
+  				
+  		});
+  		
+  	}
+  	
+  	function queryPro(index)
+  	{
+  		var a=scenicPro[index];
+  		var f="<%=basePath%>" + a.proImage;
+			alert(f);
+			document.getElementById("query_headimg").src = f;
+			$("#query_headimg").src = f;
+			$("#query_scenicNo").val(a.scenicNo);
+			$("#query_scenicName").val(a.scenicName);
+			$("#query_proTitle").val(a.proTitle);
+			$("#query_proLink").val(a.proLink);
+			$("#query_proRealse").val(a.ProProduceTime);
+			$("#query_proStart").val(a.proStartTime);
+			$("#query_proEnd").val(a.ProEndTime);
+			$("#query_proText").val(a.ProContext);
+			$("#query_proMain").val(a.isMainShow);
+			$("#query_proAdmin").val(a.isAdmin);
+			$("#querymodal").modal('show');
+		}
 	</script>
 	<script src="<%=path%>/assets/js/bootstrap.js"></script>
-
+  	
+  	<script type="text/javascript" src="<%=basePath %>js/dateSelect.js"></script>
+  	<script type="text/javascript">
+		$("#add_proStart").dateSelect();
+		$("#add_proEnd").dateSelect();
+	</script>
 </body>
 </html>

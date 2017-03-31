@@ -118,6 +118,7 @@ AdminInfo accont=(AdminInfo) session.getAttribute("adminSession");
 					<li><a href="scenicInfo.action" target="targetiframe">景区信息管理</a></li>
 					<li><a href="scenicTicket.action" target="targetiframe">景区门票管理</a></li>
 					<li><a href="scenicTeam.action" target="targetiframe">景区拼团信息管理</a></li>
+					<li><a href="scenicProInfo.action" target="targetiframe">景区活动信息管理</a></li>
 				</ul>
 				<h3 class="am-icon-money">
 					<em></em> <a href="#">收入管理</a>

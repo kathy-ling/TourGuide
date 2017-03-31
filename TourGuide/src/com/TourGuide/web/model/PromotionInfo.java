@@ -11,6 +11,7 @@ package com.TourGuide.web.model;
  */
 public class PromotionInfo {
 	
+	private String proID;
 	private String scenicNo;
 	private String scenicName;
 	private String proTitle;
@@ -19,8 +20,8 @@ public class PromotionInfo {
 	private String proStartTime;
 	private String ProEndTime;
 	private String ProProduceTime;
-	private int isMainShow;
-	private int isAdmin;
+	private String  isMainShow;
+	private String  isAdmin;
 	private String ProContext;
 	public String getScenicNo() {
 		return scenicNo;
@@ -70,16 +71,16 @@ public class PromotionInfo {
 	public void setProProduceTime(String proProduceTime) {
 		ProProduceTime = proProduceTime;
 	}
-	public int getIsMainShow() {
+	public String getIsMainShow() {
 		return isMainShow;
 	}
-	public void setIsMainShow(int isMainShow) {
+	public void setIsMainShow(String isMainShow) {
 		this.isMainShow = isMainShow;
 	}
-	public int getIsAdmin() {
+	public String getIsAdmin() {
 		return isAdmin;
 	}
-	public void setIsAdmin(int isAdmin) {
+	public void setIsAdmin(String isAdmin) {
 		this.isAdmin = isAdmin;
 	}
 	public String getProContext() {
@@ -87,6 +88,12 @@ public class PromotionInfo {
 	}
 	public void setProContext(String proContext) {
 		ProContext = proContext;
+	}
+	public String getProID() {
+		return proID;
+	}
+	public void setProID(String proID) {
+		this.proID = proID;
 	}
 	
 	
