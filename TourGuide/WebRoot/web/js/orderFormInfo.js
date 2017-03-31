@@ -142,6 +142,11 @@ function setNormalData(data){
 		
 	}
 
-var id = GetUrlem("orderId");
+function produce()
+{
+	$("#qrcode").empty();
+	var orderId = GetUrlem("orderId");
+	var a={orderID:orderId}
+	jQuery('#qrcode').qrcode(utf16to8(a));
+}
 
-jQuery('#qrcode').qrcode(utf16to8(id+"  " + payTime + "   "+num + "   " + totalFee+"  "+name));

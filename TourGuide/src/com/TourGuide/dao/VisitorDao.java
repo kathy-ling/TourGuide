@@ -64,20 +64,26 @@ public class VisitorDao {
 		public VisitorInfo getInfobyOpenID(String openID){
 					
 			final VisitorInfo visitorInfo = new VisitorInfo();
-			String sql = "select * from t_visitor where openID='"+openID+"'";
-			
-			jdbcTemplate.query(sql,  new RowCallbackHandler() {
+			DataSource dataSource =jdbcTemplate.getDataSource();
+			 
+			try {
+				Connection conn = dataSource.getConnection();
+				CallableStatement cst=conn.prepareCall("call getInfobyOpenID(?)");
+				cst.setString(1, openID);
+				ResultSet rst=cst.executeQuery();
 				
-				@Override
-				public void processRow(ResultSet res) throws SQLException {
-					visitorInfo.setPhone(res.getString(1));
-					visitorInfo.setName(res.getString(2));
-					visitorInfo.setNickName(res.getString(3));
-					visitorInfo.setImage(res.getString(4));
-					visitorInfo.setSex(res.getString(5));
-					visitorInfo.setOpenID(res.getString(6));
-				}
-			});
+				while (rst.next()) {
+					visitorInfo.setPhone(rst.getString(1));
+					visitorInfo.setName(rst.getString(2));
+					visitorInfo.setNickName(rst.getString(3));
+					visitorInfo.setImage(rst.getString(4));
+					visitorInfo.setSex(rst.getString(5));
+					visitorInfo.setOpenID(openID);
+				}							
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} 		
 			
 			return visitorInfo;
 		}

@@ -45,7 +45,7 @@ public class PromotionDao {
 			
 			while (rst.next()) {
 				Map<String , Object> map = new HashMap<String, Object>();
-				map.put("promotionImage", rst.getString(1));
+				map.put("promotionImage", "/TourGuide" + rst.getString(1));
 				map.put("promotionLinks", rst.getString(2));
 				map.put("promotionTitle", rst.getString(3));
 				list.add(map);

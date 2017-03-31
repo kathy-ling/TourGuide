@@ -1,3 +1,4 @@
+
 //从登录界面获得游客的手机号即登录名
 //1-15 datebox 时间无法获取
 var scenicNo = GetUrlem("scenicNo");

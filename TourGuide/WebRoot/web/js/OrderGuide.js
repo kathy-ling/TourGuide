@@ -1,6 +1,7 @@
 
 var sname;
-var Phone = vistPhone;
+//var Phone = vistPhone;
+var Phone = GetUrlem("phone");
 $('#OrderguidePage').bind('pagecreate', function(event, ui) {
 	var ScenicNo = GetUrlem("scenicNo");
 	sname = GetUrlem("sname");
@@ -476,7 +477,7 @@ function addlist(data) {
 //		PList.appendChild(SpanListLanguage);
 		// 添加立即预约链接
 		var A1List = document.createElement("a");
-		// A1List.href = "?phone="+n.phone+"#orderTicketPop";
+		 A1List.href = "confirmOrderInfo.html?phone="+n.phone;
 		// A1List.setAttribute("data-transition","pop");
 		A1List.setAttribute("Phone", n.phone);
 		//A1List.setAttribute("class", "DirectOrderBtn");

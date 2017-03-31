@@ -127,13 +127,22 @@ public class FastOrderDao {
 	 * @param num  游客的订单中的参观人数
 	 * @return 0 接单失败  1-接单成功  -1-已经被接单
 	 */
-	public int takeFastOrder(String consistOrderID, String orderID, String guidePhone, int num){
+	public int takeFastOrder(String consistOrderID, String guidePhone, int num){
 		
 		int ret = 0;
 		
 		String time = MyDateFormat.form(new Date());
 		String orderState = "待游览";
 		int isConsisted = 1;
+		String orderID = null;
+		
+		String sqlSelect = "select orderID,visitNum from t_consistresult where "
+				+ "guidePhone='"+guidePhone+"' and finishScan=0";
+		List<Map<String, Object>> listOrder = jdbcTemplate.queryForList(sqlSelect);
+		
+		if(listOrder.size() != 0){
+			orderID = (String) listOrder.get(0).get("orderID");
+		}
 		
 		//beScanned标志，使游客的拼单只能被导游扫描一次;1-已被扫描 ，0-未被扫描
 		String sqlUpdate = "update t_consistOrder set orderID='"+orderID+"',"
