@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	 http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	 "
+	 	default-autowire="byName"
+	 >
+	
+	<!-- 注入上下文关系注解支持 -->
+	<context:annotation-config></context:annotation-config>
+	<!-- 扫描组件包并自动注入 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	
+	<context:component-scan base-package="chris.timer"></context:component-scan>
+	<context:component-scan base-package="chris.dao"></context:component-scan>
+	<context:component-scan base-package="chris.service"></context:component-scan>
+	<context:component-scan base-package="chris.biz"></context:component-scan>
+	<context:component-scan base-package="chris.action"></context:component-scan>
+	<context:component-scan base-package="chris.service2"></context:component-scan>
+	<context:component-scan base-package="chirs.listener"></context:component-scan>
+	
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver">
+		</property>
+		<property name="url" value="jdbc:mysql://202.200.119.158:3306/zhineng">
+		</property>
+		<property name="username" value="${uname}"></property>
+		<property name="password" value="${password}"></property>
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+			</props>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>chris.pojo.User</value>
+				<value>chris.pojo.Guide</value>
+				<value>chris.pojo.Guidem</value>
+				<value>chris.pojo.Youkem</value>
+				<value>chris.pojo.Session</value>
+				<value>chris.pojo.Total</value>
+				<value>chris.pojo.Message</value>
+				<value>chris.pojo.Systemscore</value>
+				<value>chris.pojo.Buletooth</value>
+				<value>chris.pojo.Memory</value>
+				<value>chris.pojo.Guidemdt</value>
+				<value>chris.pojo.Area</value>
+				<value>chris.pojo.Guidegroup</value>
+				</list>
+		</property>
+	</bean>
+	<!-- 注入Hibernate的事务管理 -->
+	<bean id="txmanager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<!-- 引入事务注解支持 -->
+	<tx:annotation-driven transaction-manager="txmanager" />
+	
+	
+	<bean id="YoukemDAO" class="chris.dao.YoukemDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="GuideDAO" class="chris.dao.GuideDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="GuidemDAO" class="chris.dao.GuidemDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="SessionDAO" class="chris.dao.SessionDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="TotalDAO" class="chris.dao.TotalDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="UserDAO" class="chris.dao.UserDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+		</bean>
+	
+	<bean id="MessageDAO" class="chris.dao.MessageDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<import resource="crystal.chris.timetask.xml"/>
+	
+	<bean id="SystemscoreDAO" class="chris.dao.SystemscoreDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="BuletoothDAO" class="chris.dao.BuletoothDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="MemoryDAO" class="chris.dao.MemoryDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="GuidemdtDAO" class="chris.dao.GuidemdtDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="AreaDAO" class="chris.dao.AreaDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="GuidegroupDAO" class="chris.dao.GuidegroupDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	</beans>
