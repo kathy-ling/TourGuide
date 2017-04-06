@@ -11,6 +11,8 @@ $('#confirmOrderPage').bind('pageshow', function(event, ui) {
 });
 
 $(document).ready(function() {
+	//加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
 	setOrderInfo(); //设置预约信息
 	getFee();
 });

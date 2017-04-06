@@ -6,6 +6,10 @@
 //	
 //});
 $('#scenicSpotPage').bind('pageshow',function(event, ui){
+	
+	//加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
+
 	//var cur = getSession(sessionStorage.ScenicNo);
 	var ScenicNo=GetUrlem("scenicNo");
 		refreshPage(ScenicNo);

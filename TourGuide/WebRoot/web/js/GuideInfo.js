@@ -10,6 +10,10 @@ $('#guideinfoPage').bind('pageshow',function(event, ui){
         $(window).bind("resize load",function(){
         	$(".guideInfoHead").width($(".guideInfoHead").height());
         });
+        
+      //加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
+      
 	phone = GetUrlem("phone");
 	visitDate=GetUrlem("visitDate");
 	visitTime=GetUrlem("visitTime");
@@ -115,11 +119,7 @@ var Url = HOST+"/getComments.do";
 //点击立即预定
 function bookGuide()
 {
-	//判断是否注册
-	//根据openId判断是否注册
-    var openId = GetUrlem("openId");
-    alert(openId);
-    //从服务器端根据openId返回数据
+	
     var Url = HOST+"/getInfobyOpenID.do";
     $.ajax({
 		type:"post",
@@ -134,8 +134,7 @@ function bookGuide()
 		success:function(data)
 		{
 			alert("根据openId返回数据Request success!");
-			alert(data.phone);
-			if(data.phone==undefined)
+			if(data.phone==openId)
 			{
 				alert("您还未注册，请注册！");
 				window.location.href = "register.html";

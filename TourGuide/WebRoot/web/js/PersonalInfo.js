@@ -1,5 +1,8 @@
 
 $(function($){
+	//加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
+
 	var Phone = vistPhone;
 	setperinfo(Phone);
 	$("#signINbtn").click(function(){

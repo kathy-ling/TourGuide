@@ -1,7 +1,13 @@
 
 var province;
 
+var openId;
+
 $(function($) {
+	
+	//加载底部导航栏
+	$(".bottom_navigation").load("bottomNavigation.html").trigger("create");
+	
 
 	$(document).bind("mobileinit", function() {
 		$.mobile.page.prototype.options.addBackBtn = true;
@@ -317,7 +323,7 @@ function freshList(data, UlList) {
 	$(".imglist-box").height($(document).width() * 0.25);
 }
 
-function LoginOrPersonal()
+/*function LoginOrPersonal()
 {
 	var AllCookies = document.cookie;
 //	alert(AllCookies);
@@ -335,39 +341,8 @@ function LoginOrPersonal()
 		window.location.href = "TourLogin.html";
 	}
 
-}
+}*/
 
-function isRegist()
-{
-	//根据openId判断是否注册
-    var openId = GetUrlem("openId");
-    alert(openId);
-    //从服务器端根据openId返回数据
-    var Url = HOST+"/getInfobyOpenID.do";
-    $.ajax({
-		type:"post",
-		url:Url,
-		async:true,
-		data:{"openId":openId},
-		datatype:"JSON",
-		error:function()
-		{
-			alert("根据openId返回数据Request error!");
-		},
-		success:function(data)
-		{
-			alert("根据openId返回数据Request success!");
-			alert(data.phone);
-			if(data.phone==undefined)
-			{
-				alert("您还未注册，请注册！");
-				window.location.href = "register.html";
-			}
-			else{
-				window.location.href = "personalHome.html?"+"phone="+data.phone;
-			}
-		}
-	});
-}
+
 
 

@@ -1,6 +1,11 @@
 
   	
 $("#orderFormListPage").bind('pageshow',function(event, ui){
+	
+	//加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
+
+	
   	getOrderList();
   	//隐藏未选中的订单
   	$(".navList").click(function(juagechar){

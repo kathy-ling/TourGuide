@@ -2,7 +2,8 @@
 var guideFee1;
 $('#confirmOrderPage').bind('pageshow', function(event, ui) {
 
-	alert("aa")
+    
+	
 	setGuideInfo(); //设置讲解员信息返回讲解费
 	setOrderInfo(); //设置预约信息
 
@@ -12,8 +13,11 @@ $('#confirmOrderPage').bind('pageshow', function(event, ui) {
 });
 
 $(document).ready(function() {
+	//加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
 	setGuideInfo(); //设置讲解员信息返回讲解费
 	setOrderInfo(); //设置预约信息
+	
 });
 //获取session值
 function setOrderInfo() {

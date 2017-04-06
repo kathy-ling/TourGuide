@@ -25,6 +25,8 @@ function getOpenId(){
 		return id;
 	 }
 }
+
+
 //function getPhone(){
 //	 var phone = getSession(sessionStorage.vistPhone);
 //	 if(phone!=null){

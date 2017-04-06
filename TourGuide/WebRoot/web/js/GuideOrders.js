@@ -1,4 +1,6 @@
 window.onload = function(){
+	//加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
 	getData("/getMyBookedOrder.do","OrderUl");
 	getData("/getFinishedBookedOrder.do","finishOrder");
 }

@@ -113,7 +113,7 @@ function WriteOrderInfo(data) {
 	$("#nowNum").empty();
 	$("#fee").empty();
 	$("#scenicName").html(data.scenicName);
-	$("#orderID").html(data.orderID);
+	//$("#orderID").html(data.orderID);
 	$("#maxnum").html(data.maxNum);
 	$("#nowNum").html(data.visitNum);
 	$("#fee").html(data.guideFee);

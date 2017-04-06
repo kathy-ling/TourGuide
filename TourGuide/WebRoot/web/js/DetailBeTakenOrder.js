@@ -3,6 +3,8 @@ var OrderID = GetUrlem("Orderid");
 
 
 window.onload = function(){
+	//加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
 	var fin = GetUrlem("fin");
 	if(fin!=null){
 		$("#takeOrder").remove();

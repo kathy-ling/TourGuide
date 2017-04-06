@@ -2,7 +2,11 @@
 //从登录界面获得游客的手机号即登录名
 //1-15 datebox 时间无法获取
 var scenicNo = GetUrlem("scenicNo");
-$(function($){
+
+$(function($){	
+	//加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html");
+	
 	$("#panel2").hide();
 	$("#orderTicketPanel").hide();
 	getconsistOrder();
@@ -38,6 +42,8 @@ $(function($){
 		window.location.href= "consistOrder.html?" + "visitorPhone=" + visitorPhone+"&visitNum="+visitNum+"&visitDate="
 		+visitdate+"&visitTime="+visitTime+"&scenicName="+scenicName;
 	});
+	
+	
 });
 
 function addDate()

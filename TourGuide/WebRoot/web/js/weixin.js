@@ -11,12 +11,10 @@
 
 
 var url = window.location.href;  
-<<<<<<< HEAD
-=======
+
 
 alert("url" + url);
 
->>>>>>> 2ea9b35025229f2520c9824b302c87770d8be55a
 var url11 = HOST + "/weixinScan.do";
     //ajax注入权限验证  
     $.ajax({  

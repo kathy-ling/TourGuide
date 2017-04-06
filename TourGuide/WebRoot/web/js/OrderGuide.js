@@ -9,6 +9,9 @@ $('#OrderguidePage').bind('pagecreate', function(event, ui) {
 	addPopularGuides();
 	addDate(); //动态添加日期
 	
+	
+	//$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
+	
 	if (ScenicNo != null) {
 		sessionStorage.scenicNo = ScenicNo;
 	}
