@@ -10,10 +10,11 @@
 		<link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
 		<link rel="stylesheet" type="text/css" href="css/GuideInfo.css">
 		<link rel="stylesheet" type="text/css" href="css/mobiscroll.custom-2.5.0.min.css">
-		
-		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
-		<script type="text/javascript" src="js/jquery.mobile-1.4.5.js"></script>
-
+		<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    	<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    	<script type="text/javascript" src="js/mobiscroll.core-2.5.2.js"></script>
+   	    <script type="text/javascript" src="js/mobiscroll.datetime-2.5.1.js"></script>
+    	<script type="text/javascript" src="js/mobiscroll.core-2.5.2-zh.js"></script>    
 		<script type="text/javascript" src="js/jquery.raty.min.js"></script>
 		<script type="text/javascript" src="js/jquery.cookie.js"></script>
 		<script type="text/javascript" src="js/nativedroid2.js"></script>
@@ -136,6 +137,7 @@
 							</select>
 							<label for="orderDatetime" class="ui-hidden-accessible">时间</label>
 							<select id="orderDatetime123" name="datetime" value="" placeholder="时间" >
+								<option selected="selected" value="">请选择时间</option>
 								<option>8:00</option>
 								<option>8:30</option>
 								<option>9:00</option>
@@ -186,7 +188,9 @@
 							</select>
 							
 							<label for="orderDatetime" class="ui-hidden-accessible">时间</label>
+						
 							<select id="orderDatetime" name="datetime" value="" placeholder="时间">
+								<option>请选择时间</option>
 								<option>8:00</option>
 								<option>8:30</option>
 								<option>9:00</option>

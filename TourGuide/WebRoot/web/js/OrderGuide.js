@@ -7,9 +7,7 @@ $('#OrderguidePage').bind('pagecreate', function(event, ui) {
 	sname = GetUrlem("sname");
 	addAllScenics();
 	addPopularGuides();
-	addDate(); //动态添加日期
-	
-	
+
 	//$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
 	
 	if (ScenicNo != null) {
@@ -32,31 +30,7 @@ $('#OrderguidePage').bind('pagecreate', function(event, ui) {
 		checkOrderForm();// 检查表单正确后，调用提交方法
 	});
 });
-function addDate()
-{
-	var now = new Date();
-	var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
-	var tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate()+2);
-	var dayAfterTomo = new Date(now.getFullYear(), now.getMonth(), now.getDate()+3);
-	var today0 = today.toISOString();
-	var today1 = today0.substring(0,10);
-	var tomorrow0 = tomorrow.toISOString();
-	var tomorrow1 = tomorrow0.substring(0,10);
-    var SdayAfterTomo0 = dayAfterTomo.toISOString();
-    var dayAfterTomo1 = SdayAfterTomo0.substring(0,10);
-	
-	//根据id获取select对象
-	var dateSelect = document.getElementById("chooseDate");
-	var dateSelect1 = document.getElementById("orderDate");
-	//dateSelect.append("<option value='"+dayAfterTomo0+"'>"+dayAfterTomo0+"</option>");
-	dateSelect.options.add(new Option(today1,today1));
-	dateSelect.options.add(new Option(tomorrow1,tomorrow1));
-	dateSelect.options.add(new Option(dayAfterTomo1,dayAfterTomo1));
-	
-	dateSelect1.options.add(new Option(today1,today1));
-	dateSelect1.options.add(new Option(tomorrow1,tomorrow1));
-	dateSelect1.options.add(new Option(dayAfterTomo1,dayAfterTomo1));
-}
+
 function getAvailableGuides1()
 {
 	
@@ -245,6 +219,7 @@ window.onload = function() {
 	}
 	
 	addPopularGuides();
+	addDate();
 }
 
 function addPopularGuides() {
@@ -444,6 +419,7 @@ function addlist(data) {
 		ImgList.src = HOST + n.image;
 		AList.appendChild(ImgList);
 		var PList = document.createElement("p");
+		PList.className = "pStyle";
 
 		AList.appendChild(PList);
 
@@ -477,9 +453,10 @@ function addlist(data) {
 		PList.appendChild(SpanListSex);
 		PList.appendChild(SpanListAge);
 		PList.appendChild(SpanListLevel);
-//		PList.appendChild(SpanListLanguage);
+		//PList.appendChild(SpanListLanguage);
 		// 添加立即预约链接
 		var A1List = document.createElement("a");
+		A1List.innerHTML = "立即预约";
 		 A1List.href = "confirmOrderInfo.html?phone="+n.phone;
 		// A1List.setAttribute("data-transition","pop");
 		A1List.setAttribute("Phone", n.phone);
@@ -489,4 +466,29 @@ function addlist(data) {
 	});
 	$("#order_guide_ul").listview('refresh');
 	myrefresh();
+}
+function addDate()
+{
+	var now = new Date();
+	var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
+	var tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate()+2);
+	var dayAfterTomo = new Date(now.getFullYear(), now.getMonth(), now.getDate()+3);
+	var today0 = today.toISOString();
+	var today1 = today0.substring(0,10);
+	var tomorrow0 = tomorrow.toISOString();
+	var tomorrow1 = tomorrow0.substring(0,10);
+    var SdayAfterTomo0 = dayAfterTomo.toISOString();
+    var dayAfterTomo1 = SdayAfterTomo0.substring(0,10);
+	
+	//根据id获取select对象
+	var dateSelect = document.getElementById("chooseDate");
+	var dateSelect1 = document.getElementById("orderDate");
+	//dateSelect.append("<option value='"+dayAfterTomo0+"'>"+dayAfterTomo0+"</option>");
+	dateSelect.options.add(new Option(today1,today1));
+	dateSelect.options.add(new Option(tomorrow1,tomorrow1));
+	dateSelect.options.add(new Option(dayAfterTomo1,dayAfterTomo1));
+	
+	dateSelect1.options.add(new Option(today1,today1));
+	dateSelect1.options.add(new Option(tomorrow1,tomorrow1));
+	dateSelect1.options.add(new Option(dayAfterTomo1,dayAfterTomo1));
 }

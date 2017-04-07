@@ -9,7 +9,9 @@
 		<link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
 		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+		<!-- <script type="text/javascript" src="js/getPhoneByOpenId.js"></script> -->
 		<script type="text/javascript" src="js/consistOrder.js"></script>
+		  
 		
 		<style type="text/css">
 			.ticketMoney p {
@@ -21,6 +23,7 @@
 
 	<body>
 		<div data-role="page" >
+			
 			<footer data-role="footer" data-position="fixed">
         		<div data-role="navbar" id="bottom_navigation">
             
@@ -30,9 +33,10 @@
 			<div data-role="header">
 				<h1>确认订单</h1>
 			</div>
+			
 			<div data-role="main" class="ui-content">
 				<ul data-role="listview">
-					</a>
+					
 					<li data-icon="false">
 						<a>
 							<h3>预约信息</h3> 
@@ -43,6 +47,7 @@
 
 						</a>
 					</li>
+					
 					<li data-icon="false">
 						<a>
 							<h3>费用信息</h3> 
@@ -51,8 +56,10 @@
 							合计：<span id="setsumMoney" class="sumMoney"></span><br/>
 						</a>
 					</li>
+					
 				</ul>
 			</div>
+			
 			<button data-theme="a" class="ui-btn-raised clr-warning" id="gopay" onclick="putOrder()">去支付</button>
 		</div>
 

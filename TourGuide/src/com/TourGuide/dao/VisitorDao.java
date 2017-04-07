@@ -41,8 +41,16 @@ public class VisitorDao {
 			List<Map<String , Object>> list = jdbcTemplate.queryForList(select);
 			
 			if(list.size() == 0){
+				//从微信服务端得到的用户性别，2-女，1-男
+				int tmp = snsUserInfo.getSex();
+				String sex = null;
+				if(tmp == 1){
+					sex = "男";
+				}else {
+					sex = "女";
+				}
 				String insert = "insert into t_visitor (nickName,sex,phone,image,openID) "
-						+ "values ('"+snsUserInfo.getNickname()+"','"+snsUserInfo.getSex()+"',"
+						+ "values ('"+snsUserInfo.getNickname()+"','"+ sex +"',"
 						+ "'"+snsUserInfo.getOpenId()+"','"+snsUserInfo.getHeadImgUrl()+"',"
 						+ "'"+snsUserInfo.getOpenId()+"')";
 				int i = jdbcTemplate.update(insert);
@@ -104,9 +112,10 @@ public class VisitorDao {
 				String name, String phone, String passwd, String image,String openID){
 			
 			boolean bool = false;
-			String sqlRegister = "insert into t_visitor (nickName,sex,name,phone,image,openID) "
-					+ "values (?,?,?,?,?,?)";
-			int i = jdbcTemplate.update(sqlRegister, new Object[]{nickName, sex, name, phone, image, openID});
+			String sqlRegister = "update t_visitor set nickName='"+nickName+"',sex='"+sex+"',"
+					+ "name='"+name+"',phone='"+phone+"',image='"+image+"' "
+					+ "where openID='"+openID+"' ";					
+			int i = jdbcTemplate.update(sqlRegister);
 			
 			String sqlSetPass = "insert into t_visitorlogin (phone,password,disable) "
 					+ "values (?,?,?)";

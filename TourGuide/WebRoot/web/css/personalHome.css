@@ -4,6 +4,10 @@
 * @Last Modified by:   Marte
 * @Last Modified time: 2017-01-12 20:07:52
 */
+.personHome
+{
+	margin-bottom: 60px;
+}
 p,a{
     text-shadow: none;
 }

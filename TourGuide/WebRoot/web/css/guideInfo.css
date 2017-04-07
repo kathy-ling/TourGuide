@@ -4,6 +4,14 @@
 * @Last Modified by:   Marte
 * @Last Modified time: 2017-01-02 15:00:30
 */
+.pStyle
+{
+	text-indent:0 ;
+}
+#guideinfoPage
+{
+	margin-bottom: 50px;
+}
 .infoheader{
     height:40%;
     background-color: #ED1313;

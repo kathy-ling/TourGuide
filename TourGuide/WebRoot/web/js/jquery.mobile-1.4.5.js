@@ -9,12 +9,12 @@
 *
 */
 
-//window["HOST"]="http://localhost:8080/TourGuide";//服务器IP地址
-
+//window["HOST"]="http://localhost/TourGuide";//服务器IP地址
 window["HOST"]="http://cps.xaut.edu.cn/TourGuide";
-//window["HOST"]="http://1f656026j8.imwork.net/TourGuide";//服务器IP地址
-//window["vistPhone"] = getPhone();
+
+window["vistPhone"] = getPhoneByOpenId();
 window["openId"] = getOpenId();
+
 function getOpenId(){
 	 var id = getSession(sessionStorage.openId);
 	 if(id!=null){
@@ -26,17 +26,31 @@ function getOpenId(){
 	 }
 }
 
+function getPhoneByOpenId(){
+	 var Phone=getSession(sessionStorage.vistPhone);
+	 var openId1=getOpenId();
+	 
+	 if(Phone!=null){
+		return Phone;
+	 }else{		
+		var Url = "http://localhost/TourGuide/getInfobyOpenID.do";
+	    $.ajax({
+			type:"post",
+			url:Url,
+			async:true,
+			data:{"openId":openId1},
+			datatype:"JSON",
+			success:function(data)
+			{							
+				Phone=data.phone;
+				sessionStorage.vistPhone=Phone;				
+			}
+		});				
+	 }	 
+	return Phone;
+}
 
-//function getPhone(){
-//	 var phone = getSession(sessionStorage.vistPhone);
-//	 if(phone!=null){
-//		 return phone;
-//	 }else{
-//		 phone = GetUrlem("phone");
-//		sessionStorage.vistPhone  = phone;
-//		return phone;
-//	 }
-//}
+
 
 function GetUrlem(name)
 {

@@ -16,7 +16,7 @@
 		<script type="text/javascript" src="js/mobiscroll.core-2.5.2-zh.js"></script>
 		<script type="text/javascript" src="js/jquery.cookie.js"></script>
 		<script type="text/javascript">
-			$(function() {
+			/*$(function() {
 				$('input:jqmData(role="datebox")').mobiscroll().date();
 				var now = new Date();
 				var max = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 3);
@@ -30,7 +30,7 @@
 					dateFormat: 'yy-mm-dd'
 				});
 				
-			});
+			});*/
 		</script>
 	</head>
 	<body>
@@ -38,16 +38,21 @@
 				<p style="text-align: center;">确认预约信息</p>
 		</div>
 		<div class="ui-field-contain">
-			<label id="scenicName0" style="text-align: center;">景区名称</label>
-			<select name="scenicName" id="orderChooseScenicName">
-				<option value="" selected="selected">请选择景区</option>
+			<label id="scenicName0" style="text-align: center; font-size: larger;">景区名称</label>
+			<div id="orderChooseScenicNameDiv">
+			<select name="scenicName" id="orderChooseScenicName" class="orderChooseScenicName">
+				<option value="">请选择景区</option>
 			</select>
-			<label for="orderDate" class="ui-hidden-accessible">日期</label>
-							<!--<input type="text" id="orderChooseDate" data-role="datebox" placeholder="请输入日期" >-->
+			</div>
+			<label id="orderChooseDateLabel" for="" class="" style="text-align: center; font-size: larger;">日期</label>
+							<!--<input type="text" id="orderChooseDate" data-role="datebox" placeholder="请输入日期" >-->				
+							<div id="orderChooseDateDiv">			
 							<select id="orderChooseDate" placeholder="日期">
 								<option value="" selected="selected">请选择日期</option>
 							</select>	
-							<label for="orderDatetime1" class="ui-hidden-accessible" id="orderChooseTime0">时间</label>
+							</div>
+							<label for="" class="" id="orderChooseTime0" style="text-align: center; font-size: larger;">时间</label>
+							<div id="orderChooseTimeDiv">
 							<select id="orderChooseTime" name="datetime" value="" placeholder="时间" >
 								<option selected="selected">请选择时间</option>
 								<option value="8:00">8:00</option>
@@ -72,6 +77,7 @@
 								<option>17:30</option>
 								<option>18:00</option>
 							</select>
+							</div>
 							<label for="chooseVisitNum" class="ui-hidden-accessible" ">人数</label>
 							<input type="text" id="orderChooseVisitNum" name="VisitNum" value="" placeholder="人数" ">
 							<input type="text" id="orderContactName" placeholder="联系人姓名">

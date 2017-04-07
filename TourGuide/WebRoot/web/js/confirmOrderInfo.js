@@ -1,11 +1,13 @@
 var Phone = GetUrlem("phone");
 
 $(document).ready(function() {
+	alert("intoConfirm");
 	//获取预约信息
 var visitDate = GetUrlem("visitDate");
 var visitTime = GetUrlem("visitTime");
 var visitNum = GetUrlem("visitNum");
 var scenicName = GetUrlem("scenicName");
+
 alert(visitDate);
 alert(visitNum);
 alert(visitTime);
@@ -16,26 +18,37 @@ addDate(); //动态添加日期
 //显示所有景点名称
 addAllScenics();
 
+
 //判断景点名称是否为空
-if(!scenicName)
+if(scenicName == null || !scenicName)
 {
 	$("#scenicName0").hide();
 }else{
-	$("#scenicName").hide();
-	$("#scenicName0").val(scenicName);
+	document.getElementById("orderChooseScenicNameDiv").style.display = "none";
+	document.getElementById("scenicName0").innerText = scenicName;
+}
+//判断日期是否为空
+if(visitDate == null || !visitDate)
+{
+	$("#orderChooseDateLabel").hide();
+}else{
+	document.getElementById("orderChooseDateLabel").innerText = visitDate;
+	document.getElementById("orderChooseDateDiv").style.display = "none";
 }
 //判断时间是否为空
-if(!visitTime)
+if(visitTime == null || !visitTime)
 {
 	$("#orderChooseTime0").hide();
-}else{
-	$("#orderChooseTime").hide();
-	$("#orderChooseTime0").val(visitTime);
+}else{	
+	//$("#orderChooseTime").hide();
+	//$("#orderChooseTime0").val(visitTime);
+	document.getElementById("orderChooseTime0").innerText = visitTime;
+	document.getElementById("orderChooseTimeDiv").style.display = "none";
 }
 
 //设置预约信息
 $("#orderChooseVisitNum").attr("value",visitNum);
-$("#orderChooseDate").attr("value",visitDate);
+//$("#orderChooseDate").attr("value",visitDate);
 
 });
 
@@ -65,18 +78,30 @@ function addDate()
 function confirmOrder()
 {
 	//alert("intoConfirm");
-	var scenicName = $('#orderChooseScenicName option:selected').val();
-	var visitDate = $("#orderChooseDate").val();
-	var visitTime = $("#orderChooseTime").val();
-	var visitNum = $("#orderChooseVisitNum").val();
+	if(scenicName == null || !scenicName)
+	{
+		scenicName = $('#orderChooseScenicName option:selected').val();
+	}
+	if(visitDate == null || !visitDate)
+	{
+		visitDate = $("#orderChooseDate").val();
+	}
+	if(visitTime == null || !visitTime)
+	{
+		visitTime = $("#orderChooseTime").val();
+	}
+	if(visitNum == null || !visitNum)
+	{
+		visitNum = $("#orderChooseVisitNum").val();
+	}
 	var contactName = $("#orderContactName").val();
 	var contactPhone = $("#orderContactPhone").val();
-	/*alert(scenicName);
+	alert(scenicName);
 	alert(visitDate);
 	alert(visitTime);
 	alert(visitNum);
 	alert(contactName);
-	alert(contactPhone);*/
+	alert(contactPhone);
 	if(!scenicName)
 	{
 		alert("请选择景区！");
