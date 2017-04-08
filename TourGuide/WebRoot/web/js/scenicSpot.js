@@ -1,26 +1,18 @@
 
-//$('#scenicSpotPage').bind('pagecreate',function(event, ui){
-//	var ScenicNo=GetUrlem("scenicNo");
-//	sessionStorage.ScenicNo=ScenicNo;
-//	refreshPage(ScenicNo,"creat");
-//	
-//});
-$('#scenicSpotPage').bind('pageshow',function(event, ui){
-	
-	//加载底部导航栏
-	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
 
-	//var cur = getSession(sessionStorage.ScenicNo);
+$(document).ready(function()
+{
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
 	var ScenicNo=GetUrlem("scenicNo");
-		refreshPage(ScenicNo);
+	refreshPage(ScenicNo);	
 });
 
 function refreshPage(ScenicNo){
 	sessionStorage.ScenicNo=ScenicNo;
 	setscenicInfo(ScenicNo);
-	setTickMoney(ScenicNo);
+//	setTickMoney(ScenicNo);
 	setweather("西安");
-};
+}
   //从服务器端获取景区详细信息
 function setscenicInfo(ScenicNo){
 	var url2 = HOST+"/getDetailScenicByScenicID.do"
@@ -57,29 +49,7 @@ function setscenicInfo(ScenicNo){
 	});
 }
 	
-	//从服务器端获取票价
-/*function setTickMoney(ScenicNo){
-	var url1 = HOST+"/geTicketsByScenicNo.do"
-	$.ajax({
-		type:"post",
-		url:url1,
-		async:true,
-		data:{scenicNo:ScenicNo},
-		datatype:"JSON",
-		error:function()
-		{
-			alert("获取门票Request error!");
-		},
-		success:function(data)
-		{
-			
-			$("#full_price").html(data.fullPrice);
-			sessionStorage.fullPrice=data.fullPrice;
-			sessionStorage.halfPrice=data.halfPrice;
-			sessionStorage.discoutPrice=data.discoutPrice;
-		}
-	});
-}*/
+
 	
 	//从服务器端获取今日天气
 function setweather(City){
@@ -97,7 +67,7 @@ function setweather(City){
 	success:function(data)
 	{
 		if(data!=null){
-			var weather = data.weather;
+		var weather = data.weather;
 		var temperature = data.temprature;
 		var wind = data.wind;
 		var img1 = data.image1;
@@ -124,5 +94,27 @@ function setweather(City){
 }
 	
   
-
+//从服务器端获取票价
+/*function setTickMoney(ScenicNo){
+	var url1 = HOST+"/geTicketsByScenicNo.do"
+	$.ajax({
+		type:"post",
+		url:url1,
+		async:true,
+		data:{scenicNo:ScenicNo},
+		datatype:"JSON",
+		error:function()
+		{
+			alert("获取门票Request error!");
+		},
+		success:function(data)
+		{
+			
+			$("#full_price").html(data.fullPrice);
+			sessionStorage.fullPrice=data.fullPrice;
+			sessionStorage.halfPrice=data.halfPrice;
+			sessionStorage.discoutPrice=data.discoutPrice;
+		}
+	});
+}*/
 

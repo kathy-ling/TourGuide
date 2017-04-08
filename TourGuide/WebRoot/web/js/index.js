@@ -308,8 +308,9 @@ function freshList(data, UlList) {
 
 		var AList = document.createElement("a");
 //		AList.href = "scenicSpot.html?" + "scenicNo=" + item.scenicName;
+		AList.setAttribute("data-ajax",false)
 		AList.href = "scenicSpot.html?" + "scenicNo=" + item.scenicNo;
-
+		
 		DivList.appendChild(AList);
 
 		var ImgList = document.createElement("img");

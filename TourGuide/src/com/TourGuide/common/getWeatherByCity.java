@@ -128,7 +128,7 @@ public class getWeatherByCity {
      */
     public static String getImageString(String image){
     	
-    	String imagePath = "http://1f656026j8.imwork.net/TourGuide/image/weather/";
+    	String imagePath = "http://cps.xaut.edu.cn/TourGuide/image/weather/";
     	
     	switch (image) {
 		case "0.gif":

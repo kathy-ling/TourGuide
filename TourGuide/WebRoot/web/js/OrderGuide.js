@@ -457,9 +457,11 @@ function addlist(data) {
 		// 添加立即预约链接
 		var A1List = document.createElement("a");
 		A1List.innerHTML = "立即预约";
-		 A1List.href = "confirmOrderInfo.html?phone="+n.phone;
+		 A1List.href = "confirmOrderInfo.html?"+ "phone=" + n.phone+"&visitNum="+visitNum+"&visitDate="
+		+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;
 		// A1List.setAttribute("data-transition","pop");
 		A1List.setAttribute("Phone", n.phone);
+		A1List.setAttribute("data-ajax", false);
 		//A1List.setAttribute("class", "DirectOrderBtn");
 		A1List.setAttribute("data-position-to", "window");
 		LiListInfo.appendChild(A1List);

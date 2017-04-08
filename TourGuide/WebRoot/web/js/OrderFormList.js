@@ -1,11 +1,9 @@
 
-  	
-$("#orderFormListPage").bind('pageshow',function(event, ui){
+$(document).ready(function()
+{
 	
-	//加载底部导航栏
 	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
 
-	
   	getOrderList();
   	//隐藏未选中的订单
   	$(".navList").click(function(juagechar){
@@ -13,6 +11,8 @@ $("#orderFormListPage").bind('pageshow',function(event, ui){
                       hideOtherLi(juagechar);
    });
 });
+
+
  function orderinfo(obj){
   		var state = obj.find("span.viewState").html();
   		var orderId = obj.find("span.orderFormId").find("span").html();
@@ -58,6 +58,7 @@ $("#orderFormListPage").bind('pageshow',function(event, ui){
   
 function getOrderList()
 {
+
     var url = HOST+"/getAllOrders.do";
 	$.ajax({
 		type:"post",
@@ -71,9 +72,8 @@ function getOrderList()
 		},
 		success:function(data)
 		{
-//			alert("全部订单success!");
+			
 			$.each(data, function(i,n) {
-				
 				var UlList = document.getElementById("OrderStateUl");
 				var LiList = document.createElement("li");
 				UlList.appendChild(LiList);
@@ -127,10 +127,9 @@ function getOrderList()
 				PList.appendChild(SpanListOrderState);
 				PList.appendChild(SpanListTime)
 				PList.appendChild(SpanListNum)
-				PList.appendChild(SpanListPrice);
-				
-				$("#OrderStateUl").listview('refresh');	 
+				PList.appendChild(SpanListPrice);					 
 			});
+			$("#OrderStateUl").listview('refresh');
 			hideOtherLi(getUrlhideChar());
 		}
 		//景区图片暂时不显示在列表

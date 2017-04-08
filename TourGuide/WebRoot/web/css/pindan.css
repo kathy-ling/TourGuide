@@ -4,6 +4,10 @@
 * @Last Modified by:   Marte
 * @Last Modified time: 2017-01-02 20:18:31
 */
+.orderStyle
+{
+	margin-top: 1em;
+}
 .goOrder{
     position: absolute;
     bottom: 0px;

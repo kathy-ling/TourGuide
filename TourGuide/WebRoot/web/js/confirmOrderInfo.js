@@ -1,12 +1,12 @@
-var Phone = GetUrlem("phone");
+//var Phone = GetUrlem("phone");
 
 $(document).ready(function() {
 	alert("intoConfirm");
 	//获取预约信息
-var visitDate = GetUrlem("visitDate");
-var visitTime = GetUrlem("visitTime");
-var visitNum = GetUrlem("visitNum");
-var scenicName = GetUrlem("scenicName");
+visitDate = GetUrlem("visitDate");
+visitTime = GetUrlem("visitTime");
+visitNum = GetUrlem("visitNum");
+scenicName = GetUrlem("scenicName");
 
 alert(visitDate);
 alert(visitNum);
@@ -77,31 +77,24 @@ function addDate()
 //使信息不为空
 function confirmOrder()
 {
+	confirmOrderBefore();
+	
+	alert(visitDate);
+	alert(visitNum);
+	alert(visitTime);
+	alert(scenicName);
 	//alert("intoConfirm");
-	if(scenicName == null || !scenicName)
-	{
-		scenicName = $('#orderChooseScenicName option:selected').val();
-	}
-	if(visitDate == null || !visitDate)
-	{
-		visitDate = $("#orderChooseDate").val();
-	}
-	if(visitTime == null || !visitTime)
-	{
-		visitTime = $("#orderChooseTime").val();
-	}
-	if(visitNum == null || !visitNum)
-	{
-		visitNum = $("#orderChooseVisitNum").val();
-	}
+	//var scenicNameP,visitDateP,visitTimeP,visitNumP;
+	
+	
 	var contactName = $("#orderContactName").val();
 	var contactPhone = $("#orderContactPhone").val();
-	alert(scenicName);
-	alert(visitDate);
-	alert(visitTime);
-	alert(visitNum);
-	alert(contactName);
-	alert(contactPhone);
+	//alert(scenicName);
+//	alert(visitDate);
+//	alert(visitTime);
+//	alert(visitNum);
+//	alert(contactName);
+//	alert(contactPhone);
 	if(!scenicName)
 	{
 		alert("请选择景区！");
@@ -132,8 +125,31 @@ function confirmOrder()
 		alert("请填写联系人手机号！");
 		return false;
 	}
-	window.location.href="orderFormPage.html?"+ "phone=" +phone+"&visitNum="+visitNum+"&visitDate="
+	window.location.href="orderFormPage.html?"+ "phone=" +vistPhone+"&visitNum="+visitNum+"&visitDate="
 	+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;
+}
+
+function confirmOrderBefore()
+{
+	if(!scenicName)
+	{
+		scenicName = $('#orderChooseScenicName option:selected').val();
+	}
+	
+	if(!visitDate)
+	{
+		visitDate = $("#orderChooseDate").val();
+	}
+	
+	if(!visitTime)
+	{
+		visitTime = $('#orderChooseTime option:selected').val();
+	}
+	
+	if(!visitNum)
+	{
+		visitNum = $("#orderChooseVisitNum").val();
+	}
 }
 
 function addAllScenics() {

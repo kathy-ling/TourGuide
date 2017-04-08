@@ -31,7 +31,7 @@
 			<div data-role="main">
 				<div class="titlebar">
 					<p>我的订单</p>
-					<a class="rightlink" id="viewmyorder" href="orderFormList.html"> >查看全部订单</a>
+					<a class="rightlink" id="viewmyorder" onclick="getAllOrders()" >查看全部订单</a>
 				</div>
 				<div class="marginRL myorder">
 					<table class="per">
@@ -132,6 +132,7 @@
 				});
 				//var Phone = vistPhone;
 				var Phone = GetUrlem("phone");
+				alert("var Phone" + Phone);
 				setperinfo(Phone);
 				$("#signINbtn").click(function() {
 					signIN(Phone);

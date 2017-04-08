@@ -4,8 +4,6 @@
 var scenicNo = GetUrlem("scenicNo");
 
 $(function($){	
-	//加载底部导航栏
-	$("#bottom_navigation").load("bottomNavigation.html");
 	
 	$("#panel2").hide();
 	$("#orderTicketPanel").hide();
