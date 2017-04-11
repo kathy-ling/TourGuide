@@ -1,56 +1,54 @@
-//var Phone = GetUrlem("phone");
+
+//获取预约信息
+var guidePhone = GetUrlem("guidePhone");
+var visitDate = GetUrlem("visitDate");
+var	visitTime = GetUrlem("visitTime");
+var	visitNum = GetUrlem("visitNum");
+var	scenicName = GetUrlem("scenicName");
+var singleMax = GetUrlem("singleMax");
 
 $(document).ready(function() {
-	alert("intoConfirm");
-	//获取预约信息
-visitDate = GetUrlem("visitDate");
-visitTime = GetUrlem("visitTime");
-visitNum = GetUrlem("visitNum");
-scenicName = GetUrlem("scenicName");
-
-alert(visitDate);
-alert(visitNum);
-alert(visitTime);
-alert(scenicName);
-
-addDate(); //动态添加日期
-
-//显示所有景点名称
-addAllScenics();
-
-
-//判断景点名称是否为空
-if(scenicName == null || !scenicName)
-{
-	$("#scenicName0").hide();
-}else{
-	document.getElementById("orderChooseScenicNameDiv").style.display = "none";
-	document.getElementById("scenicName0").innerText = scenicName;
-}
-//判断日期是否为空
-if(visitDate == null || !visitDate)
-{
-	$("#orderChooseDateLabel").hide();
-}else{
-	document.getElementById("orderChooseDateLabel").innerText = visitDate;
-	document.getElementById("orderChooseDateDiv").style.display = "none";
-}
-//判断时间是否为空
-if(visitTime == null || !visitTime)
-{
-	$("#orderChooseTime0").hide();
-}else{	
-	//$("#orderChooseTime").hide();
-	//$("#orderChooseTime0").val(visitTime);
-	document.getElementById("orderChooseTime0").innerText = visitTime;
-	document.getElementById("orderChooseTimeDiv").style.display = "none";
-}
-
-//设置预约信息
-$("#orderChooseVisitNum").attr("value",visitNum);
-//$("#orderChooseDate").attr("value",visitDate);
-
+	
+	//动态添加日期
+	addDate(); 
+	//显示所有景点名称
+	addAllScenics();
+	//从前一个页面获取信息
+	getInfofromFormer();		
 });
+
+
+//从前一个页面获取景点名称、日期、时间、人数
+function getInfofromFormer(){
+	//从前一个页面获取到了相应的值后，隐藏选择器，显示lable并赋值
+	if(scenicName == ""){
+		$("#scenicName0").hide();
+		document.getElementById("orderChooseScenicNameDiv").style.display = "";
+	}else{				
+		$("#scenicName0").show();
+		document.getElementById("scenicName0").innerText = scenicName;
+		document.getElementById("orderChooseScenicNameDiv").style.display = "none";
+	}	
+	if(visitDate == ""){
+		$("#orderChooseDateLabel").hide();
+		document.getElementById("orderChooseDateDiv").style.display = "";
+	}else{
+		document.getElementById("orderChooseDateDiv").style.display = "none";
+		$("#orderChooseDateLabel").show();
+		document.getElementById("orderChooseDateLabel").innerText = visitDate;			
+	}
+	if(visitTime == ""){
+		$("#orderChooseTime0").hide();	
+		document.getElementById("orderChooseTimeDiv").style.display = "";
+	}else{		
+		$("#orderChooseTime0").show();
+		document.getElementById("orderChooseTime0").innerText = visitTime;	
+		document.getElementById("orderChooseTimeDiv").style.display = "none";
+	}
+	
+	//设置人数
+	$("#orderChooseVisitNum").attr("value",visitNum);
+}
 
 function addDate()
 {
@@ -67,34 +65,19 @@ function addDate()
 	
 	//根据id获取select对象
 	var dateSelect = document.getElementById("orderChooseDate");
-	//dateSelect.append("<option value='"+dayAfterTomo0+"'>"+dayAfterTomo0+"</option>");
 	dateSelect.options.add(new Option(today1,today1));
 	dateSelect.options.add(new Option(tomorrow1,tomorrow1));
-	dateSelect.options.add(new Option(dayAfterTomo1,dayAfterTomo1));
-	
+	dateSelect.options.add(new Option(dayAfterTomo1,dayAfterTomo1));	
 }
 
-//使信息不为空
+//onclick="confirmOrder()">确认,使信息不为空
 function confirmOrder()
 {
 	confirmOrderBefore();
 	
-	alert(visitDate);
-	alert(visitNum);
-	alert(visitTime);
-	alert(scenicName);
-	//alert("intoConfirm");
-	//var scenicNameP,visitDateP,visitTimeP,visitNumP;
-	
-	
 	var contactName = $("#orderContactName").val();
 	var contactPhone = $("#orderContactPhone").val();
-	//alert(scenicName);
-//	alert(visitDate);
-//	alert(visitTime);
-//	alert(visitNum);
-//	alert(contactName);
-//	alert(contactPhone);
+
 	if(!scenicName)
 	{
 		alert("请选择景区！");
@@ -125,10 +108,11 @@ function confirmOrder()
 		alert("请填写联系人手机号！");
 		return false;
 	}
-	window.location.href="orderFormPage.html?"+ "phone=" +vistPhone+"&visitNum="+visitNum+"&visitDate="
-	+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;
+
+	timeConflict();	
 }
 
+//如果从前一页面没有取到值，则从选择器中选择
 function confirmOrderBefore()
 {
 	if(!scenicName)
@@ -152,6 +136,44 @@ function confirmOrderBefore()
 	}
 }
 
+//判断讲解员的时间与预约时间是否冲突，True 冲突,false  不冲突
+function timeConflict(){
+	var url = HOST + "/isTimeConflict.do";
+	var time = visitDate + " " + visitTime;
+	var contactPhone = $("#orderContactPhone").val();
+
+	$.ajax({
+		type : "post",
+		url : url,
+		async : true,
+		data:{"guidePhone":guidePhone,"visitTime": time},
+		datatype : "JSON",
+		error:function()
+		{
+			alert("timeConflict Request error!");
+		},
+		success : function(data) {
+			if(data != false){
+				alert("改讲解员时间发生冲突，请重新选择");
+				window.location.href = "orderGuide.html";
+			}else{
+				window.location.href="orderFormPage.html?"+ "contactPhone=" +contactPhone+"&visitNum="+visitNum+"&visitDate="
+				+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName+"&guidePhone="+guidePhone;
+			}			
+		}
+	});
+}
+
+
+function restrictNum(){
+	visitNum = $("#orderChooseVisitNum").val();
+	if(parseInt(visitNum) > parseInt(singleMax)){
+		alert("超过讲解员带团的最大人数限制");
+		$("#orderChooseVisitNum").val("");
+	}	
+}
+
+
 function addAllScenics() {
 	var url = HOST + "/getAllScenics.do";
 	$.ajax({
@@ -163,22 +185,26 @@ function addAllScenics() {
 			addSelect(data);
 		}
 	});
-
 }
-
 function addSelect(a) {
 	$.each(a, function(index, value) {
 		addOption(value.scenicName);
 	});
-
 }
-
 function addOption(a) {
-
 	// 根据id查找对象，
 	var obj = document.getElementById('orderChooseScenicName');
-	//var obj1 = document.getElementById('chooseScenicName1');
 	// 这个只能在IE中有效
 	obj.options.add(new Option(a, a)); // 这个兼容IE与firefox
-	//obj1.options.add(new Option(a, a));
+}
+
+function isRegist()
+{
+	if(vistPhone == "undefined" || vistPhone == openId)
+	{
+		alert("您还未注册，请注册！");
+		window.location.href = "register.html";
+	}else{
+		window.location.href = "personalHome.html";
+	}
 }

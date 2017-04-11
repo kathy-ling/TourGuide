@@ -1,20 +1,15 @@
+
 window.onload = function() {
 
 	getUserInfo();
 
-	setSex();
-
-	$("#Registsubmit").click(function() {
-		Regist();
-	});
-
 	$("#visitor_img").click(function() {
-		$("#btnFile").click();
+		$("#btn_file").click();		
 	});
 }
 
+//从服务端获取用户的部分信息，并显示在页面
 function getUserInfo() {
-
 	var url = HOST + "/getInfobyOpenID.do";
 
 	$.ajax({
@@ -49,21 +44,40 @@ function selectImage(file) {
 		document.getElementById("visitor_img").src = evt.target.result;
 		image = evt.target.result;
 	}
-	reader.readAsDataURL(file.files[0]);
+	reader.readAsDataURL(file.files[0]);	
 }
 
-function setSex() {
-	var sex = $("#sexlable").attr("sex");
 
-	if(sex == 1) { //男
-		$("input[name='guideSex']:eq(1)").attr("checked", 'checked');
-	} else if(sex == 2) { //女
-		$("input[name='guideSex']:eq(0)").attr("checked", 'checked');
-	}
+//上传头像，并进行注册
+function changePerHeadImg()
+{
+	alert(openId);
+	var URL = HOST+"/putImg.do";
+	
+	$.ajaxFileUpload({
+			url : URL,
+			fileElementId:'btn_file',
+			dataType : "json",
+			success: function(data){
+				if(data == true)					
+				{
+					Regist();
+				}else
+				{
+					alert("图片上传失败");
+				}				
+			 },
+			error: function(data)
+			{
+				
+		  	alert("图片上传异常");
+			}
+	});	
 }
+
 
 function Regist() {
-	alert(openId);
+	
 	if(check()) {
 		var postdata = {
 			"nickName": $("#nickname").val(),
@@ -71,9 +85,7 @@ function Regist() {
 			"name": $("#name").val(),
 			"phone": $("#tel").val(),
 			"passwd": $("#password").val(),
-			"image": $("#visitor_img").attr("src"),
 			"openID": openId
-//			"openID": $("#openID").val()
 		};
 
 		var url = HOST + "/visitorRegister.do";
@@ -85,12 +97,9 @@ function Regist() {
 			datatype: "JSON",
 			error: function(data) {
 				alert("注册Request error!");
-				//console.log(JSON.stringify(data));
 			},
 			success: function(data) {
-				window.location = HOST + "/web/index.html?phone=" + postdata.phone;
-				//alert("注册success!");
-				//alert(data);
+				window.location = HOST + "/web/index.html?phone=" + postdata.phone;				
 			}
 		});
 	}

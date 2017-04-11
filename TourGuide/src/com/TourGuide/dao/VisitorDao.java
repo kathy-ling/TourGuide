@@ -155,6 +155,52 @@ public class VisitorDao {
 			return visitorInfo;
 		}  
 		
+		
+		/**
+		 * 用户根据openId修改自己的头像
+		 * @param openId
+		 * @param imgPath 头像路径
+		 * @return
+		 */
+		public boolean changeImg(String openId, String imgPath){
+			
+			boolean bool = false;
+			
+			String sqlUpdate = "update t_visitor set image='"+imgPath+"' where openID='"+openId+"'";
+			int i = jdbcTemplate.update(sqlUpdate);
+			
+			if(i != 0){
+				bool = true;
+			}
+			
+			return bool;
+		}
+		
+		
+		/**
+		 * 用户根据openId修改自己的信息
+		 * @param openId
+		 * @param name  姓名
+		 * @param nickName  昵称
+		 * @param sex  性别
+		 * @return
+		 */
+		public boolean changeInfo(String openId, String name, String nickName, String sex){
+			
+			boolean bool = false;
+			
+			String sqlUpdate = "update t_visitor set name='"+name+"',"
+					+ "nickName='"+nickName+"',sex='"+sex+"' where openID='"+openId+"'";
+			int i = jdbcTemplate.update(sqlUpdate);
+			
+			if(i != 0){
+				bool = true;
+			}
+			
+			return bool;
+		}
+		
+		
 		/*
 		 *通过页数与页数容量来获取未禁用游客信息 
 		 * time：2017-1-2 17:22:30

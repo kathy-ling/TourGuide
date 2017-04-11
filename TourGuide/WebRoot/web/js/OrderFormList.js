@@ -2,7 +2,7 @@
 $(document).ready(function()
 {
 	
-	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
+//	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
 
   	getOrderList();
   	//隐藏未选中的订单
@@ -134,4 +134,15 @@ function getOrderList()
 		}
 		//景区图片暂时不显示在列表
 	});	
+}
+
+function isRegist()
+{
+	if(vistPhone == "undefined" || vistPhone == openId)
+	{
+		alert("您还未注册，请注册！");
+		window.location.href = "register.html";
+	}else{
+		window.location.href = "personalHome.html";
+	}
 }

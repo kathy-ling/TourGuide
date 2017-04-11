@@ -7,6 +7,17 @@
 .pStyle
 {
 	text-indent:0 ;
+	position: absolute;
+	top:-12%;		
+}
+.liStyle
+{
+	/*height: 30%;*/
+	bottom: 30%;
+}
+.aStyle
+{
+	padding: 20px;
 }
 #guideinfoPage
 {

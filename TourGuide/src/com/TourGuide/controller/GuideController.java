@@ -1,11 +1,13 @@
 package com.TourGuide.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.model.ScenicsSpotInfo;
@@ -29,6 +32,7 @@ public class GuideController {
 	@Autowired
 	private ScenicSpotService scenicSpotService;
 	
+	private String imgPath;
 	
 	/**
 	 * 讲解员提交相应的信息，申请认证
@@ -49,13 +53,13 @@ public class GuideController {
 			@RequestParam("sex") String sex,
 			@RequestParam("language") String language, 
 			@RequestParam("selfIntro") String selfIntro, 
-			@RequestParam("image") String image,
-			@RequestParam("age") String age) throws IOException{
+			@RequestParam("age") String age,
+			@RequestParam("workAge") String workAge) throws IOException{
 		
 		CommonResp.SetUtf(resp);
 		
 		int ret = guideService.getGuideAuthentication(phone, name, 
-				sex, language, selfIntro, image, Integer.parseInt(age));
+				sex, language, selfIntro, imgPath, Integer.parseInt(age), workAge);
 		
 		PrintWriter writer = resp.getWriter();
 		writer.write(new Gson().toJson(ret));
@@ -63,6 +67,43 @@ public class GuideController {
 	}
 	
 	
+	@RequestMapping(value="/upLoadImg.do")
+	public void UploadImage(HttpServletResponse resp,
+			HttpServletRequest request,
+			@RequestParam MultipartFile btn_file) throws IOException {
+		
+		CommonResp.SetUtf(resp);
+		boolean ret = false;
+		
+		String realPath=request.getSession().getServletContext().getRealPath("image/visitor");
+		File pathFile = new File(realPath);
+		
+		if (!pathFile.exists()) {
+			//文件夹不存 创建文件
+			System.out.println("目录不存在，创建目录");
+			pathFile.mkdirs();
+		}
+		imgPath = "/image/visitor/" + btn_file.getOriginalFilename();
+		System.out.println("文件类型："+btn_file.getContentType());
+		System.out.println("文件名称："+btn_file.getOriginalFilename());
+		System.out.println("文件大小:"+btn_file.getSize());
+		System.out.println(".................................................");
+			//将文件copy上传到服务器
+		try {
+			System.out.println(realPath + "/" + btn_file.getOriginalFilename());
+			File fileImageFile=new File(realPath + "/" + btn_file.getOriginalFilename());
+			btn_file.transferTo(fileImageFile);
+			System.out.println("图片上传成功");
+			ret = true;
+		} catch (IllegalStateException | IOException e) {
+				
+			e.printStackTrace();
+		}	
+		
+		PrintWriter writer = resp.getWriter();
+		writer.write(new Gson().toJson(ret));
+		writer.flush();
+	}  	
 	
 	/**
 	 * 查询最受欢迎的讲解员
@@ -158,34 +199,6 @@ public class GuideController {
 	}
 	
 	
-	
-	/**
-	 * 该导游在该天，是否被预约了
-	 * @param resp
-	 * @param guidePhone   导游的手机号
-	 * @param visitTime  游览时间
-	 * @return   1-被预约了    0-未被预约
-	 * @throws IOException
-	 */
-//	@RequestMapping(value = "/WhetherBooked.do")
-//	@ResponseBody
-//	public Object WhetherBooked(HttpServletResponse resp,
-//			@RequestParam("guidePhone") String guidePhone, 
-//			@RequestParam("visitTime") String visitTime) throws IOException{
-//		
-//		CommonResp.SetUtf(resp);
-//		
-//		int booked = 0;
-//		
-//		String[] date = visitTime.toString().split(" ");
-//		String visitDate = date[0];
-//		
-//		booked = guideService.WhetherBooked(guidePhone, visitDate);
-//		
-//		return booked;
-//	}
-	
-	
 	/**
 	 * 根据手机号，查询导游的详细信息
 	 * @param resp
@@ -206,4 +219,54 @@ public class GuideController {
 		
 		return listResult;
 	}
+	
+	
+	/**
+	 * 判断该讲解员已经被预约了的时间(被预约了的时间要大于当前时间)与time是否冲突
+	 * 若有冲突，则返回数据；否则，查询结果为空
+	 * @param guidePhone  讲解员的手机号
+	 * @param visitTime  游客的预约参观时间
+	 * @return
+	 */
+	@RequestMapping(value = "/isTimeConflict.do")
+	@ResponseBody
+	public Object isTimeConflict(HttpServletResponse resp,
+			@RequestParam("guidePhone") String guidePhone,
+			@RequestParam("visitTime") String visitTime) throws IOException{
+		
+		CommonResp.SetUtf(resp);		
+		
+		boolean bool = guideService.isTimeConflict(guidePhone, visitTime);
+		
+		return bool;
+	}
 }
+
+
+
+
+/**
+ * 该导游在该天，是否被预约了
+ * @param resp
+ * @param guidePhone   导游的手机号
+ * @param visitTime  游览时间
+ * @return   1-被预约了    0-未被预约
+ * @throws IOException
+ */
+//@RequestMapping(value = "/WhetherBooked.do")
+//@ResponseBody
+//public Object WhetherBooked(HttpServletResponse resp,
+//		@RequestParam("guidePhone") String guidePhone, 
+//		@RequestParam("visitTime") String visitTime) throws IOException{
+//	
+//	CommonResp.SetUtf(resp);
+//	
+//	int booked = 0;
+//	
+//	String[] date = visitTime.toString().split(" ");
+//	String visitDate = date[0];
+//	
+//	booked = guideService.WhetherBooked(guidePhone, visitDate);
+//	
+//	return booked;
+//}

@@ -2,8 +2,11 @@
 var visitDate;
 var visitTime;
 var visitNum;
-var  phone;
+var  phone;//讲解员的手机号
 var scenicName;
+var singleMax;
+
+
 $('#guideinfoPage').bind('pageshow',function(event, ui){
 	
 	$(".guideInfoHead").width($(".guideInfoHead").height());
@@ -11,14 +14,15 @@ $('#guideinfoPage').bind('pageshow',function(event, ui){
         	$(".guideInfoHead").width($(".guideInfoHead").height());
         });
         
-      //加载底部导航栏
-	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
+      /*//加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");*/
       
 	phone = GetUrlem("phone");
 	visitDate=GetUrlem("visitDate");
 	visitTime=GetUrlem("visitTime");
 	visitNum=GetUrlem("visitNum");
 	scenicName=GetUrlem("scenicName");
+	
 	$("#DirectorderTicketSub").attr("phone",phone);
 	/*
 	$("#bookGuide").click(function(){
@@ -32,12 +36,6 @@ $('#guideinfoPage').bind('pageshow',function(event, ui){
 	setGuideComment(phone);
 });
 
-//$("#bookGuide").click(function(){
-//	 $.mobile.changePage('#orderTicketPop', {
-//          transition: "slide",
-//          role: "dialog"
-//      });
-//});
 
 //获取并设置导游信息
 function setGuideInfo(phone){
@@ -54,12 +52,10 @@ function setGuideInfo(phone){
 		},
 		success:function(data)
 		{
-			//alert("导游详细信息success!");
 			$.each(data, function(i,item) {
 				$("#guide_info_name").html(item.name);
 				$("#guide_info_sex").html(item.sex);
 				$("#guide_age").html(item.age);			
-//				$("#guide_img").attr("src","img/1.jpg");
 				$("#guide_img").attr("src",HOST+item.image);
 				$("#bgimg").attr("src",HOST+item.image);
 				$("#guide_starlevel").html(item.guideLevel);
@@ -68,18 +64,8 @@ function setGuideInfo(phone){
 				$("#guide_self_intro").html(item.selfIntro);
 				$("#guide_phone").html(item.phone);
 				$("#guide_language").html(item.language);
-//				if(item.language == "0")
-//				{
-//					$("#guide_language").html("中文");
-//				}
-//				if(item.language == "1")
-//				{
-//					$("#guide_language").html("英文");
-//				}
-//				if(item.language == "2")
-//				{
-//					$("#guide_language").html("中文 英文");
-//				}
+				singleMax = item.singleMax;
+				scenicName = item.scenicName;				
 			});
 		}
 	});
@@ -101,7 +87,6 @@ var Url = HOST+"/getComments.do";
 		},
 		success:function(data)
 		{
-			//alert(JSON.stringify(data));
 			$.each(data,function(i,item){
 				var commentStr = "<li><a><span>"+item.nickName+"</span><span>("+item.evaluateTime+")</span><br>";
 				commentStr+='<div class="starlev" data-num="'+item.star+'"></div>';
@@ -116,39 +101,28 @@ var Url = HOST+"/getComments.do";
 	});
 }
 
-//点击立即预定
+//点击立即预定,要先判断是否注册
 function bookGuide()
 {
-	
-    var Url = HOST+"/getInfobyOpenID.do";
-    $.ajax({
-		type:"post",
-		url:Url,
-		async:true,
-		data:{"openId":openId},
-		datatype:"JSON",
-		error:function()
-		{
-			alert("根据openId返回数据Request error!");
-		},
-		success:function(data)
-		{
-			alert("根据openId返回数据Request success!");
-			if(data.phone==openId)
-			{
-				alert("您还未注册，请注册！");
-				window.location.href = "register.html";
-			}
-			else{
-				window.location.href = "confirmOrderInfo.html?"+"phone="+data.phone+"&visitNum="+visitNum+"&visitDate="
-	            +visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;
-			}
-		}
-	});
-	
-	//alert(visitDate+visitNum+visitTime+vistPhone);
-	/*window.location.href="orderFormPage.html?"+ "phone=" + phone+"&visitNum="+visitNum+"&visitDate="
-	+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;*/
-//	window.location.href="confirmOrderInfo.html?"+ "phone=" + phone+"&visitNum="+visitNum+"&visitDate="
-//	+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName;
+	if(vistPhone == "undefined" || vistPhone == openId)
+	{
+		alert("您还未注册，请注册！");
+		window.location.href = "register.html";
+	}
+	else{
+		window.location.href = "confirmOrderInfo.html?"+"visitNum="+visitNum+"&visitDate="
+        +visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName+"&guidePhone="+phone+
+        "&singleMax="+singleMax;
+	}
+}
+
+function isRegist()
+{
+	if(vistPhone == "undefined" || vistPhone == openId)
+	{
+		alert("您还未注册，请注册！");
+		window.location.href = "register.html";
+	}else{
+		window.location.href = "personalHome.html";
+	}
 }

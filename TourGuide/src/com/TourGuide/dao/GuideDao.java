@@ -41,7 +41,7 @@ public class GuideDao {
 	 * @return 0-失败  1-成功  -1-账号已存在
 	 */
 	public int getGuideAuthentication(String phone, String name,String sex, 
-			String language, String selfIntro, String image, int age){
+			String language, String selfIntro, String image, int age, String workAge){
 		
 		int retValue = 0;
 		final GuideInfo guideInfo = new GuideInfo();
@@ -70,9 +70,9 @@ public class GuideDao {
 		
 		
 		//向t_guideotherinfo插入其他的信息
-		String sqlString2 = "insert into t_guideotherinfo (phone,historyNum,authorized,disabled) "
+		String sqlString2 = "insert into t_guideotherinfo (phone,workAge,authorized,disabled) "
 				+ "values (?,?,?,?)";
-		int j = jdbcTemplate.update(sqlString2, new Object[]{phone, 0, 0, 0});
+		int j = jdbcTemplate.update(sqlString2, new Object[]{phone, workAge, 0, 0});
 		
 		if (i!=0 && j!=0) {
 			retValue = 1;
@@ -125,6 +125,7 @@ public class GuideDao {
 	/**
 	 * 查询可被预约的讲解员,查看推荐
 	 * 查询条件：级别、所属景区、讲解员是否请假、单次最大带团人数、去除时间冲突的讲解员信息
+	 * scenicID必选，不为空；visitNum可不选，不选置为0；
 	 * @param visitTime  游客的参观日期
 	 * @param visitNum  参观的人数
 	 * @param scenicID  景区编号
@@ -134,40 +135,55 @@ public class GuideDao {
 	public List<Map<String, Object>> getAvailableGuides(String visitTime, 
 			int visitNum, String scenicID){
 		
-    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-    	String[] visitDate = visitTime.split(" ");
-
-    	//计算参观日期与今日之间相隔的天数
-    	int day = DateConvert.getDaysBetweenDate(visitDate[0], dayNow);
-    	
 		String selectDay = null;
-		switch (day) {
-		
-		case 0:
-			selectDay = "one";
-			break;
-		case 1:
-			selectDay = "two";			
-			break;
-		case 2:
-			selectDay = "three";
-			break;
-		case 3:
-			selectDay = "four";
-			break;
-		default:
-			break;
-		}
+    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    	
+    	if(!visitTime.equals("null")){
+    		String[] visitDate = visitTime.split(" ");
+
+        	//计算参观日期与今日之间相隔的天数
+        	int day = DateConvert.getDaysBetweenDate(visitDate[0], dayNow);   		
+    		switch (day) {
+    		
+    		case 0:
+    			selectDay = "one";
+    			break;
+    		case 1:
+    			selectDay = "two";			
+    			break;
+    		case 2:
+    			selectDay = "three";
+    			break;
+    		case 3:
+    			selectDay = "four";
+    			break;
+    		default:
+    			break;
+    		}
+    	}
 		
 		List<Map<String , Object>> listResult = new ArrayList<>(); 
 		List<Map<String , Object>> list = null;
-		String sqlString = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
-				+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes from t_guideinfo,t_guideotherinfo "
-				+ "where t_guideinfo.id = t_guideotherinfo.id and singleMax > '"+visitNum+"' "
-				+ "and scenicBelong = '"+scenicID+"' and guideLevel >= 5 and t_guideotherinfo.id in "
-				+ "(select id from t_guideworkday where "+selectDay+"=1)"
-				+ "ORDER BY guideLevel desc,historyTimes desc";
-		list = jdbcTemplate.queryForList(sqlString);
+		
+		if(!visitTime.equals("null") && visitNum != 0){
+			String sqlString = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
+					+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes from t_guideinfo,t_guideotherinfo "
+					+ "where t_guideinfo.id = t_guideotherinfo.id and singleMax > '"+visitNum+"' "
+					+ "and scenicBelong = '"+scenicID+"' and guideLevel >= 5 and t_guideotherinfo.id in "
+					+ "(select id from t_guideworkday where "+selectDay+"=1)"
+					+ "ORDER BY guideLevel desc,historyTimes desc";
+			list = jdbcTemplate.queryForList(sqlString);
+		}else{
+			//当用户只输入景区名称，进行的筛选
+			String sqlSelect = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
+					+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes from t_guideinfo,t_guideotherinfo "
+					+ "where t_guideinfo.id = t_guideotherinfo.id and scenicBelong = '"+scenicID+"' "
+					+ "and guideLevel >= 5 ORDER BY guideLevel desc,historyTimes desc";
+			listResult = jdbcTemplate.queryForList(sqlSelect);
+			return listResult;
+		}
+		
+		
 		
 		for(int i=0; i<list.size(); i++){
 			listResult.add(list.get(i));
@@ -309,6 +325,8 @@ public class GuideDao {
 				map.put("historyTimes", rst.getString(11));
 				map.put("guideFee", rst.getInt(12));
 				map.put("scenicBelong", rst.getString(13));
+				map.put("singleMax", rst.getInt(14));
+				map.put("scenicName", rst.getString(15));
 				list.add(map);
 			}							
 			conn.close();

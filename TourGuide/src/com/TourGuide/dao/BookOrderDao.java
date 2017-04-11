@@ -103,16 +103,17 @@ public class BookOrderDao {
 	 * @return
 	 */
 	public int BookOrderWithGuide(String orderID, String produceTime, String guidePhone, 
-			String visitorPhone, String visitTime, String scenicID, int visitNum, int guideFee){
+			String visitorPhone, String visitTime, String scenicID, 
+			int visitNum, int guideFee, String contactPhone){
 		
 		int ret = 0;	
 		String orderState = "待付款";
 		
 		String sqlString = "insert into t_bookorder (bookOrderID,produceTime,visitTime,"
-				+ "visitorPhone,visitNum,scenicID,guideFee,guidePhone,orderState) "
-				+ "values (?,?,?,?,?,?,?,?,?)";
+				+ "visitorPhone,visitNum,scenicID,guideFee,guidePhone,orderState,contact) "
+				+ "values (?,?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlString, new Object[]{orderID,produceTime,visitTime,
-				visitorPhone,visitNum, scenicID, guideFee,  guidePhone, orderState});
+				visitorPhone,visitNum, scenicID, guideFee,  guidePhone, orderState, contactPhone});
 		
 //    	String[] visitDate = visitTime.split(" ");		
 //		//计算参观日期与当前日期的间隔，并得到数据库的字段名称

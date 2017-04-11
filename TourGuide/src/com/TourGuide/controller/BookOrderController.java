@@ -132,6 +132,7 @@ public class BookOrderController {
 	 * @param guidePhone   导游手机号
 	 * @param guideFee   导游的讲解费
 	 * @param visitorPhone  游客手机号
+	 * @param contactPhone  订单联系人手机号
 	 * @return
 	 * @throws IOException
 	 */
@@ -143,9 +144,10 @@ public class BookOrderController {
 			@RequestParam("visitNum") String visitNum,
 			@RequestParam("guidePhone") String guidePhone,
 			@RequestParam("guideFee") String guideFee,
-			@RequestParam("visitorPhone") String visitorPhone
+			@RequestParam("visitorPhone") String visitorPhone,
+			@RequestParam("contactPhone") String contactPhone
 			) throws IOException{
-		//http://10.50.63.83:8080/TourGuide/BookOrderWithGuide.do?scenicName=秦始皇兵马俑&visitTime=2017-3-23 14:00&visitNum=6&guidePhone=13823456789&guideFee=300&visitorPhone=18191762572
+		//BookOrderWithGuide.do?scenicName=秦始皇兵马俑&visitTime=2017-4-12 14:00&visitNum=6&guidePhone=13823456789&guideFee=300&visitorPhone=18191762572&contactPhone=1111
 		CommonResp.SetUtf(resp);
 		
 		String orderID = UUID.randomUUID().toString().replace("-", "");
@@ -170,7 +172,7 @@ public class BookOrderController {
 		
 		int ret = bookOrderService.BookOrderWithGuide(orderID, produceTime, guidePhone, 
 				visitorPhone, visitTime, scenicID, Integer.parseInt(visitNum),
-				Integer.parseInt(guideFee));
+				Integer.parseInt(guideFee), contactPhone);
 		
 		return ret;
 	}

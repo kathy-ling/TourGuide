@@ -29,10 +29,10 @@ public class GuideService {
 	 * @return  0-失败  1-成功  -1-账号已存在
 	 */
 	public int getGuideAuthentication(String phone, String name,String sex, 
-			String language, String selfIntro, String image, int age){
+			String language, String selfIntro, String image, int age, String workAge){
 		
 		return guideDao.getGuideAuthentication(phone, name, sex,
-				language, selfIntro, image, age);
+				language, selfIntro, image, age, workAge);
 	}
 	
 	
@@ -91,6 +91,17 @@ public class GuideService {
 	 */
 	public List<Map<String, Object>> getDetailGuideInfoByPhone(String phone){
 		return guideDao.getDetailGuideInfoByPhone(phone);
+	}
+	
+	/**
+	 * 判断该讲解员已经被预约了的时间(被预约了的时间要大于当前时间)与time是否冲突
+	 * 若有冲突，则返回数据；否则，查询结果为空
+	 * @param guidePhone  讲解员的手机号
+	 * @param visitTime  游客的预约参观时间
+	 * @return
+	 */
+	public boolean isTimeConflict(String guidePhone, String visitTime){
+		return guideDao.isTimeConflict(guidePhone, visitTime);
 	}
 	
 	

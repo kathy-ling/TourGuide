@@ -63,6 +63,28 @@ public class VisitorService {
 	
 	
 	/**
+	 * 用户根据openId修改自己的头像
+	 * @param openId
+	 * @param imgPath 头像路径
+	 * @return
+	 */
+	public boolean changeImg(String openId, String imgPath){
+		return visitorDao.changeImg(openId, imgPath);
+	}
+	
+	/**
+	 * 用户根据openId修改自己的信息
+	 * @param openId
+	 * @param name  姓名
+	 * @param nickName  昵称
+	 * @param sex  性别
+	 * @return
+	 */
+	public boolean changeInfo(String openId, String name, String nickName, String sex){
+		return visitorDao.changeInfo(openId, name, nickName, sex);
+	}
+	
+	/**
 	 * 分页得到未禁用游客的基本信息
 	 * @param i
 	 * @param j
