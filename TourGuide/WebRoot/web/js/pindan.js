@@ -2,6 +2,7 @@
 //从登录界面获得游客的手机号即登录名
 //1-15 datebox 时间无法获取
 var scenicNo = GetUrlem("scenicNo");
+var scenicName = GetUrlem("sname");
 
 $(function($){	
 	
@@ -9,8 +10,8 @@ $(function($){
 	$("#orderTicketPanel").hide();
 	
 	getconsistOrder();
-	addAllScenics();
-	addDate();
+	addDate();	
+	getInfofromFormer(scenicName);
 	
 	$("#paySubmit").click(function(){
 		var scenicName = $("#chooseScenicName").val();
@@ -39,10 +40,27 @@ $(function($){
 				
 		window.location.href= "consistOrder.html?" + "visitorPhone=" + visitorPhone+"&visitNum="+visitNum+"&visitDate="
 		+visitdate+"&visitTime="+visitTime+"&scenicName="+scenicName;
-	});
-		
+	});		
 });
 
+//从前一个页面获取景点名称
+function getInfofromFormer(scenicName){
+	//从前一个页面获取到了相应的值后，隐藏选择器，显示lable并赋值
+	if(scenicName == "" || scenicName == "null" || scenicName == null){
+		$("#ScenicName").hide();
+		document.getElementById("chooseScenicNameDiv").style.display = "";
+		$("#ScenicName1").hide();
+		document.getElementById("chooseScenicNameDiv1").style.display = "";
+		addAllScenics();
+	}else{	
+		$("#ScenicName").show();
+		document.getElementById("ScenicName").innerText = scenicName;
+		document.getElementById("chooseScenicNameDiv").style.display = "none";
+		$("#ScenicName1").show();
+		document.getElementById("ScenicName1").innerText = scenicName;
+		document.getElementById("chooseScenicNameDiv1").style.display = "none";
+	}	
+}
 
 function addDate()
 {
@@ -60,7 +78,7 @@ function addDate()
 	//根据id获取select对象
 	var dateSelect = document.getElementById("visitTime");
 	var dateSelect1 = document.getElementById("visitTime1");
-	//dateSelect.append("<option value='"+dayAfterTomo0+"'>"+dayAfterTomo0+"</option>");
+
 	dateSelect.options.add(new Option(today1,today1));
 	dateSelect.options.add(new Option(tomorrow1,tomorrow1));
 	dateSelect.options.add(new Option(dayAfterTomo1,dayAfterTomo1));
@@ -83,7 +101,6 @@ function addAllScenics() {
 			addSelect(data);
 		}
 	});
-
 }
 
 function addSelect(a) {

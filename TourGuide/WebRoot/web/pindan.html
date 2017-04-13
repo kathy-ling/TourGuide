@@ -45,19 +45,17 @@
     <div data-role="main" >
     	<div id="panel1" class="ui-content" >
     		
-    		<div id="nameSelector">
-				<label for="chooseDatetime" class="ui-hidden-accessible">景区名称</label>
+    		<label id="ScenicName1"  style="text-align: center; font-size: larger;">景区名称</label>
+    		<div id="chooseScenicNameDiv1">				
 				<select id="chooseScenicName1" name="scenicName" onchange="chooseOrder()">
 					<option value="" selected="selected">请选择景区</option>
 				</select>
 			</div>
-			
-			<label for="orderDate" class="ui-hidden-accessible">日期</label>						
+									
 			<select id="visitTime1" placeholder="日期" onchange="chooseOrder()">
 				<option value="" selected="selected">请选择日期</option>
 			</select>
 	
-			<label for="chooseVisitNum" class="ui-hidden-accessible" ">人数</label>
 			<input type="text" id="chooseVisitNum" name="VisitNum" value="" placeholder="人数" onblur="chooseOrder()">					
 			
 			<div id="order_list">
@@ -70,20 +68,18 @@
         <div id="panel2" >      
             <form action="pindan_submit" id="" method="get" accept-charset="utf-8">            	
             	
-            	<div id="nameSelector">
-					<label for="chooseDatetime" class="ui-hidden-accessible">景区名称</label>
+            	<label id="ScenicName"  style="text-align: center; font-size: larger;">景区名称</label>
+            	<div id="chooseScenicNameDiv">					
 					<select id="chooseScenicName" name="scenicName" onchange="getTodayFee()">
 						<option value="" selected="selected">请选择景区</option>
 					</select>
 				</div>
 				
-                <div class="visitTime">
-	                <label for="visitTime" class="ui-hidden-accessible">日期</label>               
+                <div class="visitTime">              
 	               	<select id="visitTime" placeholder="日期" onchange="getDateFee()">
 						<option value="" selected="selected">请选择日期</option>
 					</select>
 
-	               <label for="chooseDatetime" class="ui-hidden-accessible">时间</label>
 	               <select id="chooseDatetime" name="datetime" value="" placeholder="时间">
 						<option>8:00</option>
 						<option>8:30</option>
@@ -109,10 +105,8 @@
 					</select>	
                 </div>
                
-                <label for="visitorCount" class="ui-hidden-accessible">浏览人数</label>
                 <input type="number" min="1" max="10" step="1" id="visitorCount" name="visitorCount" class="" placeholder="浏览人数" onchange="getDateFee()" />
                
-                <label for="visitorCount" class="ui-hidden-accessible">联系方式</label>
                 <input type="text"  id="visitorPhone" name="visitorPhone"  placeholder="游览人联系方式"  />
             </form>
             
@@ -140,34 +134,7 @@
 			$("#panel1").hide(300);
     		$(".visitTime").show();
     		$("#panel2").show(300);
-		}
-	    
-	    /* var Url = HOST+"/getInfobyOpenID.do";
-	    $.ajax({
-			type:"post",
-			url:Url,
-			async:true,
-			data:{"openId":openId},
-			datatype:"JSON",
-			error:function()
-			{
-				alert("根据openId返回数据Request error!");
-			},
-			success:function(data)
-			{
-				if(data.phone==undefined)
-				{
-					alert("您还未注册，请注册后再发起拼单！");
-					window.location.href = "register.html";
-				}
-				else{
-					<!--window.location.href = "orderGuide.html?"+"phone="+data.phone;-->
-					$("#panel1").hide(300);
-        			$(".visitTime").show();
-        			$("#panel2").show(300);
-				}
-			}
-		}); */
+		}	    
     });
     
     $("#panel1btn").bind("click", function(event) {

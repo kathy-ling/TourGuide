@@ -116,8 +116,14 @@ function guideAuthentication()
 			{
 				alert("您申请的账号已存在！");
 			}
-			alert("导游申请成功，系统审核后将会以短信的方式通知您，请耐心等待!");
-			window.location.href = "index.html";
+			if(data == 1){
+				alert("导游申请成功，系统审核后将会以短信的方式通知您，请耐心等待!");
+				alert("请您继续填写挂靠景区信息！");
+				window.location.href = "applyForAffiliation.html";
+			}
+			if(data == 0){
+				alert("导游申请认证Request error!");
+			}
 		}
 	});
 }

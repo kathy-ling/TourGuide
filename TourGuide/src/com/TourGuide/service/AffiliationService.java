@@ -21,7 +21,7 @@ public class AffiliationService {
 	 * @param applyDate  申请日期
 	 * @return
 	 */
-	public boolean applyForAffiliation(String guidePhone, String scenicID, String applyDate){
+	public int applyForAffiliation(String guidePhone, String scenicID, String applyDate){
 		return affiliationDao.applyForAffiliation(guidePhone, scenicID, applyDate);
 	}
 	
@@ -38,24 +38,14 @@ public class AffiliationService {
 	}
 	
 	
-	/**
-	 * 查看当前景区的申请挂靠时间
-	 * @param guidePhone  导游手机号
-	 * @param scenicID  景区编号
-	 * @return
-	 */
-	public List<Map<String , Object>> getApplyDateofCurrentScenic(String guidePhone, String scenicID){
-		return affiliationDao.getApplyDateofCurrentScenic(guidePhone, scenicID);
-	}
-	
 	
 	/**
 	 * 查看该导游的挂靠景区记录
 	 * @param guidePhone  手机号
 	 * @return
 	 */
-	public List<Map<String , Object>> getApplyHistory(String guidePhone){
-		return affiliationDao.getApplyHistory(guidePhone);
+	public List<Map<String , Object>> getHistoryAffiliation(String guidePhone){
+		return affiliationDao.getHistoryAffiliation(guidePhone);
 	}
 	
 	
@@ -64,7 +54,17 @@ public class AffiliationService {
 	 * @param guidePhone  手机号
 	 * @return
 	 */
-	public List<Map<String , Object>> getCurrentAffiliation(String guidePhone){
+	public Map<String , Object> getCurrentAffiliation(String guidePhone){
 		return affiliationDao.getCurrentAffiliation(guidePhone);
+	}
+	
+	
+	/**
+	 * 查看该导游当前de挂靠申请
+	 * @param guidePhone
+	 * @return
+	 */
+	public Map<String , Object> getCurrentApply(String guidePhone){
+		return affiliationDao.getCurrentApply(guidePhone);
 	}
 }

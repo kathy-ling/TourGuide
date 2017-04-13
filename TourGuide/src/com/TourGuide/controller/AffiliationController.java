@@ -1,9 +1,11 @@
 package com.TourGuide.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.TourGuide.common.CommonResp;
 import com.TourGuide.service.AffiliationService;
+import com.google.gson.Gson;
 
 @Controller
 public class AffiliationController {
@@ -44,7 +47,7 @@ public class AffiliationController {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String applyDate = dateFormat.format(new Date());
 		
-		boolean bool = affiliationService.applyForAffiliation(guidePhone, scenicID, applyDate);
+		int bool = affiliationService.applyForAffiliation(guidePhone, scenicID, applyDate);
 		
 		return bool;
 	}
@@ -57,8 +60,8 @@ public class AffiliationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/cancleAffiliation.do")
-	@ResponseBody
-	public Object cancleAffiliation(HttpServletResponse resp,
+//	@ResponseBody
+	public void cancleAffiliation(HttpServletResponse resp,
 			@RequestParam("guidePhone") String guidePhone, 
 			@RequestParam("scenicID") String scenicID) throws IOException{
 		
@@ -69,32 +72,9 @@ public class AffiliationController {
 		
 		boolean bool = affiliationService.cancleAffiliation(guidePhone, scenicID, quitDate);
 		
-		return bool;
-	}
-	
-	
-	
-	/**
-	 * 查看当前景区的申请挂靠时间
-	 * @param resp
-	 * @param guidePhone  导游手机号 
-	 * @param scenicID  景区编号
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping(value = "/getApplyDateofCurrentScenic.do")
-	@ResponseBody
-	public Object getApplyDateofCurrentScenic(HttpServletResponse resp,
-			@RequestParam("guidePhone") String guidePhone, 
-			@RequestParam("scenicID") String scenicID) throws IOException{
-		
-		CommonResp.SetUtf(resp);
-		
-		List<Map<String , Object>> listResult = new ArrayList<>();
-		
-		listResult = affiliationService.getApplyDateofCurrentScenic(guidePhone, scenicID);
-		
-		return listResult;
+		PrintWriter writer = resp.getWriter();
+		writer.write(new Gson().toJson(bool));
+		writer.flush();
 	}
 	
 	
@@ -106,18 +86,18 @@ public class AffiliationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/getApplyHistory.do")
+	@RequestMapping(value = "/getHistoryAffiliation.do")
 	@ResponseBody
-	public Object getApplyHistory(HttpServletResponse resp,
+	public Object getHistoryAffiliation(HttpServletResponse resp,
 			@RequestParam("guidePhone") String guidePhone) throws IOException{
 		
 		CommonResp.SetUtf(resp);
 		
-		List<Map<String , Object>> listResult = new ArrayList<>();
+		List<Map<String , Object>> list = new ArrayList<>();
 		
-		listResult = affiliationService.getApplyHistory(guidePhone);
+		list = affiliationService.getHistoryAffiliation(guidePhone);
 		
-		return listResult;
+		return list;
 	}
 	
 	
@@ -135,12 +115,32 @@ public class AffiliationController {
 		
 		CommonResp.SetUtf(resp);
 		
-		List<Map<String , Object>> listResult = new ArrayList<>();
+		Map<String , Object> map = new HashMap<String, Object>();
 		
-		listResult = affiliationService.getCurrentAffiliation(guidePhone);
+		map = affiliationService.getCurrentAffiliation(guidePhone);
 		
-		return listResult;
+		return map;
 	}
 	
 	
+	/**
+	 * 查看该导游当前de挂靠申请
+	 * @param resp
+	 * @param guidePhone
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value="/getCurrentApply.do")
+	@ResponseBody
+	public Object getCurrentApply(HttpServletResponse resp,
+			@RequestParam("guidePhone") String guidePhone) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		Map<String , Object> map = new HashMap<String, Object>();
+		
+		map = affiliationService.getCurrentApply(guidePhone);
+		
+		return map;
+	}
 }

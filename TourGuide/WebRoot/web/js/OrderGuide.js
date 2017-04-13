@@ -1,30 +1,40 @@
 
-var sname;
 var Phone = GetUrlem("phone");
 var ScenicNo = GetUrlem("scenicNo");
-sname = GetUrlem("sname");
+var scenicName = GetUrlem("sname");
 
 
 window.onload = function() {
 	
-	/*alert("sname"+sname);
-	if(sname != undefined){
-		addOption(sname);
-	}else{
-		addAllScenics();
-		$("#nameSelector").show();
-		$("#nameSelector1").show();
-	}*/
-	
-	addAllScenics();
-	addPopularGuides();
 	addDate();
+	
+	getInfofromFormer(scenicName);
 	
 	$("#submitOrderForm").click(function() {
 		checkOrderForm();// 检查表单正确后，调用提交方法
 	});
 }
 
+//从前一个页面获取景点名称
+function getInfofromFormer(scenicName){
+	//从前一个页面获取到了相应的值后，隐藏选择器，显示lable并赋值
+	if(scenicName == "" || scenicName == "null" || scenicName == null){
+		$("#ScenicName").hide();
+		document.getElementById("chooseScenicNameDiv").style.display = "";
+		$("#ScenicName1").hide();
+		document.getElementById("chooseScenicNameDiv1").style.display = "";
+		addAllScenics();
+		addPopularGuides();
+	}else{	
+		$("#ScenicName").show();
+		document.getElementById("ScenicName").innerText = scenicName;
+		document.getElementById("chooseScenicNameDiv").style.display = "none";
+		$("#ScenicName1").show();
+		document.getElementById("ScenicName1").innerText = scenicName;
+		document.getElementById("chooseScenicNameDiv1").style.display = "none";
+		getAvailableGuides1();
+	}	
+}
 
 //从服务器获取所有的景区名称，并填充到下拉选择菜单
 function addAllScenics() {
@@ -101,7 +111,10 @@ function addDate()
 //只输入景区时，进行的筛选
 function getAvailableGuides1()
 {	
-	var scenicName = $('#chooseScenicName option:selected').val();
+	var scenicName = GetUrlem("sname");
+	if(scenicName == "" || scenicName == "null" || scenicName == null){
+		var scenicName = $('#chooseScenicName option:selected').val();
+	}
 	
 	var Url = HOST + "/getAvailableGuides.do";
 	$.ajax({

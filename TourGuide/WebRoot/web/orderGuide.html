@@ -18,6 +18,14 @@
 		<script type="text/javascript" src="js/jquery.raty.min.js"></script>
 		<script type="text/javascript" src="js/jquery.cookie.js"></script>
 		<script type="text/javascript" src="js/OrderGuide.js"></script>
+		<style>
+			#releaseDiv{
+				margin-top: 1em;
+			}
+			#chosePanel{
+				margin-top: 1em;
+			}
+		</style>
 	</head>
 
 
@@ -105,19 +113,17 @@
 					<form action="chooseGuide_submit" method="get" accept-charset="utf-8">
 						<div class="ui-field-contain">
 							
-							<div id="nameSelector">
-								<label for="chooseDatetime" class="ui-hidden-accessible">景区名称</label>
+							<label id="ScenicName"  style="text-align: center; font-size: larger;">景区名称</label>
+							<div id="chooseScenicNameDiv">								
 								<select id="chooseScenicName" name="scenicName" onchange="getAvailableGuides1()">
 									<option value="" selected="selected">请选择景区</option>
 								</select>
 							</div>
-							
-							<label for="orderDate" class="ui-hidden-accessible">日期</label>							
+												
 							<select id="chooseDate" placeholder="日期" onchange="getAvailableGuides2()">
 								<option value="" selected="selected">请选择日期</option>
 							</select>
 							
-							<label for="orderDatetime" class="ui-hidden-accessible">时间</label>
 							<select id="orderDatetime123" name="datetime" value="" placeholder="时间" onchange="getAvailableGuides2()">
 								<option selected="selected" value="">请选择时间</option>
 								<option>8:00</option>
@@ -143,7 +149,6 @@
 								<option>18:00</option>
 							</select>
 							
-							<label for="chooseVisitNum" class="ui-hidden-accessible" ">人数</label>
 							<input type="text" id="chooseVisitNum" name="VisitNum" value="" placeholder="人数" onblur="getAvailableGuides()">
 							
 							<a href="#myPanel" class="ui-btn ui-btn-inline">筛选</a>
@@ -158,12 +163,12 @@
 				
 				
 				<!--预约讲解员-发布预约订单-->
-				<div data-role="nd2tab" data-tab="order">
+				<div data-role="nd2tab" data-tab="order" id="releaseDiv">
 					<form action="orderGuide_submit" method="get" accept-charset="utf-8">
 						<div>
 						
-							<div id="nameSelector1">
-								<label for="chooseDatetime" class="ui-hidden-accessible">景区名称</label>
+							<label id="ScenicName1"  style="text-align: center; font-size: larger;">景区名称</label>
+							<div id="chooseScenicNameDiv1">								
 								<select id="chooseScenicName1" name="scenicName">
 									<option value="" selected="selected">请选择景区</option>
 								</select>

@@ -1,101 +1,219 @@
-$(function($){
-	setapotlist();
-	setCurrentSpot();
+$(".my-imgcard").height($(window).width() * 0.3);
+
+$(window).bind('resize load', function() {
+	//加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
+	$(".my-imgcard").height($(window).width() * 0.3);
 });
 
+$(function($) {
+	$("#panel2").hide();
+	$("#lable1").hide();
+	$("#lable2").hide();
 
- 
-    //显示加载器  
-    
+	setapotlist();
+	setCurrentSpot();
+	getCurrentApply();
+	getHistoryAffiliation();
+});
 
-//填充当前挂靠景点
-function setCurrentSpot(){
+//填充景点列表
+function setapotlist() {
+	var url = HOST + "/getAllScenics.do";
 	$.ajax({
-	type:"get",
-	url:HOST+'/getCurrentAffiliation.do?guidePhone='+vistPhone,
-	async:true,
-	error:function(){alert("false");},
-	success:function(data){
-		var scenid = data[0].scenicBelong;
-		//var applyDate = data[0].applyDate;
-			$.ajax({
-				type:"get",
-				url:HOST+'/getSomeScenicInfoByscenicID.do?scenicID='+scenid,
-				async:true,
-				error:function(){alert("false");},
-				success:function(info){
-					var appstr="<p>您还未挂靠景点</p>"
-					if(info.length==0){
-						
-					}else{
-						appstr = '<p style="font-style:strong;">当前挂靠景区<p><li><a href="#" scenicNo="'+scenid+'"><img src="'+HOST+info[0].scenicImagePath+'"><p>'+
-                info[0].scenicName+'<br/>';
-					//appstr+='申请时间：'+applyDate+'</p></a>';
-					appstr+='<div class="sidebtn"><a href="#" scenicNo="'+scenid+'" onclick="cancleW($(this))" class="ui-btn ui-mini ui-btn-inline  ui-btn-raised clr-warning ">取消挂靠</a><div>';
-					$("#apply_ul").find("div.sidebtn").children("a").addClass("ui-disabled");
-					}
-					$("#currentW_ul").html(appstr);
-					$("#currentW_ul").listview("refresh");
-				}
+		type: "post",
+		url: url,
+		async: true,
+		datatype: "JSON",
+		error: function() {
+			alert("全部景点Request error!");
+		},
+		success: function(data) {
+			$("#scenic_ul").empty();
+
+			$.each(data, function(i, n) {
+				var a = '<li><a href="#" scenicNo="' + n.scenicNo + '" onclick="toDetail($(this))">';
+				var img = '<img src="' + HOST + n.scenicImagePath + '">';
+				var span = '<p><span class="spotname" scenicNo="' + n.scenicNo + '">' + n.scenicName + '</span><br/></p>';
+				var btn = '<div class="sidebtn"><a  href="#" scenicNo="' + n.scenicNo + '" onclick="applyit($(this))" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline" >申请挂靠</a></div>';
+
+				$("#scenic_ul").append(a + img + span + btn);
 			});
-	}
+			$("#scenic_ul").listview("refresh");
+		}
 	});
 }
 
-//填充景点列表
-function setapotlist(){
-$.ajax({
-	type:"get",
-	url:HOST+"/getAllScenicByLocation.do?province=陕西",
-	async:true,
-	error:function(){alert("false");},
-	success:function(data){
-		$("#apply_ul").empty();
-		$.each(data,function(i,n){
-			var appstr='<li><a><img src="'+HOST+n.scenicImagePath+'"><p>'+
-                '<span class="spotname" scenicNo="'+n.scenicNo+'">'+n.scenicName+'</span><br/></p>'
-//                  '景点等级：<span class="starLevel">AAAAA</span><br/>'+
-//                  '景点地址：<sapn calss="location">陕西省西安市临潼区临蓝路</sapn>'+
-               +'<div class="sidebtn"><a  href="#" scenicNo="'+n.scenicNo+'"onclick="applyit($(this))" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline" '
-                 +'>申请挂靠</a></div>';
-			$("#apply_ul").append(appstr);
-		});
-		$("#apply_ul").listview("refresh");
-	}
-});
-}
-//申请挂靠景点
-function applyit(This){
-	var URL=HOST+'/applyForAffiliation.do?guidePhone='+vistPhone+'&scenicID='+This.attr("scenicNo");
+//查看挂靠记录
+function getHistoryAffiliation() {
+
+	var Url = HOST + "/getHistoryAffiliation.do";
 	$.ajax({
-		type:"get",
-		url:URL,
-		async:true,
-		error:function(data){console.log(JSON.stringify(data));},
-		success:function(data){
-			if(data==true){
-				setCurrentSpot();
-				alert("成功!");
+		type: "post",
+		url: Url,
+		async: true,
+		data: {
+			guidePhone: '18191762572'
+		}, //vistPhone
+		datatype: "JSON",
+		error: function() {
+			alert("Request error!");
+		},
+		success: function(data) {
+
+			$("#history").empty();
+
+			$.each(data, function(i, n) {
+				var name = '<li><p>景区名称: <span>' + n.scenicName + '</span><br/>';
+				var date1 = '申请时间: <span>' + n.applyDate + '</span><br/> ';
+				var date2 = '挂靠时间: <span>' + n.passDate + '</span><br/> ';
+				var date3 = '取消时间: <span>' + n.quitDate + '</span><br/></p></li> ';
+
+				$("#history").append(name + date1 + date2 + date3);
+			});
+			$("#history").listview("refresh");
+		}
+	});
+}
+
+//填充当前挂靠景点
+function setCurrentSpot() {
+	var Url = HOST + "/getCurrentAffiliation.do";
+
+	$.ajax({
+		type: "get",
+		url: Url,
+		async: true,
+		data: {
+			guidePhone: '18191762572'
+		}, //vistPhone
+		datatype: "JSON",
+		error: function() {
+			alert("false");
+		},
+		success: function(data) {
+			$("#lable2").hide();
+			if(JSON.stringify(data)!="{}"){
+				$("#lable1").show();
+				$("#lable1").html("我的挂靠"); 
+				var p1 = '<li><p>景区名称：<span>' + data.scenicName + '</span><br/><br/>';
+				var p2 = '申请时间：<span>' + data.applyDate + '</span><br/>';
+				var p3 = '挂靠时间：<span>' + data.passDate + '</span><br/></p>';
+				var div = '<div class="sidebtn"><a  href="#" scenicID="'+data.scenicID+'" onclick="cancle($(this))" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline" >取消挂靠</a></div></li>';
+				
+				$("#current_ul").append(p1+p2+p3+div);
+				$("#current_ul").listview("refresh");
 			}else{
-				alert("申请失败!");
+				$("#lable1").show();
+				$("#lable1").html("您还未挂靠景点!"); 
 			}
 		}
 	});
 }
+
+//查看当前的挂靠申请
+function getCurrentApply(){
+	var Url = HOST + "/getCurrentApply.do";
+	
+	$.ajax({
+		type: "get",
+		url: Url,
+		async: true,
+		data: {
+			guidePhone: '18191762572'
+		}, //vistPhone
+		datatype: "JSON",
+		error: function() {
+			alert("false");
+		},
+		success: function(data) {
+			$("#lable1").hide();
+			if(JSON.stringify(data)!="{}"){
+				$("#lable2").show();
+				$("#lable2").html("我的挂靠申请"); 
+				var p1 = '<li><p>景区名称：<span>' + data.scenicName + '</span><br/><br/>';
+				var p2 = '申请时间：<span>' + data.applyDate + '</span><br/></p>';
+//				var div = '<div class="sidebtn"><a  href="#" scenicNo="'+data.scenicID+'" onclick="cancle($(this))" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline" >待处理</a></div></li>';
+				var div = '<div class="sidebtn"><label style="text-align: end; font-size: larger; color:#008A00;">待处理</label></div></li>';
+				
+				$("#current_ul").append(p1+p2+div);
+				$("#current_ul").listview("refresh");
+			}			
+		}
+	});
+}
+
+
 //取消挂靠
-function cancleW(This){
-	//alert(This.attr("scenicNo"));
-	var scenicId = This.attr("scenicNo");
-	var URL = HOST+'/cancleAffiliation.do?guidePhone='+vistPhone+'&scenicID='+scenicId;
+function cancle(This){
+	var scenicId = This.attr("scenicID");
+	var URL = HOST+'/cancleAffiliation.do';
+
 	$.ajax({
 		type:"get",
 		url:URL,
 		async:true,
-		error:function(data){console.log(JSON.stringify(data));},
-		success:function(data){
-			setCurrentSpot();
-			$("#apply_ul").find("div.sidebtn").children("a").removeClass("ui-disabled");
-			alert(data);
+		data: {
+			guidePhone: '18191762572',scenicID:scenicId
+		}, //vistPhone
+		datatype: "JSON",
+		error:function(data){
+			console.log(JSON.stringify(data));
+		},
+		success:function(data){		
+			if(data == true){
+				alert("取消成功！");
+				setCurrentSpot();				
+			}
 		}
-		});
+	});
+	window.location.href = "applyForAffiliation.html";
 }
+
+
+//申请挂靠景点
+function applyit(This){
+	var scenicId = This.attr("scenicNo");
+	var URL=HOST+'/applyForAffiliation.do';
+
+	$.ajax({
+		type:"get",
+		url:URL,
+		async:true,
+		data: {
+			guidePhone: '18191762572',scenicID:scenicId
+		}, //vistPhone
+		datatype: "JSON",
+		error:function(data){
+			console.log(JSON.stringify(data));
+		},
+		success:function(data){
+			alert("data="+JSON.stringify(data));
+			//0--失败 ，1--成功，-1--申请失败。因为您有待处理的挂靠申请！，-2请先取消当前的挂靠，再进行申请
+			
+			if(parseInt(data) == parseInt(-2)){
+				alert("请先取消当前的挂靠，再进行申请!");
+			}
+			if(parseInt(data) == parseInt(-1)){
+				alert("申请失败。因为您有待处理的挂靠申请!");
+			}
+			if(parseInt(data) == parseInt(1)){
+				alert("申请成功，请耐心等待审核和通知!");
+				$("#lable1").hide();
+				$("#lable2").show();
+				$("#lable2").html("我的挂靠申请"); 
+				window.location.href = "applyForAffiliation.html";
+			}
+			if(parseInt(data) == parseInt(0)){
+				alert("申请失败。发生未知错误!");
+			}
+		}
+	});
+}
+
+function toDetail(This){
+	
+	var scenicNo = This.attr("scenicNo");
+	window.location.href = "scenicSpot.html?scenicNo=" + scenicNo;
+}
+

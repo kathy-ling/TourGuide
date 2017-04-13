@@ -63,7 +63,7 @@ function setperinfo(Phone) {
 				if(!patt1.test(img)){
 					img = HOST + img;
 				}
-
+				alert("img" + img);
 				$(".perhead").attr("src", img);		
 				}
 			}
