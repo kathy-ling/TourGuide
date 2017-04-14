@@ -1,5 +1,6 @@
 package com.TourGuide.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,11 @@ public class VisitorService {
 	 * @param passwd  用户密码
 	 * @param image   用户头像
 	 * @return
+	 * @throws SQLException 
 	 */
 	public boolean visitorRegister(String nickName, String sex,
-			String name, String phone, String passwd, String image, String openID){
+			String name, String phone, String passwd, 
+			String image, String openID) throws SQLException{
 		return visitorDao.visitorRegister(nickName, sex, name, phone, passwd, image, openID);
 	}
 	

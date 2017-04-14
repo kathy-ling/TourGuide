@@ -1,5 +1,6 @@
 package com.TourGuide.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +28,11 @@ public class GuideService {
 	 * @param image  头像
 	 * @param age    年龄
 	 * @return  0-失败  1-成功  -1-账号已存在
+	 * @throws SQLException 
 	 */
 	public int getGuideAuthentication(String phone, String name,String sex, 
-			String language, String selfIntro, String image, int age, String workAge){
+			String language, String selfIntro, String image, 
+			int age, String workAge) throws SQLException{
 		
 		return guideDao.getGuideAuthentication(phone, name, sex,
 				language, selfIntro, image, age, workAge);

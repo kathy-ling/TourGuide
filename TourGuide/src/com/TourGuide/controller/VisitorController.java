@@ -3,6 +3,7 @@ package com.TourGuide.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ public class VisitorController {
 	 * @param phone   手机号 
 	 * @param passwd   用户密码
 	 * @throws IOException
+	 * @throws SQLException 
 	 */
 	@RequestMapping(value = "/visitorRegister.do")
 	public void visitorRegister(HttpServletResponse resp,
@@ -48,7 +50,7 @@ public class VisitorController {
 			@RequestParam("name") String name,
 			@RequestParam("phone") String phone,
 			@RequestParam("passwd") String passwd,
-			@RequestParam("openID") String openID) throws IOException{
+			@RequestParam("openID") String openID) throws IOException, SQLException{
 		
 		CommonResp.SetUtf(resp);
 		

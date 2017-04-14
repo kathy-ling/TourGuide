@@ -1,6 +1,7 @@
 package com.TourGuide.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -135,6 +136,8 @@ public class BookOrderController {
 	 * @param contactPhone  订单联系人手机号
 	 * @return
 	 * @throws IOException
+	 * @throws SQLException 
+	 * @throws NumberFormatException 
 	 */
 	@RequestMapping(value = "/BookOrderWithGuide.do")
 	@ResponseBody
@@ -146,7 +149,7 @@ public class BookOrderController {
 			@RequestParam("guideFee") String guideFee,
 			@RequestParam("visitorPhone") String visitorPhone,
 			@RequestParam("contactPhone") String contactPhone
-			) throws IOException{
+			) throws IOException, NumberFormatException, SQLException{
 		//BookOrderWithGuide.do?scenicName=秦始皇兵马俑&visitTime=2017-4-12 14:00&visitNum=6&guidePhone=13823456789&guideFee=300&visitorPhone=18191762572&contactPhone=1111
 		CommonResp.SetUtf(resp);
 		

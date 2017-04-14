@@ -1,5 +1,6 @@
 package com.TourGuide.service;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,10 @@ public class FastOrderService {
 	 * @param guidePhone  讲解员的手机号
 	 * @param num  游客的订单中的参观人数
 	 * @return
+	 * @throws SQLException 
 	 */
-	public int takeFastOrder(String consistOrderID, String guidePhone, int num){
+	public int takeFastOrder(String consistOrderID, 
+			String guidePhone, int num) throws SQLException{
 		return fastOrderDao.takeFastOrder(consistOrderID, guidePhone, num);
 	}
 

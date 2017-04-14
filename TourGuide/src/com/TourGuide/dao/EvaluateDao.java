@@ -1,8 +1,15 @@
 package com.TourGuide.dao;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.style.ValueStyler;
@@ -76,12 +83,35 @@ public class EvaluateDao {
 	 */
 	public List<Map<String, Object>> getComments(String guidePhone){
 		
-		List<Map<String, Object>> list = new ArrayList<>();
+		List<Map<String , Object>> list = new ArrayList<>(); 		
+ 		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getComments(?)");
+			cst.setString(1, guidePhone);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				Map<String , Object> map = new HashMap<String, Object>();
+				map.put("evaluateTime", rst.getString(1));
+				map.put("evaluateContext", rst.getString(2));
+				map.put("nickName", rst.getString(3));				
+				
+				list.add(map);
+			}			
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+ 		return list;
 		
-		String sqlString = "select evaluateTime,evaluateContext,nickName "
-				+ "from t_evaluate where guidePhone='"+guidePhone+"'";
-		list = jdbcTemplate.queryForList(sqlString);
-		
-		return list;
+//		List<Map<String, Object>> list = new ArrayList<>();
+//		
+//		String sqlString = "select evaluateTime,evaluateContext,nickName "
+//				+ "from t_evaluate where guidePhone='"+guidePhone+"'";
+//		list = jdbcTemplate.queryForList(sqlString);
+//		
+//		return list;
 	}
 }

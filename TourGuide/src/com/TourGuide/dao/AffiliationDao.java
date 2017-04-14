@@ -32,8 +32,10 @@ public class AffiliationDao {
 	 * @param scenicID  景区编号
 	 * @param applyDate  申请日期
 	 * @return 0--失败 ，1--成功，-1--申请失败。因为您有待处理的挂靠申请！，-2请先取消当前的挂靠，再进行申请
+	 * @throws SQLException 
 	 */
-	public int applyForAffiliation(String guidePhone, String scenicID, String applyDate){
+	public int applyForAffiliation(String guidePhone, String scenicID, 
+			String applyDate) throws SQLException{
 		
 		int ret = 0;
 		String belong = null;
@@ -43,34 +45,41 @@ public class AffiliationDao {
 		
 		if(belong != null){
 			return ret = -2;
-			//return "请先取消当前的挂靠，再进行申请";
 		}else{
 			
 			String id = (String) getCurrentApply(guidePhone).get("scenicID");
 			if(id != null){
 				return ret = -1;
-//				return bool = "申请失败。因为您有待处理的挂靠申请！";
 			}
 			
-			String sqlUpdate = "update t_guideotherinfo set scenicBelong='"+scenicID+"' "
-					+ "where phone='"+guidePhone+"'";
-			int i = jdbcTemplate.update(sqlUpdate);
+			//jdbc事务
+			DataSource dataSource = jdbcTemplate.getDataSource();
+			Connection  conn = null;
+			try {
+				  conn = dataSource.getConnection();
+				  conn.setAutoCommit(false);
+				  
+				  String sqlUpdate = "update t_guideotherinfo set scenicBelong='"+scenicID+"' "
+							+ "where phone='"+guidePhone+"'";
+				  int i = jdbcTemplate.update(sqlUpdate);
+				  
+				  String sql = "update t_guideotherinfo set authorized=2 "
+							+ "where phone='"+guidePhone+"'";
+				  int j = jdbcTemplate.update(sql);
+					
+				  String sqlInsert = "insert into t_affiliation (guidePhone,scenicID,applyDate,state) "
+							+ "values (?,?,?,?)";
+				  int k = jdbcTemplate.update(sqlInsert, new Object[]{guidePhone, scenicID, applyDate,state});									
 			
-			if(i == 0){
-				return ret = 0;
-			}
-			
-			String sql = "update t_guideotherinfo set authorized=0 "
-					+ "where phone='"+guidePhone+"'";
-			int j = jdbcTemplate.update(sql);
-			
-			String sqlInsert = "insert into t_affiliation (guidePhone,scenicID,applyDate,state) "
-					+ "values (?,?,?,?)";
-			int k = jdbcTemplate.update(sqlInsert, new Object[]{guidePhone, scenicID, applyDate,state});
-			
-			if (i != 0 && j != 0 && k != 0){
-				ret = 1;
-			}
+				  conn.commit();//提交JDBC事务 
+				  conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+				  if (i != 0 && j != 0 && k != 0){
+					  ret = 1;
+				  }
+				} catch (SQLException e) {
+					conn.rollback();
+					e.printStackTrace();
+				}	
 		}
 				
 		return ret;
@@ -83,8 +92,10 @@ public class AffiliationDao {
 	 * @param scenicID   景区编号
 	 * @param quitDate  取消挂靠的日期
 	 * @return
+	 * @throws SQLException 
 	 */
-	public boolean cancleAffiliation(String guidePhone, String scenicID, String quitDate){
+	public boolean cancleAffiliation(String guidePhone, String scenicID, 
+			String quitDate) throws SQLException{
 		
 		boolean bool = false;
 		
@@ -95,20 +106,32 @@ public class AffiliationDao {
 		int guideFee = (int) map.get("guideFee");
 		String guideLevel = (String) map.get("guideLevel");
 		
-		//记录之前的挂靠数据及取消的日期,state=0 ---不再挂靠该景区
-		String sqlRecord = "update t_affiliation set quitDate='"+quitDate+"', "
-				+ "historyTimes="+historyTimes+",historyNum="+historyNum+","
-				+ "singleMax="+singleMax+", guideFee="+guideFee+",guideLevel='"+guideLevel+"',state=0 "
-				+ "where guidePhone='"+guidePhone+"' and scenicID='"+scenicID+"'";
-		int j = jdbcTemplate.update(sqlRecord);
-		
-		String sqlUpdate = "update t_guideotherinfo set scenicBelong='null',"
-				+ "historyTimes=0,historyNum=0,singleMax=0,guideFee=0,guideLevel='0' "
-				+ "where phone='"+guidePhone+"'";
-		int i = jdbcTemplate.update(sqlUpdate);		
-		
-		if (i != 0 && j != 0){
-			bool = true;
+		//jdbc事务
+		DataSource dataSource = jdbcTemplate.getDataSource();
+		Connection  conn = null;
+		try{
+			conn = dataSource.getConnection();
+			conn.setAutoCommit(false);
+			//记录之前的挂靠数据及取消的日期,state=0 ---不再挂靠该景区
+			String sqlRecord = "update t_affiliation set quitDate='"+quitDate+"', "
+					+ "historyTimes="+historyTimes+",historyNum="+historyNum+","
+					+ "singleMax="+singleMax+", guideFee="+guideFee+",guideLevel='"+guideLevel+"',state=0 "
+					+ "where guidePhone='"+guidePhone+"' and scenicID='"+scenicID+"'";
+			int j = jdbcTemplate.update(sqlRecord);
+			
+			String sqlUpdate = "update t_guideotherinfo set scenicBelong='null',"
+					+ "historyTimes=0,historyNum=0,singleMax=0,guideFee=0,guideLevel='0' "
+					+ "where phone='"+guidePhone+"'";
+			int i = jdbcTemplate.update(sqlUpdate);		
+			
+			conn.commit();//提交JDBC事务 
+			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			if (i != 0 && j != 0){
+				bool = true;
+			}
+		} catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
 		}
 		
 		return bool;

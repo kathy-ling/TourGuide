@@ -59,37 +59,53 @@ public class ConsistOrderDao {
 	 * @param totalFee  讲解费总额
 	 * @param fee 每个人的讲解费
 	 * @return
+	 * @throws SQLException 
 	 */
 	public boolean ReleaseConsistOrder(String consistOrderID, String orderID, String scenicID,
 			String produceTime, String visitTime, int visitNum, String visitorPhone, 
-			String contact, String orderState, int isConsisted, int maxNum, int totalFee, int fee){
+			String contact, String orderState, int isConsisted, int maxNum,
+			int totalFee, int fee) throws SQLException{
 		
 		boolean bool = false;
 		
-		String sqlString2 = "insert into t_consistresult (orderID,visitNum,maxNum,"
-				+ "visitTime,scenicID) values (?,?,?,?,?)";
-		int j = jdbcTemplate.update(sqlString2, new Object[]{orderID, visitNum, 
-				maxNum, visitTime, scenicID});
-		
-		String sqlString = "insert into t_consistOrder (consistOrderID,orderID,scenicID,produceTime,"
-				+ "visitTime,visitNum,visitorPhone,contact,orderState,"
-				+ "isConsisted,maxNum,totalGuideFee,guideFee)"
-				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		int i = jdbcTemplate.update(sqlString, new Object[]{consistOrderID, orderID, scenicID, 
-				produceTime, visitTime, visitNum, visitorPhone,contact,
-				orderState, isConsisted,maxNum, totalFee, fee});
-		
-		/**
-		 * 假设付款成功
-		 */
-		String payTime = MyDateFormat.form(new Date());
-		String sqlUpdate = "update t_consistOrder set hadPay=1,payTime='"+payTime+"' "
-				+ "where consistOrderID='"+consistOrderID+"'";
-		int k = jdbcTemplate.update(sqlUpdate);
-		
-		if(i!=0 && j!=0 && k!=0){
-			bool = true;
-		}
+		DataSource dataSource = jdbcTemplate.getDataSource();
+		Connection  conn = null;
+		try{
+			conn = dataSource.getConnection();
+			conn.setAutoCommit(false);
+			
+			String sqlString2 = "insert into t_consistresult (orderID,visitNum,maxNum,"
+					+ "visitTime,scenicID) values (?,?,?,?,?)";
+			int j = jdbcTemplate.update(sqlString2, new Object[]{orderID, visitNum, 
+					maxNum, visitTime, scenicID});
+			
+			String sqlString = "insert into t_consistOrder (consistOrderID,orderID,scenicID,produceTime,"
+					+ "visitTime,visitNum,visitorPhone,contact,orderState,"
+					+ "isConsisted,maxNum,totalGuideFee,guideFee)"
+					+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			int i = jdbcTemplate.update(sqlString, new Object[]{consistOrderID, orderID, scenicID, 
+					produceTime, visitTime, visitNum, visitorPhone,contact,
+					orderState, isConsisted,maxNum, totalFee, fee});
+			
+			/**
+			 * 假设付款成功
+			 */
+			String payTime = MyDateFormat.form(new Date());
+			String sqlUpdate = "update t_consistOrder set hadPay=1,payTime='"+payTime+"' "
+					+ "where consistOrderID='"+consistOrderID+"'";
+			int k = jdbcTemplate.update(sqlUpdate);
+
+			conn.commit();//提交JDBC事务 
+			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			
+			if(i!=0 && j!=0 && k!=0){
+				bool = true;
+			}			
+		} catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		}	
+	
 		return bool;
 	}
 	
@@ -110,40 +126,57 @@ public class ConsistOrderDao {
 	 * @param orderState  拼单的状态
 	 * @param isConsisted   是否被拼单
 	 * @param maxNum
+	 * @throws SQLException 
 	 */
-	public boolean consistWithconsistOrderID(String orderID, String consistOrderID, String scenicID, 
-			String produceTime, String visitTime, int visitNum, String visitorPhone, String contact,
-			int currentNum, String orderState, int isConsisted, int maxNum, int totalFee, int fee){
+	public boolean consistWithconsistOrderID(String orderID, String consistOrderID,
+			String scenicID, String produceTime, String visitTime, int visitNum, 
+			String visitorPhone, String contact,int currentNum, String orderState,
+			int isConsisted, int maxNum, int totalFee, int fee) throws SQLException{
 		
 		boolean bool = false;
 		String payTime = MyDateFormat.form(new Date());;
 		
-		//将拼单信息插入拼单表
-		String sqlString = "insert into t_consistOrder (orderID,consistOrderID,scenicID,produceTime,"
-				+ "visitTime,visitNum,visitorPhone,contact,orderState,isConsisted,maxNum,"
-				+ "totalGuideFee,guideFee) "
-				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		int i = jdbcTemplate.update(sqlString, new Object[]{orderID, consistOrderID, scenicID, 
-				produceTime, visitTime, visitNum, visitorPhone, contact,
-				orderState, isConsisted,maxNum,totalFee, fee});
-		
-		//更新拼单状态，已拼单
-		String sqlString1 = "update t_consistorder set isConsisted=1 where orderID=?";
-		int j = jdbcTemplate.update(sqlString1, new Object[]{orderID});
-		
-		//更新拼单结果，当前人数
-		String sqlString2 = "update t_consistresult set "
-				+ "visitNum=?,maxNum=?,visitTime=?,scenicID=? where orderID=?";
-		int k = jdbcTemplate.update(sqlString2, new Object[]{currentNum, maxNum,
-				visitTime, scenicID, orderID});
-		
-		String sqlUpdate = "update t_consistorder set payTime='"+payTime+"',hadPay=1 "
-				+ "where orderID='"+orderID+"' ";
-		int h = jdbcTemplate.update(sqlUpdate);
-		
-		if(i != 0 && j!=0 && k!=0 && h!=0){
-			bool = true;
-		}
+		DataSource dataSource = jdbcTemplate.getDataSource();
+		Connection  conn = null;
+		try{
+			conn = dataSource.getConnection();
+			conn.setAutoCommit(false);
+			
+			//将拼单信息插入拼单表
+			String sqlString = "insert into t_consistOrder (orderID,consistOrderID,scenicID,produceTime,"
+					+ "visitTime,visitNum,visitorPhone,contact,orderState,isConsisted,maxNum,"
+					+ "totalGuideFee,guideFee) "
+					+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			int i = jdbcTemplate.update(sqlString, new Object[]{orderID, consistOrderID, scenicID, 
+					produceTime, visitTime, visitNum, visitorPhone, contact,
+					orderState, isConsisted,maxNum,totalFee, fee});
+			
+			//更新拼单状态，已拼单
+			String sqlString1 = "update t_consistorder set isConsisted=1 where orderID=?";
+			int j = jdbcTemplate.update(sqlString1, new Object[]{orderID});
+			
+			//更新拼单结果，当前人数
+			String sqlString2 = "update t_consistresult set "
+					+ "visitNum=?,maxNum=?,visitTime=?,scenicID=?,guideFee=? where orderID=?";
+			int k = jdbcTemplate.update(sqlString2, new Object[]{currentNum, maxNum,
+					visitTime, scenicID, fee, orderID});
+			
+			String sqlUpdate = "update t_consistorder set payTime='"+payTime+"',hadPay=1 "
+					+ "where orderID='"+orderID+"' ";
+			int h = jdbcTemplate.update(sqlUpdate);
+
+			conn.commit();//提交JDBC事务 
+			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			
+			if(i != 0 && j!=0 && k!=0 && h!=0){
+				bool = true;
+			}
+			
+		} catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		}	
+	
 		return bool;
 	}
 
@@ -233,28 +266,6 @@ public class ConsistOrderDao {
 	}
 
 
-
-	/**
-	 * 根据订单编号，查询该订单中的所有拼单的编号
-	 * @param orderID  订单编号
-	 * @return
-	 */
-	public List<String> getConsistOrderIDsWithOrderID(String orderID){
-		
-		List<String> consistOrderIDs = new ArrayList<>();
-		
-		String sqlSearch = "select consistOrderID from t_consistorder where orderID='"+orderID+"'";
-		List<Map<String , Object>> list2=jdbcTemplate.queryForList(sqlSearch);
-		
-		for (int j = 0; j <list2.size(); j++){
-			String id = (String)list2.get(j).get("consistOrderID");
-			consistOrderIDs.add(id);
-		}
-		
-		return consistOrderIDs;
-	}
-	
-	
 	
 	
 	/**
@@ -273,12 +284,12 @@ public class ConsistOrderDao {
 			cst.setString(1, OrderID);
 			ResultSet rst=cst.executeQuery();
 		
-			while (rst.next()) {
+			while (rst.next()) {				
 				consistResult.setOrderID(rst.getString(1));
-				consistResult.setMaxNum(rst.getInt(2));
+				consistResult.setScenicID(rst.getString(2));
 				consistResult.setVisitTime(rst.getString(3));
-				consistResult.setScenicID(rst.getString(4));
-				consistResult.setVisitNum(rst.getInt(5));
+				consistResult.setVisitNum(rst.getInt(4));
+				consistResult.setMaxNum(rst.getInt(5));											
 			}							
 			conn.close();
 		} catch (SQLException e) {
@@ -286,5 +297,26 @@ public class ConsistOrderDao {
 		} 	
 		
 		return consistResult;
+	}
+	
+	
+	/**
+	 * 根据订单编号，查询该订单中的所有拼单的编号
+	 * @param orderID  订单编号
+	 * @return
+	 */
+	public List<String> getConsistOrderIDsWithOrderID(String orderID){
+		
+		List<String> consistOrderIDs = new ArrayList<>();
+		
+		String sqlSearch = "select consistOrderID from t_consistorder where orderID='"+orderID+"'";
+		List<Map<String , Object>> list2=jdbcTemplate.queryForList(sqlSearch);
+		
+		for (int j = 0; j <list2.size(); j++){
+			String id = (String)list2.get(j).get("consistOrderID");
+			consistOrderIDs.add(id);
+		}
+		
+		return consistOrderIDs;
 	}
 }

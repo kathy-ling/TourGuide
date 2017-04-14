@@ -39,9 +39,10 @@ public class GuideDao {
 	 * @param image  头像
 	 * @param age    年龄
 	 * @return 0-失败  1-成功  -1-账号已存在
+	 * @throws SQLException 
 	 */
 	public int getGuideAuthentication(String phone, String name,String sex, 
-			String language, String selfIntro, String image, int age, String workAge){
+			String language, String selfIntro, String image, int age, String workAge) throws SQLException{
 		
 		int retValue = 0;
 		final GuideInfo guideInfo = new GuideInfo();
@@ -62,21 +63,35 @@ public class GuideDao {
 			return retValue = -1;
 		}
 		
-		//向t_guideinfo表中插入导游的基本信息
-		String sqlString = "insert into t_guideinfo (phone,name,sex,language,selfIntro,image,age) "
-				+ "values (?,?,?,?,?,?,?)";
-		int i = jdbcTemplate.update(sqlString, new Object[]{phone, name, sex,
-				language, selfIntro, image, age});
-		
-		
-		//向t_guideotherinfo插入其他的信息
-		String sqlString2 = "insert into t_guideotherinfo (phone,workAge,authorized,disabled) "
-				+ "values (?,?,?,?)";
-		int j = jdbcTemplate.update(sqlString2, new Object[]{phone, workAge, 0, 0});
-		
-		if (i!=0 && j!=0) {
-			retValue = 1;
-		}
+		DataSource dataSource = jdbcTemplate.getDataSource();
+		Connection  conn = null;
+		try{
+			conn = dataSource.getConnection();
+			conn.setAutoCommit(false);
+			
+			//向t_guideinfo表中插入导游的基本信息
+			String sqlString = "insert into t_guideinfo (phone,name,sex,language,selfIntro,image,age) "
+					+ "values (?,?,?,?,?,?,?)";
+			int i = jdbcTemplate.update(sqlString, new Object[]{phone, name, sex,
+					language, selfIntro, image, age});		
+			
+			//向t_guideotherinfo插入其他的信息
+			String sqlString2 = "insert into t_guideotherinfo (phone,workAge,authorized,disabled) "
+					+ "values (?,?,?,?)";
+			int j = jdbcTemplate.update(sqlString2, new Object[]{phone, workAge, 0, 0});
+
+			conn.commit();//提交JDBC事务 
+			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			
+			if (i!=0 && j!=0) {
+				retValue = 1;
+			}
+			
+		} catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		}	
+	
 		return retValue;
 	}
 	

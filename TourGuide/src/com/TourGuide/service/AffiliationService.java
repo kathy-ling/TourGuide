@@ -1,5 +1,6 @@
 package com.TourGuide.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +21,10 @@ public class AffiliationService {
 	 * @param scenicID  景区编号
 	 * @param applyDate  申请日期
 	 * @return
+	 * @throws SQLException 
 	 */
-	public int applyForAffiliation(String guidePhone, String scenicID, String applyDate){
+	public int applyForAffiliation(String guidePhone, 
+			String scenicID, String applyDate) throws SQLException{
 		return affiliationDao.applyForAffiliation(guidePhone, scenicID, applyDate);
 	}
 	
@@ -32,8 +35,10 @@ public class AffiliationService {
 	 * @param scenicID   景区编号
 	 * @param quitDate  取消挂靠的日期
 	 * @return
+	 * @throws SQLException 
 	 */
-	public boolean cancleAffiliation(String guidePhone, String scenicID, String quitDate){
+	public boolean cancleAffiliation(String guidePhone, 
+			String scenicID, String quitDate) throws SQLException{
 		return affiliationDao.cancleAffiliation(guidePhone, scenicID, quitDate);
 	}
 	

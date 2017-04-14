@@ -166,11 +166,67 @@ function chooseOrder()
 
 function UpdateConsistOrder(data)
 {
-	var a="";
-	$.each(data, function(i,n){
+	//var a="";
+	var visitNum = $("#chooseVisitNum").val();
+	
+	$("#pindan_ul_id").empty();
+	
+	$.each(data, function(i, n){
 		
-			var htmlString="<li><a   href='ConsistOrderList.html?date="+n.visitTime+
-			"&PerNum="+n.num+"&Fee="+n.guideFee+"&OrderID="+n.orderID+"'>" +
+		var UlList = document.getElementById("pindan_ul_id");
+		var LiListInfo = document.createElement("li");
+		LiListInfo.className = "liStyle";
+		UlList.appendChild(LiListInfo);
+
+		var AList = document.createElement("a");
+		AList.className = "aStyle";
+//		AList.href ='ConsistOrderList.html?date="+n.visitTime+
+//			"&PerNum="+n.num+"&Fee="+n.guideFee+"&OrderID="+n.orderID+"&visitNum="+visitNum+";
+
+		AList.href = "ConsistOrderList.html?" + "date=" + n.visitTime+"&PerNum="+n.num+"&Fee="
+		+n.guideFee+"&OrderID="+n.orderID+"&visitNum="+visitNum;
+
+		AList.setAttribute("data-ajax", false);
+
+		LiListInfo.appendChild(AList);
+
+		// 添加景区名称
+		var SpanListName = document.createElement("span");
+		SpanListName.className = "name";
+		SpanListName.innerHTML = "景区名称：" + n.scenicName + "<br/>";
+
+		// 添加浏览时间
+		var SpanListTime = document.createElement("span");
+		SpanListTime.className = "sex";
+		SpanListTime.innerHTML = "浏览时间：" + n.visitTime + "<br/>";
+
+		// 添加已有人数
+		var SpanListCurrentName = document.createElement("span");
+		SpanListCurrentName.className = "age";
+		SpanListCurrentName.innerHTML = "已有人数：" + n.currentNum + "<br/>";
+
+		// 添加可拼人数
+		var SpanListNum = document.createElement("span");
+		SpanListNum.className = "starLevel";
+		SpanListNum.innerHTML = "可拼人数：" + n.num + "<br/>";
+
+		// 添加讲解费
+		var SpanListGuideFee = document.createElement("span");
+		SpanListGuideFee.className = "language";
+		SpanListGuideFee.innerHTML = "讲解费：" + n.guideFee + "<br/>";
+		
+		AList.appendChild(SpanListName);
+		AList.appendChild(SpanListTime);
+		AList.appendChild(SpanListCurrentName);
+		AList.appendChild(SpanListNum);
+		AList.appendChild(SpanListGuideFee);	
+	});
+	$("#order_guide_ul").listview('refresh');
+		
+		/*$.each(data, function(i,n){
+		
+			var htmlString="<li><a href='ConsistOrderList.html?date="+n.visitTime+
+			"&PerNum="+n.num+"&Fee="+n.guideFee+"&OrderID="+n.orderID+"&visitNum="+visitNum+"'>" +
 //			"<span>订单编号:"+n.orderID+"</span><br/>" +
 			"<span>景区名称："+n.scenicName+"</span><br/>" +
 			"<span>游览时间："+n.visitTime+"</span><br/>" +
@@ -178,8 +234,9 @@ function UpdateConsistOrder(data)
 			"<span>可拼人数："+n.num+"</span><br/>" +
 			"<span>讲解费："+n.guideFee+"元/人</span><br/></a></li>";
 			a = a + htmlString;
+		
 			});	
-	$("#pindan_ul_id").html(a);
+	$("#pindan_ul_id").html(a);*/	
 }
 
 

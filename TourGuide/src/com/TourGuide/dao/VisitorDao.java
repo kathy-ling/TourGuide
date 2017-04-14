@@ -107,23 +107,41 @@ public class VisitorDao {
 		 * @param image   用户头像
 		 * 
 		 * @return
+		 * @throws SQLException 
 		 */
 		public boolean visitorRegister(String nickName, String sex,
-				String name, String phone, String passwd, String image,String openID){
+				String name, String phone, String passwd, 
+				String image,String openID) throws SQLException{
 			
 			boolean bool = false;
-			String sqlRegister = "update t_visitor set nickName='"+nickName+"',sex='"+sex+"',"
-					+ "name='"+name+"',phone='"+phone+"',image='"+image+"' "
-					+ "where openID='"+openID+"' ";					
-			int i = jdbcTemplate.update(sqlRegister);
 			
-			String sqlSetPass = "insert into t_visitorlogin (phone,password,disable) "
-					+ "values (?,?,?)";
-			int j = jdbcTemplate.update(sqlSetPass, new Object[]{phone, passwd, disable});
-			
-			if(i!=0 && j!=0){
-				bool = true;
-			}
+			DataSource dataSource = jdbcTemplate.getDataSource();
+			Connection  conn = null;
+			try{
+				conn = dataSource.getConnection();
+				conn.setAutoCommit(false);
+				
+				String sqlRegister = "update t_visitor set nickName='"+nickName+"',sex='"+sex+"',"
+						+ "name='"+name+"',phone='"+phone+"',image='"+image+"' "
+						+ "where openID='"+openID+"' ";					
+				int i = jdbcTemplate.update(sqlRegister);
+				
+				String sqlSetPass = "insert into t_visitorlogin (phone,password,disable) "
+						+ "values (?,?,?)";
+				int j = jdbcTemplate.update(sqlSetPass, new Object[]{phone, passwd, disable});
+
+				conn.commit();//提交JDBC事务 
+				conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+				
+				if(i!=0 && j!=0){
+					bool = true;
+				}
+				
+			} catch (SQLException e) {
+				conn.rollback();
+				e.printStackTrace();
+			}	
+
 			return bool;
 		}
 		
@@ -136,21 +154,25 @@ public class VisitorDao {
 		public VisitorInfo getVisitorInfoWithPhone(String phone){
 			
 			final VisitorInfo visitorInfo = new VisitorInfo();
-			
-			String sqlSearch = "select * from t_visitor where phone='"+phone+"'";
-			
-			jdbcTemplate.query(sqlSearch, new RowCallbackHandler() {
+			DataSource dataSource =jdbcTemplate.getDataSource();
+			 
+			try {
+				Connection conn = dataSource.getConnection();
+				CallableStatement cst=conn.prepareCall("call getVisitorInfoWithPhone(?)");
+				cst.setString(1, phone);
+				ResultSet rst=cst.executeQuery();
 				
-				@Override
-				public void processRow(java.sql.ResultSet rSet) throws SQLException {
-
-					visitorInfo.setPhone(rSet.getString(1));
-					visitorInfo.setName(rSet.getString(2));
-					visitorInfo.setNickName(rSet.getString(3));
-					visitorInfo.setImage(rSet.getString(4));
-					visitorInfo.setSex(rSet.getString(5));
-				}
-			});
+				while (rst.next()) {
+					visitorInfo.setPhone(rst.getString(1));
+					visitorInfo.setName(rst.getString(2));
+					visitorInfo.setNickName(rst.getString(3));
+					visitorInfo.setImage(rst.getString(4));
+					visitorInfo.setSex(rst.getString(5));					
+				}							
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} 		
 			
 			return visitorInfo;
 		}  
@@ -199,7 +221,8 @@ public class VisitorDao {
 			
 			return bool;
 		}
-		
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		/*
 		 *通过页数与页数容量来获取未禁用游客信息 

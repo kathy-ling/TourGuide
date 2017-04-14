@@ -1,5 +1,6 @@
 package com.TourGuide.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -31,10 +32,12 @@ public class ConsistOrderService {
 	 * @param totalFee  讲解费总额
 	 * @param fee 每个人的讲解费
 	 * @return
+	 * @throws SQLException 
 	 */
 	public boolean ReleaseConsistOrder(String consistOrderID, String orderID, String scenicID,
 			String produceTime, String visitTime, int visitNum, String visitorPhone, 
-			String contact,String orderState, int isConsisted, int maxNum, int totalFee, int fee){
+			String contact,String orderState, int isConsisted, int maxNum, 
+			int totalFee, int fee) throws SQLException{
 		
 		return consistOrderDao.ReleaseConsistOrder(consistOrderID, orderID, scenicID,
 				produceTime, visitTime, visitNum, visitorPhone, contact,orderState, 
@@ -80,10 +83,12 @@ public class ConsistOrderService {
 	 * @param orderState  拼单的状态
 	 * @param isConsisted   是否被拼单
 	 * @param maxNum
+	 * @throws SQLException 
 	 */
-	public boolean consistWithconsistOrderID(String orderID, String consistOrderID, String scenicID, 
-			String produceTime, String visitTime, int visitNum, String visitorPhone, String contact,
-			int currentNum, String orderState, int isConsisted, int maxNum, int totalFee, int fee){
+	public boolean consistWithconsistOrderID(String orderID, String consistOrderID,
+			String scenicID, String produceTime, String visitTime, int visitNum,
+			String visitorPhone, String contact,int currentNum, String orderState,
+			int isConsisted, int maxNum, int totalFee, int fee) throws SQLException{
 		
 		return consistOrderDao.consistWithconsistOrderID(orderID, consistOrderID, scenicID, 
 				produceTime, visitTime, visitNum, visitorPhone, contact, currentNum, 

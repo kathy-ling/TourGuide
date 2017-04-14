@@ -1,6 +1,7 @@
 package com.TourGuide.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -98,12 +99,13 @@ public class FastOrderController {
 	 * @param guidePhone   讲解员手机号
 	 * @return
 	 * @throws IOException
+	 * @throws SQLException 
 	 */
 	@RequestMapping(value = "/takeFastOrder.do")
 	@ResponseBody
 	public Object takeFastOrder(HttpServletResponse resp,
 			@RequestParam("consistOrderID") String consistOrderID,
-			@RequestParam("guidePhone") String guidePhone) throws IOException{
+			@RequestParam("guidePhone") String guidePhone) throws IOException, SQLException{
 		
 		CommonResp.SetUtf(resp);
 		

@@ -3,6 +3,7 @@ package com.TourGuide.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,8 @@ public class GuideController {
 	 * @param image  头像
 	 * @param age    年龄
 	 * @throws IOException
+	 * @throws SQLException 
+	 * @throws NumberFormatException 
 	 */
 	@RequestMapping(value = "/getGuideAuthentication.do")
 	public void getGuideAuthentication(HttpServletResponse resp,
@@ -54,7 +57,8 @@ public class GuideController {
 			@RequestParam("language") String language, 
 			@RequestParam("selfIntro") String selfIntro, 
 			@RequestParam("age") String age,
-			@RequestParam("workAge") String workAge) throws IOException{
+			@RequestParam("workAge") String workAge) 
+			throws IOException, NumberFormatException, SQLException{
 		
 		CommonResp.SetUtf(resp);
 		

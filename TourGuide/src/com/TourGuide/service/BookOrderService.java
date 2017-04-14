@@ -1,5 +1,6 @@
 package com.TourGuide.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -68,10 +69,11 @@ public class BookOrderService {
 	 * @param totalGuideFee  讲解费总额
 	 * @param totalMoney  门票总额 + 讲解费总额
 	 * @return
+	 * @throws SQLException 
 	 */
 	public int BookOrderWithGuide(String orderID, String produceTime, String guidePhone, 
 			String visitorPhone, String visitTime, String scenicID, 
-			int visitNum, int guideFee, String contactPhone){
+			int visitNum, int guideFee, String contactPhone) throws SQLException{
 		return bookOrderDao.BookOrderWithGuide(orderID, produceTime, guidePhone, 
 				visitorPhone, visitTime, scenicID, visitNum, guideFee, contactPhone);
 	}

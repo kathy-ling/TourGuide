@@ -61,6 +61,7 @@ public class GuideFeeDao {
 		return list;
 	}
 	
+	
 	/**
 	 * 得到讲解员的信息数目
 	 * @return

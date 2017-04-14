@@ -1,11 +1,15 @@
 package com.TourGuide.dao;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -126,8 +130,9 @@ public class FastOrderDao {
 	 * @param guidePhone  讲解员的手机号
 	 * @param num  游客的订单中的参观人数
 	 * @return 0 接单失败  1-接单成功  -1-已经被接单
+	 * @throws SQLException 
 	 */
-	public int takeFastOrder(String consistOrderID, String guidePhone, int num){
+	public int takeFastOrder(String consistOrderID, String guidePhone, int num) throws SQLException{
 		
 		int ret = 0;
 		
@@ -144,27 +149,41 @@ public class FastOrderDao {
 			orderID = (String) listOrder.get(0).get("orderID");
 		}
 		
-		//beScanned标志，使游客的拼单只能被导游扫描一次;1-已被扫描 ，0-未被扫描
-		String sqlUpdate = "update t_consistOrder set orderID='"+orderID+"',"
-				+ "takeOrderTime='"+time+"',guidePhone='"+guidePhone+"',"
-				+ "orderState='"+orderState+"',isConsisted='"+isConsisted+"'"
-				+ "where consistOrderID='"+consistOrderID+"' and beScanned=0";
-		int i = jdbcTemplate.update(sqlUpdate);
-		
-		String date = MyDateFormat.form1(new Date());
-		String sqlString = "update t_consistOrder set beScanned=1"
-				+ " where consistOrderID='"+consistOrderID+"'";
-		int j = jdbcTemplate.update(sqlString);
-		
-		String sql = "update t_consistresult set visitNum=visitNum+"+num+" where orderID='"+orderID+"'";
-		int k = jdbcTemplate.update(sql);
-		
-		if(i!=0 && j!= 0 && k!=0){
-			ret = 1;
-		}else if(i!=0){
-			ret = -1;
-		}
-		
+		DataSource dataSource = jdbcTemplate.getDataSource();
+		Connection  conn = null;
+		try{
+			conn = dataSource.getConnection();
+			conn.setAutoCommit(false);
+			
+			//beScanned标志，使游客的拼单只能被导游扫描一次;1-已被扫描 ，0-未被扫描
+			String sqlUpdate = "update t_consistOrder set orderID='"+orderID+"',"
+					+ "takeOrderTime='"+time+"',guidePhone='"+guidePhone+"',"
+					+ "orderState='"+orderState+"',isConsisted='"+isConsisted+"'"
+					+ "where consistOrderID='"+consistOrderID+"' and beScanned=0";
+			int i = jdbcTemplate.update(sqlUpdate);
+			
+			String date = MyDateFormat.form1(new Date());
+			String sqlString = "update t_consistOrder set beScanned=1"
+					+ " where consistOrderID='"+consistOrderID+"'";
+			int j = jdbcTemplate.update(sqlString);
+			
+			String sql = "update t_consistresult set visitNum=visitNum+"+num+" where orderID='"+orderID+"'";
+			int k = jdbcTemplate.update(sql);
+
+			conn.commit();//提交JDBC事务 
+			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			
+			if(i!=0 && j!= 0 && k!=0){
+				ret = 1;
+			}else if(i!=0){
+				ret = -1;
+			}
+			
+		} catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		}	
+
 		return ret;
 		
 	}

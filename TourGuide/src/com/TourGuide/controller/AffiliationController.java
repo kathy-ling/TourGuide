@@ -2,6 +2,7 @@ package com.TourGuide.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,12 +36,13 @@ public class AffiliationController {
 	 * @param scenicID  景区编号
 	 * @return
 	 * @throws IOException
+	 * @throws SQLException 
 	 */
 	@RequestMapping(value = "/applyForAffiliation.do")
 	@ResponseBody
 	public Object applyForAffiliation(HttpServletResponse resp,
 			@RequestParam("guidePhone") String guidePhone, 
-			@RequestParam("scenicID") String scenicID) throws IOException{
+			@RequestParam("scenicID") String scenicID) throws IOException, SQLException{
 		
 		CommonResp.SetUtf(resp);
 		
@@ -58,12 +60,13 @@ public class AffiliationController {
 	 * @param guidePhone  导游手机号
 	 * @param scenicID   景区编号
 	 * @return
+	 * @throws SQLException 
 	 */
 	@RequestMapping(value = "/cancleAffiliation.do")
 //	@ResponseBody
 	public void cancleAffiliation(HttpServletResponse resp,
 			@RequestParam("guidePhone") String guidePhone, 
-			@RequestParam("scenicID") String scenicID) throws IOException{
+			@RequestParam("scenicID") String scenicID) throws IOException, SQLException{
 		
 		CommonResp.SetUtf(resp);
 		

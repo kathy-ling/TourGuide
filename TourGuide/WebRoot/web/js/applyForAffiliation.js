@@ -53,7 +53,7 @@ function getHistoryAffiliation() {
 		url: Url,
 		async: true,
 		data: {
-			guidePhone: '18191762572'
+			guidePhone:vistPhone
 		}, //vistPhone
 		datatype: "JSON",
 		error: function() {
@@ -64,7 +64,7 @@ function getHistoryAffiliation() {
 			$("#history").empty();
 
 			$.each(data, function(i, n) {
-				var name = '<li><p>景区名称: <span>' + n.scenicName + '</span><br/>';
+				var name = '<li><p>挂靠景区: <span>' + n.scenicName + '</span><br/>';
 				var date1 = '申请时间: <span>' + n.applyDate + '</span><br/> ';
 				var date2 = '挂靠时间: <span>' + n.passDate + '</span><br/> ';
 				var date3 = '取消时间: <span>' + n.quitDate + '</span><br/></p></li> ';
@@ -85,7 +85,7 @@ function setCurrentSpot() {
 		url: Url,
 		async: true,
 		data: {
-			guidePhone: '18191762572'
+			guidePhone:vistPhone
 		}, //vistPhone
 		datatype: "JSON",
 		error: function() {
@@ -96,7 +96,7 @@ function setCurrentSpot() {
 			if(JSON.stringify(data)!="{}"){
 				$("#lable1").show();
 				$("#lable1").html("我的挂靠"); 
-				var p1 = '<li><p>景区名称：<span>' + data.scenicName + '</span><br/><br/>';
+				var p1 = '<li><p>挂靠景区：<span>' + data.scenicName + '</span><br/><br/>';
 				var p2 = '申请时间：<span>' + data.applyDate + '</span><br/>';
 				var p3 = '挂靠时间：<span>' + data.passDate + '</span><br/></p>';
 				var div = '<div class="sidebtn"><a  href="#" scenicID="'+data.scenicID+'" onclick="cancle($(this))" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline" >取消挂靠</a></div></li>';
@@ -120,7 +120,7 @@ function getCurrentApply(){
 		url: Url,
 		async: true,
 		data: {
-			guidePhone: '18191762572'
+			guidePhone:vistPhone
 		}, //vistPhone
 		datatype: "JSON",
 		error: function() {
@@ -154,7 +154,7 @@ function cancle(This){
 		url:URL,
 		async:true,
 		data: {
-			guidePhone: '18191762572',scenicID:scenicId
+			guidePhone:vistPhone,scenicID:scenicId
 		}, //vistPhone
 		datatype: "JSON",
 		error:function(data){
@@ -181,7 +181,7 @@ function applyit(This){
 		url:URL,
 		async:true,
 		data: {
-			guidePhone: '18191762572',scenicID:scenicId
+			guidePhone:vistPhone,scenicID:scenicId
 		}, //vistPhone
 		datatype: "JSON",
 		error:function(data){
@@ -217,3 +217,13 @@ function toDetail(This){
 	window.location.href = "scenicSpot.html?scenicNo=" + scenicNo;
 }
 
+function isRegist()
+{
+	if(vistPhone == "undefined" || vistPhone == openId)
+	{
+		alert("您还未注册，请注册！");
+		window.location.href = "register.html";
+	}else{
+		window.location.href = "personalHome.html";
+	}
+}

@@ -2,6 +2,7 @@ package com.TourGuide.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,8 @@ public class ConsistOrderController {
 	 * @param contact  订单联系人
 	 * @return
 	 * @throws IOException
+	 * @throws SQLException 
+	 * @throws NumberFormatException 
 	 */
 	@RequestMapping(value = "/releaseConsistOrder.do")
 	@ResponseBody
@@ -102,7 +105,7 @@ public class ConsistOrderController {
 //			@RequestParam("halfPrice") String halfPrice,
 //			@RequestParam("discoutPrice") String discoutPrice,
 //			@RequestParam("fullPrice") String fullPrice
-			) throws IOException{
+			) throws IOException, NumberFormatException, SQLException{
 		
 		//releaseConsistOrder.do?scenicName=秦始皇兵马俑&visitTime=2017-03-22 15:00&visitNum=10&visitorPhone=18191762572
 		
@@ -197,6 +200,8 @@ public class ConsistOrderController {
 	 * @param contact  游客在订单中填写的联系人手机号
 	 * @return
 	 * @throws IOException
+	 * @throws SQLException 
+	 * @throws NumberFormatException 
 	 */
 	@RequestMapping(value = "/consistWithconsistOrderID.do")
 	@ResponseBody
@@ -209,7 +214,7 @@ public class ConsistOrderController {
 //			@RequestParam("halfPrice") String halfPrice,
 //			@RequestParam("discoutPrice") String discoutPrice,
 //			@RequestParam("fullPrice") String fullPrice
-			) throws IOException{
+			) throws IOException, NumberFormatException, SQLException{
 		//orderID=2ac019d156e4402e9dcdeaa59cc636c9&visitNum=2&visitorPhone=18191762572&contact=13698742569
 		CommonResp.SetUtf(resp);
 		
