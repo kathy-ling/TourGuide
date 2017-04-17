@@ -1,27 +1,53 @@
 
-var fee;
-$(document).ready(
-	function()
-	{
+var scenicName = GetUrlem("scenicName");
+var visitPhone = GetUrlem("visitPhone");
+
+$(function($){
+	
+	getInfofromFormer(scenicName);
+});
+
+function getInfofromFormer(scenicName){
+	//从前一个页面获取到了相应的值后，隐藏选择器，显示lable并赋值
+	
+	if(scenicName == "" || scenicName == "null" || scenicName == null){
+		$("#ScenicName").hide();
+		document.getElementById("chooseScenicNameDiv").style.display = "";
 		
 		addAllScenics();
-	}
-	
-);
+	}else{	
+		$("#ScenicName").show();
+		document.getElementById("ScenicName").innerText = scenicName;
+		document.getElementById("chooseScenicNameDiv").style.display = "none";
+		getFee();
+	}	
+}
 
-
+//选则景区后，显示该景区当日的讲解费
 function getFee()
 {
 	$('#ul_fee').empty();
-	var scenicName = $("#chooseScenicName").val();
+	var scenicName1 = $("#chooseScenicName").val();
+	var scenicName2 = document.getElementById("ScenicName").innerText;
+
+	var scenicName;
+	if(scenicName1 == ''){
+		scenicName = scenicName2;
+	}
+	if(scenicName2 == ''){
+		scenicName = scenicName1;
+	}
+
 	if (scenicName=='') {
-		alert('请选择景区，进行支付');
+		alert('请选择景区');
 		return;
 	}
+
 	var d = new Date();
 	var str = d.getFullYear()+"-0"+(d.getMonth()+1)+"-"+d.getDate();
 	var url = HOST+"/getIntroFee.do";
 	var fee;
+	
 	$.ajax({
 		type:"get",
 		url:url,
@@ -29,29 +55,40 @@ function getFee()
 		data:{scenicName:scenicName,date:str},
 		success:function(data)
 		{
-			fee=data;
+			fee = data;
 			var ul_feetext ="<li><a><h3>费用信息</h3><p>个人讲解费："+data+"元<br>";
 			
 			$("#ul_fee").append(ul_feetext);
 			$("#ul_fee").listview("refresh");
+			document.getElementById("guideFee").innerText = data;
 		},
 	});
 }
 
 
+//选则景区，输入人数，显示个人讲解费和总额
 function getFee1()
 {
 	$('#ul_fee').empty();
-	var scenicName = $("#chooseScenicName").val();
+	var scenicName1 = $("#chooseScenicName").val();
+	var scenicName2 = document.getElementById("ScenicName").innerText;
+	var scenicName;
+	if(scenicName1 == ''){
+		scenicName = scenicName2;
+	}
+	if(scenicName2 == ''){
+		scenicName = scenicName1;
+	}
 	var num=$("#personNum").val();
 	var d = new Date();
 	var str = d.getFullYear()+"-0"+(d.getMonth()+1)+"-"+d.getDate();
-	if (scenicName=='') {
-		alert('请选择景区，进行支付');
+	if (scenicName == '') {
+		alert('请选择景区');
+		$("#personNum").val("");
 		return;
 	}
 	
-	if (num==undefined) {
+	if (num == undefined) {
 		return;
 	}
 	var url = HOST+"/getIntroFee.do";
@@ -66,7 +103,7 @@ function getFee1()
 			var ul_feetext ="<li><a><h3>费用信息</h3><p>个人讲解费："+data+"元<br>"+"<p>拼团人数："+num+"人<br><p>总计："+data*num+"元<br>";
 			
 			$("#ul_fee").append(ul_feetext);
-			$("#ul_fee").listview("refresh");
+			$("#ul_fee").listview("refresh");						
 		},
 	});
 }
@@ -85,14 +122,12 @@ function addAllScenics() {
 			addSelect(data);
 		}
 	});
-
 }
 
 function addSelect(a) {
 	$.each(a, function(index, value) {
 		addOption(value.scenicName);
 	});
-
 }
 
 function addOption(a) {
@@ -108,9 +143,20 @@ function addOption(a) {
 function ProduceOrder()
 {
 	var url=HOST+"/releaseFastOrder.do";
-	var scenicName = $("#chooseScenicName").val();
+	var scenicName1 = $("#chooseScenicName").val();
+	var scenicName2 = document.getElementById("ScenicName").innerText;
+	var scenicName;
+	
+	if(scenicName1 == ''){
+		scenicName = scenicName2;
+	}
+	if(scenicName2 == ''){
+		scenicName = scenicName1;
+	}
+	
+	var guideFee = document.getElementById("guideFee").innerText;
 	var num=$("#personNum").val();
-	var data={scenicName:scenicName,visitNum:num,guideFee:fee,visitorPhone:vistPhone};
+	var data={scenicName:scenicName,visitNum:num,guideFee:guideFee,visitorPhone:vistPhone};
 	if (scenicName=='') {
 		alert('请选择景区，进行支付');
 		return;
@@ -118,6 +164,8 @@ function ProduceOrder()
 	if (num=='') {
 		return;
 	}
+	alert("scenicName"+scenicName +"num"+num+"guideFee"+guideFee+"vistPhone"+vistPhone);
+	
 	$.ajax({
 		type:"post",
 		url:url,
@@ -138,3 +186,13 @@ function ProduceOrder()
 	});
 }
 
+function isRegist()
+{
+	if(vistPhone == undefined || vistPhone == openId)
+	{
+		alert("您还未注册，请注册！");
+		window.location.href = "register.html";
+	}else{
+		window.location.href = "personalHome.html";
+	}
+}

@@ -337,9 +337,13 @@ function getDateFee()
 	});
 }
 
+function fastPin(){
+	window.location.href = "FastPin.html?scenicName="+scenicName;
+}
+
 function isRegist()
 {
-	if(vistPhone == "undefined" || vistPhone == openId)
+	if(vistPhone == undefined || vistPhone == openId)
 	{
 		alert("您还未注册，请注册！");
 		window.location.href = "register.html";

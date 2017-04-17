@@ -200,7 +200,7 @@ public class ScenicSpotDao {
  		ScenicsSpotInfo scenicsSpotInfo = new ScenicsSpotInfo();
  		DataSource dataSource =jdbcTemplate.getDataSource();
  		
-		List<Map<String , Object>> list = getScenicByName(scenicName);
+		List<Map<String , Object>> list = getNameSimilarScenics(scenicName);
 		String cityString = null;
 		String scenicID = null;
 		if(list.size() != 0){
@@ -292,6 +292,7 @@ public class ScenicSpotDao {
 				Map<String , Object> map = new HashMap<String, Object>();
 				map.put("scenicName", rst.getString(1));
 				map.put("scenicNo", rst.getString(2));
+				map.put("city", rst.getString(3));
 			
 				list.add(map);
 			}

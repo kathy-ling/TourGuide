@@ -120,7 +120,8 @@ public class AffiliationDao {
 			int j = jdbcTemplate.update(sqlRecord);
 			
 			String sqlUpdate = "update t_guideotherinfo set scenicBelong='null',"
-					+ "historyTimes=0,historyNum=0,singleMax=0,guideFee=0,guideLevel='0' "
+					+ "historyTimes=0,historyNum=0,singleMax=0,guideFee=0,guideLevel='0',"
+					+ "InterviewTime='null',Interviewlocation='null',InterviewContext='null' "
 					+ "where phone='"+guidePhone+"'";
 			int i = jdbcTemplate.update(sqlUpdate);		
 			

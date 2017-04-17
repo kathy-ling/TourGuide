@@ -1,6 +1,8 @@
 package com.TourGuide.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,8 +41,6 @@ public class GuideSalaryController {
 	
 		CommonResp.SetUtf(resp);
 		
-		String timeNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		
 		List<Map<String , Object>> list = guideSalaryService.getSalaryRecord(guidePhone);
 		
 		return list;
@@ -61,10 +61,92 @@ public class GuideSalaryController {
 	
 		CommonResp.SetUtf(resp);
 		
-		String timeNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		
 		Map<String , Object> map = guideSalaryService.getSalaryAmount(guidePhone);
 		
 		return map;
 	}
+	
+	
+	/**
+	 * 查询用户的总金额、可提现金额和已经提现的总额
+	 * @param resp
+	 * @param guidePhone
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getCash.do")
+	@ResponseBody
+	public Object getCash(HttpServletResponse resp, 
+			@RequestParam("guidePhone") String guidePhone) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		Map<String , Object> map = guideSalaryService.getCash(guidePhone);
+		
+		return map;
+	}
+	
+	
+	/**
+	 * 输入金额进行提现
+	 * @param resp
+	 * @param guidePhone  手机号
+	 * @param money  提现金额
+	 * @return
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	@RequestMapping(value = "/withdrawMoney.do")
+	@ResponseBody
+	public Object withdrawMoney(HttpServletResponse resp, 
+			@RequestParam("guidePhone") String guidePhone,
+			@RequestParam("money") BigDecimal money) throws IOException, SQLException{
+	
+		CommonResp.SetUtf(resp);
+		
+		int ret = guideSalaryService.withdrawMoney(guidePhone, money);
+		
+		return ret;
+	}
+	
+	
+	/**
+	 * 查看正在处理的提现申请
+	 * @param resp
+	 * @param guidePhone
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getProcessingWithdraw.do")
+	@ResponseBody
+	public Object getProcessingWithdraw(HttpServletResponse resp, 
+			@RequestParam("guidePhone") String guidePhone) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> list = guideSalaryService.getProcessingWithdraw(guidePhone);
+		
+		return list;
+	}
+	
+	
+	/**
+	 * 查看已经成功提现的记录
+	 * @param resp
+	 * @param guidePhone
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getSuccessRecord.do")
+	@ResponseBody
+	public Object getSuccessRecord(HttpServletResponse resp, 
+			@RequestParam("guidePhone") String guidePhone) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> list = guideSalaryService.getSuccessRecord(guidePhone);
+		
+		return list;
+	}
+	
 }

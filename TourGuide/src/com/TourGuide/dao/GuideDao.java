@@ -79,11 +79,15 @@ public class GuideDao {
 			String sqlString2 = "insert into t_guideotherinfo (phone,workAge,authorized,disabled) "
 					+ "values (?,?,?,?)";
 			int j = jdbcTemplate.update(sqlString2, new Object[]{phone, workAge, 0, 0});
-
+			
+			//向t_guideworkday中插入信息
+			String sqlString3 = "insert into t_guideworkday (guidePhone) values (?)";
+			int k = jdbcTemplate.update(sqlString2, new Object[]{phone});
+			
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
 			
-			if (i!=0 && j!=0) {
+			if (i!=0 && j!=0 && k!=0) {
 				retValue = 1;
 			}
 			
@@ -183,23 +187,21 @@ public class GuideDao {
 		if(!visitTime.equals("null") && visitNum != 0){
 			String sqlString = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
 					+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes from t_guideinfo,t_guideotherinfo "
-					+ "where t_guideinfo.id = t_guideotherinfo.id and singleMax > '"+visitNum+"' "
-					+ "and scenicBelong = '"+scenicID+"' and guideLevel >= 5 and t_guideotherinfo.id in "
-					+ "(select id from t_guideworkday where "+selectDay+"=1)"
+					+ "where t_guideinfo.phone = t_guideotherinfo.phone and singleMax > '"+visitNum+"' "
+					+ "and scenicBelong = '"+scenicID+"' and guideLevel >= 5 and t_guideotherinfo.phone in "
+					+ "(select guidePhone from t_guideworkday where "+selectDay+"=1)"
 					+ "ORDER BY guideLevel desc,historyTimes desc";
 			list = jdbcTemplate.queryForList(sqlString);
 		}else{
 			//当用户只输入景区名称，进行的筛选
 			String sqlSelect = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
 					+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes from t_guideinfo,t_guideotherinfo "
-					+ "where t_guideinfo.id = t_guideotherinfo.id and scenicBelong = '"+scenicID+"' "
+					+ "where t_guideinfo.phone = t_guideotherinfo.phone and scenicBelong = '"+scenicID+"' "
 					+ "and guideLevel >= 5 ORDER BY guideLevel desc,historyTimes desc";
 			listResult = jdbcTemplate.queryForList(sqlSelect);
 			return listResult;
 		}
-		
-		
-		
+
 		for(int i=0; i<list.size(); i++){
 			listResult.add(list.get(i));
 		}

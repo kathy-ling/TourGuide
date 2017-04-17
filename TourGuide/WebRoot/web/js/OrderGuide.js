@@ -111,9 +111,11 @@ function addDate()
 //只输入景区时，进行的筛选
 function getAvailableGuides1()
 {	
-	var scenicName = GetUrlem("sname");
-	if(scenicName == "" || scenicName == "null" || scenicName == null){
-		var scenicName = $('#chooseScenicName option:selected').val();
+	var scenicName = $('#chooseScenicName option:selected').val();
+
+	if(scenicName == "" || scenicName == "请选择景区"){
+		addPopularGuides();
+		return;
 	}
 	
 	var Url = HOST + "/getAvailableGuides.do";
@@ -135,13 +137,66 @@ function getAvailableGuides1()
 	});	
 }
 
-//当用户输入日期或时间时，
+//当用户输入日期时，
 function getAvailableGuides2()
 {	
 	var scenicName = $('#chooseScenicName option:selected').val();
 	var date1= $("#chooseDate").val();
 	var time1=$("#orderDatetime123").val();
 	var visitTime = "null";
+	
+	if(scenicName == "" || scenicName == "请选择景区"){
+		
+		alert("请选择景区！");
+		$("#chooseDate option").eq(0).attr("selected",true);
+		return;
+	}
+
+	if(date1 != "" && time1 != ""){
+		visitTime =  date1 + " " + time1
+	}
+	
+	var Url = HOST + "/getAvailableGuides.do";
+	$.ajax({
+		type : "post",
+		url : Url,
+		async : true,
+		data : {scenicName:scenicName,visitTime: visitTime,visitNum:"0"},
+		datatype : "JSON",
+		error : function() {
+			alert("筛选失败，请重新进行选择");
+		},
+		success : function(data) {
+			if (jQuery.isEmptyObject(data)) {
+				alert("没有符合条件的讲解员");
+			}
+			addlist(data);
+		}
+	});	
+}
+
+//当用户输入时间时，
+function getAvailableGuides3()
+{	
+	var scenicName = $('#chooseScenicName option:selected').val();
+	var date1= $("#chooseDate").val();
+	var time1=$("#orderDatetime123").val();
+	var visitTime = "null";
+	
+	if(scenicName == "" || scenicName == "请选择景区"){
+		
+		alert("请选择景区和日期！");
+		$("#chooseDate option").eq(0).attr("selected",true);
+		return;
+	}
+	
+	if(date1 == "" || date1 == "请选择日期"){
+		
+		alert("请选择景区和日期！");
+		$("#orderDatetime123 option").eq(0).attr("selected",true);
+		$("#orderDatetime123 option[value='请选择时间']").attr("selected", true);
+		return;
+	}
 
 	if(date1 != "" && time1 != ""){
 		visitTime =  date1 + " " + time1
@@ -189,7 +244,7 @@ function getAvailableGuides()
 		return;
 	}	
 	if (visitNum=="") {
-		alert("请选择人数");
+		alert("请输入游览人数");
 		return;
 	}
 	

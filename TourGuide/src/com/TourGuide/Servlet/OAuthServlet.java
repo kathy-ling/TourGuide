@@ -51,13 +51,14 @@ public class OAuthServlet extends HttpServlet{
 			SNSUserInfo snsUserInfo = SNSUserInfoUtil.getSNSUserInfo(accessToken, openId);			
 			
 			VisitorService visitorService = (VisitorService) SpringContextUtil.getBean("visitorService");
-			VisitorInfo visitorInfo=visitorService.getInfobyOpenID(openId);		
-			
 			boolean bool = visitorService.recordWeixinInfo(snsUserInfo);
 			
-			response.sendRedirect("/TourGuide/web/index.html?openId="+openId);
+			VisitorInfo visitorInfo = visitorService.getInfobyOpenID(openId);					
 			
-//			// 设置要传递的参数
+			System.out.println("openId="+openId + "vistPhone=" + visitorInfo.getPhone());
+			
+			response.sendRedirect("/TourGuide/web/index.html?openId="+openId + "&vistPhone=" + visitorInfo.getPhone());
+			
 //			request.setAttribute("snsUserInfo", snsUserInfo);
 //			
 //			if(null == visitorInfo || visitorInfo.getOpenID()==null){

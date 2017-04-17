@@ -100,17 +100,26 @@ function setData(){
 }*/
 function setNormalData(data){
 
-		$(".orderTime").html(data.produceTime);
-		$(".vistTime").html(data.visitTime);
-		$(".vistorNum").html(data.visitNum);
-		$(".totalMoney").html(data.money);
-		//$("#MoneyInfo").append("<p>讲解费"+data.guideFee+"元</p><p>总计"+data.totalMoney+"元</p>");
-		$("#MoneyInfo").append(data.money);
-		$(".viewState").html(data.orderState);
-		$(".totalMoney1").html(data.money);
-		
-		num = data.visitNum;
-		totalFee = data.money;
+	var visitTime = data.visitTime;
+	var d = new Date();
+	var dateStr = d.getFullYear()+"-0"+(d.getMonth()+1)+"-"+d.getDate();
+	if(visitTime == undefined){					
+		$(".vistTime").html(dateStr);	
+	}else{
+		$(".vistTime").html(visitTime);
+	}
+	
+	$(".orderTime").html(data.produceTime);
+	$(".vistTime").html(data.visitTime);
+	$(".vistorNum").html(data.visitNum);
+	$(".totalMoney").html(data.money);
+	//$("#MoneyInfo").append("<p>讲解费"+data.guideFee+"元</p><p>总计"+data.totalMoney+"元</p>");
+	$("#MoneyInfo").append(data.money);
+	$(".viewState").html(data.orderState);
+	$(".totalMoney1").html(data.money);
+	
+	num = data.visitNum;
+	totalFee = data.money;
 }
 	function setSenicData(data){
 			/*scenicUrl = HOST+"/getSomeScenicInfoByscenicID.do?scenicID="+scenicID;

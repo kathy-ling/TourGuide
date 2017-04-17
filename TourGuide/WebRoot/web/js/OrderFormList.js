@@ -111,7 +111,14 @@ function getOrderList()
 				//添加时间
 				var SpanListTime = document.createElement("span");
 				SpanListTime.className = "vistTime";
-				SpanListTime.innerHTML = "时间："+n.visitTime+"<br/>";
+				if(n.visitTime == undefined){
+					var d = new Date();
+					var dateStr = d.getFullYear()+"-0"+(d.getMonth()+1)+"-"+d.getDate();
+					SpanListTime.innerHTML = "时间："+ dateStr +"<br/>";
+					
+				}else{
+					SpanListTime.innerHTML = "时间："+n.visitTime+"<br/>";
+				}				
 				
 				//添加人数
 				var SpanListNum = document.createElement("span");

@@ -8,23 +8,24 @@
 		<link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
 		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
     	<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
-    	<script type="text/javascript" src="js/takeOrderList.js"></script>
+    	<script type="text/javascript" src="js/takeOrder.js"></script>
 	</head>
 	
 	
 	<body>
 	<div data-role="page">
+		
 		<footer data-role="footer" data-position="fixed">
 	        <div data-role="navbar" id="bottom_navigation">
 	            
 	        </div>
    		</footer>
+   		
 		<div data-role="header" >
-				<h1>共有可接订单<span id="orderCount"></span>个</h1>
+			<h1>共有可接订单<span id="orderCount"></span>个</h1>
 		</div>
-		<div data-role="main" class="ui-content">
-			
-			
+		
+		<div data-role="main" class="ui-content">						
 			<div data-role = "list">
 				<ul data-role="listview" id="takeOrders">
 					<!--<li>
@@ -50,9 +51,8 @@
             </div>
       </li>-->
          		</ul>
-			</div>
-         
+			</div>         
 		</div>
-</div>
+	</div>
 	</body>
 </html>

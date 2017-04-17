@@ -148,7 +148,8 @@ public class BookOrderController {
 			@RequestParam("guidePhone") String guidePhone,
 			@RequestParam("guideFee") String guideFee,
 			@RequestParam("visitorPhone") String visitorPhone,
-			@RequestParam("contactPhone") String contactPhone
+			@RequestParam("contactPhone") String contactPhone,
+			@RequestParam("language") String language
 			) throws IOException, NumberFormatException, SQLException{
 		//BookOrderWithGuide.do?scenicName=秦始皇兵马俑&visitTime=2017-4-12 14:00&visitNum=6&guidePhone=13823456789&guideFee=300&visitorPhone=18191762572&contactPhone=1111
 		CommonResp.SetUtf(resp);
@@ -175,7 +176,7 @@ public class BookOrderController {
 		
 		int ret = bookOrderService.BookOrderWithGuide(orderID, produceTime, guidePhone, 
 				visitorPhone, visitTime, scenicID, Integer.parseInt(visitNum),
-				Integer.parseInt(guideFee), contactPhone);
+				Integer.parseInt(guideFee), contactPhone, language);
 		
 		return ret;
 	}

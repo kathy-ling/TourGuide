@@ -73,9 +73,9 @@ public class BookOrderService {
 	 */
 	public int BookOrderWithGuide(String orderID, String produceTime, String guidePhone, 
 			String visitorPhone, String visitTime, String scenicID, 
-			int visitNum, int guideFee, String contactPhone) throws SQLException{
+			int visitNum, int guideFee, String contactPhone, String language) throws SQLException{
 		return bookOrderDao.BookOrderWithGuide(orderID, produceTime, guidePhone, 
-				visitorPhone, visitTime, scenicID, visitNum, guideFee, contactPhone);
+				visitorPhone, visitTime, scenicID, visitNum, guideFee, contactPhone, language);
 	}
 	
 	

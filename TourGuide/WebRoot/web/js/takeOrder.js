@@ -2,9 +2,12 @@ window.onload = function(){
 	
 	//加载底部导航栏
 	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
+	
 	//获取导游手机号
 	var phone = GetUrlem("phone");
-//	alert(phone);
+	
+	getGuideLevel();
+
 	//根据导游手机号获取导游级别
 	var url0 = HOST+"/getDetailGuideInfoByPhone.do";
 	$.ajax({
@@ -101,4 +104,30 @@ window.onload = function(){
 				});
 		}
 	});	
+}
+
+
+function getGuideLevel(){
+
+	var Url = HOST + "/getDetailGuideInfoByPhone.do";
+	$.ajax({
+		type: "get",
+		url: Url,
+		async: true,
+		data: {
+			guidePhone:'13165662195'
+		}, //vistPhone
+		datatype: "JSON",
+		error: function() {
+			alert("request error");
+		},
+		success: function(data) {
+			var guideLevel = data[0].guideLevel;
+			if(parseInt(guideLevel) < parseInt(5)){
+				alert("您的级别达不到接单标准");
+				window.location.href = "personalHome.html";
+			}
+		
+		}
+	});
 }

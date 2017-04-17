@@ -9,45 +9,36 @@
 *
 */
 
-window["HOST"]="http://localhost/TourGuide";//服务器IP地址
-//window["HOST"]="http://cps.xaut.edu.cn/TourGuide";
+//window["HOST"]="http://localhost/TourGuide";//服务器IP地址
+window["HOST"]="http://cps.xaut.edu.cn/TourGuide";
 
-window["vistPhone"] = getPhoneByOpenId();
+window["vistPhone"] = getPhone();
 window["openId"] = getOpenId();
 
 function getOpenId(){
 	 var id = getSession(sessionStorage.openId);
+//	 alert("getSession(sessionStorage.openId);"+id);
 	 if(id!=null){
 		 return id;
 	 }else{
 		 id = GetUrlem("openId");
+//		 alert("id = GetUrlem(openId);"+id);
 		sessionStorage.openId  = id;
 		return id;
 	 }
 }
 
-function getPhoneByOpenId(){
+function getPhone(){
 	 var Phone=getSession(sessionStorage.vistPhone);
-	 var openId1=getOpenId();
-	 
+//	 alert("Phone=getSession(sessionStorage.vistPhone)"+Phone);
 	 if(Phone!=null){
 		return Phone;
 	 }else{		
-		var Url = "http://cps.xaut.edu.cn/TourGuide/getInfobyOpenID.do";
-	    $.ajax({
-			type:"post",
-			url:Url,
-			async:true,
-			data:{"openId":openId1},
-			datatype:"JSON",
-			success:function(data)
-			{							
-				Phone=data.phone;
-				sessionStorage.vistPhone=Phone;				
-			}
-		});				
+		Phone = GetUrlem("vistPhone");
+//		alert(Phone+ "GetUrlem(vistPhone);");
+		sessionStorage.vistPhone  = Phone;
+		return Phone;			
 	 }	 
-	return Phone;
 }
 
 

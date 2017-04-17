@@ -8,6 +8,8 @@ window.onload = function() {
 	});
 }
 
+
+
 //从服务端获取用户的部分信息，并显示在页面
 function getUserInfo() {
 	var url = HOST + "/getInfobyOpenID.do";
@@ -17,7 +19,7 @@ function getUserInfo() {
 		url: url,
 		async: true,
 		data: {
-			openId: openId
+			openId: openId//'o8AUTxMhNb82uSM4DcIxesDyDZnY'//
 		},
 		datatype: "JSON",
 		error: function() {
@@ -33,8 +35,8 @@ function getUserInfo() {
 	});
 }
 
-var image = "";
 
+var image = "";
 function selectImage(file) {
 	if(!file.files || !file.files[0]) {
 		return;
@@ -44,35 +46,42 @@ function selectImage(file) {
 		document.getElementById("visitor_img").src = evt.target.result;
 		image = evt.target.result;
 	}
-	reader.readAsDataURL(file.files[0]);	
+	reader.readAsDataURL(file.files[0]);
 }
 
 
 //上传头像，并进行注册
 function changePerHeadImg()
 {
-	alert(openId);
-	var URL = HOST+"/putImg.do";
+	var path = document.getElementById("visitor_img").src;	
+	var patt1 = new RegExp("wx.qlogo.cn");
 	
-	$.ajaxFileUpload({
-			url : URL,
-			fileElementId:'btn_file',
-			dataType : "json",
-			success: function(data){
-				if(data == true)					
+	//如果是微信服务器的图片，则直接注册；否则先上传图片再注册
+	if(patt1.test(path)){
+		RegistwithImg();
+	}else{
+		var URL = HOST+"/putImg.do";
+	
+		$.ajaxFileUpload({
+				url : URL,
+				fileElementId:'btn_file',
+				dataType : "json",
+				success: function(data){
+					if(data == true)					
+					{
+						Regist();
+					}else
+					{
+						alert("图片上传失败");
+					}				
+				 },
+				error: function(data)
 				{
-					Regist();
-				}else
-				{
-					alert("图片上传失败");
-				}				
-			 },
-			error: function(data)
-			{
-				
-		  	alert("图片上传异常");
-			}
-	});	
+					
+			  	alert("图片上传异常");
+				}
+		});	
+	}	
 }
 
 
@@ -85,7 +94,7 @@ function Regist() {
 			"name": $("#name").val(),
 			"phone": $("#tel").val(),
 			"passwd": $("#password").val(),
-			"openID": openId
+			"openID": openId//'o8AUTxMhNb82uSM4DcIxesDyDZnY'//
 		};
 
 		var url = HOST + "/visitorRegister.do";
@@ -99,7 +108,40 @@ function Regist() {
 				alert("注册Request error!");
 			},
 			success: function(data) {
-				window.location = HOST + "/web/index.html?phone=" + postdata.phone;				
+				window.location = HOST + "/web/index.html?phone=" + postdata.phone;	
+				sessionStorage.setItem("vistPhone", postdata.phone); 
+			}
+		});
+	}
+}
+
+function RegistwithImg() {
+	
+	if(check()) {
+		var img = document.getElementById("visitor_img").src;
+		var postdata = {
+			"nickName": $("#nickname").val(),
+			"sex": $("input:radio[name='guideSex']:checked").val(),
+			"name": $("#name").val(),
+			"phone": $("#tel").val(),
+			"passwd": $("#password").val(),
+			"image": img,
+			"openID": openId//'o8AUTxMhNb82uSM4DcIxesDyDZnY'//
+		};
+
+		var url = HOST + "/visitorRegisterWithImg.do";
+		$.ajax({
+			type: "post",
+			url: url,
+			async: true,
+			data: postdata,
+			datatype: "JSON",
+			error: function(data) {
+				alert("注册Request error!");
+			},
+			success: function(data) {
+				window.location = HOST + "/web/index.html?phone=" + postdata.phone;	
+				sessionStorage.setItem("vistPhone", postdata.phone);
 			}
 		});
 	}

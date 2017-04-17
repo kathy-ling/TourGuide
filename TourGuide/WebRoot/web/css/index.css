@@ -83,3 +83,7 @@ body{
 	right: 10px;
 }
 
+.slist ul li{
+	display: block;
+}
+

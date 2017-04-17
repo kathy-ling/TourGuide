@@ -1,5 +1,7 @@
 package com.TourGuide.service;
 
+import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -31,5 +33,49 @@ public class GuideSalaryService {
 	 */
 	public Map<String , Object> getSalaryAmount(String guidePhone){
 		return guideSalaryDao.getSalaryAmount(guidePhone);
+	}
+	
+	
+	/**
+	 * 查询用户的总金额、可提现金额和已经提现的总额
+	 * @param guidePhone
+	 * @return
+	 */
+	public Map<String , Object> getCash(String guidePhone){
+		return guideSalaryDao.getCash(guidePhone);
+	}
+	
+	
+	/**
+	 * 输入金额进行提现
+	 * @param guidePhone  讲解员手机号
+	 * @param money   提现金额
+	 * @return
+	 * @throws SQLException
+	 * 
+	 */
+	public int withdrawMoney(String guidePhone, BigDecimal money) 
+			throws SQLException{
+		return guideSalaryDao.withdrawMoney(guidePhone, money);
+	}
+	
+	
+	/**
+	 * 查看正在处理的提现申请
+	 * @param guidePhone
+	 * @return
+	 */
+	public List<Map<String, Object>> getProcessingWithdraw(String guidePhone){
+		return guideSalaryDao.getProcessingWithdraw(guidePhone);
+	}
+	
+	
+	/**
+	 * 查看已经成功提现的记录
+	 * @param guidePhone
+	 * @return
+	 */
+	public List<Map<String, Object>> getSuccessRecord(String guidePhone){
+		return guideSalaryDao.getSuccessRecord(guidePhone);
 	}
 }

@@ -33,7 +33,38 @@ public class VisitorController {
 	
 	
 	/**
-	 * 游客注册
+	 * 游客注册,没有自己选择头像，直接使用微信服务器的数据
+	 * @param resp
+	 * @param nickName  昵称
+	 * @param sex  性别
+	 * @param name   姓名
+	 * @param phone   手机号 
+	 * @param passwd   用户密码
+	 * @throws IOException
+	 * @throws SQLException 
+	 */
+	@RequestMapping(value = "/visitorRegisterWithImg.do")
+	public void visitorRegisterWithImg(HttpServletResponse resp,
+			@RequestParam("nickName") String nickName, 
+			@RequestParam("sex") String sex, 
+			@RequestParam("name") String name,
+			@RequestParam("phone") String phone,
+			@RequestParam("passwd") String passwd,
+			@RequestParam("image") String image,
+			@RequestParam("openID") String openID) throws IOException, SQLException{
+		
+		CommonResp.SetUtf(resp);
+		
+		boolean bool = visitorService.visitorRegister(nickName, sex, name, phone, passwd, image, openID);
+		
+		PrintWriter writer = resp.getWriter();
+		writer.write(new Gson().toJson(bool));
+		writer.flush();
+	}
+	
+	
+	/**
+	 * 游客注册,自己选择头像
 	 * @param resp
 	 * @param nickName  昵称
 	 * @param sex  性别

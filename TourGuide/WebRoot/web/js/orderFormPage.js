@@ -82,6 +82,7 @@ function putOrder() {
 	var visitNum = GetUrlem("visitNum");
 	var guidephone = GetUrlem("guidePhone");
 	var contactPhone = GetUrlem("contactPhone");
+	var language = $("#language").val();
 	var postData = {
 		'scenicName': scenicName,
 		'visitTime': visitDate+" "+visitTime,
@@ -89,7 +90,8 @@ function putOrder() {
 		'visitorPhone': vistPhone,
 		'guidePhone': guidephone,
 		'guideFee': guideFee1,
-		'contactPhone': contactPhone
+		'contactPhone': contactPhone,
+		'language':language
 	};
 	var Url = HOST + "/BookOrderWithGuide.do";
 	

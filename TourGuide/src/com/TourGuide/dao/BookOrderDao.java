@@ -105,7 +105,7 @@ public class BookOrderDao {
 	 */
 	public int BookOrderWithGuide(String orderID, String produceTime, String guidePhone, 
 			String visitorPhone, String visitTime, String scenicID, 
-			int visitNum, int guideFee, String contactPhone) throws SQLException{
+			int visitNum, int guideFee, String contactPhone, String language) throws SQLException{
 		
 		int ret = 0;	
 		String orderState = "待付款";
@@ -117,10 +117,11 @@ public class BookOrderDao {
 				conn.setAutoCommit(false);
 				
 				String sqlString = "insert into t_bookorder (bookOrderID,produceTime,visitTime,"
-						+ "visitorPhone,visitNum,scenicID,guideFee,guidePhone,totalGuideFee,orderState,contact) "
-						+ "values (?,?,?,?,?,?,?,?,?,?,?)";
+						+ "visitorPhone,visitNum,scenicID,guideFee,guidePhone,totalGuideFee,orderState,contact,language) "
+						+ "values (?,?,?,?,?,?,?,?,?,?,?,?)";
 				int i = jdbcTemplate.update(sqlString, new Object[]{orderID,produceTime,visitTime,
-						visitorPhone,visitNum, scenicID, guideFee, guideFee, guidePhone, orderState, contactPhone});
+						visitorPhone,visitNum, scenicID, guideFee, guideFee, guidePhone, 
+						orderState, contactPhone, language});
 				
 				String payTime = MyDateFormat.form(new Date());
 				String sqlUpdate = "update t_bookorder set orderState='待游览',hadPay=1,payTime='"+payTime+"' "
@@ -173,7 +174,6 @@ public class BookOrderDao {
 	 * @param timeNow  当前的时间
 	 * @return 订单号、景区名称、参观时间、人数、讲解员性别、讲解语言、可接受价位
 	 * 
-	 * 待解决：根据导游所属的景区进行筛选订单
 	 */
 	public List<Map<String , Object>> getReleasedOrders(String guidePhone){
 		
@@ -183,10 +183,11 @@ public class BookOrderDao {
 		List<Map<String , Object>> listTime = new ArrayList<>();
 		List<Map<String , Object>> listOrder = new ArrayList<>();
 		
-		//查询该讲解员所属的景区
+		//查询该讲解员所属的景区(该讲解员必须审核且等级大于等于5)
 		String sqlscenicNo = "select t_guideotherinfo.scenicBelong "
 				+ "from t_guideotherinfo,t_guideinfo WHERE t_guideinfo.phone = '"+guidePhone+"' "
-				+ "and t_guideotherinfo.id = t_guideinfo.id and t_guideotherinfo.guideLevel >=5";
+				+ "and t_guideotherinfo.id = t_guideinfo.id and t_guideotherinfo.guideLevel >=5 "
+				+ "and t_guideotherinfo.authorized=1";
 		list = jdbcTemplate.queryForList(sqlscenicNo);
 		
 		if(list.size() != 0){

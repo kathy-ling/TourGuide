@@ -1,8 +1,6 @@
 
 var province;
 
-var openId;
-
 $(function($) {
 	
 	//加载底部导航栏
@@ -232,9 +230,7 @@ window.onload = function() {
 
 
 function getScenicByProvince()
-{
-	alert(province);
-	
+{	
 	var url1 = HOST + "/getScenicByLocation.do";
 	$.ajax({
 		type : "post",
@@ -250,7 +246,6 @@ function getScenicByProvince()
 		success : function(data) {
 			var UlList = document.getElementById("index_scenic_ul_id");
 			freshList(data, UlList);
-			alert("推荐景点success!");
 		}
 	});
 

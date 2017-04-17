@@ -24,9 +24,10 @@ a:hover { color: #D40000; text-decoration: none}
     width:100%;
 }
 .searchDiv{
-    width:90%;
-    float: left;
+    width:85%;
     margin:0;
+    float: left;
+    display: inline;
 }
 .backbtn{
     float: left;
@@ -180,6 +181,7 @@ a:hover { color: #D40000; text-decoration: none}
     height: 100%;
 }
 .searchResultDis p{
+	line-height:80%
     margin:0.3em;
 }
 .spotDis{
