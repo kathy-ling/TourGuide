@@ -15,6 +15,9 @@ $(function($) {
 	setCurrentSpot();
 	getCurrentApply();
 	getHistoryAffiliation();
+	
+	var authorized = false;
+	isAuthorized();
 });
 
 //填充景点列表
@@ -174,7 +177,12 @@ function cancle(This){
 //申请挂靠景点
 function applyit(This){
 	var scenicId = This.attr("scenicNo");
-	var URL=HOST+'/applyForAffiliation.do';
+	var URL = HOST+'/applyForAffiliation.do';
+	
+	if(authorized == false){
+		alert("您暂未通过审核，不能使用此功能!");
+		return false;
+	}
 
 	$.ajax({
 		type:"get",
@@ -189,8 +197,10 @@ function applyit(This){
 		},
 		success:function(data){
 			alert("data="+JSON.stringify(data));
-			//0--失败 ，1--成功，-1--申请失败。因为您有待处理的挂靠申请！，-2请先取消当前的挂靠，再进行申请
-			
+			//0--失败 ，1--成功，-1--申请失败。因为您有待处理的挂靠申请！，-2请先取消当前的挂靠，再进行申请,-3未通过审核，不能挂靠
+			if(parseInt(data) == parseInt(-3)){
+				alert("未通过审核，不能挂靠");
+			}
 			if(parseInt(data) == parseInt(-2)){
 				alert("请先取消当前的挂靠，再进行申请!");
 			}
@@ -224,6 +234,34 @@ function isRegist()
 		alert("您还未注册，请注册！");
 		window.location.href = "register.html";
 	}else{
-		window.location.href = "personalHome.html";
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "personalHome.html";
+		}else{
+			alert("您已被系统管理员拉黑!");
+		}
 	}
+}
+
+//判断导游是否通过审核
+function isAuthorized(){
+	var url = HOST + "/isAuthorized.do";
+	$.ajax({
+		type: "post",
+		url: url,
+		async: true,
+		data: {guidePhone: vistPhone},
+		datatype: "JSON",
+		error: function() {
+			alert("Request error!");
+		},
+		success: function(data) {
+			if(data == true){
+				authorized = true;
+			}else{
+				authorized = false;
+			}
+		}
+	});
 }

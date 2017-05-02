@@ -1,17 +1,16 @@
 
 $(document).ready(function()
-{
-	
+{	
 //	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
-
+    getUrlhideChar();
   	getOrderList();
+  	
   	//隐藏未选中的订单
   	$(".navList").click(function(juagechar){
-                      var juagechar = $(this).html();
-                      hideOtherLi(juagechar);
+		var juagechar = $(this).html();
+		hideOtherLi(juagechar);
    });
 });
-
 
  function orderinfo(obj){
   		var state = obj.find("span.viewState").html();
@@ -25,37 +24,38 @@ $(document).ready(function()
  }
  
    /*实现订单筛选*/
-    function hideOtherLi(juagechar){
-    	juagechar = arguments[0] ? arguments[0]:null;
-        if(juagechar){
-            $(".viewState").parents("li").show();//显示全部订单
-             if(juagechar!="全部")
-           {
-                $(".viewState").each(function() {//隐藏未选中的
-               if($(this).html()!=juagechar)
-                {
-                    $(this).parents("li").hide();
-                }
-                });
+function hideOtherLi(juagechar){
+	juagechar = arguments[0] ? arguments[0]:null;
+    if(juagechar){
+        $(".viewState").parents("li").show();//显示全部订单
+         if(juagechar!="全部")
+       {
+            $(".viewState").each(function() {//隐藏未选中的
+           if($(this).html()!=juagechar)
+            {
+                $(this).parents("li").hide();
             }
+            });
         }
     }
-    
-    function getUrlhideChar(){
-        var murl = window.location.search;
+}
+
+function getUrlhideChar(){
+    var murl = window.location.search;
+    var hidechar = GetUrlem("hide");
+    if(hidechar)
+    {
         var hidechar = GetUrlem("hide");
-        if(hidechar)
-        {
-            var hidechar = GetUrlem("hide");
-            return hidechar;
-        }
-        else
-        {
-            return null;
-        }
+        alert(hidechar);
+        return hidechar;
     }
+    else
+    {
+        return null;
+    }
+}
   
-  
+//获取用户的所有订单 
 function getOrderList()
 {
 
@@ -76,6 +76,7 @@ function getOrderList()
 			$.each(data, function(i,n) {
 				var UlList = document.getElementById("OrderStateUl");
 				var LiList = document.createElement("li");
+//				LiList.setAttribute("data-icon",false);
 				UlList.appendChild(LiList);
 				
 				var AList = document.createElement("a");
@@ -150,6 +151,12 @@ function isRegist()
 		alert("您还未注册，请注册！");
 		window.location.href = "register.html";
 	}else{
-		window.location.href = "personalHome.html";
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "personalHome.html";
+		}else{
+			alert("您已被系统管理员拉黑!");
+		}
 	}
 }

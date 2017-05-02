@@ -4,6 +4,9 @@ $(document).on("pagecreate",function(){
 	
 
 $(function($) {
+	
+//	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
+	
     $( "#tabs" ).tabs();
     
     $(".treebox .level1>a").click(function(){
@@ -58,23 +61,35 @@ function getCash(){
 function withdrawMoney(){
 	var Url = HOST + "/withdrawMoney.do";
 	var money = $('#inputCash').val();
-	$.ajax({
-		type: "get",
-		url: Url,
-		async: true,
-		data: {
-			guidePhone:vistPhone,money:money
-		}, //vistPhone
-		datatype: "JSON",
-		error: function() {
-			alert("request error");
-		},
-		success: function(data) {
-			if(data == 1){
-				getCash();
+	var cashAvailable = $('#availableCash').html();
+	
+	//对输入的提现金额进行判断
+	if(!(/^\d+(\.\d{2})?$/.test(money))) {//
+		alert("请输入正确的提现金额");
+		return false;		
+	}else if(money > cashAvailable){
+		alert("提现金额大于可提现金额，请重新输入!");
+	}
+	
+	if(vistPhone == undefined || vistPhone == openId || vistPhone == null){
+		$.ajax({
+			type: "get",
+			url: Url,
+			async: true,
+			data: {
+				guidePhone:vistPhone,money:money
+			}, //vistPhone
+			datatype: "JSON",
+			error: function() {
+				alert("request error");
+			},
+			success: function(data) {
+				if(data == 1){
+					getCash();
+				}
 			}
-		}
-	});
+		});
+	}	
 }
 
 //查看正在处理的提现申请
@@ -178,6 +193,12 @@ function isRegist()
 		alert("您还未注册，请注册！");
 		window.location.href = "register.html";
 	}else{
-		window.location.href = "personalHome.html";
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "personalHome.html";
+		}else{
+			alert("您已被系统管理员拉黑!");
+		}
 	}
 }

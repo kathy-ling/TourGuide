@@ -2,7 +2,9 @@ package com.TourGuide.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+
+
+
 
 
 
@@ -40,7 +46,6 @@ public class OrderController {
 	public void getAllOrders(HttpServletResponse resp,
 			@RequestParam("visitorPhone") String visitorPhone) throws IOException{
 		
-		resp.setHeader("Access-Control-Allow-Origin","*");
 		CommonResp.SetUtf(resp);
 		
 		List<Map<String , Object>> listResult =orderService.getAllOrders(visitorPhone);
@@ -72,27 +77,84 @@ public class OrderController {
 		return listResult;
 	}
 	
+	
 	/**
-	 * 根据订单的状态，查看用户相应的订单
-	 * 订单状态：待接单、待付款、待游览、待评价
+	 * 根据订单编号，讲解员查看自己的预约单的详情,包括游客的姓名、手机号
 	 * @param resp
-	 * @param visitorPhone   手机号
-	 * @param orderState   订单状态
+	 * @param orderID
+	 * @return
 	 * @throws IOException
-	 * 订单编号、参观时间、参观人数、景区名称、图片（暂时不用）、订单状态、总金额
 	 */
-//	@RequestMapping(value = "/getOrdersWithState.do")
-//	public void getOrdersWithState(HttpServletResponse resp,
-//			@RequestParam("visitorPhone") String visitorPhone,
-//			@RequestParam("orderState") String orderState) throws IOException{
-//		
-//		CommonResp.SetUtf(resp);
-//		
-//		List<Map<String, String>> listResult =orderService.getOrdersWithState(visitorPhone, orderState);
-//		
-//		PrintWriter writer = resp.getWriter();
-//		writer.write(new Gson().toJson(listResult));
-//		writer.flush();
-//	}
+	@RequestMapping(value = "/getGuideBookOrdersDetail.do")
+	@ResponseBody
+	public Object getGuideBookOrdersDetail(HttpServletResponse resp,
+			@RequestParam("orderID") String orderID) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		Map<String, Object> map = orderService.getGuideBookOrdersDetail(orderID);
+				
+		return map;
+	}
 
+	
+	/**
+	 * 根据订单编号，讲解员查看自己的拼单订单的详情
+	 * @param resp
+	 * @param orderID
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getGuideConsistOrderDetail.do")
+	@ResponseBody
+	public Object getGuideConsistOrderDetail(HttpServletResponse resp,
+			@RequestParam("orderID") String orderID) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		Map<String, Object> map = orderService.getGuideConsistOrderDetail(orderID);
+				
+		return map;
+	}
+	
+	
+	/**
+	 * 讲解员查看自己的拼团订单中的游客的信息
+	 * @param resp
+	 * @param orderID
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getConsistVisitorInfo.do")
+	@ResponseBody
+	public Object getConsistVisitorInfo(HttpServletResponse resp,
+			@RequestParam("orderID") String orderID) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String, Object>> list = orderService.getConsistVisitorInfo(orderID);
+				
+		return list;
+	}
+	
+	
+	/**
+	 * 讲解员开始讲解
+	 * @param resp
+	 * @param orderId
+	 * @return
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	@RequestMapping(value = "/startVisit.do")
+	@ResponseBody
+	public Object startVisit(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId)throws IOException, SQLException{
+		
+		CommonResp.SetUtf(resp);
+		
+		boolean bool = orderService.startVisit(orderId);
+		
+		return bool;
+	}
 }

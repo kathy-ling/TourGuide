@@ -157,14 +157,20 @@ function check() {
 	var Password = $("#password").val();
 	var ConfirmPassword = $("#confirm_password").val();
 	var FilePath = $("#btnFile").val();
-
+	var reg = /^1[3|4|5|7|8][0-9]{9}$/;
+	
+	if(Sex == null || Sex == ""){
+		alert("请选择性别!");
+		return false;
+	}
 	if(Tel == null || Tel == "") {
 		alert("电话不能为空！");
 		return false;
 	}
-	if(Tel.length != 11) {
-		alert("请输入正确的手机号");
-		return false;
+	if(!reg.test(Tel)){
+		alert('请输入有效的手机号码！');
+		$("#tel").val("");
+    	return false;
 	}
 	if(Password == null || Password == "") {
 		alert("密码不能为空！");
@@ -187,4 +193,17 @@ function check() {
 		return false;
 	}
 	return true;
+}
+
+//输入手机号后，验证手机号的有效性
+function checkPhone(){
+	//表示以1开头，第二位可能是3/4/5/7/8等的任意一个，在加上后面的\d表示数字[0-9]的9位，总共加起来11位结束。
+	var reg = /^1[3|4|5|7|8][0-9]{9}$/; 
+	var phone = $("#tel").val();
+	
+	if(!reg.test(phone)){
+		alert('请输入有效的手机号码！');
+		$("#tel").val("");
+    	return false;
+	}
 }

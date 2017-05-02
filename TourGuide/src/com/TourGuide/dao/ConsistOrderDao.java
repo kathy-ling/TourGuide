@@ -23,6 +23,8 @@ import java.util.Map;
 
 
 
+
+
 import javax.sql.DataSource;
 
 import org.apache.tomcat.util.bcel.Const;
@@ -67,6 +69,7 @@ public class ConsistOrderDao {
 			int totalFee, int fee) throws SQLException{
 		
 		boolean bool = false;
+		int finishScan = 2;
 		
 		DataSource dataSource = jdbcTemplate.getDataSource();
 		Connection  conn = null;
@@ -75,9 +78,9 @@ public class ConsistOrderDao {
 			conn.setAutoCommit(false);
 			
 			String sqlString2 = "insert into t_consistresult (orderID,visitNum,maxNum,"
-					+ "visitTime,scenicID) values (?,?,?,?,?)";
+					+ "visitTime,scenicID,finishScan) values (?,?,?,?,?,?)";
 			int j = jdbcTemplate.update(sqlString2, new Object[]{orderID, visitNum, 
-					maxNum, visitTime, scenicID});
+					maxNum, visitTime, scenicID, finishScan});
 			
 			String sqlString = "insert into t_consistOrder (consistOrderID,orderID,scenicID,produceTime,"
 					+ "visitTime,visitNum,visitorPhone,contact,orderState,"
@@ -157,7 +160,7 @@ public class ConsistOrderDao {
 			
 			//更新拼单结果，当前人数
 			String sqlString2 = "update t_consistresult set "
-					+ "visitNum=?,maxNum=?,visitTime=?,scenicID=?,guideFee=? where orderID=?";
+					+ "visitNum=?,maxNum=?,visitTime=?,scenicID=?,guideFee=?,finishScan=2 where orderID=?";
 			int k = jdbcTemplate.update(sqlString2, new Object[]{currentNum, maxNum,
 					visitTime, scenicID, fee, orderID});
 			
@@ -301,6 +304,66 @@ public class ConsistOrderDao {
 	
 	
 	/**
+	 * 导游指定集合地点
+	 * @param orderId 预约订单的订单号
+	 * @param longitude  经度
+	 * @param latitude  纬度
+	 * @return
+	 */
+	public int uploadConsistLocation(String orderId, String longitude, String latitude){
+		
+		int ret = 0;
+		
+		String update = "UPDATE t_consistorder SET longitude='"+longitude+"',"
+				+ "latitude='"+latitude+"' WHERE orderID='"+orderId+"'";
+		int i = jdbcTemplate.update(update);
+		
+		if(i != 0){
+			ret = 1;
+		}
+		
+		return ret;
+	}
+	
+	
+	/**
+	 * 讲解员完成拼单订单的讲解
+	 * @param orderId
+	 * @return
+	 * @throws SQLException
+	 */
+	public int finishConsistOrderByGuide(String orderId) throws SQLException{
+		
+		int ret = 0;
+		DataSource dataSource = jdbcTemplate.getDataSource();
+		Connection  conn = null;
+		try{
+			conn = dataSource.getConnection();
+			conn.setAutoCommit(false);
+			
+			String update = "UPDATE t_consistorder SET endTime=NOW(),orderState='待评价'"
+					+ " WHERE orderID='"+orderId+"'";
+			int i = jdbcTemplate.update(update);
+			
+			String sqlString = "update t_consistresult set state=1 where orderID='"+orderId+"'";
+			int j = jdbcTemplate.update(sqlString);
+			
+			conn.commit();//提交JDBC事务 
+			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			
+			if(i != 0 && j!= 0){
+				ret = 1;
+			}			
+		} catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		}
+		
+		return ret;
+	}
+
+	
+	/**
 	 * 根据订单编号，查询该订单中的所有拼单的编号
 	 * @param orderID  订单编号
 	 * @return
@@ -319,4 +382,77 @@ public class ConsistOrderDao {
 		
 		return consistOrderIDs;
 	}
+	
+	
+	/**
+	 * 从t_consistResult中筛选讲解员未讲解的订单(拼单和快捷拼单)
+	 * @param guidePhone
+	 * @return
+	 */
+	public List<Map<String , Object>> getUndoGuideOrder(String guidePhone){
+		
+		List<Map<String , Object>> list = new ArrayList<>();		
+		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getUndoGuideOrder(?)");
+			cst.setString(1, guidePhone);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				Map<String , Object> map = new HashMap<String, Object>();
+				map.put("orderID", rst.getString(1));
+				map.put("visitTime", rst.getString(2));
+				map.put("orderState", rst.getString(3));
+				map.put("visitNum", rst.getInt(4));
+				map.put("guideFee", rst.getInt(5));
+				map.put("scenicName", rst.getString(6));
+				
+				list.add(map);
+			}			
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+		
+		return list;
+	} 
+	
+	
+	/**
+	 * 从t_consistResult中筛选讲解员已经讲解完成的订单(拼单和快捷拼单)
+	 * @param guidePhone
+	 * @return
+	 */
+	public List<Map<String , Object>> getFinishedGuideOrder(String guidePhone){
+		
+		List<Map<String , Object>> list = new ArrayList<>();		
+		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getFinishedGuideOrder(?)");
+			cst.setString(1, guidePhone);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				Map<String , Object> map = new HashMap<String, Object>();
+				map.put("orderID", rst.getString(1));
+				map.put("visitTime", rst.getString(2));
+				map.put("orderState", rst.getString(3));
+				map.put("visitNum", rst.getInt(4));
+				map.put("guideFee", rst.getInt(5));
+				map.put("scenicName", rst.getString(6));
+				
+				list.add(map);
+			}			
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+		
+		return list;
+	}
+	
 }

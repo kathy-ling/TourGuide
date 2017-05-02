@@ -194,6 +194,12 @@ function isRegist()
 		alert("您还未注册，请注册！");
 		window.location.href = "register.html";
 	}else{
-		window.location.href = "personalHome.html";
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "personalHome.html";
+		}else{
+			alert("您已被系统管理员拉黑!");
+		}
 	}
 }

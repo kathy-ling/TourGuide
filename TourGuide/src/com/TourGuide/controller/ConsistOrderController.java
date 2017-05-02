@@ -64,8 +64,13 @@ public class ConsistOrderController {
 	
 		CommonResp.SetUtf(resp);
 		
+		String scenicID = null;
+		
 		List<Map<String, Object>> scenicSpotInfo = scenicSpotService.getScenicByName(scenicName);
-		String scenicID = (String) scenicSpotInfo.get(0).get("scenicNo");
+		if(scenicSpotInfo.size() != 0){
+			scenicID = (String) scenicSpotInfo.get(0).get("scenicNo");
+		}
+		 
 		
 		//讲解费,？元/人		
 		IntroFeeAndMaxNum introFeeAndMaxNum = 
@@ -256,5 +261,89 @@ public class ConsistOrderController {
 		return bool;
 	}
 	
+	
+	/**
+	 * 筛选讲解员未讲解的订单(拼单和快捷拼单)
+	 * @param resp
+	 * @param guidePhone
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getUndoGuideOrder.do")
+	@ResponseBody
+	public Object getUndoGuideOrder(HttpServletResponse resp,
+			@RequestParam("guidePhone") String guidePhone)throws IOException{
+		//scenicName=秦始皇兵马俑&visitDate=2017-3-22&visitNum=3
+		CommonResp.SetUtf(resp);	
+		
+		List<Map<String , Object>> list = consistOrderService.getUndoGuideOrder(guidePhone);				
+		
+		return list;
+	}
+	
+	
+	/**
+	 * 筛选讲解员已经讲解完成讲解的订单(拼单和快捷拼单)
+	 * @param resp
+	 * @param guidePhone
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getFinishedGuideOrder.do")
+	@ResponseBody
+	public Object getFinishedGuideOrder(HttpServletResponse resp,
+			@RequestParam("guidePhone") String guidePhone)throws IOException{
+		//scenicName=秦始皇兵马俑&visitDate=2017-3-22&visitNum=3
+		CommonResp.SetUtf(resp);	
+		
+		List<Map<String , Object>> list = consistOrderService.getFinishedGuideOrder(guidePhone);				
+		
+		return list;
+	}
+	
+	
+	/**
+	 * 导游指定集合地点
+	 * @param resp
+	 * @param orderId 拼单订单的订单号（导游的订单号）
+	 * @param longitude  经度
+	 * @param latitude  纬度
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/uploadConsistLocation.do")
+	@ResponseBody
+	public Object uploadConsistLocation(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId,
+			@RequestParam("longitude") String longitude,
+			@RequestParam("latitude") String latitude) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		int ret = consistOrderService.uploadConsistLocation(orderId, longitude, latitude);
+		
+		return ret;
+	}
+	
+	
+	/**
+	 * 讲解员完成拼单订单的讲解
+	 * @param resp
+	 * @param orderId
+	 * @return
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	@RequestMapping(value = "/finishConsistOrderByGuide.do")
+	@ResponseBody
+	public Object finishConsistOrderByGuide(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId) throws IOException, SQLException{
+	
+		CommonResp.SetUtf(resp);
+		
+		int ret = consistOrderService.finishConsistOrderByGuide(orderId);
+		
+		return ret;
+	}
 	
 }

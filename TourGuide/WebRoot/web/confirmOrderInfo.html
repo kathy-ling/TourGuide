@@ -51,8 +51,8 @@
 			
 			<label id="orderChooseTime0" for="" class="" style="text-align: center; font-size: larger;">时间</label>
 			<div id="orderChooseTimeDiv">
-				<select id="orderChooseTime" name="datetime" value="" placeholder="时间" >
-					<option value="">请选择时间</option>
+				<select id="orderChooseTime" name="datetime" placeholder="请选择时间" onchange="setTime()">
+					<option selected="selected" value="请选择时间">请选择时间</option>
 					<option value="8:00">8:00</option>
 					<option value="8:30">8:30</option>
 					<option value="9:00">9:00</option>
@@ -81,7 +81,7 @@
 			<input type="text" id="orderChooseVisitNum" name="VisitNum" value="" placeholder="人数" onchange="restrictNum()">
 			
 			<input type="text" id="orderContactName" placeholder="联系人姓名">
-			<input type="text" id="orderContactPhone" placeholder="联系人手机号">
+			<input type="text" id="orderContactPhone" placeholder="联系人手机号" onblur="checkPhone()">
 			
 			<button data-theme="a" class="ui-btn-raised clr-warning" id="confirm" onclick="confirmOrder()">确认</button>
 		</div>

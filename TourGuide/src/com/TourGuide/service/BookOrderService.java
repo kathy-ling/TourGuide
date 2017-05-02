@@ -130,7 +130,28 @@ public class BookOrderService {
 		return bookOrderDao.getFinishedBookedOrder(guidePhone);
 	}
 	
+	/**
+	 * 导游指定集合地点
+	 * @param orderId 预约订单的订单号
+	 * @param longitude  经度
+	 * @param latitude  纬度
+	 * @return
+	 */
+	public int uploadBookLocation(String orderId, String longitude, String latitude){
+		return bookOrderDao.uploadBookLocation(orderId, longitude, latitude);		
+	}
 	
+	
+	/**
+	 * 讲解员完成预约订单的讲解
+	 * @param orderId
+	 * @return
+	 */
+	public int finishOrderByGuide(String orderId){
+		return bookOrderDao.finishOrderByGuide(orderId);
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * 

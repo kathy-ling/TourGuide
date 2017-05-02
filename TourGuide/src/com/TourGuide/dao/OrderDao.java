@@ -39,7 +39,7 @@ public class OrderDao {
 	
 	
 	/**
-	 * 根据用户的手机号，查询用户的所有订单
+	 * 根据用户的手机号，查询用户的所有订单(游客)
 	 * 全部订单包括：拼单（用户自己发起的拼单、与他人进行拼单）
 	 * 			  预约单（选择讲解员进行预约、自己发布预约订单）
 	 * @param phone  用户手机号
@@ -112,59 +112,14 @@ public class OrderDao {
 				map.put("guidePhone", rst.getString(12));
 				map.put("orderState", rst.getString(13));
 				map.put("imagePath", rst.getString(14));
+				map.put("longitude", rst.getString(15));
+				map.put("latitude", rst.getString(16));
 				listResult.add(map);
 			}							
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 	
-		
-//		switch (orderState) {
-//		case "待接单":
-//			sqlString = "select produceTime,visitTime,scenicID,visitNum,"
-//					+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
-//					+ "from t_bookorder where bookOrderID='"+orderID+"'";
-//			listResult = jdbcTemplate.queryForList(sqlString);
-//			
-//			if(listResult == null){
-//				sqlString = "select produceTime,visitTime,scenicID,visitNum,"
-//						+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
-//						+ "from t_consistorder where consistOrderID='"+orderID+"'";
-//				listResult = jdbcTemplate.queryForList(sqlString);
-//			}
-//			break;
-//		case "待付款":
-//			
-//		case "待游览":
-//			sqlString = "select produceTime,visitTime,scenicID,visitNum,guidePhone,"
-//					+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
-//					+ "from t_bookorder where bookOrderID='"+orderID+"'";
-//			listResult = jdbcTemplate.queryForList(sqlString);
-//			
-//			if(listResult == null){
-//				sqlString = "select produceTime,visitTime,scenicID,visitNum,guidePhone,"
-//						+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
-//						+ "from t_consistorder where consistOrderID='"+orderID+"'";
-//				listResult = jdbcTemplate.queryForList(sqlString);
-//			}
-//			break;
-//		case "待评价":
-//			sqlString = "select produceTime,visitTime,scenicID,visitNum,guidePhone,endTime,"
-//					+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
-//					+ "from t_bookorder where bookOrderID='"+orderID+"'";
-//			listResult = jdbcTemplate.queryForList(sqlString);
-//			
-//			if(listResult == null){
-//				sqlString = "select produceTime,visitTime,scenicID,visitNum,guidePhone,endTime,"
-//						+ "fullPrice,discoutPrice,halfPrice,totalTicket,guideFee,totalGuideFee,totalMoney "
-//						+ "from t_consistorder where consistOrderID='"+orderID+"'";
-//				listResult = jdbcTemplate.queryForList(sqlString);
-//			}
-//			break;
-//
-//		default:
-//			break;
-//		}
 		
 		return listResult;
 	}
@@ -192,6 +147,150 @@ public class OrderDao {
 		return listResult;
 	}
 	
+
+	/**
+	 * 根据订单编号，讲解员查看自己的预约单的详情,包括游客的姓名、手机号
+	 * @param orderID
+	 * @return
+	 */
+	public Map<String, Object> getGuideBookOrdersDetail(String orderID){
+		
+		Map<String, Object> map = new HashMap<>();
+		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getGuideBookOrdersDetail(?)");
+			cst.setString(1, orderID);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				map.put("orderID", rst.getString(1));
+				map.put("scenicName", rst.getString(2));
+				map.put("visitNum", rst.getInt(3));
+				map.put("money", rst.getInt(4));
+				map.put("visitTime", rst.getString(5));
+				map.put("state", rst.getString(6));
+				map.put("contact", rst.getString(7));
+				map.put("visitorName", rst.getString(8));
+				map.put("signIn", rst.getInt(9));
+				map.put("longitude", rst.getString(10));
+				map.put("latitude", rst.getString(11));
+				map.put("startTime", rst.getString(12));
+				map.put("endTime", rst.getString(13));
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	
+	/**
+	 * 根据订单编号，讲解员查看自己的拼单订单的详情
+	 * @param orderID
+	 * @return
+	 */
+	public Map<String, Object> getGuideConsistOrderDetail(String orderID){
+		
+		Map<String, Object> map = new HashMap<>();
+		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getGuideConsistOrderDetail(?)");
+			cst.setString(1, orderID);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				map.put("orderID", rst.getString(1));
+				map.put("scenicName", rst.getString(2));
+				map.put("visitNum", rst.getInt(3));
+				map.put("money", rst.getInt(4));
+				map.put("visitTime", rst.getString(5));
+				map.put("state", rst.getString(6));
+				map.put("signIn", rst.getInt(7));
+				map.put("longitude", rst.getString(8));
+				map.put("latitude", rst.getString(9));
+				map.put("startTime", rst.getString(10));
+				map.put("endTime", rst.getString(11));
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	
+	/**
+	 * 讲解员查看自己的拼团订单中的游客的信息
+	 * @param orderID
+	 * @return
+	 */
+	public List<Map<String, Object>> getConsistVisitorInfo(String orderID){
+		
+		List<Map<String, Object>> list = new ArrayList<>();		
+		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getConsistVisitorInfo(?)");
+			cst.setString(1, orderID);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				Map<String, Object> map = new HashMap<>();
+				map.put("visitorPhone", rst.getString(1));
+				map.put("visitorName", rst.getString(2));
+				map.put("visitNum", rst.getInt(3));
+				list.add(map);
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	/**
+	 * 讲解员开始讲解
+	 * @param orderId
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean startVisit(String orderId) throws SQLException{
+		
+		boolean bool = false;
+		
+		DataSource dataSource = jdbcTemplate.getDataSource();
+		Connection  conn = null;
+		try{
+			conn = dataSource.getConnection();
+			conn.setAutoCommit(false);
+			
+			String sqlBook = "update t_bookorder set startTime=NOW() where bookOrderID='"+orderId+"'";
+			int i = jdbcTemplate.update(sqlBook);
+			
+			String sqlConsist = "update t_consistorder set startTime=NOW() where orderID='"+orderId+"'";
+			int j = jdbcTemplate.update(sqlConsist);
+			
+			conn.commit();//提交JDBC事务 
+			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			
+			if(i!=0 || j!=0){
+				bool = true;
+			}
+			
+		} catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		}
+		
+		return bool;
+	}
 	
 //	/**
 //	 * 根据用户的手机号，查询特定订单状态的订单
@@ -222,46 +321,6 @@ public class OrderDao {
 //	}
 	
 	
-//	/**
-//	 * 按一定格式，将订单的信息返回
-//	 * @param list  从数据库中查询到的订单信息
-//	 * @param orderID   订单编号类型：bookOrderID、consistOrderID
-//	 * @return
-//	 */
-//	public List<Map<String, String>> getSimpleOders(List<Map<String , Object>> list, String orderID){
-//		
-//		List<Map<String, String>> listResult = new ArrayList<>();
-//		
-//		for(int j=0; j<list.size(); j++){
-//			Map<String, String> map = new HashMap<String, String>();
-//			String scenicID = (String)list.get(j).get("scenicID");
-//			Timestamp timestamp = (Timestamp) list.get(j).get("visitTime");
-//			String visitTime = DateConvert.timeStamp2DateTime(timestamp);
-//			
-//			//订单总金额
-//			if(list.get(j).get("totalMoney") != null){
-//				map.put("totalMoney", list.get(j).get("totalMoney")+"");
-//			}else{
-//				map.put("totalMoney", "null");
-//			}
-//						
-//			map.put("visitTime", visitTime);   //参观时间
-//			map.put("OrderID", (String)list.get(j).get(orderID));     //订单编号
-//			map.put("visitNum", (int)list.get(j).get("visitNum")+"");		 //参观人数
-//			List<Map<String , Object>> list2 = scenicSpotDao.getSomeScenicInfoByscenicID(scenicID);
-//			String scenicName = (String)list2.get(0).get("scenicName");
-//			String scenicImagePath = (String)list2.get(0).get("scenicImagePath");
-//			map.put("scenicName", scenicName); //景区名称、图片
-//			map.put("scenicImagePath", scenicImagePath);
-//			map.put("orderState", (String)list.get(j).get("orderState"));   //订单状态
-//			listResult.add(map);
-//		}
-//		
-//		return listResult;
-//	}
-//	
-//	
-//	
 
 
 }

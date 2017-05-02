@@ -57,8 +57,7 @@ function putOrder() {
 	var visitNum = GetUrlem("visitNum");
 	var scenicName=GetUrlem("scenicName");
 	var visitorPhone=GetUrlem("visitorPhone");
-	
-	var url = HOST+"/releaseConsistOrder.do";
+		
 	var postData = {
 		'scenicName': scenicName,
 		'visitTime': visitDate+" "+visitTime,
@@ -66,6 +65,17 @@ function putOrder() {
 		'visitorPhone':vistPhone ,
 		'contact':visitorPhone
 	};
+	
+	if(vistPhone == "null" || vistPhone == undefined || vistPhone == openId){
+		alert("出错啦！");
+		return;
+	}else{
+		releaseConsistOrder(postData);
+	}
+}
+
+function releaseConsistOrder(postData){
+	var url = HOST+"/releaseConsistOrder.do";
 	
 	$.ajax({
 		type: "post",
@@ -87,8 +97,6 @@ function putOrder() {
 		}
 	});
 }
-
-
 	
 	
 	

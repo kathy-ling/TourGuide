@@ -41,7 +41,7 @@ public class EvaluateDao {
 	 * @return
 	 */
 	public boolean commentByVisitor(String orderID, String evaluateContext,
-			String evaluateTime, int isAnonymous, int stars){
+			String evaluateTime, int isAnonymous, int star1, int star2, int star3){
 		
 		boolean bool = false;
 		String guidePhone = null;
@@ -62,10 +62,11 @@ public class EvaluateDao {
 		}
 			
 		String sqlString = "insert into t_evaluate (orderID,evaluateContext,evaluateTime,"
-				+ "guidePhone,visitorPhone,nickName,isAnonymous,star) values (?,?,?,?,?,?,?,?)";
+				+ "guidePhone,visitorPhone,nickName,isAnonymous,star1,star2,star3) "
+				+ "values (?,?,?,?,?,?,?,?,?,?)";
 		
 		int i = jdbcTemplate.update(sqlString, new Object[]{orderID, evaluateContext, 
-				evaluateTime, guidePhone, visitorPhone, nickName, isAnonymous,stars});
+				evaluateTime, guidePhone, visitorPhone, nickName, isAnonymous,star1,star2,star3});
 		
 		if(i != 0){
 			bool = true;

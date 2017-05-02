@@ -69,7 +69,8 @@
   			</div>           
         </div>
         
-           
+        
+        <!--发起拼单-->
         <div id="panel2" >      
             <form action="pindan_submit" id="" method="get" accept-charset="utf-8">            	
             	
@@ -85,8 +86,9 @@
 						<option value="" selected="selected">请选择日期</option>
 					</select>
 
-	               <select id="chooseDatetime" name="datetime" value="" placeholder="时间">
-						<option>8:00</option>
+	               <select id="chooseDatetime" name="datetime" placeholder="时间" onchange="checkDateSelect('#visitTime','#chooseDatetime')">
+						<option selected="selected" value="请选择时间">请选择时间</option>
+						<!--<option>8:00</option>
 						<option>8:30</option>
 						<option>9:00</option>
 						<option>9:30</option>
@@ -106,13 +108,13 @@
 						<option>16:30</option>
 						<option>17:00</option>
 						<option>17:30</option>
-						<option>18:00</option>
+						<option>18:00</option>-->
 					</select>	
                 </div>
                
-                <input type="number" min="1" max="10" step="1" id="visitorCount" name="visitorCount" class="" placeholder="浏览人数" onchange="getDateFee()" />
+                <input type="number" min="1" max="10" step="1" id="visitorCount" name="visitorCount" class="" placeholder="浏览人数" onchange="checkNum()" />
                
-                <input type="text"  id="visitorPhone" name="visitorPhone"  placeholder="游览人联系方式"  />
+                <input type="text"  id="visitorPhone" name="visitorPhone"  placeholder="游览人联系方式"  onchange="checkPhone()"/>
             </form>
             
             <!--显示拼单费用-->
@@ -120,7 +122,7 @@
             </ul>
             
             <div class="paybtn">
-            	<a href="#" class="ui-btn ui-btn-b" data-state="confirm" data-theme="b" id="paySubmit">确定</a>
+            	<a href="#" class="ui-btn ui-btn-b" data-state="confirm" data-theme="b" id="paySubmit" onclick="paySubmit()">确定</a>
             </div>            
         </div>
         
@@ -130,16 +132,22 @@
 <script type="text/javascript">
 	$("#panel2btn").bind("click", function(event) {
 		//根据vistPhone判断是否注册,vistPhone全局变量，通过openId获取得到   
-	    if(vistPhone == undefined)
-		{
-			alert("您还未注册，请注册后再发起拼单！");
-			window.location.href = "register.html";
-		}
-		else{			
-			$("#panel1").hide(300);
-    		$(".visitTime").show();
-    		$("#panel2").show(300);
-		}	    
+//	    if(vistPhone == undefined || vistPhone == "null" || vistPhone == openId)
+//		{
+//			alert("您还未注册，请注册后再发起拼单！");
+//			window.location.href = "register.html";
+//		}
+//		else{				
+			var black = sessionStorage.getItem("isBlackened");
+
+			if(black == "false"){
+				$("#panel1").hide(300);
+	    		$(".visitTime").show();
+	    		$("#panel2").show(300);
+			}else{
+				alert("您已被系统管理员拉黑!");
+			}			
+//		}	    
     });
     
     $("#panel1btn").bind("click", function(event) {

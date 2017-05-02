@@ -32,10 +32,10 @@ public class GuideService {
 	 */
 	public int getGuideAuthentication(String phone, String name,String sex, 
 			String language, String selfIntro, String image, 
-			int age, String workAge) throws SQLException{
+			int age, String workAge, String scenic) throws SQLException{
 		
 		return guideDao.getGuideAuthentication(phone, name, sex,
-				language, selfIntro, image, age, workAge);
+				language, selfIntro, image, age, workAge, scenic);
 	}
 	
 	
@@ -84,6 +84,20 @@ public class GuideService {
 		return guideDao.getAvailableGuidesWithSelector(visitDate, visitNum, scenicID,
 				sex, age, languange, level);
 	}
+	
+	
+	/**
+	 * 用户不输入参观信息，只对讲解员进行筛选查看
+	 * @param sex
+	 * @param age
+	 * @param languange
+	 * @param level
+	 * @return
+	 */
+	public List<Map<String, Object>> getGuidesWithSelector(String sex, 
+			String age, String language, String level){
+		return guideDao.getGuidesWithSelector(sex, age, language, level);
+	}
 
 	
 	/**
@@ -106,6 +120,37 @@ public class GuideService {
 	public boolean isTimeConflict(String guidePhone, String visitTime){
 		return guideDao.isTimeConflict(guidePhone, visitTime);
 	}
+	
+	/**
+	 * 判断该讲解员是否通过审核
+	 * @param guidePhone
+	 * @return
+	 */
+	public boolean isAuthorized(String guidePhone){
+		return guideDao.isAuthorized(guidePhone);
+	}
+	
+	
+	/**
+	 * 讲解员签到
+	 * @param orderId
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean guideSignIn(String orderId) throws SQLException{
+		return guideDao.guideSignIn(orderId);
+	}
+	
+	
+	/**
+	 * 判断讲解员的订单是否签到
+	 * @param orderId
+	 * @return
+	 */
+	public boolean isSignIn(String orderId){
+		return guideDao.isSignIn(orderId);
+	}
+	
 	
 	
 	/**

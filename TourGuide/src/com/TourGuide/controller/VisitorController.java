@@ -220,4 +220,24 @@ public class VisitorController {
 		writer.write(new Gson().toJson(bool));
 		writer.flush();
 	}
+	
+	
+	/**
+	 * 判断游客是否被拉黑
+	 * @param resp false --没有拉黑，true---拉黑
+	 * @param phone
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/isBlackened.do")
+	public void isBlackened(HttpServletResponse resp,
+			@RequestParam("phone") String phone) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		boolean bool = visitorService.isBlackened(phone);
+		
+		PrintWriter writer = resp.getWriter();
+		writer.write(new Gson().toJson(bool));
+		writer.flush();
+	}
 }

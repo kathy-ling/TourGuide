@@ -26,10 +26,10 @@ public class EvaluateService {
 	 * @return
 	 */
 	public boolean commentByVisitor(String orderID, String evaluateContext,
-			String evaluateTime, int isAnonymous, int stars){
+			String evaluateTime, int isAnonymous, int star1, int star2, int star3){
 		
 		return evaluateDao.commentByVisitor(orderID, evaluateContext,
-				evaluateTime, isAnonymous, stars);
+				evaluateTime, isAnonymous, star1, star2, star3);
 	}
 	
 	

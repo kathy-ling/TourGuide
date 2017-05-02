@@ -221,6 +221,35 @@ public class VisitorDao {
 			
 			return bool;
 		}
+		
+		
+		/**
+		 * 判断游客是否被拉黑
+		 * @param phone
+		 * @return  false --没有拉黑，true---拉黑
+		 */
+		public boolean isBlackened(String phone){
+			boolean bool = false;
+			DataSource dataSource =jdbcTemplate.getDataSource();
+			 
+			try {
+				Connection conn = dataSource.getConnection();
+				CallableStatement cst = conn.prepareCall("call isBlackened(?)");
+				cst.setString(1, phone);
+				ResultSet rst = cst.executeQuery();
+				
+				while (rst.next()) {
+					int disable = rst.getInt(1);
+					if(disable == 1){//游客被拉黑
+						bool = true;
+					}				
+				}							
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} 
+			return bool;
+		}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 		

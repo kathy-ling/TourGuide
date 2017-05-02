@@ -118,6 +118,24 @@ public class FastOrderController {
 	}
 	
 	
-	 
+	/**
+	 * 讲解员设置结束扫码，完成拼单
+	 * @param resp
+	 * @param guidePhone
+	 * @return 0--结束扫码失败，1--结束扫码成功
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	@RequestMapping(value = "/finishScan.do")
+	@ResponseBody
+	public Object finishScan(HttpServletResponse resp,
+			@RequestParam("guidePhone") String guidePhone) throws IOException, SQLException{
+		
+		CommonResp.SetUtf(resp);
+
+		int ret= fastOrderService.finishScan(guidePhone);
+		
+		return ret;
+	}
 
 }

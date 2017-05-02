@@ -31,7 +31,8 @@ public class AffiliationDao {
 	 * @param guidePhone  导游手机号
 	 * @param scenicID  景区编号
 	 * @param applyDate  申请日期
-	 * @return 0--失败 ，1--成功，-1--申请失败。因为您有待处理的挂靠申请！，-2请先取消当前的挂靠，再进行申请
+	 * @return 0--失败 ，1--成功，-1--申请失败。因为您有待处理的挂靠申请！，
+	 * -2请先取消当前的挂靠，再进行申请,-3未通过审核，不能挂靠
 	 * @throws SQLException 
 	 */
 	public int applyForAffiliation(String guidePhone, String scenicID, 
@@ -60,8 +61,12 @@ public class AffiliationDao {
 				  conn.setAutoCommit(false);
 				  
 				  String sqlUpdate = "update t_guideotherinfo set scenicBelong='"+scenicID+"' "
-							+ "where phone='"+guidePhone+"'";
+							+ "where phone='"+guidePhone+"' and authorized=1";
 				  int i = jdbcTemplate.update(sqlUpdate);
+				  
+				  if (i != 0 ){
+					  ret = -3;
+				  }
 				  
 				  String sql = "update t_guideotherinfo set authorized=2 "
 							+ "where phone='"+guidePhone+"'";

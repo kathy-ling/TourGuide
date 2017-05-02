@@ -3,9 +3,10 @@
 var guidePhone = GetUrlem("guidePhone");
 var visitDate = GetUrlem("visitDate");
 var	visitTime = GetUrlem("visitTime");
-var	visitNum = GetUrlem("visitNum");
+//var	visitNum = GetUrlem("visitNum");
 var	scenicName = GetUrlem("scenicName");
 var singleMax = GetUrlem("singleMax");
+var	visitNum;
 
 $(document).ready(function() {
 	
@@ -14,7 +15,12 @@ $(document).ready(function() {
 	//显示所有景点名称
 	addAllScenics();
 	//从前一个页面获取信息
-	getInfofromFormer();		
+	getInfofromFormer();	
+	
+	if(guidePhone != "null"){
+		setGuideInfo(guidePhone);		
+	}
+	
 });
 
 
@@ -37,7 +43,7 @@ function getInfofromFormer(){
 		$("#orderChooseDateLabel").show();
 		document.getElementById("orderChooseDateLabel").innerText = visitDate;			
 	}
-	if(visitTime == ""){
+	if(visitTime == "" || visitTime == "请选择时间"){
 		$("#orderChooseTime0").hide();	
 		document.getElementById("orderChooseTimeDiv").style.display = "";
 	}else{		
@@ -47,7 +53,7 @@ function getInfofromFormer(){
 	}
 	
 	//设置人数
-	$("#orderChooseVisitNum").attr("value",visitNum);
+//	$("#orderChooseVisitNum").attr("value",visitNum);
 }
 
 function addDate()
@@ -70,7 +76,7 @@ function addDate()
 	dateSelect.options.add(new Option(dayAfterTomo1,dayAfterTomo1));	
 }
 
-//onclick="confirmOrder()">确认,使信息不为空
+//onclick="confirmOrder()">【确认】,使信息不为空
 function confirmOrder()
 {
 	confirmOrderBefore();
@@ -108,8 +114,20 @@ function confirmOrder()
 		alert("请填写联系人手机号！");
 		return false;
 	}
+	
+	var time = visitDate + " " + visitTime;
+	var timeNow = getNowFormatDate();
+	if(!timeCompare(time, timeNow)){
+			return false;	
+	}
 
 	timeConflict();	
+}
+
+//当时间选定后触发的事件
+function setTime(){
+	visitTime = $('#orderChooseTime option:selected').val();
+//	alert("setTime visitTime" + visitTime);
 }
 
 //如果从前一页面没有取到值，则从选择器中选择
@@ -125,11 +143,11 @@ function confirmOrderBefore()
 		visitDate = $("#orderChooseDate").val();
 	}
 	
-	if(!visitTime)
+	if(!visitTime && visitTime != "请选择时间")
 	{
 		visitTime = $('#orderChooseTime option:selected').val();
 	}
-	
+
 	if(!visitNum)
 	{
 		visitNum = $("#orderChooseVisitNum").val();
@@ -164,15 +182,97 @@ function timeConflict(){
 	});
 }
 
+//获取并设置导游信息
+function setGuideInfo(phone){
+	var Url = HOST+"/getDetailGuideInfoByPhone.do";
+	$.ajax({
+		type:"post",
+		url:Url,
+		async:true,
+		data:{"guidePhone":phone},
+		datatype:"JSON",
+		error:function()
+		{
+			alert("导游详细信息Request error!");
+		},
+		success:function(data)
+		{
+//			alert(JSON.stringify(data));
+			$.each(data, function(i,item) {				
+				singleMax = item.singleMax;				
+			});
+		}
+	});
+}
 
 function restrictNum(){
-	visitNum = $("#orderChooseVisitNum").val();
-	if(parseInt(visitNum) > parseInt(singleMax)){
+	
+	var num = $("#orderChooseVisitNum").val();
+
+	if (num == "") {
+		alert("请填写游览人数");
+		$("#orderChooseVisitNum").val("");
+		return false;		
+	}else if(!( /^\+?[1-9][0-9]*$/).test(num)){
+		alert("请输入正确的人数");
+		$("#orderChooseVisitNum").val("");
+		return false;
+	}
+	
+	if(parseInt(num) > parseInt(singleMax)){
 		alert("超过讲解员带团的最大人数限制");
 		$("#orderChooseVisitNum").val("");
+		return false;
 	}	
 }
 
+//输入手机号后，验证手机号的有效性
+function checkPhone(){
+	//表示以1开头，第二位可能是3/4/5/7/8等的任意一个，在加上后面的\d表示数字[0-9]的9位，总共加起来11位结束。
+	var reg = /^1[3|4|5|7|8][0-9]{9}$/; 
+	var phone = $("#orderContactPhone").val()
+	
+	if(!reg.test(phone)){
+		alert('请输入有效的手机号码！');
+		$("#orderContactPhone").val("");
+    	return false;
+	}
+}
+
+//比较两个时间的大小
+function timeCompare(endTime, beginTime){
+	
+	var a = (Date.parse(endTime) - Date.parse(beginTime)) / 3600 / 1000;
+	if(a < 0){
+		alert("您选择的时间在当前时间之前，请重新选择!");
+		return false;
+	}else{
+		return true;	
+	}
+}
+
+//"yyyy-mm-dd hh:mm",获取当前的时间
+function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    var minute = date.getMinutes();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    if (minute >= 0 && minute <= 9) {
+        minute = "0" + minute;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + minute;
+
+    return currentdate;
+}
 
 function addAllScenics() {
 	var url = HOST + "/getAllScenics.do";
@@ -205,6 +305,12 @@ function isRegist()
 		alert("您还未注册，请注册！");
 		window.location.href = "register.html";
 	}else{
-		window.location.href = "personalHome.html";
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "personalHome.html";
+		}else{
+			alert("您已被系统管理员拉黑!");
+		}
 	}
 }

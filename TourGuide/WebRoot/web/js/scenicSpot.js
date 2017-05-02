@@ -2,20 +2,25 @@
 
 $(document).ready(function()
 {
-	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
-	var ScenicNo=GetUrlem("scenicNo");
+	var ScenicNo = GetUrlem("scenicNo");
+	
+//	ScenicNo = '19743';
+	
 	refreshPage(ScenicNo);	
 });
 
 function refreshPage(ScenicNo){
-	sessionStorage.ScenicNo=ScenicNo;
+	
+	sessionStorage.ScenicNo = ScenicNo;
 	setscenicInfo(ScenicNo);
 //	setTickMoney(ScenicNo);
-	setweather("西安");
+	
 }
-  //从服务器端获取景区详细信息
+
+//从服务器端获取景区详细信息
 function setscenicInfo(ScenicNo){
 	var url2 = HOST+"/getDetailScenicByScenicID.do"
+	
 	$.ajax({
 		type:"post",
 		url:url2,
@@ -37,62 +42,98 @@ function setscenicInfo(ScenicNo){
 				//设置显示简介
 				$("#scenic_info").html(item.scenicIntro);
 				//设置显示历史参观人数
-				var td = $("#scenic_total_visit");
-				$(td).html(item.totalVisits);
+				$("#scenic_total_visit").html(item.totalVisits);
+				
+				var tmp = item.city;
+				var city = tmp.replace("市", "");				
+				setweather(city);
 				
 				$("#orderGuideBtn").attr("href","orderGuide.html?scenicNo="+ScenicNo+"&sname="+item.scenicName);
 				$("#pinGuideBtn").attr("href","pindan.html?scenicNo="+ScenicNo+"&sname="+item.scenicName);
-				
-			});
-			
+//				$("#fastOrderBtn").attr("href","FastPin.html?scenicNo="+ScenicNo+"&sname="+item.scenicName);
+			});			
 		}
 	});
 }
 	
-
 	
-	//从服务器端获取今日天气
+//从服务器端获取今日天气
 function setweather(City){
 	var url = HOST+"/getWeatherByCity.do";
-  $.ajax({
-	type:"post",
-	url:url,
-	async:true,
-	data:{city:City},
-	datatype:"JSON",
-	error:function()
-	{
-		alert("今日天气Request error!");
-	},
-	success:function(data)
-	{
-		if(data!=null){
-		var weather = data.weather;
-		var temperature = data.temprature;
-		var wind = data.wind;
-		var img1 = data.image1;
-		var img2 = data.image2;
-		if(weather.length>2)
+	  $.ajax({
+		type:"post",
+		url:url,
+		async:true,
+		data:{city:City},
+		datatype:"JSON",
+		error:function()
 		{
-			$("#weather").text(weather);
-			$("#img1").attr("src",img1);
-			$("#img2").attr("src",img2);
-			$("#temperature").text(temperature);
-			$("#wind").text(wind);
-		}
-		else
+			alert("今日天气Request error!");
+		},
+		success:function(data)
 		{
-			$("#weather").text(weather);
-			$("#img1").attr("src",img1);
-			$("#temperature").text(temperature);
-			$("#wind").text(wind);
-		}			
-		}
-		
-	}
-});
+			if(data!=null){
+				var weather = data.weather;
+				var temperature = data.temprature;
+				var wind = data.wind;
+				var img1 = data.image1;
+				var img2 = data.image2;
+				if(weather.length>2)
+				{
+					$("#weather").text(weather);
+					$("#img1").attr("src",img1);
+					$("#img2").attr("src",img2);
+					$("#temperature").text(temperature);
+					$("#wind").text(wind);
+				}
+				else
+				{
+					$("#weather").text(weather);
+					$("#img1").attr("src",img1);
+					$("#temperature").text(temperature);
+					$("#wind").text(wind);
+					}			
+				}				
+			}
+		});
 }
+
+
+function clickFastPin(){
+	var scenicName = $("#scenic_title").html();
 	
+	if(vistPhone == undefined || vistPhone == openId)
+	{
+		alert("您还未注册，请注册！");
+		window.location.href = "register.html";
+	}else{
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "FastPin.html?scenicName="+scenicName;
+		}else{
+			alert("您已被系统管理员拉黑!");
+			return;
+		}
+	}
+}
+
+function isRegist()
+{
+	if(vistPhone == undefined || vistPhone == openId)
+	{
+		alert("您还未注册，请注册！");
+		window.location.href = "register.html";
+	}else{
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "personalHome.html";
+		}else{
+			alert("您已被系统管理员拉黑!");
+		}
+	}
+}
   
 //从服务器端获取票价
 /*function setTickMoney(ScenicNo){

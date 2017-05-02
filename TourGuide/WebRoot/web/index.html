@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/mystyle.css">
     <link rel="stylesheet" type="text/css" href="css/cityPicker.css"/>
     <link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
 	<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
     <script  type="text/javascript" src="js/yxMobileSlider.js"></script>
 	<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
@@ -16,110 +17,51 @@
 	<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>  
     <script type="text/javascript" src="js/nativedroid2.js"></script>
-    
+  
 </head>
+
 <body>	
 
 	<div data-role="page" >
 		
-     <header data-role="header" id="header" class="">
-           <input type="search" class="search" name="search" placeholder="秦始皇兵马俑" id="searchBox">
-    </header>
-    <div data-role="main" >
-    	
-        <div class="slider"><!--id="imageSlider" -->
-        	
-          <ul class="items" id="index_ul_id">
-            
-          </ul>
-        </div> 
-        <div>
-            <p class="imglist-title"><span class="left-title">推荐景点</span>
-            	<a class="rightLink" href="#moreSpotPage" target="_top">更多</a>
-            </p>
-            <ul class="my-imglist" id="index_scenic_ul_id">
-                
+	<footer data-role="footer" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+            <li><a href="index.html" target="_top" id="" class="navbar0" >首页</a></li>
+            <li><a href="pindan.html" target="_top" id="" class="navbar0" >拼讲解员</a></li>
+            <li><a href="orderGuide.html" target="_top" id="" class="navbar0">预约讲解员</a></li>           
+            <li><a href="" target="_top" id="" class="navbar0" onclick="isRegist()">个人中心</a></li>           
             </ul>
         </div>
-        
-          <div>
-        	<p id="location" ></p>
+    </footer>
+	
+	<header data-role="header" >		
+		<div class="headersearch">
+			<div class="searchinput" >
+				<input type="search" id="mySearchInput" placeholder="输入景区名称进行搜索" />
+			</div>				
+			<button onclick="scenicsrch()" id="searchSubmit" ><b>搜  索</b></button>
+		</div>
+	</header>
+		
+    <div data-role="main" >
+    	
+        <div class="slider"><!--id="imageSlider" -->       	
+          <ul class="items" id="index_ul_id">           
+          </ul>
         </div> 
         
-    </div>
-    <!--<span id="bottom_navigation"></span>
-    <IE Download ID = "ieDownload" style="behavior: url(#default#download);"/>-->
-    <footer data-role="footer" data-position="fixed">
-        <div data-role="navbar" class="bottom_navigation">
-            
+        <div>
+            <p class="imglist-title"><span class="left-title">推荐景点</span>
+            	<a class="rightLink" onclick="moreScenic()">更多</a>
+            </p>
+            <ul class="my-imglist" id="index_scenic_ul_id">                
+            </ul>
         </div>
-   </footer>
-</div>
-<!--搜索面板-->
-<div data-role="page" id="searchPanelPage">
-    <div data-role="header" id="header" data-position="fixed" class="header" >
-         <form action="search_submit" method="get" accept-charset="utf-8">
-         <a href="#" class="backbtn" data-role="button" data-rel="back">后退</a>
-         	 <div class="searchDiv">
-             <label for="search" class="ui-hidden-accessible">搜索</label>         
-             <input type="search" id="mySearchInput" name="search" placeholder="秦始皇兵马俑" class="searchBox">          
- 			</div>
-           <input class="searchbtn ui-btn ui-icon-search ui-btn-icon-left" type="button" data-inline="true" id="searchSubmit" name="submit" value="搜索">
-        </form>
+              
     </div>
-    <div data-role="main" class="ui-content">
-        <ul class="searchTagPanel">
-            <li>秦始皇兵马俑</li>
-            <li>华清池</li>
-            <li>陕西省博物馆</li>
-            <li>半坡遗址公园</li>
-            <li>华山</li>
-        </ul>
-    </div>
+    
 </div>
 
-<!--更多景点页面-->
-<div data-role="page" id="moreSpotPage" data-add-back-btn="true" >
-<header data-role="header" id="header" class="" >
-           <input type="search" class="search" name="search" placeholder="秦始皇兵马俑">
-</header>
-<div data-role="main" class="ui-content">
-        <ul class="my-imglist" id="more_ul">
-           
-    </ul>
-</div>
-</div>
-<!--搜索结果页面-->
-<div data-role="page" id="searchResultPage" data-add-back-btn="true">
-    <div data-role="header"  id="header" class="header">
-           <input type="search" class="search" data-inline="true" id="mysearch"  name="search"  placeholder="秦始皇兵马俑" >
-    </div>
-    <div data-role="main" >
-        <div class="searchResult ui-grid-a">
-            <div class="searchResultImg ui-block-a">
-            	<a id="imgA" href="" target="_top" >
-            <img src="img/1.jpg" id="search_img"></a>
-            </div>
-            <div class="searchResultDis ui-block-b">
-                <p class="spotDis" id="search_scenic_intro"></p>
-                <p>景点等级：<span class="spotlevel" id="search_starlevel"></span></p>
-                <p>景点地址：<span class="spotAddr" id="search_address"></span></p>
-            </div>
-        </div>
-        <p class="imglist-title"><span class="left-title">为您推荐</span>
-        	
-        </p>
-        <ul class="my-imglist" id="search_ul">
-            
-        </ul>
-    </div>
-</div>
 </body>
-<!--<script type="text/javascript">
-    function onDownloadDone(downDate)
-    {
-    	bottom_navigation.innerHTML = downDate;
-    }
-    ieDownload.startDownload("bottomNavigation.htm",onDownloadDone);
-    </script>-->
 </html>

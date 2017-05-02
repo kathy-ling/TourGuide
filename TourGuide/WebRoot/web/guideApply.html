@@ -5,12 +5,11 @@
 		<meta charset="UTF-8" />
 		<title>申请导游</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link rel="stylesheet" type="text/css" href="css/">
 		<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
 		<link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
 		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
-		<script type="text/javascript" src="js/GuideApply.js"></script>
+		<script type="text/javascript" src="js/guideApply.js"></script>
 		<script type="text/javascript" src="js/ajaxfileupload.js"></script>
 	</head>
 	
@@ -32,7 +31,7 @@
 			<div data-role="header" id="perheader">
 			</div>
 			
-			<div data-role="main" class="ui-content">
+			<div data-role="main" class="ui-content">					
 				
 				<table>
 					<tbody>
@@ -54,12 +53,11 @@
 							</tr>
 							<tr>
 								<td><label for="age">年龄：</label></td>
-								<td><input type="number" id="apply_age" name="" value="" placeholder=""></td>
+								<td><input type="number" id="apply_age" onblur="checkAge()"></td>
 							</tr>
 							<tr>
 								<td><label for="workedTime">从业时间</label></td>
 								<td>
-								<!-- <input type="date" id="apply_workedTime" name="" value="" placeholder=""> -->
 									<select id="apply_workAge" name="datetime" value="" placeholder="时间">
 										<option>请选择时间</option>
 										<option>不满一年</option>
@@ -73,16 +71,26 @@
 							</tr>
 							<tr>
 								<td><label for="tel">联系电话：</label></td>
-								<td><input type="text" id="apply_tel" name="" value="" placeholder=""></td>
+								<td><input type="text" id="apply_tel" onchange="checkPhone()" ></td>
 							</tr>
 							<tr>
 								<td><label for="guideIdNum">讲解语言：</label></td>
 								<td>
 									<select id="apply_guideLanguage" name="language">
-										<option value="0">中文</option>
-										<option value="1">英文</option>
-										<option value="2">中英文</option>
+										<option>中文</option>
+										<option>英文</option>
+										<option>中英文</option>
 									</select>
+								</td>
+							</tr>
+							<tr>
+								<td><label for="">景区名称：</label></td>
+								<td>
+									<div id="chooseScenicNameDiv">
+										<select id="chooseScenicName" name="scenicName">
+											<option value="" selected="selected">请选择景区</option>
+										</select>
+									</div>
 								</td>
 							</tr>
 							<tr>
@@ -95,7 +103,7 @@
 								<td><label for="name">个人照片：</label></td>
 								<td>
 									<input type="file" id="btn_file" name="btn_file" style="display: none" onchange="selectImage(this)">
-									<img src="img/visitor.png" id="visithead" height="100" width="100">			
+									<img src="img/visitor.png" id="visitor_img" height="100" width="100">					
 								</td>
 							</tr>
 							<tr>
@@ -103,7 +111,7 @@
 							</tr>
 						</form>
 					</tbody>
-				</table>
+				</table>												
 			</div>
 		</div>
 		

@@ -3,17 +3,26 @@
 <head>
     <meta charset="UTF-8" />
     <title>发表评论</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <link rel="stylesheet" type="text/css" href="css/">
-    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.css">
-		<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">   
-		<link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />	
     <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
-    <link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
+    <!--<link rel="stylesheet" type="text/css" href="css/nativedroid2.css">-->
     <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript" src="js/jquery.raty.min.js"></script>
-    <style type="text/css" media="screen">
+     <script type="text/javascript" src="js/comment.js"></script>
+    <style type="text/css" >
+    	.myText{
+    		resize:none;
+    		overflow-y:visible;
+    		max-height: 200px;
+			height: 100px;
+			width: auto;
+    	}
+    	.spanHeight{
+    		/*height: 10px;
+			border:1px ; 
+			display:block; */
+    	}
     </style>
 </head>
 <body>
@@ -26,63 +35,23 @@
     </div>
     <div data-role="main" class="ui-content">
     	
-       <div>满意度:<span id="star"></span></div>
-        <div id = "textCount"></div>
-        <textarea name="comment" id="evalueContext" placeholder="玩的怎么样呀？快来说说吧"></textarea>
+       <div>
+	       	<p>满意度:<span id="star1"></span></p>
+	       	<p>讲解水平: <span id="star2"></span></p>
+	       	<p>服务态度: <span id="star3"></span></p>
+       </div>
+       
+        <div>
+        	<textarea name="comment" id="evalueContext" placeholder="玩的怎么样呀？快来说说吧" class="myText"></textarea>
+        	<p align="right" style="color: lightgrey;">可输入200字，已输入<span id = "textCount"></span></p>
+        </div>
         <label for="anonymous">匿名评论</label>
         <input id="anonymous" name="anonymous" type="checkbox" data-inline="true" value="">
-        <input type="button" id="commentSub" name="" value="提交" >
+        
+        <input type="button" id="commentSub" value="提交" onclick="commentSub()">
     </div>
-    <script type="text/javascript">
-    $(function($){
-         $('#star').raty({ path:'img', score: 0,width:200});
-         $("#evalueContext").keydown(function(){
-            var maxCount = 140;
-        var curLength=$("#evalueContext").val().length;
-        if(curLength>maxCount){
-            var num=$("#evalueContext").val().substr(0,4);
-            $("#evalueContext").val(num);
-            alert("超过字数限制啦!" );
-        }
-        else{
-            $("#textCount").text(maxCount-$("#evalueContext").val().length)
-        }
-    });
-         $("#commentSub").click(function(event) {
-            var star =  $('#star').raty('score');
-            var text = $("#evalueContext").val();
-            var orderId = GetUrlem("orderId");
-            var isanonymous = 0;
-            if($("input:checkbox[name='anonymous']").get(0).checked)
-            {
-                isanonymous = 1;
-            }
-            var postData={
-                "orderID":orderId,//动态获取
-                "evaluateContext":text,
-                "isAnonymous":isanonymous,
-                "star":star
-            };
-            //alert(JSON.stringify(postData));
-            var postUrl = HOST+"/commentByVisitor.do";
-            $.ajax({
-            	type:"post",
-            	url:postUrl,
-            	async:true,
-            	data:postData,
-				datatype:"JSON",
-				error:function()
-				{
-				alert("Error:评论失败！");
-				},
-				success:function(data)
-				{ 
-					alert("评论成功！");
-				}
-            });
-         });
-    });
-    </script>
+   
+  
 </div>
 </body>
 </html>

@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,7 @@ public class GuideController {
 	 * @param selfIntro   自我介绍
 	 * @param image  头像
 	 * @param age    年龄
+	 * @param scenic 申请的景区
 	 * @throws IOException
 	 * @throws SQLException 
 	 * @throws NumberFormatException 
@@ -57,13 +59,14 @@ public class GuideController {
 			@RequestParam("language") String language, 
 			@RequestParam("selfIntro") String selfIntro, 
 			@RequestParam("age") String age,
-			@RequestParam("workAge") String workAge) 
+			@RequestParam("workAge") String workAge,
+			@RequestParam("scenic") String scenic) 
 			throws IOException, NumberFormatException, SQLException{
 		
 		CommonResp.SetUtf(resp);
 		
-		int ret = guideService.getGuideAuthentication(phone, name, 
-				sex, language, selfIntro, imgPath, Integer.parseInt(age), workAge);
+		int ret = guideService.getGuideAuthentication(phone, name, sex, 
+				language, selfIntro, imgPath, Integer.parseInt(age), workAge, scenic);
 		
 		PrintWriter writer = resp.getWriter();
 		writer.write(new Gson().toJson(ret));
@@ -151,10 +154,11 @@ public class GuideController {
 		//根据scenicName，查找相应的景区信息
 		ScenicsSpotInfo scenicsSpotInfo = scenicSpotService.SearchScenicInfoByName_Service(scenicName);
 		String scenicID = scenicsSpotInfo.getScenicNo();
-		
-		if(scenicID != null){
-			listResult = guideService.getAvailableGuides(visitTime, Integer.parseInt(visitNum), scenicID);
+
+		if(scenicID == null){
+			scenicID = "null";
 		}
+		listResult = guideService.getAvailableGuides(visitTime, Integer.parseInt(visitNum), scenicID);
 		
 		return listResult;  //若返回值为空，则景区名称有误或者没有符合条件的讲解员
 	}
@@ -194,10 +198,38 @@ public class GuideController {
 		ScenicsSpotInfo scenicsSpotInfo = scenicSpotService.SearchScenicInfoByName_Service(scenicName);
 		String scenicID = scenicsSpotInfo.getScenicNo();
 		
-		if(scenicID != null){
-			listResult = guideService.getAvailableGuidesWithSelector(visitTime, Integer.parseInt(visitNum),
-					scenicID, sex, age, language, level);
+		if(scenicID == null){
+			scenicID = "null";
 		}
+		listResult = guideService.getAvailableGuidesWithSelector(visitTime, Integer.parseInt(visitNum),
+				scenicID, sex, age, language, level);
+		
+		return listResult;
+	}
+	
+	
+	/**
+	 * 用户不输入参观信息，只对讲解员进行筛选查看
+	 * @param resp
+	 * @param sex
+	 * @param age
+	 * @param language
+	 * @param level
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getGuidesWithSelector.do")
+	@ResponseBody
+	public Object getGuidesWithSelector(HttpServletResponse resp,			
+			@RequestParam("sex") String sex,
+			@RequestParam("age") String age,
+			@RequestParam("language") String language,
+			@RequestParam("level") String level) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> listResult = guideService.getGuidesWithSelector(
+				sex, age, language, level);
 		
 		return listResult;
 	}
@@ -244,8 +276,67 @@ public class GuideController {
 		
 		return bool;
 	}
+	
+	/**
+	 * 判断该讲解员是否通过审核
+	 * @param guidePhone
+	 * @return
+	 */
+	@RequestMapping(value = "/isAuthorized.do")
+	@ResponseBody
+	public Object isAuthorized(HttpServletResponse resp,
+			@RequestParam("guidePhone") String guidePhone)throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		boolean bool = guideService.isAuthorized(guidePhone);
+		
+		return bool;
+	}
+	
+	
+	/**
+	 * 讲解员签到
+	 * @param resp
+	 * @param orderId
+	 * @return
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	@RequestMapping(value = "/guideSignIn.do")
+	@ResponseBody
+	public Object guideSignIn(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId)throws IOException, SQLException{
+		
+		CommonResp.SetUtf(resp);
+		
+		boolean bool = guideService.guideSignIn(orderId);
+		
+		return bool;
+	}
+	
+	
+	/**
+	 * 判断讲解员的订单是否签到
+	 * @param resp
+	 * @param orderId
+	 * @return
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	@RequestMapping(value = "/isSignIn.do")
+	@ResponseBody
+	public Object isSignIn(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId)throws IOException, SQLException{
+		
+		CommonResp.SetUtf(resp);
+		
+		boolean bool = guideService.isSignIn(orderId);
+		
+		return bool;
+	}
+	
 }
-
 
 
 

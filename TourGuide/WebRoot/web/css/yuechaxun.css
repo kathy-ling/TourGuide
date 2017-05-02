@@ -57,7 +57,7 @@
 	text-align: center;
 	padding-bottom: 10px;
 }
-.cash_btn > a {
+#cash_btn{
 
     font-size: 15px;
     display: inline-block;

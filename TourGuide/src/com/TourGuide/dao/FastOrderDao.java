@@ -2,6 +2,7 @@ package com.TourGuide.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -77,13 +78,18 @@ public class FastOrderDao {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		String orderID = UUID.randomUUID().toString().replace("-", "");
+		String dateNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		int visitNum = 0;
+		String scenicNo = null;
+		String scenicName = null;
 		
 		//由讲解员手机号获取其所在的景区
 		List<Map<String, Object>> list = guideInfoDao.getDetailGuideInfoByPhone(guidePhone);
-		String scenicNo = (String) list.get(0).get("scenicBelong");
-		String scenicName = (String) scenicSpotDao.getSomeScenicInfoByscenicID(scenicNo).get(0).get("scenicName");
-		
+		if(list.size() != 0){
+			scenicNo = (String) list.get(0).get("scenicBelong");
+			scenicName = (String) scenicSpotDao.getSomeScenicInfoByscenicID(scenicNo).get(0).get("scenicName");
+		}
+	
 		//查询该天该景区的拼单人数和讲解费		
 		IntroFeeAndMaxNum introFeeAndMaxNum = 
 				introFeeAndMaxNumDao.getIntroFeeAndMaxNum(MyDateFormat.form1(new Date()), scenicNo);
@@ -101,9 +107,9 @@ public class FastOrderDao {
 			visitNum = (int) listOrder.get(0).get("visitNum");
 		}else {
 			String sqlString = "insert into t_consistresult (orderID,maxNum,"
-					+ "scenicID,guideFee,guidePhone) values (?,?,?,?,?)";
+					+ "scenicID,guideFee,guidePhone,visitTime) values (?,?,?,?,?,?)";
 			int i = jdbcTemplate.update(sqlString, new Object[]{orderID, 
-					maxNum, scenicNo, guideFee,guidePhone});
+					maxNum, scenicNo, guideFee,guidePhone, dateNow});
 			
 			String sql = "select visitNum from t_consistresult where orderID='"+orderID+"'";
 			List<Map<String, Object>> listNum = jdbcTemplate.queryForList(sql);
@@ -124,7 +130,7 @@ public class FastOrderDao {
 	
 	
 	/**
-	 * 讲解员加单（快捷拼单）
+	 * 讲解员接单（快捷拼单）
 	 * @param consistOrderID  游客的订单编号
 	 * @param orderID   讲解员的订单编号
 	 * @param guidePhone  讲解员的手机号
@@ -161,6 +167,9 @@ public class FastOrderDao {
 					+ "orderState='"+orderState+"',isConsisted='"+isConsisted+"'"
 					+ "where consistOrderID='"+consistOrderID+"' and beScanned=0";
 			int i = jdbcTemplate.update(sqlUpdate);
+			if(i == 0){
+				return ret = -1;
+			}
 			
 			String date = MyDateFormat.form1(new Date());
 			String sqlString = "update t_consistOrder set beScanned=1"
@@ -175,8 +184,6 @@ public class FastOrderDao {
 			
 			if(i!=0 && j!= 0 && k!=0){
 				ret = 1;
-			}else if(i!=0){
-				ret = -1;
 			}
 			
 		} catch (SQLException e) {
@@ -184,7 +191,36 @@ public class FastOrderDao {
 			e.printStackTrace();
 		}	
 
-		return ret;
+		return ret;		
+	}
+	
+	
+	/**
+	 * 讲解员设置结束扫码，完成拼单
+	 * @param guidePhone
+	 * @return 0--结束扫码失败，1--结束扫码成功
+	 */
+	public int finishScan(String guidePhone){
 		
+		int ret = 0;
+		
+		String orderID = null;		
+		
+		String sqlSelect = "select orderID,visitNum from t_consistresult where "
+				+ "guidePhone='"+guidePhone+"' and finishScan=0";
+		List<Map<String, Object>> listOrder = jdbcTemplate.queryForList(sqlSelect);
+		
+		if(listOrder.size() != 0){
+			orderID = (String) listOrder.get(0).get("orderID");
+		}
+		
+		if(orderID != null){
+			String sql = "update t_consistresult set finishScan=1 where orderID='"+orderID+"'";
+			int k = jdbcTemplate.update(sql);
+			if(k != 0){
+				ret = 1;
+			}
+		}
+		return ret;
 	}
 }

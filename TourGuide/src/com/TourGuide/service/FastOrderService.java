@@ -54,4 +54,13 @@ public class FastOrderService {
 		return fastOrderDao.takeFastOrder(consistOrderID, guidePhone, num);
 	}
 
+	
+	/**
+	 * 讲解员设置结束扫码，完成拼单
+	 * @param guidePhone
+	 * @return 0--结束扫码失败，1--结束扫码成功
+	 */
+	public int finishScan(String guidePhone){
+		return fastOrderDao.finishScan(guidePhone);
+	}
 }

@@ -5,7 +5,7 @@
 		<meta charset="UTF-8" />
 		<title>预约讲解员</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link rel="stylesheet" href="css/jquery.mobile-1.4.5.css">   
+		<link rel="stylesheet" href="css/jquery.mobile-1.4.5.css"> 
 		<link rel="stylesheet" type="text/css" href="css/GuideInfo.css">
     	<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
     	<link rel="stylesheet" type="text/css" href="css/mystyle.css">
@@ -17,7 +17,7 @@
     	<script type="text/javascript" src="js/nativedroid2.js"></script>  
 		<script type="text/javascript" src="js/jquery.raty.min.js"></script>
 		<script type="text/javascript" src="js/jquery.cookie.js"></script>
-		<script type="text/javascript" src="js/OrderGuide.js"></script>
+		<script type="text/javascript" src="js/orderGuide.js"></script>
 		<style>
 			#releaseDiv{
 				margin-top: 1em;
@@ -25,6 +25,15 @@
 			#chosePanel{
 				margin-top: 1em;
 			}
+			.shuli{ 
+				margin:0 auto;
+				width:25px;
+				line-height:24px;
+				border:1px solid #333;
+				float: right;
+				height: 100%;
+				text-align: center;
+			} 
 		</style>
 	</head>
 
@@ -32,6 +41,14 @@
 	<body>		
 		<div data-role="page" id="OrderguidePage">
 			
+		<div data-role="header"  id="header" data-position="fixed" class="header">
+        <div data-role="navbar">
+           <ul>
+               <li><a id="panel1Btn" href="#">选择讲解员</a></li>
+               <li><a id="panel2Btn" href="#">发布订单</a></li>
+           </ul>
+       </div>
+   </div>
 			<footer data-role="footer" data-position="fixed">
         		<div data-role="navbar">
 		            <ul>
@@ -42,13 +59,50 @@
 		            </ul>
         		</div>
    			</footer>
-			
+		
 			<!--筛选条件模块-->
 			<div data-role="panel" data-display="overlay" id="myPanel">
 				<h2>筛选条件</h2>
 				<form action="" method="">
 					<table>
 						<tbody>
+							<tr>
+								<td>参观日期：</td>
+								<td>
+									<select id="chooseDate" placeholder="日期" onchange='showVisitTime("#chooseDate","orderDatetime123")'>
+										<option value="" selected="selected">请选择日期</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>参观时间：</td>
+								<td>
+									<select id="orderDatetime123" name="datetime" placeholder="时间" onchange="checkDateSelect('#chooseDate','#orderDatetime123')">
+										<option selected="selected" value="请选择时间">请选择时间</option>
+										<!--<option value="8:00">8:00</option>
+										<option value="8:30">8:30</option>
+										<option value="9:00">9:00</option>
+										<option value="9:30">9:30</option>
+										<option value="10:00">10:00</option>
+										<option value="10:30">10:30</option>
+										<option>11:00</option>
+										<option>11:30</option>
+										<option>12:00</option>
+										<option>12:30</option>
+										<option>13:00</option>
+										<option>13:30</option>
+										<option>14:00</option>
+										<option>14:30</option>
+										<option>15:00</option>
+										<option>15:30</option>
+										<option>16:00</option>-->
+										<!--<option>16:30</option>
+										<option>17:00</option>
+										<option>17:30</option>
+										<option>18:00</option>-->
+									</select>
+								</td>
+							</tr>
 							<tr>
 								<td>性别:</td>
 								<td>
@@ -97,15 +151,6 @@
 				</form>
 			</div>
 
-
-			<div data-role="header" id="header" data-position="fixed" class="header">
-				<ul data-role="nd2tabs" data-swipe="true">
-					<li data-tab="choose" data-tab-active="true">选择讲解员</li>
-					<li data-tab="order" onclick="isRegistOrder()">发布订单</li>
-				</ul>
-			</div>
-
-
 			
 			<div data-role="main" class="ui-content">
 				<!--选择讲解员页面-->
@@ -113,51 +158,32 @@
 					<form action="chooseGuide_submit" method="get" accept-charset="utf-8">
 						<div class="ui-field-contain">
 							
-							<label id="ScenicName"  style="text-align: center; font-size: larger;">景区名称</label>
+							<label id="ScenicName"  style="text-align: center; font-size: larger;"></label>
 							<div id="chooseScenicNameDiv">								
 								<select id="chooseScenicName" name="scenicName" onchange="getAvailableGuides1()">
 									<option value="" selected="selected">请选择景区</option>
 								</select>
-							</div>
-												
-							<select id="chooseDate" placeholder="日期" onchange="getAvailableGuides2()">
-								<option value="" selected="selected">请选择日期</option>
-							</select>
+							</div>																		
 							
-							<select id="orderDatetime123" name="datetime" value="" placeholder="时间" onchange="getAvailableGuides3()">
-								<option selected="selected" value="请选择时间">请选择时间</option>
-								<option value="8:00">8:00</option>
-								<option value="8:30">8:30</option>
-								<option value="9:00">9:00</option>
-								<option value="9:30">9:30</option>
-								<option value="10:00">10:00</option>
-								<option value="10:30">10:30</option>
-								<option>11:00</option>
-								<option>11:30</option>
-								<option>12:00</option>
-								<option>12:30</option>
-								<option>13:00</option>
-								<option>13:30</option>
-								<option>14:00</option>
-								<option>14:30</option>
-								<option>15:00</option>
-								<option>15:30</option>
-								<option>16:00</option>
-								<option>16:30</option>
-								<option>17:00</option>
-								<option>17:30</option>
-								<option>18:00</option>
-							</select>
+							<!--<input type="text" id="chooseVisitNum" name="VisitNum" value="" placeholder="人数" onblur="getAvailableGuides4()">-->
 							
-							<input type="text" id="chooseVisitNum" name="VisitNum" value="" placeholder="人数" onblur="getAvailableGuides()">
-							
-							<a href="#myPanel" class="ui-btn ui-btn-inline">筛选</a>
+							<a href="" class="ui-btn ui-btn-inline" id="select" onclick="select()">筛选</a>
 							
 						</div>
 					</form>
-					<ul data-role="listview" data-inset="true" id="order_guide_ul">
-						<li id="order_guide_li">
-						</li>
+					
+					<!--讲解员列表-->
+					<ul data-role="listview" data-inset="true" id="order_guide_ul" data-icon="false">
+						<!--<li id="order_guide_li" data-icon="false">						
+						</li>-->	
+						<!--<li class="liStyle" data-icon="false">
+							<div class="shuli" onclick="order()">
+								<a>立即预约</a>
+							</div>
+							<a class="aStyle" >
+								<img src="img/1.jpg"/>									
+							</a>							
+						</li>-->
 					</ul>
 				</div>
 				
@@ -167,7 +193,7 @@
 					<form action="orderGuide_submit" method="get" accept-charset="utf-8">
 						<div>
 						
-							<label id="ScenicName1"  style="text-align: center; font-size: larger;">景区名称</label>
+							<label id="ScenicName1"  style="text-align: center; font-size: larger;"></label>
 							<div id="chooseScenicNameDiv1">								
 								<select id="chooseScenicName1" name="scenicName">
 									<option value="" selected="selected">请选择景区</option>
@@ -175,14 +201,14 @@
 							</div>
 						
 							<label for="orderDate" class="ui-hidden-accessible">日期</label>
-							<select id="orderDate" placeholder="日期">
+							<select id="orderDate" placeholder="日期" onchange='showVisitTime("#orderDate","orderDatetime")'>
 								<option value="" selected="selected">请选择日期</option>
 							</select>
 							
 							<label for="orderDatetime" class="ui-hidden-accessible">时间</label>						
-							<select id="orderDatetime" name="datetime" value="" placeholder="时间">
-								<option>请选择时间</option>
-								<option>8:00</option>
+							<select id="orderDatetime" name="datetime" value="" placeholder="时间" onchange="checkDateSelect('#orderDate','#orderDatetime')">
+								<option selected="selected" value="请选择时间">请选择时间</option>
+								<!--<option>8:00</option>
 								<option>8:30</option>
 								<option>9:00</option>
 								<option>9:30</option>
@@ -202,11 +228,10 @@
 								<option>16:30</option>
 								<option>17:00</option>
 								<option>17:30</option>
-								<option>18:00</option>
+								<option>18:00</option>-->
 							</select>
-							
-							<label for="visitorCount" class="ui-hidden-accessible">游客人数</label>
-							<input type="number" id="visitorCount" name="visitorCount" value="" placeholder="参观人数">
+													
+							<input type="number" id="visitorCount" name="visitorCount" placeholder="参观人数" onblur="checkNum()">
 
 							<table width="100%">
 								<tbody>
@@ -252,13 +277,13 @@
 							<input type="radio" id="notorderTicketRadio" class="notorderTicketRadio" name="orderTicket" value="0" class="" /> -->
 							
 							<input id="orderM" type="number" placeholder="预期价格" />
-							<label for="visitorPhone" class="ui-hidden-accessible">联系电话</label>
-							<input type="tel" id="visitorPhone" name="visitorPhone" value="" placeholder="联系电话">
-							<label for="visitorName" class="ui-hidden-accessible">姓名</label>
+							
+							<input type="tel" id="visitorPhone" name="visitorPhone" onchange="checkPhone()" placeholder="联系电话">
+							
 							<input type="text" id="visitorName" name="visitorName" value="" placeholder="您的姓名">
 							<label for="otherRequest">其他需求</label>
 							<textarea name="otherRequest" id="otherRequest"></textarea>
-							<input id="submitOrderForm" data-theme="b" type="button" name="submit" value="提交订单">
+							<input id="submitOrderForm" data-theme="b" type="button" name="submit" value="提交订单" onclick="checkOrderForm()">
 						</div>
 					</form>
 				</div>

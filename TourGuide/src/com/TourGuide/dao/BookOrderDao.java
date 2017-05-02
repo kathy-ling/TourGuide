@@ -117,7 +117,7 @@ public class BookOrderDao {
 				conn.setAutoCommit(false);
 				
 				String sqlString = "insert into t_bookorder (bookOrderID,produceTime,visitTime,"
-						+ "visitorPhone,visitNum,scenicID,guideFee,guidePhone,totalGuideFee,orderState,contact,language) "
+						+ "visitorPhone,visitNum,scenicID,guideFee,totalGuideFee,guidePhone,orderState,contact,language) "
 						+ "values (?,?,?,?,?,?,?,?,?,?,?,?)";
 				int i = jdbcTemplate.update(sqlString, new Object[]{orderID,produceTime,visitTime,
 						visitorPhone,visitNum, scenicID, guideFee, guideFee, guidePhone, 
@@ -130,7 +130,18 @@ public class BookOrderDao {
 				
 				DataSource dataSource1 =jdbcTemplate.getDataSource();
 				int hour = 0;
-				try {
+				try {			
+					CallableStatement cst = conn.prepareCall("call getMaxHourbyScenicID(?)");
+					cst.setString(1, scenicID);
+					ResultSet rst=cst.executeQuery();
+					
+					while (rst.next()) {
+						hour = Integer.parseInt(rst.getString(1));
+					}							
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} 
+				/*try {
 					Connection conn1 = dataSource.getConnection();
 					CallableStatement cst=conn.prepareCall("call getMaxHourbyScenicID(?)");
 					cst.setString(1, scenicID);
@@ -142,7 +153,7 @@ public class BookOrderDao {
 					conn.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
-				} 		
+				} */		
 				
 				String sqlInsert = "insert into t_guideBeOrdered "
 						+ "(orderId,guidePhone,visitTime,timeFrom,timeTo) "
@@ -407,7 +418,7 @@ public class BookOrderDao {
 			
 			while (rst.next()) {
 				Map<String , Object> map = new HashMap<String, Object>();
-				map.put("bookOrderID", rst.getString(1));
+				map.put("orderID", rst.getString(1));
 				map.put("visitTime", rst.getString(2));
 				map.put("orderState", rst.getString(3));
 				map.put("visitNum", rst.getInt(4));
@@ -443,7 +454,7 @@ public class BookOrderDao {
 			
 			while (rst.next()) {
 				Map<String , Object> map = new HashMap<String, Object>();
-				map.put("bookOrderID", rst.getString(1));
+				map.put("orderID", rst.getString(1));
 				map.put("visitTime", rst.getString(2));
 				map.put("orderState", rst.getString(3));
 				map.put("visitNum", rst.getInt(4));
@@ -472,6 +483,50 @@ public class BookOrderDao {
 	}
 
 
+	/**
+	 * 导游指定集合地点
+	 * @param orderId 预约订单的订单号
+	 * @param longitude  经度
+	 * @param latitude  纬度
+	 * @return
+	 */
+	public int uploadBookLocation(String orderId, String longitude, String latitude){
+		
+		int ret = 0;
+		
+		String update = "UPDATE t_bookorder SET longitude='"+longitude+"',"
+				+ "latitude='"+latitude+"' WHERE bookOrderID='"+orderId+"'";
+		int i = jdbcTemplate.update(update);
+		
+		if(i != 0){
+			ret = 1;
+		}
+		
+		return ret;
+	}
+	
+	
+	/**
+	 * 讲解员完成预约订单的讲解
+	 * @param orderId
+	 * @return
+	 */
+	public int finishOrderByGuide(String orderId){
+		
+		int ret = 0;
+		
+		String update = "UPDATE t_bookorder SET endTime=NOW(),orderState='待评价' WHERE bookOrderID='"+orderId+"'";
+		int i = jdbcTemplate.update(update);
+		
+		if(i != 0){
+			ret = 1;
+		}
+		
+		return ret;
+	}
+	
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * 得到订单信息并进行分页获取
 	 * @param currentPage

@@ -87,3 +87,41 @@ body{
 	display: block;
 }
 
+.headersearch{
+	display: inline-block;
+	width: 100%;
+	height: 41px;
+}
+
+.searchinput{
+	width: 74%;
+	display: block;
+	float: left;
+	margin: 5px;
+}
+.button1{
+	width: 25%;
+	height: 30px;
+	border: 1px solid white;
+	margin:1px;
+	font-size: 15px;
+	line-height: 3px;
+}
+
+#searchSubmit{
+	width: 20%;
+	height: 30px;
+	margin-right:1%;
+	margin-top:5px;
+	margin-left:5px;
+	font-size: 15px;
+	line-height: 3px;
+	color: white;
+	border: 1px solid white;
+}
+
+#sceniclist{
+	margin-left: 5px;
+	display: block; 
+	margin-top: 10px;
+}

@@ -4,23 +4,30 @@
 		<meta charset="UTF-8">		
 		<title>从可拼单列表中进行拼单</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-        <!--<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
-        <link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
-        <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
-   	    <script type="text/javascript" src="js/jquery.mobile-1.4.5.js"></script>
-   	    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
-   	    <script  type="text/javascript" src="js/yxMobileSlider.js"></script>
-   	    <script type="text/javascript" src="js/nativedroid2.js"></script>-->
-   	    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
+        <link rel="stylesheet" type="text/css" href="css/pindan.css">
+	    <link rel="stylesheet" href="css/jtsage-datebox-4.1.0.jqm.min.css">
+	    <link rel="stylesheet" type="text/css" href="css/mobiscroll.custom-2.5.0.min.css"> 
+	    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css">
+		<link rel="stylesheet" type="text/css" href="css/mystyle.css">
+		<link rel="stylesheet" type="text/css" href="css/cityPicker.css"/>
 		<link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
-		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+	    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+		<script  type="text/javascript" src="js/yxMobileSlider.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+		<script type="text/javascript" src="js/nativedroid2.js"></script>
+	    <script type="text/javascript" src="js/jquery.cookie.js"></script>
    	    <script type="text/javascript" src="js/ConsistOrderList.js"></script>
   	    <style>
   	    	#page{
   	    		position: absolute;
 				right: 1em;			
 				margin-top: 2em;				
+  	    	}
+  	    	#mainInfo{		
+				border-width: 0;
+				overflow: visible;
+				overflow-x: hidden;
+				padding: 1em;
   	    	}
   	    
   	    </style>
@@ -38,30 +45,42 @@
 		            </ul>
 		        </div>
 		    </footer>
-		   
-		    <!--<div data-role="main" class="ui-content">
-		    	<table>
-					<tbody>
-						<form action="submit" method="get" accept-charset="utf-8">			
-							<tr>
-								<td><label id="num">浏览人数：</label></td>
-								<td><input type="text" id="visitNum" onblur="OrderShow()"></td>
-							</tr>
-							<tr>
-								<td><label for="name">联系方式:</label></td>
-								<td><input type="text" id="contact" onblur="OrderShow()"/></td>
-							</tr>
-						</form>
-					</tbody>
-				</table>
-		    </div>-->
-   
-			<form action="pindan_submit" id="" method="get" accept-charset="utf-8">                               
-                <label id="num" class="ui-hidden-accessible">浏览人数</label>
-                <input type="text" id="visitorNum" placeholder="浏览人数" onblur="OrderShow()"/>
+		   		 
+		    
+		    <div data-role="main" id="mainInfo">
+		    	<label id="num" class="ui-hidden-accessible">浏览人数</label>
+                <input type="text" id="visitorNum" placeholder="浏览人数" onchange="checkNum()"/>
              
-                <input type="text" id="contact" placeholder="游览人联系方式" onblur="OrderShow()"/>
-               <!-- <legend>需要为您代购门票吗？</legend>
+                <input type="text" id="contact" placeholder="游览人联系方式" onchange="checkPhone()"/>
+		    </div>
+   			            
+            <div>
+	            <ul id="orderInfo" data-role="listview" data-icon="false">
+	                <li>
+	                	<h3>订单信息</h3>
+	                	<p>联系人手机号：<span  id="list_pindan_guide_phone"></span></p>	                		                	
+	                	<p>浏览人数：<span  id="list_pindan_guide_num"></span></p>
+	                	<p>讲解费：<span  id="list_pindan_guide_money"></span></p>
+	                	<p>合计：<span  id="list_pindan_total_money"></span></p>
+	                	<!--<p>
+	                		<span>联系人手机号：</span>
+	                		<span  id="list_pindan_guide_phone"></span><br/>
+	                    	浏览人数：<span  id="list_pindan_guide_num"></span><br/>
+	                       	 讲解费：<span  id="list_pindan_guide_money"></span><br/>
+	             			 合计：<span  id="list_pindan_total_money"></span><br/>
+	                   </p>	              -->
+	                </li>
+	            </ul>
+            </div>
+            
+            <div class="paybtn">
+            	<button class="ui-btn" style="background-color: #4CD964;" onclick="consistOrder()">去支付</button>
+            </div>
+		</div>
+		
+	</body>
+</html>
+<!-- <legend>需要为您代购门票吗？</legend>
                 <label for="orderTicketRadio" value ="1">是，请为我代购门票</label>
                 <input type="radio" id="orderTicketRadio" name="pindan_orderTicket" value="1" class="" />
                 <div data-role="collapsible" id="orderTicketPanel" data-collapsed="false" hidden="true">
@@ -74,27 +93,3 @@
                 </div>
                 <label for="notorderTicketRadio" value="0">否，不用了，谢谢</label>
                 <input type="radio" id="notorderTicketRadio" name="pindan_orderTicket" value="0" class="" />-->
-            </form>
-            
-            <div id="order">
-	            <ul id="orderInfo" data-role="listview" data-icon="false">
-	                <li>
-	                	<h3>订单信息</h3>
-	                		
-	                	<p style="font-size: 14px;">
-	                		联系人手机号：<span  id="list_pindan_guide_phone"></span><br/>
-	                    	浏览人数：<span  id="list_pindan_guide_num"></span><br/>
-	                       	 讲解费：<span  id="list_pindan_guide_money"></span><br/>
-	             			 合计：<span  id="list_pindan_total_money"></span><br/>
-	                   </p>	              
-	                </li>
-	            </ul>
-            </div>
-            
-            <div class="paybtn">
-            	<button class="ui-btn" style="background-color: #4CD964;" onclick="list_consistOrder()">去支付</button>
-            </div>
-		</div>
-		
-	</body>
-</html>

@@ -88,6 +88,17 @@ public class VisitorService {
 	}
 	
 	/**
+	 * 判断游客是否被拉黑
+	 * @param phone
+	 * @return  false --没有拉黑，true---拉黑
+	 */
+	public boolean isBlackened(String phone){
+		return visitorDao.isBlackened(phone);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
 	 * 分页得到未禁用游客的基本信息
 	 * @param i
 	 * @param j

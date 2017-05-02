@@ -20,6 +20,7 @@ import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
 import com.TourGuide.common.DateConvert;
+import com.TourGuide.common.MyDateFormat;
 import com.TourGuide.model.GuideInfo;
 import com.TourGuide.model.GuideOtherInfo;
 @Repository
@@ -28,6 +29,8 @@ public class GuideDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
+	@Autowired
+	private ScenicSpotDao scenicSpotDao;
 	
 	/**
 	 * 讲解员提交相应的信息，申请认证
@@ -42,10 +45,17 @@ public class GuideDao {
 	 * @throws SQLException 
 	 */
 	public int getGuideAuthentication(String phone, String name,String sex, 
-			String language, String selfIntro, String image, int age, String workAge) throws SQLException{
+			String language, String selfIntro, String image, 
+			int age, String workAge, String scenic) throws SQLException{
 		
 		int retValue = 0;
+		String scenicId = null;
+		String dayNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		final GuideInfo guideInfo = new GuideInfo();
+		List<Map<String, Object>> list = scenicSpotDao.getScenicByName(scenic);
+		if(list.size() != 0){
+			scenicId = (String) list.get(0).get("scenicNo");
+		}
 		
 		//查询该账号是否被注册了
 		String sqlSearch = "select phone from t_guideinfo where phone='"+phone+"'";	
@@ -76,18 +86,22 @@ public class GuideDao {
 					language, selfIntro, image, age});		
 			
 			//向t_guideotherinfo插入其他的信息
-			String sqlString2 = "insert into t_guideotherinfo (phone,workAge,authorized,disabled) "
-					+ "values (?,?,?,?)";
-			int j = jdbcTemplate.update(sqlString2, new Object[]{phone, workAge, 0, 0});
+			String sqlString2 = "insert into t_guideotherinfo (phone,workAge,scenicBelong,authorized,disabled) "
+					+ "values (?,?,?,?,?)";
+			int j = jdbcTemplate.update(sqlString2, new Object[]{phone, workAge, scenicId, 0, 0});
 			
 			//向t_guideworkday中插入信息
 			String sqlString3 = "insert into t_guideworkday (guidePhone) values (?)";
-			int k = jdbcTemplate.update(sqlString2, new Object[]{phone});
+			int k = jdbcTemplate.update(sqlString3, new Object[]{phone});
+			
+			String sqlApply = "insert into t_affiliation (guidePhone,scenicID,applyDate,state) "
+					+ "values (?,?,?,?)";
+			int p = jdbcTemplate.update(sqlApply, new Object[]{phone,scenicId,dayNow,1});
 			
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
 			
-			if (i!=0 && j!=0 && k!=0) {
+			if (i!=0 && j!=0 && k!=0 && p != 0) {
 				retValue = 1;
 			}
 			
@@ -142,9 +156,9 @@ public class GuideDao {
 	
 	
 	/**
-	 * 查询可被预约的讲解员,查看推荐
+	 * 查询可被预约的讲解员,查看推荐.若景区为空，则筛选所有景区的空闲讲解员
 	 * 查询条件：级别、所属景区、讲解员是否请假、单次最大带团人数、去除时间冲突的讲解员信息
-	 * scenicID必选，不为空；visitNum可不选，不选置为0；
+	 * scenicID可不选，不为空；visitTime一定存在；visitNum可不选，不选置为0；
 	 * @param visitTime  游客的参观日期
 	 * @param visitNum  参观的人数
 	 * @param scenicID  景区编号
@@ -155,36 +169,57 @@ public class GuideDao {
 			int visitNum, String scenicID){
 		
 		String selectDay = null;
-    	String dayNow=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    	String dayNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    	String timeNow = MyDateFormat.form(new Date());
     	
-    	if(!visitTime.equals("null")){
-    		String[] visitDate = visitTime.split(" ");
-
-        	//计算参观日期与今日之间相隔的天数
-        	int day = DateConvert.getDaysBetweenDate(visitDate[0], dayNow);   		
-    		switch (day) {
-    		
-    		case 0:
-    			selectDay = "one";
-    			break;
-    		case 1:
-    			selectDay = "two";			
-    			break;
-    		case 2:
-    			selectDay = "three";
-    			break;
-    		case 3:
-    			selectDay = "four";
-    			break;
-    		default:
-    			break;
-    		}
-    	}
+    	if (visitTime.equals("null")) {
+    		visitTime = DateConvert.addHourToTime(timeNow, 1);
+		}    	
+		
+    	//计算参观日期与今日之间相隔的天数
+    	String[] visitDate = visitTime.split(" ");
+    	int day = DateConvert.getDaysBetweenDate(visitDate[0], dayNow);   		
+		switch (day) {
+		
+		case 0:
+			selectDay = "one";
+			break;
+		case 1:
+			selectDay = "two";			
+			break;
+		case 2:
+			selectDay = "three";
+			break;
+		case 3:
+			selectDay = "four";
+			break;
+		default:
+			break;
+		}   	
 		
 		List<Map<String , Object>> listResult = new ArrayList<>(); 
-		List<Map<String , Object>> list = null;
+		List<Map<String , Object>> list = null;		
 		
-		if(!visitTime.equals("null") && visitNum != 0){
+		//若景区为空，则筛选visitTime时所有景区的空闲讲解员；否则，筛选特定景区的visitTime时的空闲讲解员
+		if(scenicID.equals("null")){
+			String sqlString = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
+					+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes,t_scenicspotinfo.scenicName from t_guideinfo,"
+					+ "t_guideotherinfo,t_scenicspotinfo where t_guideinfo.phone = t_guideotherinfo.phone "
+					+ "and guideLevel >= 5 AND t_guideotherinfo.scenicBelong=t_scenicspotinfo.scenicNo and t_guideotherinfo.phone in "
+					+ "(select guidePhone from t_guideworkday where "+selectDay+"=1)"
+					+ "ORDER BY guideLevel desc,historyTimes desc";
+			list = jdbcTemplate.queryForList(sqlString);
+		}else {
+			String sqlSelect = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
+					+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes,t_scenicspotinfo.scenicName from t_guideinfo,t_guideotherinfo,t_scenicspotinfo "
+					+ "where t_guideinfo.phone = t_guideotherinfo.phone and scenicBelong = '"+scenicID+"' "
+					+ "and guideLevel >= 5 AND t_guideotherinfo.scenicBelong=t_scenicspotinfo.scenicNo and t_guideotherinfo.phone in "
+					+ "(select guidePhone from t_guideworkday where "+selectDay+"=1)"
+					+ "ORDER BY guideLevel desc,historyTimes desc";
+			list = jdbcTemplate.queryForList(sqlSelect);
+		}
+		
+		/*if(!visitTime.equals("null") && visitNum != 0){
 			String sqlString = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
 					+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes from t_guideinfo,t_guideotherinfo "
 					+ "where t_guideinfo.phone = t_guideotherinfo.phone and singleMax > '"+visitNum+"' "
@@ -200,7 +235,7 @@ public class GuideDao {
 					+ "and guideLevel >= 5 ORDER BY guideLevel desc,historyTimes desc";
 			listResult = jdbcTemplate.queryForList(sqlSelect);
 			return listResult;
-		}
+		}*/
 
 		for(int i=0; i<list.size(); i++){
 			listResult.add(list.get(i));
@@ -310,6 +345,61 @@ public class GuideDao {
 	}
 	
 	
+	/**
+	 * 用户不输入参观信息，只对讲解员进行筛选查看
+	 * @param sex
+	 * @param age
+	 * @param languange
+	 * @param level
+	 * @return
+	 */
+	public List<Map<String, Object>> getGuidesWithSelector(String sex, 
+			String age, String language, String level){
+		
+		List<Map<String , Object>> listResult = new ArrayList<>(); 
+		//查询所有的讲解员
+		String sqlSelectAll = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
+				+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes from t_guideinfo,t_guideotherinfo "
+				+ "where t_guideinfo.phone = t_guideotherinfo.phone ORDER BY guideLevel desc,historyTimes desc";	
+		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlSelectAll);
+		
+		for(int i=0; i<list.size(); i++){
+			listResult.add(list.get(i));
+		}
+		
+		for(int i=0; i<list.size(); i++){
+			
+			String sexString = (String)list.get(i).get("sex");
+			int guideAge = (int)list.get(i).get("age");
+			String languageString = (String)list.get(i).get("language");
+			String levelString = (String)list.get(i).get("guideLevel");
+			
+			if(!sex.equals("null") && !sex.equals(sexString)){
+				listResult.remove(list.get(i));
+			}
+			
+			if(!age.equals("null")){
+				
+				String[] ages = age.split("-");
+				int age1 = Integer.parseInt(ages[0]);
+				int age2 = Integer.parseInt(ages[1]);
+				
+				if(guideAge < age1 || guideAge > age2){
+					listResult.remove(list.get(i));
+				}
+			}			
+			
+			if(!language.equals("null") && !language.equals(languageString)){				
+				listResult.remove(list.get(i));
+			}
+			
+			if(!level.equals("null") && !level.equals(levelString)){
+				listResult.remove(list.get(i));
+			}
+		}
+		
+		return listResult;
+	}
 	
 	/**
 	 * 根据手机号，查询导游的详细信息
@@ -352,6 +442,105 @@ public class GuideDao {
 		} 		
 		
 		return list;
+	}
+	
+	
+	/**
+	 * 判断该讲解员是否通过审核
+	 * @param guidePhone
+	 * @return true--通过审核，false--未审核
+	 */
+	public boolean isAuthorized(String guidePhone){
+		
+		boolean bool = false;		
+		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call isAuthorized(?)");
+			cst.setString(1, guidePhone);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				int authorized = rst.getInt(1);
+				if(authorized == 1){
+					bool = true;
+				}				
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+		
+		return bool;
+	}
+	
+	
+	/**
+	 * 讲解员签到
+	 * @param orderId
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean guideSignIn(String orderId) throws SQLException{
+		
+		boolean bool = false;
+		
+		DataSource dataSource = jdbcTemplate.getDataSource();
+		Connection  conn = null;
+		try{
+			conn = dataSource.getConnection();
+			conn.setAutoCommit(false);
+			
+			String sqlBook = "update t_bookorder set signIn=1,signInTime=NOW() where bookOrderID='"+orderId+"'";
+			int i = jdbcTemplate.update(sqlBook);
+			
+			String sqlConsist = "update t_consistorder set signIn=1,signInTime=NOW() where orderID='"+orderId+"'";
+			int j = jdbcTemplate.update(sqlConsist);
+			
+			conn.commit();//提交JDBC事务 
+			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			
+			if(i!=0 || j!=0){
+				bool = true;
+			}
+			
+		} catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		}
+		
+		return bool;
+	}
+	
+	
+	/**
+	 * 判断讲解员的订单是否签到
+	 * @param orderId
+	 * @return
+	 */
+	public boolean isSignIn(String orderId){
+		
+		boolean bool = false;
+		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst = conn.prepareCall("call isSignIn(?)");
+			cst.setString(1, orderId);
+			ResultSet rst = cst.executeQuery();
+			
+			while (rst.next()) {
+				int signIn = rst.getInt(1);
+				if(signIn == 1){
+					bool = true;
+				}				
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return bool;
 	}
 	
 	/**

@@ -283,8 +283,51 @@ public class BookOrderController {
 	
 		CommonResp.SetUtf(resp);
 		
-		List<Map<String , Object>> list = bookOrderService.getFinishedBookedOrder(guidePhone) ;
+		List<Map<String , Object>> list = bookOrderService.getFinishedBookedOrder(guidePhone);
 		
 		return list;
 	}
+	
+	
+	/**
+	 * 导游指定集合地点
+	 * @param resp
+	 * @param orderId 预约订单的订单号
+	 * @param longitude  经度
+	 * @param latitude  纬度
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/uploadBookLocation.do")
+	@ResponseBody
+	public Object uploadBookLocation(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId,
+			@RequestParam("longitude") String longitude,
+			@RequestParam("latitude") String latitude) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		int ret = bookOrderService.uploadBookLocation(orderId, longitude, latitude);
+		
+		return ret;
+	}
+	
+	
+	/**
+	 * 讲解员完成预约订单的讲解
+	 * @param orderId
+	 * @return
+	 */
+	@RequestMapping(value = "/finishOrderByGuide.do")
+	@ResponseBody
+	public Object finishOrderByGuide(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId)throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		int ret = bookOrderService.finishOrderByGuide(orderId);
+		
+		return ret;
+	}
+	
 }

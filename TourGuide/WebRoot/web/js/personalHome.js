@@ -15,40 +15,30 @@ $(function($) {
 	});
 
 	$(".orderFormLink").click(function(event) {
-		URL = "orderFormList.html?hide=" + $(this).children('span').html();
-		$.mobile.changePage(URL);
+		/*URL = "orderFormList.html?hide=" + $(this).children('span').html();
+		$.mobile.changePage(URL);*/
+		window.location.href = "orderFormList.html?hide=" + $(this).children('span').html();
 	});
 	
-	var Phone = vistPhone;
-	setperinfo(Phone);
+	setperinfo();
+	vistPhone='18191762572';
 	
-//	$("#signINbtn").click(function() {
-//		signIN(Phone);
-//	});
+	var authorized = false;
+	isAuthorized();
 });
 
-
-function weiXin()
-{
-	var Phone = vistPhone;
-	window.location.href = "QRcodeScan.html?guidePhone="+Phone;		
-}
-
-
 function getAllOrders(){
-//	var iphone = GetUrlem("phone");
-//	alert("clicked" + iphone);
 	window.location.href = "orderFormList.html";
 }
 
-function setperinfo(Phone) {
+function setperinfo() {
 	var url = HOST + "/getVisitorInfoWithPhone.do";
 	$.ajax({
 		type: "post",
 		url: url,
 		async: true,
 		data: {
-			phone: Phone
+			phone: vistPhone
 		},
 		datatype: "JSON",
 		error: function() {
@@ -67,10 +57,54 @@ function setperinfo(Phone) {
 				}
 			}
 		});
+}
+
+
+//判断导游是否通过审核
+function isAuthorized(){
+	var url = HOST + "/isAuthorized.do";
+	$.ajax({
+		type: "post",
+		url: url,
+		async: true,
+		data: {guidePhone: vistPhone},
+		datatype: "JSON",
+		error: function() {
+			alert("Request error!");
+		},
+		success: function(data) {
+			if(data == true){
+				authorized = true;
+			}else{
+				authorized = false;
+			}
+		}
+	});
+}
+
+//点击【抢单】
+function takeOrder(){
+	
+	if(authorized){
+		window.location.href = "takeOrder.html";
+	}else{
+		alert("您暂未通过审核，不能使用此功能!");
 	}
+}
+
+//点击【扫一扫】
+function weiXin(){
+	
+	if(authorized){
+		var Phone = vistPhone;
+		window.location.href = "QRcodeScan.html?guidePhone="+Phone;
+	}else{
+		alert("您暂未通过审核，不能使用此功能!");
+	}			
+}
 
 //签到
-function signIN(Phone) {
+/*function signIN(Phone) {
 	var URL = HOST + "guideCheckIn.do?phone=" + Phone;
 	$.ajax({
 		type: "get",
@@ -87,5 +121,4 @@ function signIN(Phone) {
 			}
 		}
 	});
-}
-
+}*/

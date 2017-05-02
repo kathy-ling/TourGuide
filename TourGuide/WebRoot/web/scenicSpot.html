@@ -12,18 +12,27 @@
     <script type="text/javascript" src="js/jquery.cookie.js"></script>
     <script type="text/javascript" src="js/scenicSpot.js"></script>
 </head>
+
 <body>
 <div data-role="page" id="scenicSpotPage">
+	
 	<footer data-role="footer" data-position="fixed">
-	        <div data-role="navbar" id="bottom_navigation">
-	            
-	        </div>
-   		</footer>
+        <div data-role="navbar">
+            <ul>
+            <li><a href="index.html" target="_top" id="" class="navbar0" >首页</a></li>
+            <li><a href="pindan.html" target="_top" id="" class="navbar0" >拼讲解员</a></li>
+            <li><a href="orderGuide.html" target="_top" id="" class="navbar0">预约讲解员</a></li>           
+            <li><a href="" target="_top" id="" class="navbar0" onclick="isRegist()">个人中心</a></li>           
+            </ul>
+        </div>
+    </footer>
+    
     <div data-role="header" id="header" class="header">
-    	<a href="#" class="ui-btn ui-corner-all ui-icon-carat-l ui-btn-icon-notext" data-rel="back">返回</a>
-        <a href="#" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-notext">分享</a>
+    	<!--<a href="#" class="ui-btn ui-corner-all ui-icon-carat-l ui-btn-icon-notext" data-rel="back">返回</a>
+        <a href="#" class="ui-btn ui-corner-all ui-icon-action ui-btn-icon-notext">分享</a>-->
          <img class="image" src="" alt="" id="scenic_img">
     </div>
+    
     <div data-role="main" class="ui-content">
         <div class="order-panle">
             <h2 class="title" id="scenic_title">景区名称</h2>
@@ -79,15 +88,16 @@
             <ul id="sideBar" class="sideBar">
                  <li><a calss="left-button sidebtn" target="_top" id="orderGuideBtn"  href="orderGuide.html">预约讲解员</a></li>
                  <li><a calss="right-button sidebtn" target="_top" id="pinGuideBtn"  href="pindan.html">拼讲解员</a></li>
+                 <li><a calss="left-button sidebtn" target="_top" id="fastOrderBtn" onclick="clickFastPin()" >快捷拼单</a></li>
            	</ul>
         </div >
+        
         <div calss="discription" id="scenic_info">
             <p>
                 
             </p>
         </div>
-        </div>
-        
-    </div>
+    </div>       
+</div>
 </body>
 </html>

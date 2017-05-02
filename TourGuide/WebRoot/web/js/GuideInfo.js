@@ -20,18 +20,11 @@ $('#guideinfoPage').bind('pageshow',function(event, ui){
 	phone = GetUrlem("phone");
 	visitDate=GetUrlem("visitDate");
 	visitTime=GetUrlem("visitTime");
-	visitNum=GetUrlem("visitNum");
+//	visitNum=GetUrlem("visitNum");
 	scenicName=GetUrlem("scenicName");
 	
 	$("#DirectorderTicketSub").attr("phone",phone);
-	/*
-	$("#bookGuide").click(function(){
-		//alert("123");
-		$.mobile.changePage("./orderGuide.html#orderTicketPop", "pop", false, false);
-	});*/
-//	$("#bookGuide").click(function(){
-//		bookGuide(phone);
-//	});
+	
 	setGuideInfo(phone);
 	setGuideComment(phone);
 });
@@ -64,6 +57,7 @@ function setGuideInfo(phone){
 				$("#guide_self_intro").html(item.selfIntro);
 				$("#guide_phone").html(item.phone);
 				$("#guide_language").html(item.language);
+				$("#scenicName").html(item.scenicName);
 				singleMax = item.singleMax;
 				scenicName = item.scenicName;				
 			});
@@ -110,9 +104,16 @@ function bookGuide()
 		window.location.href = "register.html";
 	}
 	else{
-		window.location.href = "confirmOrderInfo.html?"+"visitNum="+visitNum+"&visitDate="
-        +visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName+"&guidePhone="+phone+
-        "&singleMax="+singleMax;
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "confirmOrderInfo.html?"+"visitDate="
+	        +visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName+"&guidePhone="+phone+
+	        "&singleMax="+singleMax;
+		}else{
+			alert("您已被系统管理员拉黑!");
+			return;
+		}		
 	}
 }
 
@@ -123,6 +124,12 @@ function isRegist()
 		alert("您还未注册，请注册！");
 		window.location.href = "register.html";
 	}else{
-		window.location.href = "personalHome.html";
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "personalHome.html";
+		}else{
+			alert("您已被系统管理员拉黑!");
+		}
 	}
 }

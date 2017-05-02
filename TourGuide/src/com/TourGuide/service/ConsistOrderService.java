@@ -116,4 +116,44 @@ public class ConsistOrderService {
 	}
 
 
+	/**
+	 * 从t_consistResult中筛选讲解员未讲解的订单(拼单和快捷拼单)
+	 * @param guidePhone
+	 * @return
+	 */
+	public List<Map<String , Object>> getUndoGuideOrder(String guidePhone){
+		return consistOrderDao.getUndoGuideOrder(guidePhone);
+	}
+	
+	/**
+	 * 从t_consistResult中筛选讲解员已经讲解完成的订单(拼单和快捷拼单)
+	 * @param guidePhone
+	 * @return
+	 */
+	public List<Map<String , Object>> getFinishedGuideOrder(String guidePhone){
+		return consistOrderDao.getFinishedGuideOrder(guidePhone);
+	}
+	
+	
+	/**
+	 * 导游指定集合地点
+	 * @param orderId 预约订单的订单号
+	 * @param longitude  经度
+	 * @param latitude  纬度
+	 * @return
+	 */
+	public int uploadConsistLocation(String orderId, String longitude, String latitude){
+		return consistOrderDao.uploadConsistLocation(orderId, longitude, latitude);
+	}
+	
+	
+	/**
+	 * 讲解员完成拼单订单的讲解
+	 * @param orderId
+	 * @return
+	 * @throws SQLException
+	 */
+	public int finishConsistOrderByGuide(String orderId) throws SQLException{
+		return consistOrderDao.finishConsistOrderByGuide(orderId);
+	}
 }

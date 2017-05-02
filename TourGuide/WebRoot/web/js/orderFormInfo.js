@@ -6,28 +6,56 @@ var name;
 
 $(function($){
 	setData();
+	
+	$('#forGuide').hide();
+	
+	initMap();
+	
 });
+
+function initMap()
+{
+	var map = new BMap.Map("mapGet");   //实例化地图控件
+	var point = new BMap.Point(116.404,39.915);
+	map.centerAndZoom(point,15);
+	map.enableScrollWheelZoom(true);
+	//进行浏览器定位
+	var geolocation = new BMap.Geolocation();
+	geolocation.getCurrentPosition(function(r){
+		if(this.getStatus() == BMAP_STATUS_SUCCESS){
+			var mk = new BMap.Marker(r.point);
+			map.addOverlay(mk);
+			map.panTo(r.point);
+			longitudeMy = r.point.lng;
+		    latitudeMy = r.point.lat;
+		}
+		else {
+			alert('failed'+this.getStatus());
+		}        
+	},{enableHighAccuracy: true})
+}
+
 function setData(){
 	var orderId = GetUrlem("orderId");
 	$(".orderFormId").html(orderId);
-	var postdata = {
-		"orderID":orderId
-	};
-		$.ajax({
-			type:"post",
-			url:HOST+"/getDetailOrderInfo.do",
-			async:true,
-			data:postdata,
-			datatype:"JSON",
-			error:function()
-			{
-				alert("Error:获取订单详情失败");
-			},
-			success:function(data)
-			{ 
-				if(JSON.stringify(data)!="[]"){
+	
+	$.ajax({
+		type:"post",
+		url:HOST+"/getDetailOrderInfo.do",
+		async:true,
+		data:{orderID:orderId},
+		datatype:"JSON",
+		error:function()
+		{
+			alert("Error:获取订单详情失败");
+		},
+		success:function(data)
+		{ 
+			if(JSON.stringify(data)!="[]"){
+				
 				setNormalData(data[0]);
 				setSenicData(data[0]);
+				
 				if(data[0].guidePhone!=undefined)
 				{
 					setGuidegData(data[0].guidePhone);
@@ -36,7 +64,6 @@ function setData(){
 				}
 				/*if(data[0].money!=0){
 					setTickData(data[0]);}*/
-				}
 				//判断下单时间是否存在
 				if(data[0].takeOrderTime!=undefined)
 				{
@@ -62,9 +89,119 @@ function setData(){
 				{
 					$("#finishTime1").hide();
 				}
-			}
-		});
+			}				
+		}
+	});
+}
+
+
+//设置订单的下单时间、参观时间、参观人数、支付费用、订单状态
+function setNormalData(data){
+	var visitTime = data.visitTime;
+	var d = new Date();
+	var dateStr = d.getFullYear()+"-0"+(d.getMonth()+1)+"-"+d.getDate();
+	if(visitTime == undefined){					
+		$(".vistTime").html(dateStr);	
+	}else{
+		$(".vistTime").html(visitTime);
 	}
+	
+	$(".orderTime").html(data.produceTime);
+	$(".vistTime").html(data.visitTime);
+	$(".vistorNum").html(data.visitNum);
+	$(".totalMoney").html(data.money);
+	$("#MoneyInfo").append(data.money);
+	$(".viewState").html(data.orderState);
+	$(".totalMoney1").html(data.money);
+	
+	$(".longitude").html(data.longitude);
+	$(".latitude").html(data.latitude);
+	
+	longitudeData = data.longitude;
+	latitudeData = data.latitude;
+	
+	num = data.visitNum;
+	totalFee = data.money;
+}
+
+//设置景区名称
+function setSenicData(data){
+		
+	$("#scenicNameId").html(data.scenicName);
+	name = data.scenicName;		
+}
+	
+//设置导游的信息	
+function setGuidegData(guidePhone){
+	guideinfoUrl = HOST+"/getDetailGuideInfoByPhone.do?guidePhone="+guidePhone;
+	
+	$.get(guideinfoUrl,function(data,status){
+		var guideif = '<img class="guideHead" src="'+HOST+data[0].image+'"><p>讲解员：'+data[0].name;
+		guideif+='<br>性别：'+data[0].sex+'<br>年龄：'+data[0].age;
+		var language = getLanguage(data[0].language);
+		guideif+='<br>语种:'+language+'<br>联系方式：'+guidePhone+'</p>';
+		$("#guideInfo").html(guideif);
+		$("#infolist").listview('refresh');
+	});
+	
+}
+
+//生成二维码
+function produce()
+{
+	$("#qrcode").empty();
+	var orderId = GetUrlem("orderId");
+	
+	jQuery('#canavas').qrcode({width: 200,height: 200,correctLevel:0,text:utf16to8(orderId)});
+	
+	//获取网页中的canvas对象
+    var mycanvas1 = document.getElementsByTagName('canvas')[0];
+
+	//将转换后的img标签插入到html中
+	var img = convertCanvasToImage(mycanvas1);
+	
+	$('#qrcode').append(img);//imagQrDiv表示你要插入的容器id
+	$("#popupDialog").popup('open');
+}
+
+function convertCanvasToImage(canvas) {
+    //新Image对象，可以理解为DOM
+    var image = new Image();
+    // canvas.toDataURL 返回的是一串Base64编码的URL，当然,浏览器自己肯定支持
+    // 指定格式 PNG
+    image.src = canvas.toDataURL("image/png");
+    return image;
+}
+
+//从服务器端获取经纬度坐标，并进行导航
+function getLocationVisitor()
+{
+//	alert(longitudeData);
+//	alert(latitudeData);
+//	alert(latitudeMy);alert(longitudeMy);
+	var A = document.getElementById("locationA");
+	A.href = "http://api.map.baidu.com/direction?origin=latlng:"+latitudeMy+","+longitudeMy+"|name:我的位置&destination=latlng:"+latitudeData+","+longitudeData+"|name:集合位置&mode=driving&region=西安&output=html&src=yourCompanyName|yourAppName";
+}
+
+
+function isRegist()
+{
+	if(vistPhone == undefined || vistPhone == openId)
+	{
+		alert("您还未注册，请注册！");
+		window.location.href = "register.html";
+	}else{
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "personalHome.html";
+		}else{
+			alert("您已被系统管理员拉黑!");
+		}
+	}
+}
+
+
 /*function setTickData(data){
 	var url = HOST+"/geTicketsByScenicNo.do";
 	$.ajax({
@@ -98,64 +235,3 @@ function setData(){
 		}
 });
 }*/
-function setNormalData(data){
-
-	var visitTime = data.visitTime;
-	var d = new Date();
-	var dateStr = d.getFullYear()+"-0"+(d.getMonth()+1)+"-"+d.getDate();
-	if(visitTime == undefined){					
-		$(".vistTime").html(dateStr);	
-	}else{
-		$(".vistTime").html(visitTime);
-	}
-	
-	$(".orderTime").html(data.produceTime);
-	$(".vistTime").html(data.visitTime);
-	$(".vistorNum").html(data.visitNum);
-	$(".totalMoney").html(data.money);
-	//$("#MoneyInfo").append("<p>讲解费"+data.guideFee+"元</p><p>总计"+data.totalMoney+"元</p>");
-	$("#MoneyInfo").append(data.money);
-	$(".viewState").html(data.orderState);
-	$(".totalMoney1").html(data.money);
-	
-	num = data.visitNum;
-	totalFee = data.money;
-}
-	function setSenicData(data){
-			/*scenicUrl = HOST+"/getSomeScenicInfoByscenicID.do?scenicID="+scenicID;
-			$.get(scenicUrl,function(data,status){
-				if(status){
-					$(".scenicName").html(data[0].scenicName);
-					$(".scenicImg").attr("src",HOST+data[0].scenicImagePath);
-				}else{
-					alert("Error:获取景点信息失败！");
-				}
-			});*/
-			$("#scenicNameId").html(data.scenicName);
-			name = data.scenicName;
-			//$(".scenicImg").attr("src",HOST+data[0].imagePath);
-			//$(".scenicImg").attr("src","http://202.200.119.253/cache/7/04/imwork.net/ae58f81f5dfcd6be50e7846c9d33b175/bingmayong.jpg");
-		}
-	
-	
-	function setGuidegData(guidePhone){
-		guideinfoUrl = HOST+"/getDetailGuideInfoByPhone.do?guidePhone="+guidePhone;
-		$.get(guideinfoUrl,function(data,status){
-		var guideif = '<img class="guideHead" src="'+HOST+data[0].image+'"><p>讲解员：'+data[0].name;
-		guideif+='<br>性别：'+data[0].sex+'<br>年龄：'+data[0].age;
-		var language = getLanguage(data[0].language);
-		guideif+='<br>语种:'+language+'<br>联系方式：'+guidePhone+'</p>';
-		$("#guideInfo").html(guideif);
-		$("#infolist").listview('refresh');
-		});
-		
-	}
-
-function produce()
-{
-	$("#qrcode").empty();
-	var orderId = GetUrlem("orderId");
-	var a={orderID:orderId}
-	jQuery('#qrcode').qrcode(utf16to8(a));
-}
-

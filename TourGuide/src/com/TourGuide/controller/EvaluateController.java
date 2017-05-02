@@ -45,14 +45,17 @@ public class EvaluateController {
 			@RequestParam("orderID") String orderID, 
 			@RequestParam("evaluateContext") String evaluateContext, 
 			@RequestParam("isAnonymous") String isAnonymous,
-			@RequestParam("star") String star) throws IOException{
+			@RequestParam("star1") String star1,
+			@RequestParam("star2") String star2,
+			@RequestParam("star3") String star3) throws IOException{
 		
 		CommonResp.SetUtf(resp);
 		
 		String evaluateTime = MyDateFormat.form(new Date());
 		
 		boolean bool = evaluateService.commentByVisitor(orderID, evaluateContext, 
-				evaluateTime, Integer.parseInt(isAnonymous), Integer.parseInt(star));
+				evaluateTime, Integer.parseInt(isAnonymous), Integer.parseInt(star1),
+				Integer.parseInt(star2),Integer.parseInt(star3));
 		
 		return bool;
 		

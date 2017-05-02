@@ -15,7 +15,7 @@
 		<script type="text/javascript">
 			function isRegist() {
 				//根据openId判断是否注册
-				//从服务器端根据openId返回数据				
+				//从服务器端根据openId返回数据
 				var Url = HOST + "/getInfobyOpenID.do";
 				$.ajax({
 					type: "post",
@@ -34,6 +34,7 @@
 							window.location.href="register.html";
 						} else {
 							phone = data.phone;
+							sessionStorage.setItem("vistPhone", phone);
 							window.location.href = "personalHome.html?" + "phone=" + data.phone;
 						}
 					}

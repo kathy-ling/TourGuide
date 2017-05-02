@@ -87,10 +87,12 @@ function getFee1()
 		$("#personNum").val("");
 		return;
 	}
-	
-	if (num == undefined) {
+
+	if (!( /^\+?[1-9][0-9]*$/).test(num)) {
+		alert('请输入正确的人数!');
 		return;
 	}
+	
 	var url = HOST+"/getIntroFee.do";
 	var fee;
 	$.ajax({
@@ -107,9 +109,6 @@ function getFee1()
 		},
 	});
 }
-
-
-
 
 function addAllScenics() {
 	var url = HOST + "/getAllScenics.do";
@@ -142,9 +141,11 @@ function addOption(a) {
 
 function ProduceOrder()
 {
-	var url=HOST+"/releaseFastOrder.do";
+	
 	var scenicName1 = $("#chooseScenicName").val();
 	var scenicName2 = document.getElementById("ScenicName").innerText;
+	var guideFee = document.getElementById("guideFee").innerText;
+	var num = $("#personNum").val();
 	var scenicName;
 	
 	if(scenicName1 == ''){
@@ -153,18 +154,31 @@ function ProduceOrder()
 	if(scenicName2 == ''){
 		scenicName = scenicName1;
 	}
-	
-	var guideFee = document.getElementById("guideFee").innerText;
-	var num=$("#personNum").val();
-	var data={scenicName:scenicName,visitNum:num,guideFee:guideFee,visitorPhone:vistPhone};
 	if (scenicName=='') {
 		alert('请选择景区，进行支付');
 		return;
 	}
 	if (num=='') {
+		alert("拼团人数不能为空！");
 		return;
 	}
-	alert("scenicName"+scenicName +"num"+num+"guideFee"+guideFee+"vistPhone"+vistPhone);
+	
+	var data = {scenicName:scenicName,
+		visitNum:num,
+		guideFee:guideFee,
+		visitorPhone:vistPhone
+	};
+	
+	if(vistPhone == "null" || vistPhone == undefined || vistPhone == openId){
+		alert("出错啦！");
+		return;
+	}else{
+		releaseFastOrder(data);
+	}
+}
+
+function releaseFastOrder(data){
+	var url=HOST+"/releaseFastOrder.do";
 	
 	$.ajax({
 		type:"post",
@@ -193,6 +207,12 @@ function isRegist()
 		alert("您还未注册，请注册！");
 		window.location.href = "register.html";
 	}else{
-		window.location.href = "personalHome.html";
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "personalHome.html";
+		}else{
+			alert("您已被系统管理员拉黑!");
+		}
 	}
 }
