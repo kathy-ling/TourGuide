@@ -188,7 +188,8 @@ function takeFastOrder(){
 //	alert("currentNum="+currentNum + "  " +"maxNum="+maxNum+"  "+"visitNum="+visitNum);
 //	alert("orderId"+orderId);
 
-	if(!dateCheck()){
+	alert("dateCheck()" + dateCheck());
+	if(dateCheck()){
 		alert("游客参观时间已过期");
     	return false;
 	}

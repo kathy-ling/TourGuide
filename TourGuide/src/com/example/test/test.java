@@ -35,8 +35,11 @@ public class test {
 		
 //		System.out.println(DateConvert.dateCompare("2012-7-25", "2017-03-22"));
 		
-		System.out.println(DateConvert.DateCompare("2017-03-24 06:00:00", ""));
+//		System.out.println(DateConvert.addMinuteToTime("2012-7-25 12:00:00", 35));
 
+		String visitTime="2017-05-06 08:00:00";
+		int visitNum=5;
+		String scenicID="19743";
 	}
 	
 	/**

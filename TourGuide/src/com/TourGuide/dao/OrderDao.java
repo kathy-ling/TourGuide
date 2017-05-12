@@ -53,7 +53,7 @@ public class OrderDao {
 		 
 		try {
 			Connection conn = dataSource.getConnection();
-			CallableStatement cst=conn.prepareCall("call getAllOrdersbyVisitorPhone(?)");
+			CallableStatement cst = conn.prepareCall("call getAllBookOrdersbyVisitorPhone(?)");
 			cst.setString(1, phone);
 			ResultSet rst=cst.executeQuery();
 			
@@ -66,8 +66,27 @@ public class OrderDao {
 				map.put("scenicName", rst.getString(5));
 				map.put("totalMoney", rst.getInt(6));
 				map.put("orderState", rst.getString(7));
+				map.put("type", "预约单");
 				listResult.add(map);
-			}							
+			}
+			
+			CallableStatement cst1 = conn.prepareCall("call getAllConsistOrdersbyVisitorPhone(?)");
+			cst1.setString(1, phone);
+			ResultSet rst1 = cst1.executeQuery();
+			
+			while (rst1.next()) {
+				Map<String , Object> map = new HashMap<String, Object>();
+				map.put("OrderID", rst1.getString(1));
+				map.put("visitTime", rst1.getString(2));
+				map.put("visitNum", rst1.getInt(3));
+				map.put("scenicID", rst1.getString(4));
+				map.put("scenicName", rst1.getString(5));
+				map.put("totalMoney", rst1.getInt(6));
+				map.put("orderState", rst1.getString(7));
+				map.put("type", "拼团单");
+				listResult.add(map);
+			}
+			
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -77,7 +96,47 @@ public class OrderDao {
 	}
 	
 	
+	/**
+	 * 游客删除自己的订单
+	 * @param orderId
+	 * @return
+	 */
+	public boolean deleteOrderbyVisitor(String orderId){
+		
+		boolean bool = false;
+		
+		String updateBook = "update t_bookorder set visitorVisible=0 where bookOrderID='"+orderId+"'";
+		String updateConsist = "update t_consistorder set visitorVisible=0 where consistOrderID='"+orderId+"'";
+		
+		int i = jdbcTemplate.update(updateBook);
+		int j = jdbcTemplate.update(updateConsist);
+		
+		if(i!=0 || j!=0){
+			bool = true;
+		}
+		return bool;
+	}
 	
+	/**
+	 * 导游删除已经讲解完成的订单
+	 * @param orderId
+	 * @return
+	 */
+	public boolean deleteOrderbyGuide(String orderId){
+		
+		boolean bool = false;
+		
+		String updateBook = "update t_bookorder set guideVisible=0 where bookOrderID='"+orderId+"'";
+		String updateConsist = "update t_consistresult set guideVisible=0 where orderID='"+orderId+"'";
+		
+		int i = jdbcTemplate.update(updateBook);
+		int j = jdbcTemplate.update(updateConsist);
+		
+		if(i!=0 || j!=0){
+			bool = true;
+		}
+		return bool;
+	}
 	
 	/**
 	 * 根据订单编号，查询订单的详细信息,包括拼单表和预约表
@@ -114,6 +173,8 @@ public class OrderDao {
 				map.put("imagePath", rst.getString(14));
 				map.put("longitude", rst.getString(15));
 				map.put("latitude", rst.getString(16));
+				map.put("cancleFee", rst.getInt(17));
+				
 				listResult.add(map);
 			}							
 			conn.close();
@@ -178,6 +239,7 @@ public class OrderDao {
 				map.put("latitude", rst.getString(11));
 				map.put("startTime", rst.getString(12));
 				map.put("endTime", rst.getString(13));
+				map.put("cancleFee", rst.getInt(14));
 			}							
 			conn.close();
 		} catch (SQLException e) {
@@ -215,6 +277,7 @@ public class OrderDao {
 				map.put("latitude", rst.getString(9));
 				map.put("startTime", rst.getString(10));
 				map.put("endTime", rst.getString(11));
+				map.put("cancleFee", rst.getInt(12));
 			}							
 			conn.close();
 		} catch (SQLException e) {

@@ -3,7 +3,6 @@
 var guidePhone = GetUrlem("guidePhone");
 var visitDate = GetUrlem("visitDate");
 var	visitTime = GetUrlem("visitTime");
-//var	visitNum = GetUrlem("visitNum");
 var	scenicName = GetUrlem("scenicName");
 var singleMax = GetUrlem("singleMax");
 var	visitNum;
@@ -21,6 +20,7 @@ $(document).ready(function() {
 		setGuideInfo(guidePhone);		
 	}
 	
+	showVisitTime("#orderDate","orderDatetime");
 });
 
 
@@ -70,7 +70,7 @@ function addDate()
     var dayAfterTomo1 = SdayAfterTomo0.substring(0,10);
 	
 	//根据id获取select对象
-	var dateSelect = document.getElementById("orderChooseDate");
+	var dateSelect = document.getElementById("orderDate");
 	dateSelect.options.add(new Option(today1,today1));
 	dateSelect.options.add(new Option(tomorrow1,tomorrow1));
 	dateSelect.options.add(new Option(dayAfterTomo1,dayAfterTomo1));	
@@ -94,7 +94,7 @@ function confirmOrder()
 		alert("请选择日期！");
 		return false;
 	}
-	if(!visitTime)
+	if(!visitTime || visitTime=="请选择时间")
 	{
 		alert("请选择时间！");
 		return false;
@@ -140,7 +140,7 @@ function confirmOrderBefore()
 	
 	if(!visitDate)
 	{
-		visitDate = $("#orderChooseDate").val();
+		visitDate = $("#orderDate option:selected").val();
 	}
 	
 	if(!visitTime && visitTime != "请选择时间")
@@ -152,6 +152,8 @@ function confirmOrderBefore()
 	{
 		visitNum = $("#orderChooseVisitNum").val();
 	}
+	
+	alert(scenicName+visitDate+visitTime+visitNum);
 }
 
 //判断讲解员的时间与预约时间是否冲突，True 冲突,false  不冲突
@@ -313,4 +315,175 @@ function isRegist()
 			alert("您已被系统管理员拉黑!");
 		}
 	}
+}
+
+//点击【请选择时间】
+function checkDateSelect(dateId,timeId){
+	
+	visitTime = $('#orderDatetime option:selected').val();
+	
+	var getDate = $(dateId).val();
+	if(getDate == ""){
+		alert("请先选择日期，再选择时间");	
+		$(timeId).val("请选择时间");
+		return false;
+	}
+}
+
+//动态改变参观时间
+function showVisitTime(dateId,timeId)
+{
+	var myDate = new Date();
+	var myDay = new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate()+1);
+	var today0 = myDay.toISOString();
+	var today1 = today0.substring(5,10);
+//	var getDate = $("#chooseDate").val();
+	var getDate = $(dateId).val();
+	var getDate0 = getDate.substring(5,10);
+	var hour = myDate.getHours();
+	var minute = myDate.getMinutes();
+	
+//	var mySelect = document.getElementById("orderDatetime123");
+	var mySelect = document.getElementById(timeId);
+	if(today1 == getDate0)
+	{
+		if(hour >= 8 && hour < 9 && minute < 30)
+		{
+			mySelect.options.remove(1);
+		}
+		if(hour >= 8 && hour < 9 && minute >= 30)
+		{
+			for(var i = 0; i < 2; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 9 && hour < 10 && minute < 30)
+		{
+			for(var i = 0; i < 3; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 9 && hour < 10 && minute >= 30)
+		{
+			for(var i = 0; i < 4; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 10 && hour < 11 && minute < 30)
+		{
+			for(var i = 0; i < 5; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 10 && hour < 11 && minute >= 30)
+		{
+			for(var i = 0; i < 6; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 11 && hour < 12 && minute < 30)
+		{
+			for(var i = 0; i < 7; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 11 && hour < 12 && minute >= 30)
+		{
+			for(var i = 0; i < 8; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 12 && hour < 13 && minute < 30)
+		{
+			for(var i = 0; i < 9; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 12 && hour < 13 && minute >= 30)
+		{
+			for(var i = 0; i < 10; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 13 && hour < 14 && minute < 30)
+		{
+			for(var i = 0; i < 11; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 13 && hour < 14 && minute >= 30)
+		{
+			for(var i = 0; i < 12; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 14 && hour < 15 && minute < 30)
+		{
+			for(var i = 0; i < 13; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 14 && hour < 15 && minute >= 30)
+		{	
+			for(var i = 0; i < 14; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}
+		if(hour >= 15 && hour < 16 && minute < 30)
+		{
+			for(var i = 0; i < 15; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}	
+		if(hour >= 15 && hour < 16 && minute >= 30)
+		{
+			alert("15");
+			for(var i = 0; i < 16; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}	
+		if(hour >= 16)
+		{
+			for(var i = 0; i < 17; i++)
+			{
+				mySelect.options.remove(1);
+			}
+		}		
+	}else{
+		for(var i = 0; i < 17; i++){
+				mySelect.options.remove(1);
+			}
+		mySelect.options.add(new Option("8:00","8:00"),1);
+		mySelect.options.add(new Option("8:30","8:30"),2);
+		mySelect.options.add(new Option("9:00","9:00"),3);
+		mySelect.options.add(new Option("9:30","9:30"),4);
+		mySelect.options.add(new Option("10:00","10:00"),5);
+		mySelect.options.add(new Option("10:30","10:30"),6);
+		mySelect.options.add(new Option("11:00","11:00"),7);
+		mySelect.options.add(new Option("11:30","11:30"),8);
+		mySelect.options.add(new Option("12:00","12:00"),9);
+		mySelect.options.add(new Option("12:30","12:30"),10);
+		mySelect.options.add(new Option("13:00","13:00"),11);
+		mySelect.options.add(new Option("13:30","13:30"),12);
+		mySelect.options.add(new Option("14:00","14:00"),13);
+		mySelect.options.add(new Option("14:30","14:30"),14);
+		mySelect.options.add(new Option("15:00","15:00"),15);
+		mySelect.options.add(new Option("15:30","15:30"),16);
+		mySelect.options.add(new Option("16:00","16:00"),17);
+	}	
 }

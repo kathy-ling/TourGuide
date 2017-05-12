@@ -55,7 +55,7 @@
 				
 				<ul data-role="listview" id="infolist">
 					<li data-inset="true">
-						<p><span class="viewState">待游览</span> 费用合计：
+						<p><span class="viewState"></span> 费用合计：
 							<span class="totalMoney1"></span>
 							<!--<span class="">已支付</span>-->
 						</p>
@@ -70,9 +70,13 @@
 							参观人数：<span class="vistorNum"></span><br/> 
 							参观时间：<span class="vistTime"></span><br/> 
 							支付费用：<span class="totalMoney"></span><br/>
-							经度：<span class="longitude"></span><br/>
-							纬度：<span class="latitude"></span><br/>
 						</p>
+						<p  class="ui-hidden-accessible">
+							经度：<span id="longitude"></span><br/>
+							纬度：<span id="latitude"></span><br/>
+						</p>
+						<p id="cancleFee">取消订单手续费：<span id="fee"></span></p>	
+						
 					</li>
 
 					<li>
@@ -96,9 +100,10 @@
 				</ul>
 				<div>
 					<div id="forUser" align="center" data-role="footer" class="ui-content">
-						<!--<a href="#" class="ui-btn ui-icon-delete ui-btn-icon-right ui-btn-b ui-corner-all" ">取消订单</a>-->
-						<a onclick="produce()" class="ui-btn ui-icon-delete ui-btn-icon-right ui-btn-b ui-corner-all" ">生成二维码</a>
-						<a href="" id="locationA" onclick="getLocationVisitor()" class="ui-btn ui-icon-navigation ui-btn-icon-right ui-btn-b ui-corner-all">获取位置</a>
+						<a id="cancleBtn" onclick="cancleOrder()" class="ui-btn ui-icon-delete ui-btn-icon-right ui-btn-b ui-corner-all">取消订单</a>
+						<a onclick="produce()" class="ui-btn ui-icon-delete ui-btn-icon-right ui-btn-b ui-corner-all">生成二维码</a>
+						<a id="locationA" onclick="getLocationVisitor()" class="ui-btn ui-icon-navigation ui-btn-icon-right ui-btn-b ui-corner-all">获取位置</a>
+						<a id="deleteBtn" onclick="deleteOrder()" class="ui-btn ui-icon-delete ui-btn-icon-right ui-btn-b ui-corner-all">删除订单</a>
 					</div>				
 										
 				</div>

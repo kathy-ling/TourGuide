@@ -285,6 +285,72 @@ public class GuideDao {
 	}
 	
 	
+	/**
+	 * 获取可带拼团的讲解员的手机号，从所有符合条件的讲解员中选择一个
+	 * @param visitTime 
+	 * @param visitNum
+	 * @param scenicID
+	 * 			三个参数都不为空
+	 * @return
+	 */
+	public String getPhoneOfPinGuide(String visitTime, String scenicID){
+		
+		String phone = null;
+		String selectDay = null;
+    	String dayNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    	
+    	//计算参观日期与今日之间相隔的天数
+    	String[] visitDate = visitTime.split(" ");
+    	int day = DateConvert.getDaysBetweenDate(visitDate[0], dayNow);   		
+		switch (day) {
+		
+		case 0:
+			selectDay = "one";
+			break;
+		case 1:
+			selectDay = "two";			
+			break;
+		case 2:
+			selectDay = "three";
+			break;
+		case 3:
+			selectDay = "four";
+			break;
+		default:
+			break;
+		}   	
+		
+		List<Map<String , Object>> listResult = new ArrayList<>(); 
+		List<Map<String , Object>> list = null;
+		
+		String sqlString = "select t_guideotherinfo.phone from t_guideotherinfo,t_scenicspotinfo,systemscore "
+				+ "where systemscore.scenicName=t_scenicspotinfo.scenicName and scenicBelong='"+scenicID+"'"
+				+ "AND t_guideotherinfo.scenicBelong=t_scenicspotinfo.scenicNo "
+				+ "and t_guideotherinfo.guideLevel<=systemscore.guideLevel and  t_guideotherinfo.phone in"
+				+ " (select guidePhone from t_guideworkday where "+selectDay+"=1) "
+				+ "ORDER BY historyTimes,historyNum";
+		list = jdbcTemplate.queryForList(sqlString);
+		
+		for(int i=0; i<list.size(); i++){
+			listResult.add(list.get(i));
+		}
+		
+		//去除时间冲突的讲解员信息
+		for(int i=0; i<list.size(); i++){
+			String p = (String)list.get(i).get("phone");
+			boolean bool = isTimeConflict(p, visitTime);
+			if(bool == true){
+				listResult.remove(list.get(i));
+			}
+		}
+		
+		if(listResult.size() != 0){
+			phone = (String)listResult.get(0).get("phone");
+		}
+					
+		return phone;
+	}
+	
 	
 	/**
 	 * 按用户的筛选条件，查询相应的讲解员信息

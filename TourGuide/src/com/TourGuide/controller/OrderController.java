@@ -57,6 +57,45 @@ public class OrderController {
 	
 	
 	/**
+	 * 游客删除自己的订单
+	 * @param resp
+	 * @param orderId
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/deleteOrderbyVisitor.do")
+	@ResponseBody
+	public Object deleteOrderbyVisitor(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+
+		boolean bool = orderService.deleteOrderbyVisitor(orderId);
+		
+		return bool;
+	}
+	
+	
+	/**
+	 * 导游删除已经讲解完成的订单
+	 * @param resp
+	 * @param orderId
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/deleteOrderbyGuide.do")
+	@ResponseBody
+	public Object deleteOrderbyGuide(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+
+		boolean bool = orderService.deleteOrderbyGuide(orderId);
+		
+		return bool;
+	}
+	
+	/**
 	 * 根据订单编号，查看订单的详细信息
 	 * @param resp
 	 * @param orderID  订单编号

@@ -1,4 +1,5 @@
 
+
 $(document).ready(function() {
 	
 	//加载底部导航栏
@@ -65,7 +66,7 @@ function putOrder() {
 		'visitorPhone':vistPhone ,
 		'contact':visitorPhone
 	};
-	
+	alert(JSON.stringify(postData));
 	if(vistPhone == "null" || vistPhone == undefined || vistPhone == openId){
 		alert("出错啦！");
 		return;

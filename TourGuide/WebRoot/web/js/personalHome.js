@@ -21,7 +21,7 @@ $(function($) {
 	});
 	
 	setperinfo();
-	vistPhone='18191762572';
+//	vistPhone='18191762572';
 	
 	var authorized = false;
 	isAuthorized();

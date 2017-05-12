@@ -67,13 +67,13 @@ public class BookOrderDao {
 				+ "visitTime,visitNum,language,guideSex,visitorPhone,visitorName,"
 				+ "priceRange,purchaseTicket,otherCommand,releaseByVisitor,orderState,"
 				+ "totalTicket,totalTicketNum,fullPriceNum,discoutPriceNum,halfPriceNum,fullPrice,"
-				+ "discoutPrice,halfPrice,visitorVisible,guideVisible,contact) values "
-				+ "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "discoutPrice,halfPrice,visitorVisible,guideVisible,contact,guideFee,hadPay) values "
+				+ "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlString, new Object[]{bookOrderID, scenicID, 
 				produceTime, visitTime,visitNum, language, guideSex, visitorPhone, 
 				visitorName, priceRange, purchaseTicket, otherCommand, releaseByVisitor, orderState,
 				totalTicket,totalTicketNum, fullPriceNum,discoutPriceNum,halfPriceNum,
-				fullPrice, discoutPrice, halfPrice,visitorVisible,guideVisible,contact});
+				fullPrice, discoutPrice, halfPrice,visitorVisible,guideVisible,contact,priceRange,1});
 		
 		if(i == 1){
 			bool = true;
@@ -197,7 +197,7 @@ public class BookOrderDao {
 		//查询该讲解员所属的景区(该讲解员必须审核且等级大于等于5)
 		String sqlscenicNo = "select t_guideotherinfo.scenicBelong "
 				+ "from t_guideotherinfo,t_guideinfo WHERE t_guideinfo.phone = '"+guidePhone+"' "
-				+ "and t_guideotherinfo.id = t_guideinfo.id and t_guideotherinfo.guideLevel >=5 "
+				+ "and t_guideotherinfo.phone = t_guideinfo.phone and t_guideotherinfo.guideLevel >=5 "
 				+ "and t_guideotherinfo.authorized=1";
 		list = jdbcTemplate.queryForList(sqlscenicNo);
 		
@@ -338,7 +338,7 @@ public class BookOrderDao {
 	public boolean takeReleasedOrderByGuide(String orderID, String guidePhone){
 		
 		boolean bool = false;
-		String orderState = "待付款";				
+		String orderState = "待游览";				
  		String visitTime = null;
  		int price = 0;
  		int totalTicket = 0;
@@ -424,6 +424,7 @@ public class BookOrderDao {
 				map.put("visitNum", rst.getInt(4));
 				map.put("guideFee", rst.getInt(5));
 				map.put("scenicName", rst.getString(6));
+				map.put("cancleFee", rst.getInt(7));
 				
 				list.add(map);
 			}			

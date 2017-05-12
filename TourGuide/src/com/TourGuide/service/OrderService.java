@@ -30,6 +30,24 @@ public class OrderService {
 	
 	
 	/**
+	 * 游客删除自己的订单
+	 * @param orderId
+	 * @return
+	 */
+	public boolean deleteOrderbyVisitor(String orderId){
+		return orderDao.deleteOrderbyVisitor(orderId);
+	}
+	
+	/**
+	 * 导游删除已经讲解完成的订单
+	 * @param orderId
+	 * @return
+	 */
+	public boolean deleteOrderbyGuide(String orderId){
+		return orderDao.deleteOrderbyGuide(orderId);
+	}
+	
+	/**
 	 * 根据订单编号和订单状态，查询订单的详细信息
 	 * @param orderID  订单编号
 	 * @param orderState   订单状态

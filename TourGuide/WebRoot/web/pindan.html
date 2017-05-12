@@ -82,7 +82,7 @@
 				</div>
 				
                 <div class="visitTime">              
-	               	<select id="visitTime" placeholder="日期" onchange="getDateFee()">
+	               	<select id="visitTime" placeholder="日期" onchange='showVisitTime("#visitTime","chooseDatetime")'>
 						<option value="" selected="selected">请选择日期</option>
 					</select>
 
@@ -132,22 +132,23 @@
 <script type="text/javascript">
 	$("#panel2btn").bind("click", function(event) {
 		//根据vistPhone判断是否注册,vistPhone全局变量，通过openId获取得到   
-//	    if(vistPhone == undefined || vistPhone == "null" || vistPhone == openId)
-//		{
-//			alert("您还未注册，请注册后再发起拼单！");
-//			window.location.href = "register.html";
-//		}
-//		else{				
+	    if(vistPhone == undefined || vistPhone == "null" || vistPhone == openId)
+		{
+			alert("您还未注册，请注册后再发起拼单！");
+			window.location.href = "register.html";
+		}
+		else{				
 			var black = sessionStorage.getItem("isBlackened");
+			alert(black);
 
 			if(black == "false"){
 				$("#panel1").hide(300);
 	    		$(".visitTime").show();
 	    		$("#panel2").show(300);
-			}else{
+			}else if(black == "true"){
 				alert("您已被系统管理员拉黑!");
 			}			
-//		}	    
+		}	    
     });
     
     $("#panel1btn").bind("click", function(event) {

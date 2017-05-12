@@ -229,14 +229,21 @@
 								<option>17:00</option>
 								<option>17:30</option>
 								<option>18:00</option>-->
+							</select>	
+							
+							<select id="chooseFee" name="fee">
+								<option value="" selected="selected">请选择价格</option>
+								<option>100</option>
+								<option>150</option>
+								<option>200</option>
+								<option>250</option>
+								<option>300</option>
 							</select>
-													
-							<input type="number" id="visitorCount" name="visitorCount" placeholder="参观人数" onblur="checkNum()">
 
 							<table width="100%">
 								<tbody>
 									<tr>
-										<td> <label for="guideLanguage">讲解语言：</label></td>
+										<td> <legend for="guideLanguage">讲解语言：</legend></td>
 										<td>
 											<select id="guideLanguage" data-mini="true" name="guideLanguage">
 												<option value="中文"  selected="selected">中文</option>
@@ -276,7 +283,10 @@
 							<label for="notorderTicketRadio" value="0">否，不用了，谢谢</label>
 							<input type="radio" id="notorderTicketRadio" class="notorderTicketRadio" name="orderTicket" value="0" class="" /> -->
 							
-							<input id="orderM" type="number" placeholder="预期价格" />
+							<!--<input id="orderM" type="number" placeholder="预期价格" />-->
+							
+							
+							<input type="number" id="visitorCount" name="visitorCount" placeholder="参观人数" onblur="checkNum()">
 							
 							<input type="tel" id="visitorPhone" name="visitorPhone" onchange="checkPhone()" placeholder="联系电话">
 							

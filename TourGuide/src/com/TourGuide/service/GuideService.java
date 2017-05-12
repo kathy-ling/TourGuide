@@ -121,6 +121,20 @@ public class GuideService {
 		return guideDao.isTimeConflict(guidePhone, visitTime);
 	}
 	
+	
+	/**
+	 * 获取可带拼团的讲解员的手机号，从所有符合条件的讲解员中选择一个
+	 * @param visitTime 
+	 * @param visitNum
+	 * @param scenicID
+	 * 			三个参数都不为空
+	 * @return
+	 */
+	public String getPhoneOfPinGuide(String visitTime, String scenicID){
+		return guideDao.getPhoneOfPinGuide(visitTime, scenicID);
+	}
+	
+	
 	/**
 	 * 判断该讲解员是否通过审核
 	 * @param guidePhone

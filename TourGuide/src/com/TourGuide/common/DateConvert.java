@@ -80,6 +80,30 @@ public class DateConvert {
 	
 	
 	/**
+	 * 时间字符串加上若干分钟
+	 * @param time
+	 * @param hour
+	 * @return
+	 */
+	public static String addMinuteToTime(String time, int minute){
+		
+		String retTime = null;
+		Date date = null;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			date = dateFormat.parse(time);			
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MINUTE, minute);
+		
+		retTime = dateFormat.format(calendar.getTime());
+		return retTime;
+	}
+	
+	/**
 	 * 比较两个字符串格式日期的大小
 	 * @param dateFrom  开始日期: yyyy-MM-dd HH:mm:ss
 	 * @param dateTo  结束日期: yyyy-MM-dd HH:mm:ss

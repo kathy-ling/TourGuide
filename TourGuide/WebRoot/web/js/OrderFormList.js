@@ -1,4 +1,6 @@
 
+//vistPhone='18191762572';
+
 $(document).ready(function()
 {	
 //	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
@@ -15,7 +17,9 @@ $(document).ready(function()
  function orderinfo(obj){
   		var state = obj.find("span.viewState").html();
   		var orderId = obj.find("span.orderFormId").find("span").html();
-  		window.location = "orderFormInfo.html?state="+state+"&orderId="+orderId;
+  		var type = obj.find("span.orderType").find("span").html();
+  		
+  		window.location = "orderFormInfo.html?state="+state+"&orderId="+orderId+"&type="+type;
   }
  
  function goComment(obj){
@@ -130,12 +134,17 @@ function getOrderList()
 				var SpanListPrice = document.createElement("span");
 				SpanListPrice.innerHTML = "价格："+n.totalMoney+"<br/>";
 				
+				var SpanListType = document.createElement("span");
+				SpanListType.className = 'orderType';
+				SpanListType.innerHTML = "订单类型：<span>"+n.type+"</span><br/>";	
+				
 				PList.appendChild(SpanListName)
 				PList.appendChild(SpanListOrderId)
 				PList.appendChild(SpanListOrderState);
 				PList.appendChild(SpanListTime)
 				PList.appendChild(SpanListNum)
-				PList.appendChild(SpanListPrice);					 
+				PList.appendChild(SpanListPrice);	
+				PList.appendChild(SpanListType);
 			});
 			$("#OrderStateUl").listview('refresh');
 			hideOtherLi(getUrlhideChar());

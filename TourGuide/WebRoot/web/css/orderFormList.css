@@ -94,3 +94,7 @@ ul li{
 	text-align: center;
 
 }
+
+.orderType{
+	display: none;
+}

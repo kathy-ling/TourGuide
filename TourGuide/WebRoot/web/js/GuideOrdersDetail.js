@@ -1,9 +1,11 @@
 
 var OrderID = GetUrlem("Orderid");
+var cancleFee = 0;
+
 //拼单 
 //OrderID = 'e44dcd884e964fd39bbd2a4578d42d2a';
 //预约单
-//OrderID = '0490143030574ae2b31ba43dc904e570';
+//OrderID = '7e3a5711e3664f308701995162bf2af8';
 
 
 $(function($){
@@ -29,6 +31,7 @@ $(function($){
 	$("#startBtn").hide();
 	$("#finishBtn").hide();
 	$("#locationBtn").hide();
+	$("#deleteBtn").hide();
 
 	getGuideBookOrdersDetail();
 	getGuideConsistOrderDetail();
@@ -208,23 +211,41 @@ function finishBookOrder(){
 	});
 }
 
+function deleteOrderbyGuide(){
+	var Url = HOST + "/deleteOrderbyGuide.do";
+	$.ajax({
+		type:"get",
+		url:Url,
+		async:true,
+		data:{orderId:OrderID},
+		error:function()
+		{
+			alert('出错啦，请稍后再试！');
+		},
+		success:function(data)
+		{
+			if(data == true){
+				alert("删除成功");
+				window.location.href = "GuideOrders.html";
+			}else{
+				alert("出错啦，请稍后再试！");
+			}
+		}
+	});
+}
+
 
 //设置只能在参观时间当天进行签到
-function checkSignInBtn(){
-	
+function checkSignInBtn(){	
 	var currentdate = getNowFormatDate();
 	var visitTime = $("#visitTime").html();
 	var patt = new RegExp(currentdate);
-
-	if(!patt.test(visitTime)){
-		$("#signInBtn").hide();		
-	}
-	
 	var sign = $("#clickSign").html();
-	if(sign == 1){
-		$("#signInBtn").hide();									
-	}else if(sign == 0){
-		$("#signInBtn").show();
+	
+	if(patt.test(visitTime) && sign == 0){
+		$("#signInBtn").show();	
+	}else{
+		$("#signInBtn").hide();	
 	}
 }
 
@@ -280,18 +301,9 @@ function checkFinishBtn(){
 		$("#bookOrderDiv").hide();
 		$("#consistOrderDiv").hide();
 	}
-	
-	/*if(state == 1 || state == "待评价"){//已完成讲解
-		$("#finishBtn").hide();
-		$("#bookOrderDiv").hide();
-		$("#consistOrderDiv").hide();
-	}else{
-		if(startTime != ""){
-			$("#finishBtn").show();
-		}else{
-			$("#finishBtn").hide();
-		}		
-	}*/	
+	if(state == "待评价"){
+		$("#deleteBtn").show();
+	}
 }
 
 function checkLocationBtn(){
@@ -381,6 +393,14 @@ function finish(){
 	$("#locationBtn").hide();
 	$("#bookOrderDiv").hide();
 	$("#consistOrderDiv").hide();
+	$("#deleteBtn").show();
+}
+
+function deleteOrder(){
+	var str = "确定删除？";
+	if(confirm(str)){
+		deleteOrderbyGuide();
+	}
 }
 
 function setOrderList(data){
@@ -400,6 +420,17 @@ function setOrderList(data){
 	$("#clickStart").html(data.startTime);
 	$("#clickLocation").html(data.longitude);
 	$("#clickFinish").html(data.endTime);
+	
+	if($("#state").html()=="已取消"){
+		$("#totalFee").html(data.cancleFee);
+		$("#startBtn").hide();
+		$("#finishBtn").hide();
+		$("#locationBtn").hide();
+		$("#bookOrderDiv").hide();
+		$("#consistOrderDiv").hide();
+		$("#deleteBtn").show();
+		return false;
+	}
 	
 	checkSignInBtn();
 	checkStartBtn();

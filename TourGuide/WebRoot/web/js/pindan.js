@@ -18,8 +18,6 @@ $(function($){
 	
 	addDate();	
 	getInfofromFormer(scenicName);
-	
-	showVisitTime("#visitTime","chooseDatetime");
 		
 });
 
@@ -467,6 +465,7 @@ function getNowFormatDate() {
 //点击【请选择时间】
 function checkDateSelect(dateId,timeId){
 	var getDate = $(dateId).val();
+	
 	if(getDate == ""){
 		alert("请先选择日期，再选择时间");	
 		$(timeId).val("请选择时间");
@@ -629,7 +628,9 @@ function showVisitTime(dateId,timeId)
 		mySelect.options.add(new Option("15:00","15:00"),15);
 		mySelect.options.add(new Option("15:30","15:30"),16);
 		mySelect.options.add(new Option("16:00","16:00"),17);
-	}	
+	}
+	getDateFee();
+
 }
 
 /*function consistOrder()

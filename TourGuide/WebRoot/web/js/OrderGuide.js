@@ -425,6 +425,11 @@ function checkOrderForm() {
 	var timeNow = getNowFormatDate();
 	var num = $("#visitorCount").val();
 	var phone = $("#visitorPhone").val();
+	var fee = $('#chooseFee option:selected').val();
+	var sex = $("input[name='guideSex']:checked").val();
+	var language = $("#guideLanguage option:selected").val();
+	var otherRequest = $("#otherRequest").val();
+	var visitorName = $("#visitorName").val();
 	var name1 = document.getElementById("ScenicName1").innerText;
 	var name2 = scenicName = $('#chooseScenicName1 option:selected').val();
 	if(name1 ==""){
@@ -448,7 +453,7 @@ function checkOrderForm() {
 		alert("时间出错，请重新选择!");
 		return false;
 	}
-	if (!$("#orderM").val()) {
+	if (!fee) {
 		alert("请输入预期价格！");
 		return false;
 	}	
@@ -467,50 +472,13 @@ function checkOrderForm() {
 	if(!timeCompare(time, timeNow)){
 			return false;	
 	}	
-	
-	var data = {
-		scenicName : scenicName,
-		otherCommand : $("#otherRequest").val(),
-		visitNum : $("#visitorCount").val(),
-		priceRange : $("#orderM").val(),
-		guideSex : $("input[name='guideSex']:checked").val(),		
-		visitorPhone : vistPhone, //vistPhone全局变量，游客的手机号
-		visitorName : $("#visitorName").val(),
-		language : $("#guideLanguage option:selected").val(),
-		purchaseTicket : 2,
-		halfPrice : 0,
-		discoutPrice : 0,
-		fullPrice : 0,
-		visitTime : time,		
-		contact : $("#visitorPhone").val()//contact,游客在发布订单界面填写的联系电话
-	};
-	alert(JSON.stringify(data));	
-	if(vistPhone != "null"){
-		releaseOrder(data);
-	}	
-}
 
-// 发布订单
-function releaseOrder(formdata) {
-	var Url = HOST + "/releaseBookOrder.do";
-	$.ajax({
-		type : "post",
-		url : Url,
-		async : true,
-		data : formdata,
-		datatype : "JSON",
-		error : function() {
-			alert("发布订单Request error!");
-		},
-		success : function(data) {
-			if (data == true) {
-				alert("发布订单成功！");
-				window.location.href="orderFormList.html";
-			} else {
-				alert("发布订单失败");
-			}
-		}
-	});
+	var Url = "confirmBookRelease.html?scenicName=" + 
+	scenicName+"&visitTime="+time+"&visitNum="+num+
+	"&priceRange="+fee+"&guideSex="+sex+"&visitorName="+visitorName+"&language="+
+	language+"&contact="+phone+"&otherRequest="+otherRequest;
+
+	window.open(Url);	
 }
 
 

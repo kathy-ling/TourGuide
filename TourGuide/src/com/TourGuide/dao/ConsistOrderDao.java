@@ -25,6 +25,10 @@ import java.util.Map;
 
 
 
+
+
+
+
 import javax.sql.DataSource;
 
 import org.apache.tomcat.util.bcel.Const;
@@ -42,6 +46,9 @@ public class ConsistOrderDao {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private GuideDao guideDao;
 	
 	private final int isConsisted = 0;  //isConsisted,订单未被拼单
 	
@@ -78,9 +85,9 @@ public class ConsistOrderDao {
 			conn.setAutoCommit(false);
 			
 			String sqlString2 = "insert into t_consistresult (orderID,visitNum,maxNum,"
-					+ "visitTime,scenicID,finishScan) values (?,?,?,?,?,?)";
+					+ "visitTime,scenicID,finishScan,guideFee) values (?,?,?,?,?,?,?)";
 			int j = jdbcTemplate.update(sqlString2, new Object[]{orderID, visitNum, 
-					maxNum, visitTime, scenicID, finishScan});
+					maxNum, visitTime, scenicID, finishScan,fee});
 			
 			String sqlString = "insert into t_consistOrder (consistOrderID,orderID,scenicID,produceTime,"
 					+ "visitTime,visitNum,visitorPhone,contact,orderState,"
@@ -96,7 +103,9 @@ public class ConsistOrderDao {
 			String payTime = MyDateFormat.form(new Date());
 			String sqlUpdate = "update t_consistOrder set hadPay=1,payTime='"+payTime+"' "
 					+ "where consistOrderID='"+consistOrderID+"'";
-			int k = jdbcTemplate.update(sqlUpdate);
+			int k = jdbcTemplate.update(sqlUpdate);	
+			
+			boolean assign = AssignGuide(visitTime, visitNum, maxNum, scenicID, orderID);
 
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
@@ -113,6 +122,70 @@ public class ConsistOrderDao {
 	}
 	
 	
+	/**
+	 * 为拼团订单分配导游
+	 * @param visitTime
+	 * @param visitNum
+	 * @param maxNum
+	 * @param scenicID
+	 * @param orderID
+	 * @return
+	 * @throws SQLException 
+	 */
+	public boolean AssignGuide(String visitTime, int visitNum, int maxNum,
+			String scenicID, String orderID) throws SQLException{
+		
+		boolean bool = false;
+		String phoneString = null;
+		
+		if(visitNum >= maxNum-3){
+			phoneString = guideDao.getPhoneOfPinGuide(visitTime, scenicID);
+		}
+		if(phoneString != null){
+			
+			DataSource dataSource =jdbcTemplate.getDataSource();
+			Connection conn = null;
+			int hour = 0;
+			try {	
+				conn = dataSource.getConnection();
+				conn.setAutoCommit(false);
+				
+				CallableStatement cst = conn.prepareCall("call getMaxHourbyScenicID(?)");
+				cst.setString(1, scenicID);
+				ResultSet rst=cst.executeQuery();
+				
+				while (rst.next()) {
+					hour = Integer.parseInt(rst.getString(1));
+				}
+				
+				String sqlInsert = "insert into t_guideBeOrdered "
+						+ "(orderId,guidePhone,visitTime,timeFrom,timeTo)"
+						+ "values (?,?,?,?,?)";
+				String timeFrom = DateConvert.addHourToTime(visitTime+":00", -hour);
+				String timeTo = DateConvert.addHourToTime(visitTime+":00", hour);
+				int k = jdbcTemplate.update(sqlInsert, new Object[]{orderID, phoneString, visitTime,
+						timeFrom, timeTo});
+				
+				String sqlUpdate = "update t_consistOrder set guidePhone='"+phoneString+"',"
+						+ "orderState='待游览' where orderID='"+orderID+"'";
+				int j = jdbcTemplate.update(sqlUpdate);
+				
+				String Update = "update t_consistresult set guidePhone='"+phoneString+"' where orderID='"+orderID+"'";
+				int i = jdbcTemplate.update(Update);
+				
+				conn.commit();//提交JDBC事务 
+				conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+				
+				if(i!=0 && j!=0 && k!=0){
+					bool = true;
+				}
+			} catch (SQLException e) {
+				conn.rollback();
+				e.printStackTrace();
+			}						
+		}
+		return bool;
+	}
 	
 	
 	/**
@@ -167,6 +240,8 @@ public class ConsistOrderDao {
 			String sqlUpdate = "update t_consistorder set payTime='"+payTime+"',hadPay=1 "
 					+ "where orderID='"+orderID+"' ";
 			int h = jdbcTemplate.update(sqlUpdate);
+			
+			boolean assign = AssignGuide(visitTime, visitNum, maxNum, scenicID, orderID);
 
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
@@ -183,6 +258,7 @@ public class ConsistOrderDao {
 		return bool;
 	}
 
+	
 	
 	
 	
@@ -408,6 +484,7 @@ public class ConsistOrderDao {
 				map.put("visitNum", rst.getInt(4));
 				map.put("guideFee", rst.getInt(5));
 				map.put("scenicName", rst.getString(6));
+				map.put("cancleFee", rst.getInt(7));
 				
 				list.add(map);
 			}			

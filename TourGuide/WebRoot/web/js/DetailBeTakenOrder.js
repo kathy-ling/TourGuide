@@ -67,7 +67,7 @@ function takeorder(){
 		url:url,
 		async:true,
 		datatype:"JSON",
-		data:{orderID:OrderID,guidePhone:"13165662195"},
+		data:{orderID:OrderID,guidePhone:vistPhone},
 		error:function()
 		{
 			alert("抢单 Request error!");

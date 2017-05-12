@@ -3,14 +3,20 @@ var num;
 var totalFee;
 var name;
 
+var type = GetUrlem("type");
+var orderId = GetUrlem("orderId");
+
+//type="预约单";
+//orderId='7e3a5711e3664f308701995162bf2af8';
 
 $(function($){
+	
 	setData();
 	
-	$('#forGuide').hide();
-	
 	initMap();
-	
+
+	$("#deleteBtn").hide();
+	$("#cancleFee").hide();
 });
 
 function initMap()
@@ -36,7 +42,7 @@ function initMap()
 }
 
 function setData(){
-	var orderId = GetUrlem("orderId");
+//	var orderId = GetUrlem("orderId");
 	$(".orderFormId").html(orderId);
 	
 	$.ajax({
@@ -114,14 +120,24 @@ function setNormalData(data){
 	$(".viewState").html(data.orderState);
 	$(".totalMoney1").html(data.money);
 	
-	$(".longitude").html(data.longitude);
-	$(".latitude").html(data.latitude);
+	$("#longitude").html(data.longitude);
+	$("#latitude").html(data.latitude);
 	
 	longitudeData = data.longitude;
 	latitudeData = data.latitude;
 	
 	num = data.visitNum;
 	totalFee = data.money;
+	
+	if(data.orderState == "已取消" || data.orderState == "待评价"){
+		$("#cancleBtn").hide();
+		$("#locationA").hide();
+		$("#deleteBtn").show();
+		if(data.orderState == "已取消"){
+			$("#cancleFee").show();
+			$("#fee").html(data.cancleFee);
+		}
+	}
 }
 
 //设置景区名称
@@ -150,7 +166,7 @@ function setGuidegData(guidePhone){
 function produce()
 {
 	$("#qrcode").empty();
-	var orderId = GetUrlem("orderId");
+//	var orderId = GetUrlem("orderId");
 	
 	jQuery('#canavas').qrcode({width: 200,height: 200,correctLevel:0,text:utf16to8(orderId)});
 	
@@ -176,13 +192,129 @@ function convertCanvasToImage(canvas) {
 //从服务器端获取经纬度坐标，并进行导航
 function getLocationVisitor()
 {
-//	alert(longitudeData);
-//	alert(latitudeData);
-//	alert(latitudeMy);alert(longitudeMy);
 	var A = document.getElementById("locationA");
 	A.href = "http://api.map.baidu.com/direction?origin=latlng:"+latitudeMy+","+longitudeMy+"|name:我的位置&destination=latlng:"+latitudeData+","+longitudeData+"|name:集合位置&mode=driving&region=西安&output=html&src=yourCompanyName|yourAppName";
 }
 
+//点击【取消订单】
+function cancleOrder(){
+	var str = "取消订单，将会扣除最高5%的费用作为手续费，您确定要取消么？"
+	//弹出一个询问框，有确定和取消按钮 
+	if(confirm(str)) {
+		alert(type== "预约单");
+		if(type == "预约单"){
+			alert('into');
+			cancleBookOrder();
+		}else if(type == "拼团单"){
+			cancleConsistOrder();
+		}      
+   }  
+}
+
+function cancleBookOrder(){
+	var url = HOST + "/cancleBookOrder.do";
+	var fee = $(".totalMoney").html();
+	
+	$.ajax({
+		type : "post",
+		url : url,
+		async : true,
+		data:{orderId:orderId},
+		datatype : "JSON",
+		success : function(data) {
+//			1--取消成功,-1--已经开始参观，不能取消,2--扣费1%,3--扣费5%
+			alert(JSON.stringify(data));
+			if(data == -1){
+				alert("已经开始参观，不能取消");
+			}
+			if(data == 1){
+				alert("取消成功");
+				window.location.href = "orderFormInfo.html?orderId=" + orderId;
+			}
+			if(data == 2){
+				alert("取消成功,扣费 " + fee*0.01 + " 元");
+				alert("剩余的金额将在三到五个工作日内返还到您的账户！");
+				window.location.href = "orderFormInfo.html?orderId=" + orderId;
+			}
+			if(data == 3){
+				alert("取消成功,扣费 " + fee*0.05 + " 元");
+				alert("剩余的金额将在三到五个工作日内返还到您的账户！");
+				window.location.href = "orderFormInfo.html?orderId=" + orderId;
+			}
+		}
+	});	
+}
+
+function cancleConsistOrder(){
+	var url = HOST + "/cancleConsistOrder.do";
+	var fee = $(".totalMoney").html();
+	var num = $(".vistorNum").html();
+	
+	$.ajax({
+		type : "post",
+		url : url,
+		async : true,
+		data:{orderId:orderId},
+		datatype : "JSON",
+		success : function(data) {
+//			1--取消成功,-1--已经开始参观，不能取消,2--扣费1%,3--扣费5%，4--扣费2%
+			alert(JSON.stringify(data));
+			if(data == -1){
+				alert("已经开始参观，不能取消");
+			}
+			if(data == 1){
+				alert("取消成功");
+				window.location.href = "orderFormInfo.html?orderId=" + orderId;
+			}
+			if(data == 2){
+				alert("取消成功,扣费 " + fee*num*0.01 + " 元");
+				alert("剩余的金额将在三到五个工作日内返还到您的账户！");
+				window.location.href = "orderFormInfo.html?orderId=" + orderId;
+			}
+			if(data == 3){
+				alert("取消成功,扣费 " + fee*num*0.05 + " 元");
+				alert("剩余的金额将在三到五个工作日内返还到您的账户！");
+				window.location.href = "orderFormInfo.html?orderId=" + orderId;
+			}
+			if(data == 4){
+				alert("取消成功,扣费 " + fee*num*0.02 + " 元");
+				alert("剩余的金额将在三到五个工作日内返还到您的账户！");
+				window.location.href = "orderFormInfo.html?orderId=" + orderId;
+			}
+		}
+	});	
+}
+
+function deleteOrder(){
+	var str = "确定删除？";
+	if(confirm(str)){
+		deleteOrderbyVisitor();
+	}
+}
+
+function deleteOrderbyVisitor(){
+	var Url = HOST + "/deleteOrderbyVisitor.do";
+	$.ajax({
+		type:"get",
+		url:Url,
+		async:true,
+		data:{orderId:orderId},
+		error:function()
+		{
+			alert('出错啦，请稍后再试！');
+		},
+		success:function(data)
+		{
+			if(data == true){
+				alert("删除成功");
+				window.location.href = "orderFormList.html";
+			}else{
+				alert("出错啦，请稍后再试！");
+			}
+		}
+	});
+}
+ 
 
 function isRegist()
 {

@@ -5,9 +5,6 @@ OrderID = GetUrlem("OrderID");
 perNum = GetUrlem("PerNum");
 guideFee = GetUrlem("Fee");
 
-perNum=10;
-guideFee=25;
-
 				
 $(function($){
 	
