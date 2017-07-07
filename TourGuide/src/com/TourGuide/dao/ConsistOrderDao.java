@@ -29,6 +29,7 @@ import java.util.Map;
 
 
 
+
 import javax.sql.DataSource;
 
 import org.apache.tomcat.util.bcel.Const;
@@ -105,10 +106,13 @@ public class ConsistOrderDao {
 					+ "where consistOrderID='"+consistOrderID+"'";
 			int k = jdbcTemplate.update(sqlUpdate);	
 			
-			boolean assign = AssignGuide(visitTime, visitNum, maxNum, scenicID, orderID);
+			if(visitNum >= maxNum-3){
+				boolean assign = AssignGuide(visitTime, visitNum, maxNum, scenicID, orderID);
+			}			
 
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			conn.close();
 			
 			if(i!=0 && j!=0 && k!=0){
 				bool = true;
@@ -175,6 +179,7 @@ public class ConsistOrderDao {
 				
 				conn.commit();//提交JDBC事务 
 				conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+				conn.close();
 				
 				if(i!=0 && j!=0 && k!=0){
 					bool = true;
@@ -241,10 +246,13 @@ public class ConsistOrderDao {
 					+ "where orderID='"+orderID+"' ";
 			int h = jdbcTemplate.update(sqlUpdate);
 			
-			boolean assign = AssignGuide(visitTime, visitNum, maxNum, scenicID, orderID);
+			if(currentNum >= maxNum-3) {
+				boolean assign = AssignGuide(visitTime, currentNum, maxNum, scenicID, orderID);
+			}			
 
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			conn.close();
 			
 			if(i != 0 && j!=0 && k!=0 && h!=0){
 				bool = true;
@@ -426,6 +434,7 @@ public class ConsistOrderDao {
 			
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			conn.close();
 			
 			if(i != 0 && j!= 0){
 				ret = 1;
@@ -530,6 +539,26 @@ public class ConsistOrderDao {
 		} 		
 		
 		return list;
+	}
+	
+	
+	/**
+	 * 填写拼单订单中游客未确认的原因
+	 * @param orderId
+	 * @return
+	 */
+	public int writeConsitOrderReason(String orderId, String reason, String phone){
+		
+		int ret = 0;
+		
+		String update = "update t_consistorder set reason='"+reason+"' "
+				+ "where orderID='"+orderId+"' and visitorPhone='"+phone+"'";
+		int i = jdbcTemplate.update(update);
+		
+		if(i != 0){
+			ret = 1;
+		}
+		return ret;
 	}
 	
 }

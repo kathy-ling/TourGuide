@@ -26,7 +26,7 @@ public class GuideSalaryDao {
 	private JdbcTemplate jdbcTemplate;
 	
 	/**
-	 * 根据讲解员的手机号，查询讲解员的收入记录
+	 * 根据讲解员的手机号，查询讲解员的收入记录(不包括已取消的订单)
 	 * @param guidePhone  讲解员的手机号
 	 * @return
 	 */
@@ -47,6 +47,41 @@ public class GuideSalaryDao {
 				map.put("guidePhone", rst.getString(2));
 				map.put("visitNum", rst.getInt(3));
 				map.put("totalMoney", rst.getInt(4));
+				map.put("time", rst.getString(5));
+				map.put("scenicName", rst.getString(6));				
+				list.add(map);
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+		
+		return list;
+	}
+	
+	
+	/**
+	 * 若订单已取消，则取消的费用为讲解员的收入
+	 * @param guidePhone
+	 * @return
+	 */
+	public List<Map<String, Object>> getCancleOrderFee(String guidePhone){
+		
+		List<Map<String, Object>> list = new ArrayList<>();		
+		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst = conn.prepareCall("call getCancleOrderFee(?)");
+			cst.setString(1, guidePhone);
+			ResultSet rst = cst.executeQuery();
+			
+			while (rst.next()) {
+				Map<String , Object> map = new HashMap<String, Object>();
+				map.put("orderId", rst.getString(1));
+				map.put("guidePhone", rst.getString(2));
+				map.put("visitNum", rst.getInt(3));
+				map.put("totalMoney", rst.getBigDecimal(4));
 				map.put("time", rst.getString(5));
 				map.put("scenicName", rst.getString(6));				
 				list.add(map);
@@ -149,6 +184,7 @@ public class GuideSalaryDao {
 				
 				conn.commit();//提交JDBC事务 
 				conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+				conn.close();
 				
 				if(i != 0 && j != 0){
 					ret = 1;

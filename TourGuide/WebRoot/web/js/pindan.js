@@ -52,8 +52,14 @@ function chooseOrder()
 {
 	var date1= $("#visitTime1").val();
 	var visitNum = $("#chooseVisitNum").val();
-	if(scenicName == null || scenicName == ""){
-		scenicName = $('#chooseScenicName1 option:selected').val();
+
+	var name1 = document.getElementById("ScenicName1").innerText;
+	var name2 = scenicName = $('#chooseScenicName1 option:selected').val();
+	if(name1 ==""){
+		scenicName = name2;
+	}
+	if(name2 ==""){
+		scenicName = name1;
 	}
 	
 	getTodayFee();

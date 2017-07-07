@@ -1,3 +1,6 @@
+
+//vistPhone='18191762572';
+
 $(function($) {
 	//加载底部导航栏
 	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
@@ -21,7 +24,7 @@ $(function($) {
 	});
 	
 	setperinfo();
-//	vistPhone='18191762572';
+	
 	
 	var authorized = false;
 	isAuthorized();
@@ -53,10 +56,35 @@ function setperinfo() {
 				if(!patt1.test(img)){
 					img = HOST + img;
 				}
-				$(".perhead").attr("src", img);		
+				//$(".perhead").attr("src", img);		
 				}
 			}
 		});
+}
+
+function guideApply(){
+	//true--已经申请， false--未申请		
+	var url = HOST + "/hasApplied.do";
+	$.ajax({
+		type: "post",
+		url: url,
+		async: true,
+		data: {
+			phone: vistPhone
+		},
+		datatype: "JSON",
+		error: function() {
+			alert("显示个人信息Request error!");
+		},
+		success: function(data) {	
+//			alert("data"+data);
+			if(data == true){				
+				window.location.href = "ApplyInfo.html?Phone="+vistPhone;
+			}else{
+				window.location.href = "guideApply.html";
+			}
+		}
+	});
 }
 
 
@@ -103,22 +131,3 @@ function weiXin(){
 	}			
 }
 
-//签到
-/*function signIN(Phone) {
-	var URL = HOST + "guideCheckIn.do?phone=" + Phone;
-	$.ajax({
-		type: "get",
-		url: URL,
-		async: true,
-		error: function(data) {
-			alert("requertError签到失败");
-		},
-		success: function(data) {
-			if(data = true) {
-				alert("签到成功");
-			} else {
-				alert("签到失败");
-			}
-		}
-	});
-}*/

@@ -10,10 +10,10 @@ window.onload = function() {
 	$("#chosePanel").show();
 	$("#releaseDiv").hide();
 	
-	$("#panel2Btn").bind("click", function(event){
+	$("#panel2Btn").bind("click", function(event){		
+		isRegistOrder();
 		$("#chosePanel").hide();
 		$("#releaseDiv").show();
-		isRegistOrder();
 	});
 	
 	$("#panel1Btn").bind("click", function(event){
@@ -329,7 +329,7 @@ function addlist(data) {
 		var A1List = document.createElement("a");
 		A1List.setAttribute("data-icon",false);
 		A1List.innerHTML = "立即预约";
-		if(vistPhone != undefined && vistPhone != "null"){
+		if(vistPhone != undefined && vistPhone != "null" && vistPhone != openId){
 			A1List.href = "confirmOrderInfo.html?"+ "guidePhone=" + n.phone+"&visitDate="
 			+visitDate+"&visitTime="+visitTime+"&scenicName="+n.scenicName;
 		}else{

@@ -4,9 +4,12 @@ $(document).ready(function()
 {
 	var ScenicNo = GetUrlem("scenicNo");
 	
-//	ScenicNo = '19743';
+	ScenicNo = '197865';
 	
 	refreshPage(ScenicNo);	
+	getPromotion(ScenicNo);
+	
+	$("#promotions").hide();
 });
 
 function refreshPage(ScenicNo){
@@ -14,6 +17,7 @@ function refreshPage(ScenicNo){
 	sessionStorage.ScenicNo = ScenicNo;
 	setscenicInfo(ScenicNo);
 //	setTickMoney(ScenicNo);
+	
 	
 }
 
@@ -38,7 +42,7 @@ function setscenicInfo(ScenicNo){
 				//设置显示名称
 				$("#scenic_title").html(item.scenicName);
 				//设置显示图片
-				$("#scenic_img").attr("src",HOST+item.scenicImagePath);
+				$("#scenic_img").attr("src", HOST + item.scenicImagePath);				
 				//设置显示简介
 				$("#scenic_info").html(item.scenicIntro);
 				//设置显示历史参观人数
@@ -116,6 +120,85 @@ function clickFastPin(){
 			return;
 		}
 	}
+}
+
+//获取首页的活动信息
+function getPromotion(ScenicNo)
+{
+	var url = HOST + "/getScenicPromotions.do";
+	$.ajax({
+		url : url,
+		datatype : "JSON",
+		async: false,
+		data:{scenicNo:ScenicNo},
+		type : "GET",
+		error : function(data) {
+			alert("活动信息request error!");
+			console.log(JSON.stringify(data));
+		},
+		success : function(data) {
+			
+			$.each(data, function(i, item) {
+				if(data.length != 0){
+					$("#promotions").show();
+					//alert(JSON.stringify(data));
+					$("act").show();
+				}
+				
+				var UlList = document.getElementById("more_ul");
+				freshList(data, UlList);
+				
+				/*var UlList = document.getElementById("index_ul_id");
+				var LiList = document.createElement("li");
+				UlList.appendChild(LiList);								
+
+				var AList = document.createElement("a");
+
+				AList.setAttribute("href", item.promotionLinks);
+				
+				//alert(item.promotionLinks);
+
+				LiList.appendChild(AList);
+
+				var ImgList = document.createElement("img");
+				ImgList.setAttribute("src", "img/visitor.png");
+//				alert("item.promotionImage:" + item.promotionImage);
+				ImgList.setAttribute("alt", item.promotionTitle);
+				AList.appendChild(ImgList);*/
+			});
+			/*$(".slider").yxMobileSlider({
+				width : 640,
+				height : 320,
+				during : 3000
+			});//轮播图片初始化*/
+		}
+	});
+}
+
+function freshList(data, UlList) {
+	$.each(data, function(i, item) {
+		var LiList = document.createElement("li");
+		UlList.appendChild(LiList);
+
+		var DivList = document.createElement("div");
+		DivList.className = "imglist-box";
+		LiList.appendChild(DivList);
+
+		var AList = document.createElement("a");
+		AList.setAttribute("data-ajax",false)
+		AList.href = item.promotionLinks;
+		
+		DivList.appendChild(AList);
+
+		var ImgList = document.createElement("img");
+		ImgList.setAttribute("src", item.promotionImage);
+		var Plist = document.createElement("p");
+		Plist.className = "imgbar";
+		Plist.innerHTML = item.promotionTitle;
+		AList.appendChild(ImgList);
+		AList.appendChild(Plist);
+	});
+	$(".imglist-box").height($(document).width() * 0.25);
 }
 
 function isRegist()

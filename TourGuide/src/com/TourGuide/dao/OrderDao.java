@@ -240,6 +240,8 @@ public class OrderDao {
 				map.put("startTime", rst.getString(12));
 				map.put("endTime", rst.getString(13));
 				map.put("cancleFee", rst.getInt(14));
+				map.put("confirm", rst.getInt(15));
+				map.put("reason", rst.getString(16));
 			}							
 			conn.close();
 		} catch (SQLException e) {
@@ -278,6 +280,7 @@ public class OrderDao {
 				map.put("startTime", rst.getString(10));
 				map.put("endTime", rst.getString(11));
 				map.put("cancleFee", rst.getInt(12));
+				map.put("isFastPin",rst.getInt(13));
 			}							
 			conn.close();
 		} catch (SQLException e) {
@@ -308,6 +311,8 @@ public class OrderDao {
 				map.put("visitorPhone", rst.getString(1));
 				map.put("visitorName", rst.getString(2));
 				map.put("visitNum", rst.getInt(3));
+				map.put("reason", rst.getString(4));
+				map.put("confirm", rst.getInt(5));
 				list.add(map);
 			}							
 			conn.close();
@@ -342,6 +347,7 @@ public class OrderDao {
 			
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			conn.close();
 			
 			if(i!=0 || j!=0){
 				bool = true;

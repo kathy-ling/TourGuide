@@ -14,14 +14,13 @@ $('#guideinfoPage').bind('pageshow',function(event, ui){
         	$(".guideInfoHead").width($(".guideInfoHead").height());
         });
         
-      /*//加载底部导航栏
-	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");*/
+    $("#moreCommentsBtn").hide();
       
 	phone = GetUrlem("phone");
 	visitDate=GetUrlem("visitDate");
 	visitTime=GetUrlem("visitTime");
-//	visitNum=GetUrlem("visitNum");
 	scenicName=GetUrlem("scenicName");
+//	phone = '15023692586';
 	
 	$("#DirectorderTicketSub").attr("phone",phone);
 	
@@ -81,18 +80,27 @@ var Url = HOST+"/getComments.do";
 		},
 		success:function(data)
 		{
+			var num = data.length;
+			$("#commentNum").html(num);
+			if(parseInt(num) > 4){
+				$("#moreCommentsBtn").show();
+			}
+			
 			$.each(data,function(i,item){
-				var commentStr = "<li><a><span>"+item.nickName+"</span><span>("+item.evaluateTime+")</span><br>";
-				commentStr+='<div class="starlev" data-num="'+item.star+'"></div>';
-				commentStr += "<span class='commentText'>"+item.evaluateContext+"</span>";
-				$("#commentList").append(commentStr);
+				if(parseInt(i) < 4){
+					var commentStr = "<li><a><span>"+item.nickName+"</span><span>("+item.evaluateTime+")</span><br>";			
+					commentStr += "</br><span class='commentText'>"+item.evaluateContext+"</span><hr>";
+					$("#commentList").append(commentStr);
+				}								
 			});
-			$("#commentList").listview('refresh');
-			$('.starlev').each(function(){
-				$(this).raty({path:'img',readOnly: true, score: $(this).attr("data-num")});
-			});
+			$("#commentList").listview('refresh');			
 		}
 	});
+}
+
+//【查看更多】评价
+function moreComments(){
+	window.location.href = "moreComments.html?guidePhone=" + phone;
 }
 
 //点击立即预定,要先判断是否注册

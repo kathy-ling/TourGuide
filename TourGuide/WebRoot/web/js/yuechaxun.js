@@ -20,9 +20,12 @@ $(function($){
 		}
 	});
 	
+	$("#lab_cancle").hide();
+	
 	guideInfo();
 	getSalaryAmount();
 	getSalaryRecord();
+	getgetCancleOrders();
 	getCash();
 });
 
@@ -117,6 +120,81 @@ function getSalaryRecord(){
 				var LiListInfo = document.createElement("li");
 				LiListInfo.className = "level1";
 				UlList.appendChild(LiListInfo);
+				
+				var AList = document.createElement("a");
+				AList.href = "#none";
+				AList.setAttribute("data-ajax", false);
+				
+				var PList = document.createElement("p");
+				
+				var timeSpan = document.createElement("span");
+				timeSpan.innerHTML = "日期时间：" + n.time + "<br/>" + "<br/>";
+				
+				var totalMoneySpan = document.createElement("span");
+				totalMoneySpan.innerHTML = "团总金额：" + n.totalMoney + "<br/>";
+				
+				PList.appendChild(timeSpan);
+				PList.appendChild(totalMoneySpan);
+				
+				var i = document.createElement("i");
+				i.className = "down"; 
+				
+				AList.appendChild(PList);
+				AList.appendChild(i);
+				
+				var detailUlList = document.createElement("ul");
+				detailUlList.className = "level2";				
+				
+				LiListInfo.appendChild(AList);
+				LiListInfo.appendChild(detailUlList);
+				
+				var detailLiList = document.createElement("li");
+				
+				detailUlList.appendChild(detailLiList);
+				
+				var SpanOrderId = document.createElement("span");
+				SpanOrderId.innerHTML = "订单编号:"+ "<br/>" + n.orderId + "<br/>";
+				
+				var SpanScenicName = document.createElement("span");
+				SpanScenicName.innerHTML = "景区名称：" + n.scenicName + "<br/>";
+				
+				var SpanVisitNum = document.createElement("span");
+				SpanVisitNum.innerHTML = "带团人数：" + n.visitNum + "<br/>";
+				
+				//detailLiList.appendChild(SpanOrderId);
+				detailLiList.appendChild(SpanScenicName);
+				detailLiList.appendChild(SpanVisitNum);	
+			});
+			$("#order_ul").listview("refresh");
+			myrefresh();
+		}		
+	});
+}
+
+function getgetCancleOrders(){
+	var Url = HOST + "/getCancleOrderFee.do";
+
+	$.ajax({
+		type: "get",
+		url: Url,
+		async: true,
+		data: {
+			guidePhone:vistPhone//'13165662195'
+		}, //vistPhone
+		datatype: "JSON",
+		error: function() {
+			alert("request error");
+		},
+		success: function(data) {
+			$.each(data, function(i, n) {
+				if(data.length != 0){
+					$("#lab_cancle").show();
+				}
+
+				var UlList = document.getElementById("cancle_order_ul");
+				var LiListInfo = document.createElement("li");
+				LiListInfo.className = "level1";
+				UlList.appendChild(LiListInfo);								
 				
 				var AList = document.createElement("a");
 				AList.href = "#none";

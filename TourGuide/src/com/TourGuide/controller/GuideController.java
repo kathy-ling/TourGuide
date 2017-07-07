@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +76,8 @@ public class GuideController {
 	
 	
 	@RequestMapping(value="/upLoadImg.do")
-	public void UploadImage(HttpServletResponse resp,
+	@ResponseBody
+	public Object UploadImage(HttpServletResponse resp,
 			HttpServletRequest request,
 			@RequestParam MultipartFile btn_file) throws IOException {
 		
@@ -84,21 +86,28 @@ public class GuideController {
 		
 		String realPath=request.getSession().getServletContext().getRealPath("image/visitor");
 		File pathFile = new File(realPath);
+		String fileName = null;
 		
 		if (!pathFile.exists()) {
 			//文件夹不存 创建文件
 			System.out.println("目录不存在，创建目录");
 			pathFile.mkdirs();
 		}
-		imgPath = "/image/visitor/" + btn_file.getOriginalFilename();
+		
 		System.out.println("文件类型："+btn_file.getContentType());
 		System.out.println("文件名称："+btn_file.getOriginalFilename());
 		System.out.println("文件大小:"+btn_file.getSize());
 		System.out.println(".................................................");
 			//将文件copy上传到服务器
+		
+		String imgString = btn_file.getOriginalFilename();
+		String[] tmp = imgString.split("\\.");
+		fileName = tmp[0] + new Date().getTime() + "."+tmp[1];
+		imgPath = "/image/visitor/" + fileName;
+		
 		try {
-			System.out.println(realPath + "/" + btn_file.getOriginalFilename());
-			File fileImageFile=new File(realPath + "/" + btn_file.getOriginalFilename());
+			System.out.println(realPath + "/" + fileName);
+			File fileImageFile=new File(realPath + "/" + fileName);
 			btn_file.transferTo(fileImageFile);
 			System.out.println("图片上传成功");
 			ret = true;
@@ -107,9 +116,12 @@ public class GuideController {
 			e.printStackTrace();
 		}	
 		
-		PrintWriter writer = resp.getWriter();
-		writer.write(new Gson().toJson(ret));
-		writer.flush();
+		System.out.println(ret);
+		return ret;
+		/*PrintWriter writer = resp.getWriter();
+		writer.write(new Gson().toJson("ret"));
+		writer.close();
+		writer.flush();*/
 	}  	
 	
 	/**
@@ -334,6 +346,48 @@ public class GuideController {
 		boolean bool = guideService.isSignIn(orderId);
 		
 		return bool;
+	}
+	
+	
+	/**
+	 *  查看导游是否已经申请成为导游了
+	 * @param resp
+	 * @param phone
+	 * @return  true--已经申请， false--未申请
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	@RequestMapping(value = "/hasApplied.do")
+	@ResponseBody
+	public Object hasApplied(HttpServletResponse resp,
+			@RequestParam("phone") String phone)throws IOException, SQLException{
+		
+		CommonResp.SetUtf(resp);
+		
+		boolean bool = guideService.hasApplied(phone);
+		
+		return bool;
+	}
+	
+	
+	/**
+	 * 根据手机号，查询导游的申请信息
+	 * @param phone 手机号
+	 * @return  
+	 * 姓名、性别、年龄、从业时间、联系电话、讲解语言、景区名称、自我介绍、个人照片、申请日期、通过日期
+	 */
+	@RequestMapping(value = "/getGuideApplyInfoByPhone.do")
+	@ResponseBody
+	public Object getGuideApplyInfoByPhone(HttpServletResponse resp,
+			@RequestParam("guidePhone") String guidePhone) throws IOException{
+		
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> listResult = new ArrayList<>();
+		
+		listResult = guideService.getGuideApplyInfoByPhone(guidePhone);
+		
+		return listResult;
 	}
 	
 }

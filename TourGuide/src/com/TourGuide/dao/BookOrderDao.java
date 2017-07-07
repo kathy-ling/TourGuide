@@ -16,6 +16,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
 import com.TourGuide.common.DateConvert;
@@ -26,6 +27,12 @@ public class BookOrderDao {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private GuideDao guideDao;
+	
+	@Autowired
+	private OrderDao orderDao;
 	
 	/**
 	 * 将游客自己发布的预约订单存入数据库
@@ -105,7 +112,7 @@ public class BookOrderDao {
 	 */
 	public int BookOrderWithGuide(String orderID, String produceTime, String guidePhone, 
 			String visitorPhone, String visitTime, String scenicID, 
-			int visitNum, int guideFee, String contactPhone, String language) throws SQLException{
+			int visitNum, int guideFee, String contactPhone, String language, String visitorName) throws SQLException{
 		
 		int ret = 0;	
 		String orderState = "待付款";
@@ -116,20 +123,23 @@ public class BookOrderDao {
 				conn = dataSource.getConnection();
 				conn.setAutoCommit(false);
 				
+				List<Map<String, Object>> guideInfoList = guideDao.GetGuiderinfoByPhone(guidePhone);
+				String sex = (String) guideInfoList.get(0).get("sex");
+				
 				String sqlString = "insert into t_bookorder (bookOrderID,produceTime,visitTime,"
-						+ "visitorPhone,visitNum,scenicID,guideFee,totalGuideFee,guidePhone,orderState,contact,language) "
-						+ "values (?,?,?,?,?,?,?,?,?,?,?,?)";
+						+ "visitorPhone,visitNum,scenicID,guideFee,totalGuideFee,guidePhone,"
+						+ "orderState,contact,language,guideSex,visitorName) "
+						+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				int i = jdbcTemplate.update(sqlString, new Object[]{orderID,produceTime,visitTime,
 						visitorPhone,visitNum, scenicID, guideFee, guideFee, guidePhone, 
-						orderState, contactPhone, language});
+						orderState, contactPhone, language,sex,visitorName});
 				
 				String payTime = MyDateFormat.form(new Date());
 				String sqlUpdate = "update t_bookorder set orderState='待游览',hadPay=1,payTime='"+payTime+"' "
 						+ "where bookOrderID='"+orderID+"'";
 				int j = jdbcTemplate.update(sqlUpdate);
 				
-				DataSource dataSource1 =jdbcTemplate.getDataSource();
-				int hour = 0;
+				/*int hour = 0;
 				try {			
 					CallableStatement cst = conn.prepareCall("call getMaxHourbyScenicID(?)");
 					cst.setString(1, scenicID);
@@ -140,20 +150,7 @@ public class BookOrderDao {
 					}							
 				} catch (SQLException e) {
 					e.printStackTrace();
-				} 
-				/*try {
-					Connection conn1 = dataSource.getConnection();
-					CallableStatement cst=conn.prepareCall("call getMaxHourbyScenicID(?)");
-					cst.setString(1, scenicID);
-					ResultSet rst=cst.executeQuery();
-					
-					while (rst.next()) {
-						hour = Integer.parseInt(rst.getString(1));
-					}							
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				} */		
+				} 					
 				
 				String sqlInsert = "insert into t_guideBeOrdered "
 						+ "(orderId,guidePhone,visitTime,timeFrom,timeTo) "
@@ -161,12 +158,14 @@ public class BookOrderDao {
 				String timeFrom = DateConvert.addHourToTime(visitTime+":00", -hour);
 				String timeTo = DateConvert.addHourToTime(visitTime+":00", hour);
 				int k = jdbcTemplate.update(sqlInsert, new Object[]{orderID, guidePhone, visitTime,
-						timeFrom, timeTo});
+						timeFrom, timeTo});*/
+				guideDao.guideBeOrdered(scenicID, orderID, guidePhone, visitTime);
 	
 				conn.commit();//提交JDBC事务 
 				conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+				conn.close();
 				
-				if(i != 0 && j!=0 && k!=0){
+				if(i != 0 && j!=0){
 					ret = 1;
 				}
 			} catch (SQLException e) {
@@ -197,7 +196,7 @@ public class BookOrderDao {
 		//查询该讲解员所属的景区(该讲解员必须审核且等级大于等于5)
 		String sqlscenicNo = "select t_guideotherinfo.scenicBelong "
 				+ "from t_guideotherinfo,t_guideinfo WHERE t_guideinfo.phone = '"+guidePhone+"' "
-				+ "and t_guideotherinfo.phone = t_guideinfo.phone and t_guideotherinfo.guideLevel >=5 "
+				+ "and t_guideotherinfo.phone = t_guideinfo.phone and t_guideotherinfo.guideLevel >=3 "
 				+ "and t_guideotherinfo.authorized=1";
 		list = jdbcTemplate.queryForList(sqlscenicNo);
 		
@@ -378,6 +377,7 @@ public class BookOrderDao {
 			
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			conn.close();
 			if(i !=0 && j!= 0){
 				bool = true;
 			}
@@ -511,21 +511,87 @@ public class BookOrderDao {
 	 * 讲解员完成预约订单的讲解
 	 * @param orderId
 	 * @return
+	 * @throws SQLException 
 	 */
-	public int finishOrderByGuide(String orderId){
+	public int finishOrderByGuide(String orderId) throws SQLException{
+		
+		int ret = 0;
+		int num = 0;
+		String phone = null;
+		
+		List<Map<String, Object>> orderInfoList = orderDao.getDetailOrderInfo(orderId);
+		if(orderInfoList.size() != 0){
+			num = (int) orderInfoList.get(0).get("visitNum");
+			phone = (String) orderInfoList.get(0).get("guidePhone");
+		}
+		
+		DataSource dataSource = jdbcTemplate.getDataSource();
+		Connection conn = null;
+		try{
+			conn = dataSource.getConnection();
+			conn.setAutoCommit(false);
+	
+			String update = "UPDATE t_bookorder SET endTime=NOW(),orderState='待评价' WHERE bookOrderID='"+orderId+"'";
+			int i = jdbcTemplate.update(update);
+			
+			String addNum = "update t_guideotherinfo set historyTimes=historyTimes+1,"
+					+ "historyNum=historyNum+"+num+" where phone='"+phone+"'";
+			int j = jdbcTemplate.update(addNum);
+			
+			String delete = "delete from t_guidebeordered where orderId='"+orderId+"'";
+			int k  = jdbcTemplate.update(delete);
+						
+			conn.commit();//提交JDBC事务 
+			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			conn.close();
+			
+			if(i != 0 && j!=0 && k!=0){
+				ret = 1;
+			}
+		} catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		}	
+		
+		return ret;
+	}
+	
+	/**
+	 * 讲解员和游客之间进行扫码确认信息
+	 * @param orderId
+	 * @return 1--信息确认成功，0--失败
+	 */
+	public int doConfirm(String orderId){
 		
 		int ret = 0;
 		
-		String update = "UPDATE t_bookorder SET endTime=NOW(),orderState='待评价' WHERE bookOrderID='"+orderId+"'";
+		String update = "update t_bookorder set confirm=1 where bookOrderID='"+orderId+"'";
 		int i = jdbcTemplate.update(update);
 		
 		if(i != 0){
 			ret = 1;
 		}
-		
 		return ret;
 	}
 	
+	
+	/**
+	 * 填写游客未确认的原因
+	 * @param orderId
+	 * @return
+	 */
+	public int writeBookOrderReason(String orderId, String reason){
+		
+		int ret = 0;
+		
+		String update = "update t_bookorder set reason='"+reason+"' where bookOrderID='"+orderId+"'";
+		int i = jdbcTemplate.update(update);
+		
+		if(i != 0){
+			ret = 1;
+		}
+		return ret;
+	}
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/**

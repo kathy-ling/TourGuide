@@ -29,7 +29,7 @@ function getGuideLevel(){
 		success: function(data) {
 			var guideLevel = data[0].guideLevel;
 
-			if(parseInt(guideLevel) < parseInt(5)){
+			if(parseInt(guideLevel) <= parseInt(2)){
 				alert("您的级别达不到接单标准");
 				window.location.href = "personalHome.html";
 			}	
@@ -53,6 +53,7 @@ function getReleasedOrders(){
 		},
 		success:function(data)
 		{
+			//alert(JSON.stringify(data));
 			var num = data.length;
 			$("#orderCount").html(num);
 			$.each(data, function(i,n){

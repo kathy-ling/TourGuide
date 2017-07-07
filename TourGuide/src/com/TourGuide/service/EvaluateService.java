@@ -25,7 +25,7 @@ public class EvaluateService {
 	 * @param isAnonymous  是否匿名（1-匿名）
 	 * @return
 	 */
-	public boolean commentByVisitor(String orderID, String evaluateContext,
+	public int commentByVisitor(String orderID, String evaluateContext,
 			String evaluateTime, int isAnonymous, int star1, int star2, int star3){
 		
 		return evaluateDao.commentByVisitor(orderID, evaluateContext,

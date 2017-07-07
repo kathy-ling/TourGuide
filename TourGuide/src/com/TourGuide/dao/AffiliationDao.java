@@ -61,7 +61,7 @@ public class AffiliationDao {
 				  conn.setAutoCommit(false);
 				  
 				  String sqlUpdate = "update t_guideotherinfo set scenicBelong='"+scenicID+"' "
-							+ "where phone='"+guidePhone+"' and authorized=1";
+							+ "where phone='"+guidePhone+"' and authorized=2";
 				  int i = jdbcTemplate.update(sqlUpdate);
 				  
 				  if (i != 0 ){
@@ -78,6 +78,7 @@ public class AffiliationDao {
 			
 				  conn.commit();//提交JDBC事务 
 				  conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+				  conn.close();
 				  if (i != 0 && j != 0 && k != 0){
 					  ret = 1;
 				  }
@@ -111,6 +112,13 @@ public class AffiliationDao {
 		int guideFee = (int) map.get("guideFee");
 		String guideLevel = (String) map.get("guideLevel");
 		
+		String sqlSelect = "select * from t_guidebeordered where guidePhone='"+guidePhone+"'";
+		List<Map<String , Object>> list = jdbcTemplate.queryForList(sqlSelect);
+		
+		if(list.size() != 0){
+			return false;
+		}
+		
 		//jdbc事务
 		DataSource dataSource = jdbcTemplate.getDataSource();
 		Connection  conn = null;
@@ -125,14 +133,18 @@ public class AffiliationDao {
 			int j = jdbcTemplate.update(sqlRecord);
 			
 			String sqlUpdate = "update t_guideotherinfo set scenicBelong='null',"
-					+ "historyTimes=0,historyNum=0,singleMax=0,guideFee=0,guideLevel='0',"
+					+ "historyTimes=0,historyNum=0,singleMax=0,guideFee=0,guideLevel='0',authorized='2',"
 					+ "InterviewTime='null',Interviewlocation='null',InterviewContext='null' "
 					+ "where phone='"+guidePhone+"'";
-			int i = jdbcTemplate.update(sqlUpdate);		
+			int i = jdbcTemplate.update(sqlUpdate);	
+			
+			String delete = "delete from guide where gtel='"+guidePhone+"'";
+			int k = jdbcTemplate.update(delete);	
 			
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
-			if (i != 0 && j != 0){
+			conn.close();
+			if (i != 0 && j != 0 && k!= 0){
 				bool = true;
 			}
 		} catch (SQLException e) {

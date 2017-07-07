@@ -16,6 +16,13 @@ public class test {
 
 	public static void main(String[] args) throws java.text.ParseException {
 		
+		String imgString = "640 (1).jpg";
+		
+		String[] tmp = imgString.split("\\.");
+		String fileName = tmp[0] + new Date().getTime() + "."+tmp[1];
+		
+		System.out.println(fileName);
+		
 //		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //		Date date=null;
 //		try {
@@ -37,9 +44,9 @@ public class test {
 		
 //		System.out.println(DateConvert.addMinuteToTime("2012-7-25 12:00:00", 35));
 
-		String visitTime="2017-05-06 08:00:00";
+		/*String visitTime="2017-05-06 08:00:00";
 		int visitNum=5;
-		String scenicID="19743";
+		String scenicID="19743";*/
 	}
 	
 	/**

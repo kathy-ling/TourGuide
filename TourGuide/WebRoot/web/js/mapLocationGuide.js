@@ -56,8 +56,8 @@ $(function($){
 
 function setLocation()
 {
-	alert(type);
-	alert(longitude);alert(latitude);
+//	alert(type);
+//	alert(longitude);alert(latitude);
 	if(type == "——我的拼团单"){
 		uploadConsistLocation(longitude,latitude);
 	}else if(type == "——我的预约单"){
@@ -81,7 +81,7 @@ function uploadBookLocation(longitude,latitude){
 		success:function(data)
 		{
 			alert("上传位置成功！");
-			alert(data);
+//			alert(data);
 			if(data == 1){
 				alert("位置设置成功");
 				window.history.back();
@@ -106,7 +106,7 @@ function uploadConsistLocation(longitude,latitude){
 		},
 		success:function(data)
 		{
-			alert(data);
+//			alert(data);
 			if(data == 1){
 				alert("位置设置成功");		
 				window.history.back();

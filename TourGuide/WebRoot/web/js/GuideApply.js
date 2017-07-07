@@ -4,22 +4,23 @@ $(document).ready(function() {
 				
 	$(window).bind('resize load', function() {
 		$(".perheader").height($(window).width() * 0.5);
-		$(".squareImg").width($(".squareImg").height());
+		$(".squareImg").width($(".squareImg").height());		
+	});
 	
-		var Phone = vistPhone;
-
-		setperinfo(Phone);
-		addAllScenics();
-				
-		$("#visitor_img").click(function() {
-			$("#btn_file").click();		
-		});
+	var Phone = vistPhone;
+//	alert("Phone"+Phone);
+//	Phone = '18191762572';
+	setperinfo(Phone);
+	addAllScenics();		
+			
+	$("#visitor_img").click(function() {
+		$("#btn_file").click();		
 	});
 });			
 
 function setperinfo(Phone){
 	var url = HOST+"/getVisitorInfoWithPhone.do";
-	
+
 	$.ajax({
 		type:"post",
 		url:url,
@@ -31,7 +32,7 @@ function setperinfo(Phone){
 			alert("显示个人信息Request error!");
 		},
 		success:function(data)
-		{
+		{			
 			if(JSON.stringify(data)!="{}"){
 				$("#apply_tel").val(data.phone);
 				$("#apply_name").val(data.name);
@@ -83,13 +84,24 @@ function selectImage(file)
 
 function upLoadImg()
 {
+	var src = document.getElementById("visitor_img").src;
+	var patt1 = new RegExp("visitor");
+	if(patt1.test(src)){
+		alert("请选择照片！");
+		return;
+	}
+	
 	var URL = HOST+"/upLoadImg.do";
 	
 	$.ajaxFileUpload({
 			url : URL,
 			fileElementId:'btn_file',
 			dataType : "json",
+			type:'json',
 			success: function(data){
+//				alert(JSON.stringify(data));
+//				alert(data == true);
+//				alert(data == "true");
 				if(data == true)					
 				{
 					checkAuthentication();
@@ -99,8 +111,9 @@ function upLoadImg()
 				}				
 			 },
 			error: function(data)
-			{				
-				alert("error,图片上传异常");
+			{			
+				alert(JSON.stringify(data));
+				alert("error---图片上传异常");
 			}
 	});	
 }

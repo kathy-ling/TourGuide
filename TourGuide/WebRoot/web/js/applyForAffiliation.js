@@ -106,9 +106,9 @@ function setCurrentSpot() {
 				
 				$("#current_ul").append(p1+p2+p3+div);
 				$("#current_ul").listview("refresh");
-			}else{
-				$("#lable1").show();
-				$("#lable1").html("您还未挂靠景点!"); 
+			}else{	
+				$("#lable1").html("您还未挂靠景点!");
+				$("#lable1").show();				 
 			}
 		}
 	});
@@ -150,6 +150,7 @@ function getCurrentApply(){
 //取消挂靠
 function cancle(This){
 	var scenicId = This.attr("scenicID");
+	
 	var URL = HOST+'/cancleAffiliation.do';
 
 	$.ajax({
@@ -167,6 +168,9 @@ function cancle(This){
 			if(data == true){
 				alert("取消成功！");
 				setCurrentSpot();				
+			}
+			if(data == false){
+				alert("您还有订单未处理，不能取消挂靠！");
 			}
 		}
 	});

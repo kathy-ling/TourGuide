@@ -2,7 +2,7 @@
 	
 $(function($){
 	var Phone = vistPhone;
-
+//	Phone = '18191762572';
 	setperinfo(Phone);
 });
 
@@ -33,6 +33,7 @@ function setperinfo(Phone){
 			if(!patt1.test(img)){
 				img = HOST + img;
 			}
+			
 			$("#visithead").attr("src",img);
 			$("#visitheadBG").attr("src",img);
 			}

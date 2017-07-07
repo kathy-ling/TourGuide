@@ -66,12 +66,7 @@ public class GuideDao {
 				guideInfo.setPhone(res.getString(1));
 			}
 		});
-		String phoneExist = guideInfo.getPhone();
-		
-		//账号已存在
-		if(phoneExist != null){			
-			return retValue = -1;
-		}
+		String phoneExist = guideInfo.getPhone();			
 		
 		DataSource dataSource = jdbcTemplate.getDataSource();
 		Connection  conn = null;
@@ -79,29 +74,45 @@ public class GuideDao {
 			conn = dataSource.getConnection();
 			conn.setAutoCommit(false);
 			
-			//向t_guideinfo表中插入导游的基本信息
-			String sqlString = "insert into t_guideinfo (phone,name,sex,language,selfIntro,image,age) "
-					+ "values (?,?,?,?,?,?,?)";
-			int i = jdbcTemplate.update(sqlString, new Object[]{phone, name, sex,
-					language, selfIntro, image, age});		
+			int i=0,j=0,k=0,p=0,m=0,n=0;
 			
-			//向t_guideotherinfo插入其他的信息
-			String sqlString2 = "insert into t_guideotherinfo (phone,workAge,scenicBelong,authorized,disabled) "
-					+ "values (?,?,?,?,?)";
-			int j = jdbcTemplate.update(sqlString2, new Object[]{phone, workAge, scenicId, 0, 0});
+			//首次申请成为导游
+			if(phoneExist == null){	
+				//向t_guideinfo表中插入导游的基本信息
+				String sqlString = "insert into t_guideinfo (phone,name,sex,language,selfIntro,image,age) "
+						+ "values (?,?,?,?,?,?,?)";
+				i = jdbcTemplate.update(sqlString, new Object[]{phone, name, sex,
+						language, selfIntro, image, age});		
+				
+				//向t_guideotherinfo插入其他的信息
+				String sqlString2 = "insert into t_guideotherinfo (phone,workAge,scenicBelong,authorized,disabled) "
+						+ "values (?,?,?,?,?)";
+				j = jdbcTemplate.update(sqlString2, new Object[]{phone, workAge, scenicId, 0, 0});
+				
+				//向t_guideworkday中插入信息
+				String sqlString3 = "insert into t_guideworkday (guidePhone) values (?)";
+				k = jdbcTemplate.update(sqlString3, new Object[]{phone});
+				
+				String sqlApply = "insert into t_affiliation (guidePhone,scenicID,applyDate,state) "
+						+ "values (?,?,?,?)";
+				p = jdbcTemplate.update(sqlApply, new Object[]{phone,scenicId,dayNow,1});
+				
+			}else{//取消景区挂靠后，再次申请
+				String sqlApply = "insert into t_affiliation (guidePhone,scenicID,applyDate,state) "
+						+ "values (?,?,?,?)";
+				m = jdbcTemplate.update(sqlApply, new Object[]{phone,scenicId,dayNow,1});
+				
+				String update = "update t_guideotherinfo set workAge='"+workAge+"',"
+						+ "scenicBelong='"+scenicId+"',authorized=0,disabled=0 where phone='"+phone+"'";
+				n = jdbcTemplate.update(update);
+			}
 			
-			//向t_guideworkday中插入信息
-			String sqlString3 = "insert into t_guideworkday (guidePhone) values (?)";
-			int k = jdbcTemplate.update(sqlString3, new Object[]{phone});
-			
-			String sqlApply = "insert into t_affiliation (guidePhone,scenicID,applyDate,state) "
-					+ "values (?,?,?,?)";
-			int p = jdbcTemplate.update(sqlApply, new Object[]{phone,scenicId,dayNow,1});
 			
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			conn.close();
 			
-			if (i!=0 && j!=0 && k!=0 && p != 0) {
+			if ((i!=0 && j!=0 && k!=0 && p != 0) || (m!=0 && n!=0)) {
 				retValue = 1;
 			}
 			
@@ -205,7 +216,7 @@ public class GuideDao {
 			String sqlString = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
 					+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes,t_scenicspotinfo.scenicName from t_guideinfo,"
 					+ "t_guideotherinfo,t_scenicspotinfo where t_guideinfo.phone = t_guideotherinfo.phone "
-					+ "and guideLevel >= 5 AND t_guideotherinfo.scenicBelong=t_scenicspotinfo.scenicNo and t_guideotherinfo.phone in "
+					+ "and guideLevel >= 2 AND t_guideotherinfo.scenicBelong=t_scenicspotinfo.scenicNo and t_guideotherinfo.phone in "
 					+ "(select guidePhone from t_guideworkday where "+selectDay+"=1)"
 					+ "ORDER BY guideLevel desc,historyTimes desc";
 			list = jdbcTemplate.queryForList(sqlString);
@@ -213,7 +224,7 @@ public class GuideDao {
 			String sqlSelect = "select t_guideinfo.phone,image,`name`,sex,age,`language`,selfIntro,"
 					+ "t_guideotherinfo.guideLevel,t_guideotherinfo.historyTimes,t_scenicspotinfo.scenicName from t_guideinfo,t_guideotherinfo,t_scenicspotinfo "
 					+ "where t_guideinfo.phone = t_guideotherinfo.phone and scenicBelong = '"+scenicID+"' "
-					+ "and guideLevel >= 5 AND t_guideotherinfo.scenicBelong=t_scenicspotinfo.scenicNo and t_guideotherinfo.phone in "
+					+ "and guideLevel >= 2 AND t_guideotherinfo.scenicBelong=t_scenicspotinfo.scenicNo and t_guideotherinfo.phone in "
 					+ "(select guidePhone from t_guideworkday where "+selectDay+"=1)"
 					+ "ORDER BY guideLevel desc,historyTimes desc";
 			list = jdbcTemplate.queryForList(sqlSelect);
@@ -500,6 +511,8 @@ public class GuideDao {
 				map.put("scenicBelong", rst.getString(13));
 				map.put("singleMax", rst.getInt(14));
 				map.put("scenicName", rst.getString(15));
+				map.put("workAge", rst.getString(16));
+				map.put("authorized", rst.getInt(17));				
 				list.add(map);
 			}							
 			conn.close();
@@ -529,7 +542,7 @@ public class GuideDao {
 			
 			while (rst.next()) {
 				int authorized = rst.getInt(1);
-				if(authorized == 1){
+				if(authorized != 0){
 					bool = true;
 				}				
 			}							
@@ -566,6 +579,7 @@ public class GuideDao {
 			
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			conn.close();
 			
 			if(i!=0 || j!=0){
 				bool = true;
@@ -607,6 +621,110 @@ public class GuideDao {
 			e.printStackTrace();
 		} 
 		return bool;
+	}
+	
+	
+	/**
+	 * 查看导游是否已经申请成为导游了
+	 * @param phone
+	 * @return  true--已经申请， false--未申请
+	 */
+	public boolean hasApplied(String phone){
+		
+		boolean bool = false;		
+		final GuideInfo guideInfo = new GuideInfo();		
+		
+		String sqlSearch = "select phone from t_guideinfo where phone='"+phone+"'";	
+		jdbcTemplate.query(sqlSearch,  new RowCallbackHandler() {
+			
+			@Override
+			public void processRow(ResultSet res) throws SQLException {
+				guideInfo.setPhone(res.getString(1));
+			}
+		});
+		String phoneExist = guideInfo.getPhone();				
+		
+		//账号已存在
+		if(phoneExist != null){
+			bool = true;
+		}
+		return bool;
+	}
+	
+	/**
+	 * 根据手机号，查询导游的申请信息
+	 * @param phone 手机号
+	 * @return  
+	 * 姓名、性别、年龄、从业时间、联系电话、讲解语言、景区名称、自我介绍、个人照片、申请日期、通过日期
+	 */
+	public List<Map<String, Object>> getGuideApplyInfoByPhone(String phone){
+		
+		List<Map<String , Object>> list = new ArrayList<>(); 		
+ 		DataSource dataSource =jdbcTemplate.getDataSource();
+		 
+		try {
+			Connection conn = dataSource.getConnection();
+			CallableStatement cst=conn.prepareCall("call getGuideApplyInfoByPhone(?)");
+			cst.setString(1, phone);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				Map<String , Object> map = new HashMap<String, Object>();
+				map.put("phone", rst.getString(2));
+				map.put("image", rst.getString(3));
+				map.put("name", rst.getString(4));
+				map.put("sex", rst.getString(5));
+				map.put("age", rst.getInt(6));
+				map.put("language", rst.getString(7));
+				map.put("selfIntro", rst.getString(8));
+				map.put("workAge", rst.getString(9));
+				map.put("authorized", rst.getInt(10));
+				map.put("scenicName", rst.getString(11));								
+				map.put("applyDate", rst.getString(12));
+				map.put("passDate", rst.getString(13));
+				list.add(map);
+			}							
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+		
+		return list;
+	}
+	
+	
+	//在t_guidebeordered表中插入导游的被预约信息
+	public void guideBeOrdered(String scenicID, String orderID, String guidePhone, String visitTime){
+		
+		DataSource dataSource = jdbcTemplate.getDataSource();
+		Connection conn = null;
+		try {
+			conn = dataSource.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		int hour = 0;
+		try {			
+			CallableStatement cst = conn.prepareCall("call getMaxHourbyScenicID(?)");
+			cst.setString(1, scenicID);
+			ResultSet rst=cst.executeQuery();
+			
+			while (rst.next()) {
+				hour = Integer.parseInt(rst.getString(1));
+			}							
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		String sqlInsert = "insert into t_guideBeOrdered "
+				+ "(orderId,guidePhone,visitTime,timeFrom,timeTo) "
+				+ "values (?,?,?,?,?)";
+		String timeFrom = DateConvert.addHourToTime(visitTime+":00", -hour);
+		String timeTo = DateConvert.addHourToTime(visitTime+":00", hour);
+		int k = jdbcTemplate.update(sqlInsert, new Object[]{orderID, guidePhone, visitTime,
+				timeFrom, timeTo});
 	}
 	
 	/**

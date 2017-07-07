@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -173,15 +174,21 @@ public class VisitorController {
 			System.out.println("目录不存在，创建目录");
 			pathFile.mkdirs();
 		}
-		imgPath = "/image/visitor/" + btn_file.getOriginalFilename();
+		
 		System.out.println("文件类型："+btn_file.getContentType());
 		System.out.println("文件名称："+btn_file.getOriginalFilename());
 		System.out.println("文件大小:"+btn_file.getSize());
 		System.out.println(".................................................");
-			//将文件copy上传到服务器
+		
+		String imgString = btn_file.getOriginalFilename();
+		String[] tmp = imgString.split("\\.");
+		String fileName = tmp[0] + new Date().getTime() + "."+tmp[1];
+		imgPath = "/image/visitor/" + fileName;
+		
+		//将文件copy上传到服务器
 		try {
-			System.out.println(realPath + "/" + btn_file.getOriginalFilename());
-			File fileImageFile=new File(realPath + "/" + btn_file.getOriginalFilename());
+			System.out.println(realPath + "/" + fileName);
+			File fileImageFile=new File(realPath + "/" + fileName);
 			btn_file.transferTo(fileImageFile);
 			System.out.println("图片上传成功");
 //			boolean bool = visitorService.changeImg(openId, fileName);

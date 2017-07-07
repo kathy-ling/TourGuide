@@ -61,11 +61,15 @@
 					</div>
 				</div>
 				
-				<div>
-					<ul data-role="listview" id="commentList" data-inset="true" data-icon="false">
-					</ul>
-				</div>
-				
+			</div>
+			
+			<div style="">
+				<ul data-role="listview" id="commentList" data-inset="true" data-icon="false">
+					<p style="padding: 8px;background-color: gainsboro;">
+						<strong>历史评价 <span id="commentNum"></span></strong>					
+					</p>
+				</ul>
+				<button id="moreCommentsBtn" onclick="moreComments()" style="background-color: lightgreen;">查看更多</button>
 			</div>
 
 			<!--不能放到head中，？？？？-->

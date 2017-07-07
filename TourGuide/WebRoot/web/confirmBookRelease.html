@@ -33,9 +33,10 @@
 				<h1>确认订单</h1>
 			</div>
 			
-			<div data-role="main" class="ui-content" id="mainPage">
+			<div data-role="main" class="ui-content" style="padding-top: 50px;padding-bottom: 60px;">
 				<ul data-role="listview">
-					<li data-icon="false">
+					
+					<li data-icon="false" data-icon="false">
 						<a>
 							<h3>导游信息</h3>  
 							性别：<span id="sex" class="sex"></span><br/>
@@ -54,7 +55,7 @@
 							其他需求：<span id="otherCommand" class=""></span><br/>
 						</a>
 					</li>
-					
+										
 					<li data-icon="false">
 						<a>
 							<h3>费用信息</h3> 讲解费：
@@ -62,10 +63,10 @@
 						</a>
 					</li>
 				</ul>
-				
+				<button data-theme="a" class="ui-btn-raised clr-warning" id="gopay" onclick="putOrder()">去支付</button>
 			</div><!--data-role="main"--> 
 			
-			<button data-theme="a" class="ui-btn-raised clr-warning" id="gopay" onclick="putOrder()">去支付</button>
+			
 		</div>
 
 	</body>

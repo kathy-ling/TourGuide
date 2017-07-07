@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.TourGuide.common.DateConvert;
 import com.TourGuide.common.MyDateFormat;
 import com.TourGuide.model.IntroFeeAndMaxNum;
 
@@ -27,6 +28,9 @@ public class FastOrderDao {
 	
 	@Autowired
 	GuideDao guideInfoDao;
+	
+	@Autowired
+	private GuideDao guideDao;
 	
 	@Autowired
 	IntroFeeAndMaxNumDao introFeeAndMaxNumDao;
@@ -56,10 +60,10 @@ public class FastOrderDao {
 		
 		String sqlInsert = "insert into t_consistOrder (consistOrderID,scenicID,"
 				+ "produceTime,payTime,visitorPhone,visitNum,guideFee,totalGuideFee,"
-				+ "isConsisted,hadPay,orderState) values (?,?,?,?,?,?,?,?,?,?,?)";
+				+ "isConsisted,hadPay,orderState,isFastPin) values (?,?,?,?,?,?,?,?,?,?,?,?)";
 		int i = jdbcTemplate.update(sqlInsert, new Object[]{consistOrderID, scenicID, 
 				time, time, visitorPhone, visitNum, guideFee, totalGuideFee,
-				isConsisted, hadPay, orderState});
+				isConsisted, hadPay, orderState,1});
 		
 		if(i != 0){
 			bool = true;
@@ -78,7 +82,10 @@ public class FastOrderDao {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		String orderID = UUID.randomUUID().toString().replace("-", "");
-		String dateNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+//		String dateNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String timeNow = MyDateFormat.form(new Date());
+		//现在时间+30min，设为参观时间和导游被预约时间
+		String visitTime = DateConvert.addMinuteToTime(timeNow, 30);
 		int visitNum = 0;
 		String scenicNo = null;
 		String scenicName = null;
@@ -107,15 +114,17 @@ public class FastOrderDao {
 			visitNum = (int) listOrder.get(0).get("visitNum");
 		}else {
 			String sqlString = "insert into t_consistresult (orderID,maxNum,"
-					+ "scenicID,guideFee,guidePhone,visitTime) values (?,?,?,?,?,?)";
+					+ "scenicID,guideFee,guidePhone,visitTime,isFastPin) values (?,?,?,?,?,?,?)";
 			int i = jdbcTemplate.update(sqlString, new Object[]{orderID, 
-					maxNum, scenicNo, guideFee,guidePhone, dateNow});
+					maxNum, scenicNo, guideFee,guidePhone, visitTime,1});
 			
 			String sql = "select visitNum from t_consistresult where orderID='"+orderID+"'";
 			List<Map<String, Object>> listNum = jdbcTemplate.queryForList(sql);
 			if(listNum.size() != 0){
 				visitNum = (int) listNum.get(0).get("visitNum");
-			}			
+			}
+			
+			guideDao.guideBeOrdered(scenicNo, orderID, guidePhone, visitTime);
 		}
 								
 		map.put("orderID", orderID);
@@ -146,13 +155,15 @@ public class FastOrderDao {
 		String orderState = "待游览";
 		int isConsisted = 1;
 		String orderID = null;
+		String visitTime = null;
 		
-		String sqlSelect = "select orderID,visitNum from t_consistresult where "
+		String sqlSelect = "select orderID,visitNum,visitTime from t_consistresult where "
 				+ "guidePhone='"+guidePhone+"' and finishScan=0";
 		List<Map<String, Object>> listOrder = jdbcTemplate.queryForList(sqlSelect);
 		
 		if(listOrder.size() != 0){
 			orderID = (String) listOrder.get(0).get("orderID");
+			visitTime = (String) listOrder.get(0).get("visitTime");
 		}
 		
 		DataSource dataSource = jdbcTemplate.getDataSource();
@@ -163,7 +174,7 @@ public class FastOrderDao {
 			
 			//beScanned标志，使游客的拼单只能被导游扫描一次;1-已被扫描 ，0-未被扫描
 			String sqlUpdate = "update t_consistOrder set orderID='"+orderID+"',"
-					+ "takeOrderTime='"+time+"',guidePhone='"+guidePhone+"',"
+					+ "takeOrderTime='"+time+"',visitTime='"+visitTime+"',guidePhone='"+guidePhone+"',"
 					+ "orderState='"+orderState+"',isConsisted='"+isConsisted+"'"
 					+ "where consistOrderID='"+consistOrderID+"' and beScanned=0";
 			int i = jdbcTemplate.update(sqlUpdate);
@@ -181,6 +192,7 @@ public class FastOrderDao {
 
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			conn.close();
 			
 			if(i!=0 && j!= 0 && k!=0){
 				ret = 1;
@@ -202,9 +214,8 @@ public class FastOrderDao {
 	 */
 	public int finishScan(String guidePhone){
 		
-		int ret = 0;
-		
-		String orderID = null;		
+		int ret = 0;		
+		String orderID = null;
 		
 		String sqlSelect = "select orderID,visitNum from t_consistresult where "
 				+ "guidePhone='"+guidePhone+"' and finishScan=0";
@@ -214,9 +225,11 @@ public class FastOrderDao {
 			orderID = (String) listOrder.get(0).get("orderID");
 		}
 		
-		if(orderID != null){
-			String sql = "update t_consistresult set finishScan=1 where orderID='"+orderID+"'";
-			int k = jdbcTemplate.update(sql);
+		if(orderID != null){		
+			String sql = "update t_consistresult set finishScan=1"
+					+ "where orderID='"+orderID+"'";
+			int k = jdbcTemplate.update(sql);			
+			
 			if(k != 0){
 				ret = 1;
 			}

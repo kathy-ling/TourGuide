@@ -346,4 +346,26 @@ public class ConsistOrderController {
 		return ret;
 	}
 	
+	
+	/**
+	 * 填写拼单订单中游客未确认的原因
+	 * @param resp
+	 * @param orderId
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/writeConsitOrderReason.do")
+	@ResponseBody
+	public Object writeConsitOrderReason(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId,
+			@RequestParam("reason") String reason,
+			@RequestParam("visitorPhone") String visitorPhone )throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		int ret = consistOrderService.writeConsitOrderReason(orderId, reason, visitorPhone);
+		
+		return ret;
+	}
+	
 }

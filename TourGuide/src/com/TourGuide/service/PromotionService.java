@@ -22,4 +22,13 @@ public class PromotionService {
 		return promotionDao.getPromotions();
 	}
 
+	
+	/**
+	 * 根据景区编号，查询该景区的活动信息
+	 * @param scenicNo
+	 * @return
+	 */
+	public List<Map<String, Object>> getScenicPromotions(String scenicNo){
+		return promotionDao.getScenicPromotions(scenicNo);
+	}
 }

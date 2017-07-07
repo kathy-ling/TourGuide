@@ -46,6 +46,23 @@ public class GuideSalaryController {
 		return list;
 	}
 	
+	/**
+	 * 若订单已取消，则取消的费用为讲解员的收入
+	 * @param guidePhone
+	 * @return
+	 */
+	@RequestMapping(value = "/getCancleOrderFee.do")
+	@ResponseBody
+	public Object getCancleOrderFee(HttpServletResponse resp, 
+			@RequestParam("guidePhone") String guidePhone) throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		List<Map<String , Object>> list = guideSalaryService.getCancleOrderFee(guidePhone);
+		
+		return list;
+	}
+	
 	
 	/**
 	 * 统计讲解员接单的总次数和总金额

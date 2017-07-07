@@ -102,6 +102,7 @@ function checkPhone(){
 	
 	if(!reg.test(phone)){
 		alert('请输入有效的手机号码！');
+		$("#contact").val("");
     	return false;
 	}else{
 		$("#list_pindan_guide_phone").html(phone);

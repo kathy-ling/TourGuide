@@ -38,12 +38,12 @@ public class EvaluateDao {
 	 * @param guidePhone  游客的手机号
 	 * @param visitorPhone  讲解员的手机号
 	 * @param isAnonymous  是否匿名（1-匿名）
-	 * @return
+	 * @return 0--失败，-1--已经评论，不能再次评论，1--评论成功
 	 */
-	public boolean commentByVisitor(String orderID, String evaluateContext,
+	public int commentByVisitor(String orderID, String evaluateContext,
 			String evaluateTime, int isAnonymous, int star1, int star2, int star3){
 		
-		boolean bool = false;
+		int ret = 0;
 		String guidePhone = null;
 		String visitorPhone = null;
 		String nickName = "匿名用户";
@@ -60,19 +60,33 @@ public class EvaluateDao {
 			VisitorInfo visitorInfo = visitorDao.getVisitorInfoWithPhone(visitorPhone);
 			nickName = visitorInfo.getNickName();
 		}
+		
+		//限制只能评论一次
+		String sqlSelect = "select * from t_evaluate where orderID='"+orderID+"' "
+				+ "and visitorPhone='"+visitorPhone+"'";
+		List<Map<String , Object>> evaluateList = jdbcTemplate.queryForList(sqlSelect);
+		
+		if(evaluateList.size() != 0){
+			ret = -1;//已评论，不能再进行评论
+		}else{
+			String sqlString = "insert into t_evaluate (orderID,evaluateContext,evaluateTime,"
+					+ "guidePhone,visitorPhone,nickName,isAnonymous,star1,star2,star3) "
+					+ "values (?,?,?,?,?,?,?,?,?,?)";
 			
-		String sqlString = "insert into t_evaluate (orderID,evaluateContext,evaluateTime,"
-				+ "guidePhone,visitorPhone,nickName,isAnonymous,star1,star2,star3) "
-				+ "values (?,?,?,?,?,?,?,?,?,?)";
-		
-		int i = jdbcTemplate.update(sqlString, new Object[]{orderID, evaluateContext, 
-				evaluateTime, guidePhone, visitorPhone, nickName, isAnonymous,star1,star2,star3});
-		
-		if(i != 0){
-			bool = true;
+			int i = jdbcTemplate.update(sqlString, new Object[]{orderID, evaluateContext, 
+					evaluateTime, guidePhone, visitorPhone, nickName, isAnonymous,star1,star2,star3});
+			
+			String sqlUpdate = "update t_bookorder set orderState='已完成' where bookOrderID='"+orderID+"'";
+			String update = "update t_consistorder set orderState='已完成' where consistOrderID='"+orderID+"'";
+			int j = jdbcTemplate.update(sqlUpdate);
+			int k = jdbcTemplate.update(update);			
+			
+			if(i != 0){
+				ret = 1;
+			}
 		}
-		
-		return bool;
+
+		return ret;
 	}
 	
 	

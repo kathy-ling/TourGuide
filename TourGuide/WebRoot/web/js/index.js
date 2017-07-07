@@ -1,5 +1,6 @@
 
 var province;
+var defaultProvince = "西安";
 //vistPhone = '13119275866';
 
 
@@ -12,17 +13,19 @@ $(function($) {
 
 
 window.onload = function() {
-
-	geolocation.getLocation(showPosition, showErr, options);
 	
 	getPromotion();	
 	
 	isBlackened();
+		
+	getScenicByProvince(defaultProvince);
+	
+	geolocation.getLocation(showPosition, showErr, options);
 }
 
 
 //根据用户当前所在省份进行景区推荐
-function getScenicByProvince()
+function getScenicByProvince(province)
 {	
 	var url1 = HOST + "/getScenicByLocation.do";
 	$.ajax({
@@ -182,8 +185,11 @@ var options = {timeout: 8000};
 function showPosition(position) {
 //    alert(position.province);
 	province = position.province;
-		
-	getScenicByProvince();
+	
+	if(province != defaultProvince){
+		getScenicByProvince(province);
+	}
+	
 };
 
 function showErr() {

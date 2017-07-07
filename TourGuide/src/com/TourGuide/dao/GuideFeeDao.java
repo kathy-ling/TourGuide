@@ -155,6 +155,7 @@ public class GuideFeeDao {
 			i=jdbcTemplate.update(sql3, new Object[]{reward+money,phone});
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			conn.close();
 		} catch (DataAccessException e) {
 			i=0;
 			e.printStackTrace();
@@ -202,6 +203,7 @@ public class GuideFeeDao {
 			i=jdbcTemplate.update(sql3, new Object[]{punishment+money,phone});
 			conn.commit();//提交JDBC事务 
 			conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+			conn.close();
 		} catch (DataAccessException e) {
 			i=0;
 			e.printStackTrace();

@@ -132,6 +132,7 @@ public class VisitorDao {
 
 				conn.commit();//提交JDBC事务 
 				conn.setAutoCommit(true);// 恢复JDBC事务的默认提交方式
+				conn.close();
 				
 				if(i!=0 && j!=0){
 					bool = true;

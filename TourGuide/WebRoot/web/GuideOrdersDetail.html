@@ -14,6 +14,7 @@
     	<script type="text/javascript" src="js/easing.js"></script>
     	<script type="text/javascript" src="js/myQRCode.js"></script>
     	<script type="text/javascript" src="js/jquery.cookie.js"></script>
+    	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     	
     	<style>
     		.ellipsis{
@@ -48,6 +49,63 @@
 			</div>
 
 			<div data-role="main" class="ui-content">
+				
+				<!--弹出游客的订单信息，让讲解员进行确认-->
+				<div data-role="popup" id="myPopupDialog"><!---->
+					<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn ui-icon-delete ui-btn-icon-notext ui-btn-right">关闭</a>
+					<div data-role="header">
+						<h1>确认订单信息</h1>
+					</div>
+	
+					<div data-role="main" class="ui-content">					
+						<ul data-role="listview" id="infolist">												
+							<li>						
+								<p>
+									<!--景区名称：<span class="scenicNameId"></span><br/><br/>
+									参观人数：<span class="vistorNum"></span><br/><br/>
+									支付费用：<span class="totalMoney"></span><br/><br/>															
+									参观时间：<span class="vistTime"></span><br/><br/>-->
+									订单号：<span class="orderFormId"></span>
+								</p>				
+							</li>
+							<label style="width: 100%;text-align: center;" id="result"></label>
+						</ul>			
+					</div>
+	
+					<div data-role="footer" id="pageone">
+						<div align="center" data-role="main" class="ui-content">
+							<a href="#" id="isMine" class="ui-btn ui-mini ui-btn-raised clr-primary" onclick="isMyOrder()">是我的单</a>
+							<a href="#" id="notMine" data-rel="back" class="ui-btn ui-mini ui-btn-raised clr-primary" onclick="notMyOrder()">不是我的单</a>
+						</div>
+					</div>
+				</div>
+				
+				<!--弹出订单信息未确认的可能原因 -->
+				<div data-role="popup" id="reasonPopupDialog"><!---->
+					<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn ui-icon-delete ui-btn-icon-notext ui-btn-right">关闭</a>
+					<div data-role="header">
+						<h1>未确认的原因</h1>
+					</div>
+	
+					<div data-role="main" class="ui-content">					
+						<ul data-role="listview" data-icon="false">	
+							<ul>
+						       <p>请选择原因：</p>
+						        <label><input type="radio" class="radio" name="radio-btn" value="无法联系上游客"/>无法联系上游客</label>
+						        <label><input type="radio" class="radio" name="radio-btn" value="游客无法按时到达"/>游客无法按时到达</label>
+						        <label><input type="radio" class="radio" name="radio-btn" value="其他"/>其他</label>	
+						        <textarea id="otherReason"></textarea>
+						</ul>			
+					</div>
+	
+					<div data-role="footer" id="pageone">
+						<div align="center" data-role="main" class="ui-content">
+							<a id="choose" href="#" class="ui-btn ui-mini ui-btn-raised clr-primary">提交</a><!--onclick="chooseReason()"-->
+							<!--<a href="#" class="ui-btn ui-mini ui-btn-raised clr-primary" onclick="()">No</a>-->
+						</div>
+					</div>
+				</div>
+				
 				<div>
 					<ul data-role="listview"  data-icon="false">
 						<li>						
@@ -58,10 +116,12 @@
 							<p>参观人数：<lable id="visitNum"></lable></p>	
 							<p>讲解费总额：<lable id="totalFee"></lable></p>
 							<p>订单状态：<lable id="state"></lable></p>
+							<!--讲解员是否签到-->
 							<p id="clickSign" class="ui-hidden-accessible"></p>
 							<p id="clickStart" class="ui-hidden-accessible"></p>	<!--class="ui-hidden-accessible"-->						
 							<p id="clickLocation" class="ui-hidden-accessible"></p>
 							<p id="clickFinish" class="ui-hidden-accessible"></p>
+							<p id="clickScan" class="ui-hidden-accessible"></p>
 							<input type="button" value="查看二维码" onclick="produce()" />							
 						</li>																												
 					</ul>
@@ -79,10 +139,12 @@
 						<label id="userInfoTitle">游客信息</label>
 						<li>
 							<p>
-								游客姓名：<span id="Name"></span></br></br>
+								游客姓名：<span id="Name"></span>&nbsp;&nbsp;&nbsp;
+								<span id="confirmResult" style="color: red;"></span></br>
 								游客手机号：<span id="Phone"></span>
 								<a id="forPhone"><button type="button" data-inline="ture" id="phoneBtn">一键拨号</button></a>
-								
+								<a  href="#" id="reasonBtn" onclick="reasonBtn()" class="ui-btn ui-mini ui-btn-raised clr-primary">填写未确认原因</a>
+								</br><span id="reason"></span>
 							</p>
 						</li>						
 					</ul>
@@ -114,7 +176,9 @@
 				
 				<div>
 					<a  href="#" id="signInBtn" onclick="signIn()" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline">签到</a>
-					<a  href="#" id="startBtn" onclick="start()" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline" >开始讲解</a>
+					<a  href="#" id="scanBtn" onclick="scanQRcode()" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline">扫码确认</a>
+					<a  href="#" id="startBtn" onclick="start()" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline">开始讲解</a>
+					<!--<a  href="#" id="startBtn" onclick="start()" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline" >开始讲解</a>-->
 					<a  href="#" id="finishBtn" onclick="finish()" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline" >结束讲解</a>
 					<a  href="#" id="locationBtn" onclick="setLocation()" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline" >设置位置</a>		
 					<a  href="#" id="deleteBtn" onclick="deleteOrder()" class="ui-btn ui-mini ui-btn-raised clr-primary ui-btn-inline" >删除订单</a>

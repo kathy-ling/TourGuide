@@ -9,7 +9,6 @@ window.onload = function() {
 }
 
 
-
 //从服务端获取用户的部分信息，并显示在页面
 function getUserInfo() {
 	var url = HOST + "/getInfobyOpenID.do";
@@ -56,45 +55,46 @@ function changePerHeadImg()
 	var path = document.getElementById("visitor_img").src;	
 	var patt1 = new RegExp("wx.qlogo.cn");
 	
-	//如果是微信服务器的图片，则直接注册；否则先上传图片再注册
-	if(patt1.test(path)){
-		RegistwithImg();
-	}else{
-		var URL = HOST+"/putImg.do";
-	
-		$.ajaxFileUpload({
-				url : URL,
-				fileElementId:'btn_file',
-				dataType : "json",
-				success: function(data){
-					if(data == true)					
+	if(check()){
+		//如果是微信服务器的图片，则直接注册；否则先上传图片再注册
+		if(patt1.test(path)){
+			RegistwithImg();
+		}else{
+			var URL = HOST+"/putImg.do";
+		
+			$.ajaxFileUpload({
+					url : URL,
+					fileElementId:'btn_file',
+					dataType : "json",
+					success: function(data){
+						if(data == true)					
+						{
+							Regist();
+						}else
+						{
+							alert("图片上传失败");
+						}				
+					 },
+					error: function(data)
 					{
-						Regist();
-					}else
-					{
-						alert("图片上传失败");
-					}				
-				 },
-				error: function(data)
-				{
-					
-			  	alert("图片上传异常");
-				}
-		});	
-	}	
+						alert("图片上传异常");
+					}
+			});	
+		}
+	}		
 }
 
 
 function Regist() {
 	
-	if(check()) {
+//	if(check()) {
 		var postdata = {
 			"nickName": $("#nickname").val(),
 			"sex": $("input:radio[name='guideSex']:checked").val(),
 			"name": $("#name").val(),
 			"phone": $("#tel").val(),
 			"passwd": $("#password").val(),
-			"openID": openId//'o8AUTxMhNb82uSM4DcIxesDyDZnY'//
+			"openID": openId
 		};
 
 		var url = HOST + "/visitorRegister.do";
@@ -112,12 +112,12 @@ function Regist() {
 				sessionStorage.setItem("vistPhone", postdata.phone); 
 			}
 		});
-	}
+//	}
 }
 
 function RegistwithImg() {
 	
-	if(check()) {
+//	if(check()) {
 		var img = document.getElementById("visitor_img").src;
 		var postdata = {
 			"nickName": $("#nickname").val(),
@@ -126,7 +126,7 @@ function RegistwithImg() {
 			"phone": $("#tel").val(),
 			"passwd": $("#password").val(),
 			"image": img,
-			"openID": openId//'o8AUTxMhNb82uSM4DcIxesDyDZnY'//
+			"openID": openId
 		};
 
 		var url = HOST + "/visitorRegisterWithImg.do";
@@ -144,7 +144,7 @@ function RegistwithImg() {
 				sessionStorage.setItem("vistPhone", postdata.phone);
 			}
 		});
-	}
+//	}
 }
 
 //检验输入是否合法

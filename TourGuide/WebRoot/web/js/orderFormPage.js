@@ -11,6 +11,9 @@ var guideFee1;
 	});
 });*/
 
+var contactName = GetUrlem("contactName");
+
+
 $(document).ready(function() {
 	//加载底部导航栏
 	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
@@ -27,6 +30,7 @@ function setOrderInfo() {
 	var visitNum = GetUrlem("visitNum");
 	var scenicName = GetUrlem("scenicName");
 	var contactPhone = GetUrlem("contactPhone");
+
 	$(".orderTime").html(visitDate + " " + visitTime);
 	$(".visitorCount").html(visitNum);
 	$("#scenicName").html(scenicName);
@@ -55,13 +59,7 @@ function setGuideInfo()
 			$.each(data, function(i, item) {
 				$(".ui-page-active").find("#name").html(item.name);
 				$(".ui-page-active").find("#sex").html(item.sex);
-//				$(".ui-page-active").find("#age").html(item.age);
-				/*$("#guide_img").attr("src","img/1.jpg");
-				$("#guide_starlevel").html(item.guideLevel);
-				$("#guide_Visitors").html(item.historyNum);
-				$("#guide_fee").html(item.guideFee+"元");
-				$("#guide_self_intro").html(item.selfIntro);
-				$("#guide_phone").html(item.phone);*/
+
 				var language = getLanguage(item.language);
 				$(".ui-page-active").find("#language").html(language);
 				$("#setguideMoney").html(item.guideFee);
@@ -71,18 +69,16 @@ function setGuideInfo()
 	});
 }
 
+//点击【去支付】按钮
 function putOrder() {
 	var scenicName=GetUrlem("scenicName");
-	/*var pur = GetUrlem("purchaseTicket");
-	var half = GetUrlem("halfPrice");
-	var disc = GetUrlem("discoutPrice");
-	var full = GetUrlem("fullPrice");*/
 	var visitDate = GetUrlem("visitDate");
 	var visitTime = GetUrlem("visitTime");
 	var visitNum = GetUrlem("visitNum");
 	var guidephone = GetUrlem("guidePhone");
 	var contactPhone = GetUrlem("contactPhone");
-	var language = $("#language").val();
+	var language = $("#language").html();
+	
 	var postData = {
 		'scenicName': scenicName,
 		'visitTime': visitDate+" "+visitTime,
@@ -91,9 +87,46 @@ function putOrder() {
 		'guidePhone': guidephone,
 		'guideFee': guideFee1,
 		'contactPhone': contactPhone,
-		'language':language
+		'language':language,
+		'visitorName':contactName
 	};
-	var Url = HOST + "/BookOrderWithGuide.do";
+	
+	if(vistPhone == "null" || vistPhone == "" ){	
+		alert("发生错误啦！");	
+	}
+	else{
+		timeConflict(guidephone,visitDate,visitTime,postData);	
+	}	
+}
+
+//判断讲解员的时间与预约时间是否冲突，True 冲突,false  不冲突
+function timeConflict(guidephone,visitDate,visitTime,postData){
+	var url = HOST + "/isTimeConflict.do";
+	var time = visitDate + " " + visitTime;	
+
+	$.ajax({
+		type : "post",
+		url : url,
+		async : true,
+		data:{"guidePhone":guidephone,"visitTime": time},
+		datatype : "JSON",
+		error:function()
+		{
+			alert("timeConflict Request error!");
+		},
+		success : function(data) {
+			if(data != false){
+				alert("改讲解员时间发生冲突，请重新选择");								
+				return false;
+			}else{
+				BookOrderWithGuide(postData);
+			}
+		}
+	});
+}
+
+function BookOrderWithGuide(postData){
+	var Url = HOST + "/BookOrderWithGuide.do";	
 	
 	$.ajax({
 		type: "post",
@@ -115,8 +148,6 @@ function putOrder() {
 		}
 	});
 }
-
-
 
 function setChargeInfo(guideMoney) {
 	guideFee1=guideMoney;

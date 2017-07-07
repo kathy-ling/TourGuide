@@ -165,7 +165,24 @@ public class GuideService {
 		return guideDao.isSignIn(orderId);
 	}
 	
+	/**
+	 * 查看导游是否已经申请成为导游了
+	 * @param phone
+	 * @return  true--已经申请， false--未申请
+	 */
+	public boolean hasApplied(String phone){
+		return guideDao.hasApplied(phone);
+	}
 	
+	/**
+	 * 根据手机号，查询导游的申请信息
+	 * @param phone 手机号
+	 * @return  
+	 * 姓名、性别、年龄、从业时间、联系电话、讲解语言、景区名称、自我介绍、个人照片、申请日期、通过日期
+	 */
+	public List<Map<String, Object>> getGuideApplyInfoByPhone(String phone){
+		return guideDao.getGuideApplyInfoByPhone(phone);
+	}
 	
 	/**
 	 * 该导游在visitDate这天，是否被预约了

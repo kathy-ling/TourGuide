@@ -156,4 +156,13 @@ public class ConsistOrderService {
 	public int finishConsistOrderByGuide(String orderId) throws SQLException{
 		return consistOrderDao.finishConsistOrderByGuide(orderId);
 	}
+	
+	/**
+	 * 填写拼单订单中游客未确认的原因
+	 * @param orderId
+	 * @return
+	 */
+	public int writeConsitOrderReason(String orderId, String reason, String phone){
+		return consistOrderDao.writeConsitOrderReason(orderId, reason, phone);
+	}
 }

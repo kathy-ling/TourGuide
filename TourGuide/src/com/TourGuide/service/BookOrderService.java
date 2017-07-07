@@ -73,9 +73,9 @@ public class BookOrderService {
 	 */
 	public int BookOrderWithGuide(String orderID, String produceTime, String guidePhone, 
 			String visitorPhone, String visitTime, String scenicID, 
-			int visitNum, int guideFee, String contactPhone, String language) throws SQLException{
+			int visitNum, int guideFee, String contactPhone, String language, String visitorName) throws SQLException{
 		return bookOrderDao.BookOrderWithGuide(orderID, produceTime, guidePhone, 
-				visitorPhone, visitTime, scenicID, visitNum, guideFee, contactPhone, language);
+				visitorPhone, visitTime, scenicID, visitNum, guideFee, contactPhone, language, visitorName);
 	}
 	
 	
@@ -146,9 +146,29 @@ public class BookOrderService {
 	 * 讲解员完成预约订单的讲解
 	 * @param orderId
 	 * @return
+	 * @throws SQLException 
 	 */
-	public int finishOrderByGuide(String orderId){
+	public int finishOrderByGuide(String orderId) throws SQLException{
 		return bookOrderDao.finishOrderByGuide(orderId);
+	}
+	
+	
+	/**
+	 * 讲解员和游客之间进行扫码确认信息
+	 * @param orderId
+	 * @return 1--信息确认成功，0--失败
+	 */
+	public int doConfirm(String orderId){
+		return bookOrderDao.doConfirm(orderId);
+	}
+	
+	/**
+	 * 填写游客未确认的原因
+	 * @param orderId
+	 * @return
+	 */
+	public int writeBookOrderReason(String orderId, String reason){
+		return bookOrderDao.writeBookOrderReason(orderId, reason);
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////

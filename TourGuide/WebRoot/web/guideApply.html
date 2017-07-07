@@ -9,7 +9,7 @@
 		<link rel="stylesheet" type="text/css" href="css/nativedroid2.css">
 		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
-		<script type="text/javascript" src="js/guideApply.js"></script>
+		<script type="text/javascript" src="js/GuideApply.js"></script>
 		<script type="text/javascript" src="js/ajaxfileupload.js"></script>
 	</head>
 	
@@ -71,7 +71,7 @@
 							</tr>
 							<tr>
 								<td><label for="tel">联系电话：</label></td>
-								<td><input type="text" id="apply_tel" onchange="checkPhone()" ></td>
+								<td><input type="text" id="apply_tel" onchange="checkPhone()" readonly="readonly"></td>
 							</tr>
 							<tr>
 								<td><label for="guideIdNum">讲解语言：</label></td>
@@ -103,11 +103,11 @@
 								<td><label for="name">个人照片：</label></td>
 								<td>
 									<input type="file" id="btn_file" name="btn_file" style="display: none" onchange="selectImage(this)">
-									<img src="img/visitor.png" id="visitor_img" height="100" width="100">					
+									<img src="img/visitor.jpg" id="visitor_img" height="100" width="100">					
 								</td>
 							</tr>
 							<tr>
-								<td colspan="2"><input type="button" name="" value="提交" onclick="upLoadImg()"></td>
+								<td colspan="2"><input type="button" name="" value="提交" onclick="upLoadImg()"></td><!---->
 							</tr>
 						</form>
 					</tbody>

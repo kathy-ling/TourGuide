@@ -113,7 +113,7 @@ function confirmOrder()
 	{
 		alert("请填写联系人手机号！");
 		return false;
-	}
+	}		
 	
 	var time = visitDate + " " + visitTime;
 	var timeNow = getNowFormatDate();
@@ -151,9 +151,7 @@ function confirmOrderBefore()
 	if(!visitNum)
 	{
 		visitNum = $("#orderChooseVisitNum").val();
-	}
-	
-	alert(scenicName+visitDate+visitTime+visitNum);
+	}		
 }
 
 //判断讲解员的时间与预约时间是否冲突，True 冲突,false  不冲突
@@ -161,6 +159,7 @@ function timeConflict(){
 	var url = HOST + "/isTimeConflict.do";
 	var time = visitDate + " " + visitTime;
 	var contactPhone = $("#orderContactPhone").val();
+	var contactName = $("#orderContactName").val();
 
 	$.ajax({
 		type : "post",
@@ -178,7 +177,7 @@ function timeConflict(){
 				window.location.href = "orderGuide.html";
 			}else{
 				window.location.href="orderFormPage.html?"+ "contactPhone=" +contactPhone+"&visitNum="+visitNum+"&visitDate="
-				+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName+"&guidePhone="+guidePhone;
+				+visitDate+"&visitTime="+visitTime+"&scenicName="+scenicName+"&guidePhone="+guidePhone+"&contactName="+contactName;
 			}			
 		}
 	});
@@ -323,7 +322,7 @@ function checkDateSelect(dateId,timeId){
 	visitTime = $('#orderDatetime option:selected').val();
 	
 	var getDate = $(dateId).val();
-	if(getDate == ""){
+	if(getDate == "" && visitDate == ""){
 		alert("请先选择日期，再选择时间");	
 		$(timeId).val("请选择时间");
 		return false;

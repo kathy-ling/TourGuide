@@ -149,7 +149,8 @@ public class BookOrderController {
 			@RequestParam("guideFee") String guideFee,
 			@RequestParam("visitorPhone") String visitorPhone,
 			@RequestParam("contactPhone") String contactPhone,
-			@RequestParam("language") String language
+			@RequestParam("language") String language,
+			@RequestParam("visitorName") String visitorName
 			) throws IOException, NumberFormatException, SQLException{
 		//BookOrderWithGuide.do?scenicName=秦始皇兵马俑&visitTime=2017-4-12 14:00&visitNum=6&guidePhone=13823456789&guideFee=300&visitorPhone=18191762572&contactPhone=1111
 		CommonResp.SetUtf(resp);
@@ -176,7 +177,7 @@ public class BookOrderController {
 		
 		int ret = bookOrderService.BookOrderWithGuide(orderID, produceTime, guidePhone, 
 				visitorPhone, visitTime, scenicID, Integer.parseInt(visitNum),
-				Integer.parseInt(guideFee), contactPhone, language);
+				Integer.parseInt(guideFee), contactPhone, language, visitorName);
 		
 		return ret;
 	}
@@ -317,15 +318,57 @@ public class BookOrderController {
 	 * 讲解员完成预约订单的讲解
 	 * @param orderId
 	 * @return
+	 * @throws SQLException 
 	 */
 	@RequestMapping(value = "/finishOrderByGuide.do")
 	@ResponseBody
 	public Object finishOrderByGuide(HttpServletResponse resp,
-			@RequestParam("orderId") String orderId)throws IOException{
+			@RequestParam("orderId") String orderId)throws IOException, SQLException{
 	
 		CommonResp.SetUtf(resp);
 		
 		int ret = bookOrderService.finishOrderByGuide(orderId);
+		
+		return ret;
+	}
+	
+	
+	/**
+	 * 讲解员和游客之间进行扫码确认信息
+	 * @param resp
+	 * @param orderId
+	 * @return 1--信息确认成功，0--失败
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/doConfirm.do")
+	@ResponseBody
+	public Object doConfirm(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId)throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		int ret = bookOrderService.doConfirm(orderId);
+		
+		return ret;
+	}
+	
+	
+	/**
+	 * 填写游客未确认的原因
+	 * @param resp
+	 * @param orderId
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/writeBookOrderReason.do")
+	@ResponseBody
+	public Object writeBookOrderReason(HttpServletResponse resp,
+			@RequestParam("orderId") String orderId,
+			@RequestParam("reason") String reason)throws IOException{
+	
+		CommonResp.SetUtf(resp);
+		
+		int ret = bookOrderService.writeBookOrderReason(orderId, reason);
 		
 		return ret;
 	}

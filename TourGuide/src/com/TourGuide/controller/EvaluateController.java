@@ -53,7 +53,7 @@ public class EvaluateController {
 		
 		String evaluateTime = MyDateFormat.form(new Date());
 		
-		boolean bool = evaluateService.commentByVisitor(orderID, evaluateContext, 
+		int bool = evaluateService.commentByVisitor(orderID, evaluateContext, 
 				evaluateTime, Integer.parseInt(isAnonymous), Integer.parseInt(star1),
 				Integer.parseInt(star2),Integer.parseInt(star3));
 		

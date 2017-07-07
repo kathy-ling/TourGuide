@@ -27,6 +27,15 @@ public class GuideSalaryService {
 	
 	
 	/**
+	 * 若订单已取消，则取消的费用为讲解员的收入
+	 * @param guidePhone
+	 * @return
+	 */
+	public List<Map<String, Object>> getCancleOrderFee(String guidePhone){
+		return guideSalaryDao.getCancleOrderFee(guidePhone);
+	}
+	
+	/**
 	 * 统计讲解员接单的总次数和总金额
 	 * @param guidePhone
 	 * @return

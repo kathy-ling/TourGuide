@@ -6,8 +6,8 @@ var name;
 var type = GetUrlem("type");
 var orderId = GetUrlem("orderId");
 
-//type="预约单";
-//orderId='7e3a5711e3664f308701995162bf2af8';
+//type="拼团单";
+//orderId='dbc1b2653d184a98adb8ec843be0c8ac';
 
 $(function($){
 	
@@ -17,6 +17,8 @@ $(function($){
 
 	$("#deleteBtn").hide();
 	$("#cancleFee").hide();
+//	$("#QrcodeBtn").hide();
+	
 });
 
 function initMap()
@@ -126,6 +128,11 @@ function setNormalData(data){
 	longitudeData = data.longitude;
 	latitudeData = data.latitude;
 	
+	/*if(longitudeData==null || latitude==null || longitudeData=="null" || latitude=="null"){
+		alert("位置信息为空");
+		$("#locationA").hide();
+	}*/
+	
 	num = data.visitNum;
 	totalFee = data.money;
 	
@@ -136,6 +143,7 @@ function setNormalData(data){
 		if(data.orderState == "已取消"){
 			$("#cancleFee").show();
 			$("#fee").html(data.cancleFee);
+			$("#QrcodeBtn").hide();
 		}
 	}
 }
@@ -189,11 +197,15 @@ function convertCanvasToImage(canvas) {
     return image;
 }
 
-//从服务器端获取经纬度坐标，并进行导航
+//【获取位置】，从服务器端获取经纬度坐标，并进行导航
 function getLocationVisitor()
 {
-	var A = document.getElementById("locationA");
-	A.href = "http://api.map.baidu.com/direction?origin=latlng:"+latitudeMy+","+longitudeMy+"|name:我的位置&destination=latlng:"+latitudeData+","+longitudeData+"|name:集合位置&mode=driving&region=西安&output=html&src=yourCompanyName|yourAppName";
+	if(longitudeData==null || latitude==null || longitudeData=="null" || latitude=="null"){
+		alert("暂无位置信息，请稍候查看！");		
+	}else{
+		var A = document.getElementById("locationA");
+		A.href = "http://api.map.baidu.com/direction?origin=latlng:"+latitudeMy+","+longitudeMy+"|name:我的位置&destination=latlng:"+latitudeData+","+longitudeData+"|name:集合位置&mode=driving&region=西安&output=html&src=yourCompanyName|yourAppName";
+	}	
 }
 
 //点击【取消订单】
@@ -201,6 +213,7 @@ function cancleOrder(){
 	var str = "取消订单，将会扣除最高5%的费用作为手续费，您确定要取消么？"
 	//弹出一个询问框，有确定和取消按钮 
 	if(confirm(str)) {
+		alert(type);
 		alert(type== "预约单");
 		if(type == "预约单"){
 			alert('into');
@@ -223,7 +236,7 @@ function cancleBookOrder(){
 		datatype : "JSON",
 		success : function(data) {
 //			1--取消成功,-1--已经开始参观，不能取消,2--扣费1%,3--扣费5%
-			alert(JSON.stringify(data));
+			alert("data:"+JSON.stringify(data));
 			if(data == -1){
 				alert("已经开始参观，不能取消");
 			}

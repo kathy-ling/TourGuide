@@ -1,5 +1,11 @@
 
+var orderId = GetUrlem("orderId");
+//orderId='527833d4f478460b8966488bce0c32a9';
+
 $(function($){
+	
+	//加载底部导航栏
+	$("#bottom_navigation").load("bottomNavigation.html").trigger("create");
 	
     $('#star1').raty({ path:'img', score: 0,width:200});
     $('#star2').raty({ path:'img', score: 0,width:200});
@@ -25,30 +31,32 @@ function commentSub(){
 	var star1 =  $('#star1').raty('score');
     var star2 =  $('#star2').raty('score');
     var star3 =  $('#star3').raty('score');
-    var text = $("#evalueContext").val();
-    var orderId = GetUrlem("orderId");
+    var evalueText = $("#evalueContext").val();   
     var isanonymous = 0;
+    
     if($("input:checkbox[name='anonymous']").get(0).checked)
     {
         isanonymous = 1;
     }
-    if(star1==undefined && star2==undefined && star3==undefined){
-    	alert("请为其中的至少一项打分!");
+    
+    if(star1==undefined || star2==undefined || star3==undefined){
+    	alert("请为每一项打分!");
     	return false;
     }
-    if(text == ""){
+    if(evalueText == ""){
     	alert("评论内容不能为空");
     	return false;
     }
+        
     var postData={
         "orderID":orderId,//动态获取
-        "evaluateContext":text,
+        "evaluateContext":evalueText,
         "isAnonymous":isanonymous,
         "star1":star1,
         "star2":star2,
         "star3":star3
     };
-    alert(star1);
+
     commentByVisitor(postData);
 }
 
@@ -68,7 +76,34 @@ function commentByVisitor(postData){
 		},
 		success:function(data)
 		{ 
-			alert("评论成功！");
+			alert("data="+data);
+			if(data == 1){
+				alert("评论成功");
+				location.href = "orderFormInfo.html?orderId="+orderId;
+			}else if(data == -1){
+				alert("已评论过，不能再次评论");
+				$("#evalueContext").val("");
+			}else{
+				alert("发生错误，请稍后再试！");
+			}
 		}
     });
+}
+
+
+function isRegist()
+{
+	if(vistPhone == undefined || vistPhone == openId)
+	{
+		alert("您还未注册，请注册！");
+		window.location.href = "register.html";
+	}else{
+		var black = sessionStorage.getItem("isBlackened");
+
+		if(black == "false"){
+			window.location.href = "personalHome.html";
+		}else{
+			alert("您已被系统管理员拉黑!");
+		}
+	}
 }

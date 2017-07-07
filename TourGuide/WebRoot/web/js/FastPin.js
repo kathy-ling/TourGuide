@@ -138,10 +138,9 @@ function addOption(a) {
 }
 
 
-
+//【支付】按钮的点击事件
 function ProduceOrder()
-{
-	
+{	
 	var scenicName1 = $("#chooseScenicName").val();
 	var scenicName2 = document.getElementById("ScenicName").innerText;
 	var guideFee = document.getElementById("guideFee").innerText;
