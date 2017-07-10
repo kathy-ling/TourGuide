@@ -14,8 +14,9 @@ public class MenuManager {
 	private static Menu createMyMenu(){
 		
 		ViewButton btn1 = new ViewButton();
-		btn1.setName("主页-cps");
+		btn1.setName("主页-");
 		btn1.setType("view");
+//		btn1.setUrl("http://www.baidu.com");
 		btn1.setUrl(Oauth2Util.getOauth2Url().toString());
 		
 		ClickButton btn2 = new ClickButton();
@@ -59,10 +60,13 @@ public class MenuManager {
 			
 			if(result){
 				System.out.println("菜单创建成功");
+				System.out.println(Oauth2Util.getOauth2Url().toString());
 			}else{
 				System.out.println("菜单创建失败！");
 			}
 		}
+		
+//		System.out.println(Oauth2Util.getOauth2Url().toString());
 	}
 
 }

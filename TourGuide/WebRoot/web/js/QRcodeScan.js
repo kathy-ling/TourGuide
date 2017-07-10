@@ -106,6 +106,7 @@ function getOrderInfoByID() {
 				alert('该讲解员信息获取失败');
 			},
 			success: function(data) {
+				alert(JSON.stringify(data));
 				WriteOrderInfo(data);
 			}
 		});

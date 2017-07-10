@@ -9,8 +9,9 @@
 *
 */
 
-window["HOST"]="http://localhost/TourGuide";//服务器IP地址
+//window["HOST"]="http://localhost/TourGuide";//服务器IP地址
 //window["HOST"]="http://cps.xaut.edu.cn/TourGuide";
+window["HOST"]="http://zhoudaoly.com/TourGuide";
 
 window["vistPhone"] = getPhone();
 window["openId"] = getOpenId();

@@ -11,12 +11,16 @@ import com.google.gson.JsonObject;
 
 public class Oauth2Util {
 	
+//	//公众账号的唯一标识
+//	public static final String appid = "wxd3bda909c7fb1467";
+//	//公众账号的密钥
+//	public static final String appSecret = "11d33e83aab183855f77a779a42d894d";
+	
+	
 	//公众账号的唯一标识
-	public static final String appid = "wxd3bda909c7fb1467";
+	public static final String appid = "wx6e58a089f2d129f4";
 	//公众账号的密钥
-	public static final String appSecret = "11d33e83aab183855f77a779a42d894d";
-	
-	
+	public static final String appSecret = "97c82f3f6361f239362c34ed096f9c1d";
 	
 	/**
 	 * 获取网页授权凭证。根据code获取access_token
@@ -136,7 +140,9 @@ public class Oauth2Util {
 //		String redirectUrI = urlEncodeUTF8("http://1f656026j8.imwork.net/TourGuide/oauthServlet");
 
 
-		String redirectUrI = urlEncodeUTF8("http://cps.xaut.edu.cn/TourGuide/oauthServlet");		
+//		String redirectUrI = urlEncodeUTF8("http://cps.xaut.edu.cn/TourGuide/oauthServlet");
+		
+		String redirectUrI = urlEncodeUTF8("http://zhoudaoly.com/TourGuide/oauthServlet");
 
 		
 		//String redirectUrI = urlEncodeUTF8("http://168r7882j9.imwork.net/TourGuide/oauthServlet");
@@ -147,6 +153,8 @@ public class Oauth2Util {
 		Oauth2Url = Oauth2Url.replace("APPID", appid);
 		Oauth2Url = Oauth2Url.replace("REDIRECT_URI", redirectUrI);
 		Oauth2Url = Oauth2Url.replace("SCOPE", scope);
+		
+		https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6e58a089f2d129f4&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect
 		
 		return Oauth2Url;
 	}

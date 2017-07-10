@@ -12,6 +12,7 @@ window.onload = function() {
 //从服务端获取用户的部分信息，并显示在页面
 function getUserInfo() {
 	var url = HOST + "/getInfobyOpenID.do";
+//	alert("openid="+openId);
 
 	$.ajax({
 		type: "post",
@@ -25,7 +26,7 @@ function getUserInfo() {
 			alert("获取个人信息Request error!");
 		},
 		success: function(data) {
-
+//			alert(JSON.stringify(data));
 			if(JSON.stringify(data) != "{}") {
 				$("#nickname").val(data.nickName);
 				$("#visitor_img").attr("src", data.image);

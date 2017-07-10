@@ -57,7 +57,8 @@ public class JsSignUtil {
         ret.put("nonceStr", nonce_str);  
         ret.put("timestamp", timestamp);  
         ret.put("signature", signature);  
-        ret.put("appId", "wxd3bda909c7fb1467");  
+        ret.put("appId", "wx6e58a089f2d129f4");
+//        ret.put("appId", "wxd3bda909c7fb1467");  
   
 //        System.out.println("1.ticket(原始)="+jsapi_ticket);  
 //        System.out.println("2.url="+ret.get("url"));  

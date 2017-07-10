@@ -3,6 +3,7 @@ var province;
 var defaultProvince = "西安";
 //vistPhone = '13119275866';
 
+//var openId = GetUrlem("openId");
 
 $(function($) {
 

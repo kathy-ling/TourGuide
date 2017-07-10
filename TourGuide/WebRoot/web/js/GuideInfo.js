@@ -20,7 +20,7 @@ $('#guideinfoPage').bind('pageshow',function(event, ui){
 	visitDate=GetUrlem("visitDate");
 	visitTime=GetUrlem("visitTime");
 	scenicName=GetUrlem("scenicName");
-//	phone = '15023692586';
+	phone = '18191762572';
 	
 	$("#DirectorderTicketSub").attr("phone",phone);
 	
