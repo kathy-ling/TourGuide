@@ -13,7 +13,7 @@
 
 	<body>
 		
-		<div data-role="header">
+		<!--<div data-role="header">
 			<p  style="text-align: center;">快捷拼团</p>
 		</div>
 		
@@ -37,7 +37,12 @@
 			<div align="center" data-role="main" class="ui-content">
 				<a href="#" class="ui-btn ui-icon-shop ui-btn-icon-right ui-btn-b ui-corner-all" onclick="ProduceOrder()">支付</a>
 			</div>
-		</div>
+		</div>-->
+		
+		<form action="/PayServlet" method="post">
+			
+			<input type="submit" value="付款"/>
+		</form>
 		
 		<footer data-role="footer" data-position="fixed">
 	        <div data-role="navbar">
