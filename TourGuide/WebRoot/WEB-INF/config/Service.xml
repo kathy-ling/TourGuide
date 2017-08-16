@@ -21,8 +21,13 @@
 	<mvc:resources location="/image/guide/" mapping="/image/guide/**"/>
 	<bean id="SpringContextUtil "    class="com.TourGuide.weixin.util.SpringContextUtil " scope="singleton" />
 	<bean id="DataSource" class="com.TourGuide.common.XBasicDataSource"
+<<<<<<< HEAD
 		p:driverClassName="com.mysql.jdbc.Driver" p:url="jdbc:mysql://47.93.204.132:3306/tourguide"
 		p:username="root" p:password="root123" destroy-method="close"  />
+=======
+		p:driverClassName="com.mysql.jdbc.Driver" p:url="jdbc:mysql://202.200.112.54:3306/tourguide"
+		p:username="root" p:password="root123" destroy-method="close"  p:validationQuery="SELECT 1" p:testOnBorrow="true" />
+>>>>>>> ba030989f1f63cda3f0b94947e316d7e7a824195
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
 		p:dataSource-ref="DataSource"   />
 	<bean id="transiactionManager"
