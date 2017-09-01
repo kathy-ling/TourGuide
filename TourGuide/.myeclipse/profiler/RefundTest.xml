@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="app_preset_prof_preset_name">RefundTest Launch Configuration</entry>
+<entry key="app_preset_prof_preset_filter_s"/>
+<entry key="app_preset_prof_preset_filter_p">com.TourGuide.Action.*,
+com.TourGuide.Servlet.*,
+com.TourGuide.common.*,
+com.TourGuide.controller.*,
+com.TourGuide.dao.*,
+com.TourGuide.message.response.*,
+com.TourGuide.model.*,
+com.TourGuide.service.*,
+com.TourGuide.web.Dao.*,
+com.TourGuide.web.Service.*,
+com.TourGuide.web.model.*,
+com.TourGuide.weixin.menu.*,
+com.TourGuide.weixin.util.*,
+com.example.test.*</entry>
+<entry key="app_preset_prof_preset_alloc_p">10</entry>
+<entry key="app_preset_"/>
+<entry key="app_preset_prof_preset_samplingRefreshRate_s">1000</entry>
+<entry key="app_preset_prof_preset_stacks_p">false</entry>
+<entry key="app_preset_prof_preset_roots_p">com.TourGuide.Action.**
+com.TourGuide.Servlet.**
+com.TourGuide.common.**
+com.TourGuide.controller.**
+com.TourGuide.dao.**
+com.TourGuide.message.response.**
+com.TourGuide.model.**
+com.TourGuide.service.**
+com.TourGuide.web.Dao.**
+com.TourGuide.web.Service.**
+com.TourGuide.web.model.**
+com.TourGuide.weixin.menu.**
+com.TourGuide.weixin.util.**
+com.example.test.**
+</entry>
+<entry key="profiler.settings.instrument.empty.methods">false</entry>
+<entry key="myeclipse.profiling.mode">0</entry>
+<entry key="profiler.settings.istrument.getter.setter.methods">false</entry>
+<entry key="app_preset_prof_preset_samplingRate_s">100</entry>
+<entry key="app_preset_prof_preset_filterMode_s">true</entry>
+<entry key="app_preset_prof_preset_selector"/>
+<entry key="app_preset_prof_preset_refreshRate_s">1000</entry>
+<entry key="app_preset_prof_preset_runnables_p">true</entry>
+<entry key="app_preset_prof_preset_filterMode_p">false</entry>
+<entry key="app_preset_prof_preset_memoryMode_p">true</entry>
+</properties>
